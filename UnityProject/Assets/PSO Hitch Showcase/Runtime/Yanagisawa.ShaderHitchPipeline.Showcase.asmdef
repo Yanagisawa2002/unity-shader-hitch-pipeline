@@ -1,0 +1,16 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.Showcase",
+  "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Showcase",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

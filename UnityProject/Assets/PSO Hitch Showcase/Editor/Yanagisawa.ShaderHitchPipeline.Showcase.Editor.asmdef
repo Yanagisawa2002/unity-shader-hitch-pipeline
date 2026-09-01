@@ -1,0 +1,20 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.Showcase.Editor",
+  "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Showcase.Editor",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Runtime",
+    "Yanagisawa.ShaderHitchPipeline.Editor",
+    "Yanagisawa.ShaderHitchPipeline.Showcase"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

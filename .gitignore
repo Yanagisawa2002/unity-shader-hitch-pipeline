@@ -1,0 +1,51 @@
+# Unity generated state
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+Recordings/
+
+# IDE state
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.vsconfig
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# OS state
+.DS_Store
+Thumbs.db
+Desktop.ini
+__pycache__/
+*.py[cod]
+
+# Pipeline-generated evidence and local profiles
+Evidence/Local/
+PsoPipelineData/Inbox/
+PsoPipelineData/Work/
+PsoArtifacts/
+UnityProject/Assets/StreamingAssets/ShaderHitchPipeline/
+UnityProject/Assets/StreamingAssets/ShaderHitchPipeline.meta
+UnityProject/Assets/Resources/PerformanceTestRunInfo.json
+UnityProject/Assets/Resources/PerformanceTestRunSettings.json
+
+# Player output
+Artifacts/Players/
+Artifacts/Captures/
+Artifacts/Reports/
+UnityProject/Builds/

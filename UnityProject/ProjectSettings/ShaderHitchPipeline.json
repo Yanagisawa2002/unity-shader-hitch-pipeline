@@ -1,0 +1,14 @@
+{
+    "inboxDirectory": "PsoArtifacts/Inbox",
+    "profileOutputDirectory": "PsoArtifacts/Profiles",
+    "installedPlanDirectory": "Assets/StreamingAssets/ShaderHitchPipeline",
+    "profileId": "windows-player-default",
+    "targetRuntimePlatform": "WindowsPlayer",
+    "targetGraphicsDeviceType": "Direct3D12",
+    "targetQualityLevelName": "",
+    "validateInstalledPlanBeforeBuild": true,
+    "initialBatchSize": 8,
+    "minimumBatchSize": 1,
+    "maximumBatchSize": 64,
+    "targetFrameMilliseconds": 16.67
+}

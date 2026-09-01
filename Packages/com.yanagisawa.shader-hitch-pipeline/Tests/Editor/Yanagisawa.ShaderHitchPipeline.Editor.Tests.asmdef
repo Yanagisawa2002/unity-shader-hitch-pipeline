@@ -1,0 +1,22 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.Editor.Tests",
+  "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Tests",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Runtime",
+    "Yanagisawa.ShaderHitchPipeline.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "noEngineReferences": false
+}

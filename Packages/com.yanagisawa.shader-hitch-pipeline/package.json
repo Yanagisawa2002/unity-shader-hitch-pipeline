@@ -1,0 +1,24 @@
+{
+  "name": "com.yanagisawa.shader-hitch-pipeline",
+  "version": "0.1.0",
+  "displayName": "Shader Hitch Pipeline",
+  "description": "Trace, merge, budget, prewarm, and regression-test real Unity graphics pipeline states.",
+  "unity": "6000.0",
+  "author": {
+    "name": "Edwin Liu"
+  },
+  "keywords": [
+    "shader",
+    "pso",
+    "performance",
+    "warmup",
+    "graphics-state"
+  ],
+  "samples": [
+    {
+      "displayName": "Shader Hitch Showcase",
+      "description": "Synthetic material and graphics-state reveal workload.",
+      "path": "Samples~/PSO Hitch Showcase"
+    }
+  ]
+}

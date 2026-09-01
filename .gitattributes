@@ -1,0 +1,17 @@
+* text=auto
+
+*.cs text eol=lf
+*.shader text eol=lf
+*.asmdef text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.ps1 text eol=lf
+*.txt text eol=lf
+*.asset text eol=lf whitespace=-blank-at-eol
+*.unity text eol=lf whitespace=-blank-at-eol
+*.meta text eol=lf whitespace=-blank-at-eol
+
+*.gif binary
+*.png binary
+*.graphicsstate binary
