@@ -61,3 +61,13 @@ pwsh Tools/Compare-PsoRuns.ps1 `
 ```
 
 The Python implementation returns exit code 2 if environments differ, the optimized run regresses beyond tolerance, or there is no material improvement.
+
+## Complete Windows showcase
+
+```powershell
+python -m pip install -r Tools/requirements.txt
+ffmpeg -version
+pwsh Tools/Invoke-PsoShowcase.ps1
+```
+
+This one command performs the training build, cold trace/benchmark/capture, merge and install, final build, prewarmed benchmark/capture, pixel-based video synchronization, blank-frame validation, and report generation. Use `-NoVisualCapture` for receipt-only automation or `-NoGif` to omit both animated outputs. `-pso-showcase-marker <file>` is an internal sample argument used by this runner to retain capture timing markers; consuming games do not need it.

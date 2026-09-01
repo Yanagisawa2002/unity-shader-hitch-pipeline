@@ -11,7 +11,8 @@ Core capabilities:
 - deduplicated profiles and merge receipts;
 - adaptive `WarmUpProgressively` orchestration;
 - build target/API validation;
-- cold/prewarmed raw-frame benchmarks.
+- cold/prewarmed raw-frame benchmarks;
+- a sample runner that records and synchronizes actual Player imagery.
 
 Supported modern graphics APIs are D3D12, Metal, and Vulkan. Unity's API is experimental; capture a distinct profile per platform, API, quality, and materially different shader build.
 

@@ -17,7 +17,7 @@
   "samples": [
     {
       "displayName": "Shader Hitch Showcase",
-      "description": "Synthetic material and graphics-state reveal workload.",
+      "description": "Controlled real first-use material and graphics-state reveal workload.",
       "path": "Samples~/PSO Hitch Showcase"
     }
   ]

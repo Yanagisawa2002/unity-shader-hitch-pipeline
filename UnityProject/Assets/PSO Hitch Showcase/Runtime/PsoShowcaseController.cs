@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,6 +14,9 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         private const int Columns = 24;
         private const int Rows = 16;
         private const int HistoryLength = 180;
+        private const int RevealBatchSize = 8;
+        private const double RevealIntervalSeconds = 1.0 / 60.0;
+        private const string VisualMarkerArgument = "-pso-showcase-marker";
 
         private readonly List<MeshRenderer> renderers = new List<MeshRenderer>();
         private readonly List<Material> materials = new List<Material>();
@@ -19,8 +25,10 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         private int historyCursor;
         private int visibleCount;
         private double readyAt;
+        private double nextRevealAt;
         private bool sequenceStarted;
         private string mode;
+        private string visualMarkerFile;
 
         [SerializeField]
         private Shader showcaseShader;
@@ -29,6 +37,9 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         {
             Application.targetFrameRate = 240;
             QualitySettings.vSyncCount = 0;
+            visualMarkerFile = PsoCommandLine.Current.GetString(
+                VisualMarkerArgument,
+                string.Empty);
             mode = PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument)
                 ? "BASELINE / COLD"
                 : "OPTIMIZED / PREWARMED";
@@ -37,9 +48,15 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             white = new Texture2D(1, 1, TextureFormat.RGBA32, false);
             white.SetPixel(0, 0, Color.white);
             white.Apply();
+            double revealDelaySeconds = PsoCommandLine.Current.GetDouble(
+                PsoConstants.BenchmarkDelayArgument,
+                1.0,
+                0.0,
+                3600.0);
             readyAt = PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument)
-                ? Time.realtimeSinceStartupAsDouble + 1.0
+                ? Time.realtimeSinceStartupAsDouble + revealDelaySeconds
                 : -1.0;
+            EmitVisualMarker("CAPTURE_READY", Time.realtimeSinceStartupAsDouble);
         }
 
         private void Update()
@@ -52,20 +69,35 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 if (!WarmupReady())
                     return;
                 if (readyAt < 0.0)
-                    readyAt = Time.realtimeSinceStartupAsDouble + 1.0;
+                {
+                    double revealDelaySeconds = PsoCommandLine.Current.GetDouble(
+                        PsoConstants.BenchmarkDelayArgument,
+                        1.0,
+                        0.0,
+                        3600.0);
+                    readyAt = Time.realtimeSinceStartupAsDouble + revealDelaySeconds;
+                }
                 if (Time.realtimeSinceStartupAsDouble < readyAt)
                     return;
                 sequenceStarted = true;
+                nextRevealAt = Time.realtimeSinceStartupAsDouble;
+                EmitVisualMarker("WORKLOAD_START", nextRevealAt);
             }
 
-            if (renderers.Count == 0)
+            if (renderers.Count == 0 || visibleCount >= renderers.Count)
                 return;
 
-            // Eight unseen combinations per frame make the first-use cost visible while
-            // keeping the exact same workload for cold and prewarmed runs.
-            for (int count = 0; count < 8; count++)
+            // Pace first use at 60 reveal batches per second. A cold hitch delays the next
+            // batch instead of catching up, so an ordinary 60 FPS recording shows the real
+            // presentation freeze while both modes still execute the identical workload.
+            double now = Time.realtimeSinceStartupAsDouble;
+            if (now < nextRevealAt)
+                return;
+            nextRevealAt = now + RevealIntervalSeconds;
+            int batchCount = Math.Min(RevealBatchSize, renderers.Count - visibleCount);
+            for (int count = 0; count < batchCount; count++)
             {
-                int index = visibleCount % renderers.Count;
+                int index = visibleCount;
                 renderers[index].enabled = true;
                 visibleCount++;
             }
@@ -107,7 +139,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             string[] keywords =
             {
                 "PSO_RIM", "PSO_PATTERN", "PSO_EMISSION", "PSO_CLIP", "PSO_WARP",
-                "PSO_NOISE", "PSO_FRESNEL2", "PSO_GRADIENT",
+                "PSO_NOISE", "PSO_FRESNEL2", "PSO_GRADIENT", "PSO_CAPTURE_V2",
             };
             for (int index = 0; index < Columns * Rows; index++)
             {
@@ -176,11 +208,38 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 fontSize = 13,
                 normal = { textColor = new Color(0.62f, 0.76f, 0.90f) },
             };
-            GUI.Label(new Rect(24, 15, 640, 34), "SHADER HITCH PIPELINE · " + mode, title);
+            GUI.Label(new Rect(24, 15, 810, 34), "SHADER HITCH PIPELINE · " + mode, title);
             GUI.Label(new Rect(25, 48, 700, 24),
                 (Columns * Rows) + " shader/PSO combinations · first-use frame time · " +
                 SystemInfo.graphicsDeviceType,
                 small);
+
+            GUIStyle status = new GUIStyle(small)
+            {
+                fontSize = 15,
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.UpperRight,
+                normal = { textColor = new Color(0.42f, 0.92f, 0.72f) },
+            };
+            string statusText;
+            if (!sequenceStarted)
+            {
+                statusText = readyAt < 0.0
+                    ? "PREWARMING CAPTURED STATES…"
+                    : "WORKLOAD IN " + Math.Max(0.0,
+                        readyAt - Time.realtimeSinceStartupAsDouble).ToString(
+                            "F1",
+                            CultureInfo.InvariantCulture) + " s";
+            }
+            else if (visibleCount < renderers.Count)
+            {
+                statusText = "LIVE FIRST USE";
+            }
+            else
+            {
+                statusText = "384 / 384 COMPLETE";
+            }
+            GUI.Label(new Rect(Screen.width - 430, 19, 400, 30), statusText, status);
 
             Rect graph = new Rect(24, Screen.height - 164, Screen.width - 48, 130);
             DrawRect(graph, new Color(0.035f, 0.050f, 0.078f, 0.94f));
@@ -197,7 +256,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                     : new Color(0.18f, 0.78f, 1.0f, 0.90f);
                 DrawRect(new Rect(x, graph.yMax - height, Mathf.Max(1, graph.width / frameHistory.Length), height), color);
             }
-            GUI.Label(new Rect(graph.x + 8, graph.y + 5, 360, 22),
+            GUI.Label(new Rect(graph.x + 8, graph.y + 5, graph.width - 16, 22),
                 "Frame time (red = ≥ 8.33 ms / missed 120 FPS) · combinations revealed: " +
                 Mathf.Min(visibleCount, renderers.Count) + "/" + renderers.Count,
                 small);
@@ -209,6 +268,33 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             GUI.color = color;
             GUI.DrawTexture(rect, white);
             GUI.color = previous;
+        }
+
+        private void EmitVisualMarker(string marker, double realtimeSeconds)
+        {
+            string line = marker + " realtime=" +
+                          realtimeSeconds.ToString("F6", CultureInfo.InvariantCulture);
+            Debug.Log("[ShaderHitchPipeline.Showcase] " + line);
+            if (string.IsNullOrWhiteSpace(visualMarkerFile))
+                return;
+
+            try
+            {
+                string fullPath = Path.GetFullPath(visualMarkerFile);
+                string directory = Path.GetDirectoryName(fullPath);
+                if (!string.IsNullOrEmpty(directory))
+                    Directory.CreateDirectory(directory);
+                File.AppendAllText(
+                    fullPath,
+                    line + Environment.NewLine,
+                    new UTF8Encoding(false));
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(
+                    "[ShaderHitchPipeline.Showcase] Could not write visual marker: " +
+                    exception.Message);
+            }
         }
 
         private void OnDestroy()

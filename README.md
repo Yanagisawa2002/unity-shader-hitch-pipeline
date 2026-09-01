@@ -4,7 +4,9 @@ An independent Unity 6 UPM package for eliminating first-use shader and graphics
 
 This is a performance pipeline, not a crash detector, culling system, asset simplifier, or streaming layer.
 
-![Measured cold versus prewarmed D3D12 frame times](Docs/Media/comparison.gif)
+![Actual D3D12 Player: cold first use versus prewarmed](Docs/Media/actual-comparison.gif)
+
+This is a synchronized capture of two **actual Unity Players**, not a chart animation or a reconstructed replay. The left Player creates previously unseen shader/graphics-state combinations during rendering; the right Player executes the same reveal after the captured states have been prewarmed. Red columns are real presented frames that exceeded 8.33 ms. The higher-quality [MP4](Docs/Media/actual-comparison.mp4), [poster frame](Docs/Media/actual-comparison.png), and secondary [raw-sample chart](Docs/Media/comparison.gif) are retained with the repository.
 
 ## Measured result
 
@@ -12,13 +14,13 @@ The included showcase was measured on Unity 6000.5.2f1, D3D12, and an AMD Radeon
 
 | Metric | Cold first use | Prewarmed | Change |
 |---|---:|---:|---:|
-| Mean | 6.466 ms | 4.167 ms | 35.6% lower |
-| P95 | 26.738 ms | 4.169 ms | 84.4% lower |
-| P99 | 34.941 ms | 4.172 ms | 88.1% lower |
-| Maximum | 39.643 ms | 4.271 ms | 89.2% lower |
-| Frames ≥ 8.33 ms | 24 | 0 | 24 eliminated |
+| Mean | 8.535 ms | 4.167 ms | 51.2% lower |
+| P95 | 34.300 ms | 4.169 ms | 87.8% lower |
+| P99 | 37.467 ms | 4.169 ms | 88.9% lower |
+| Maximum | 48.943 ms | 4.174 ms | 91.5% lower |
+| Frames ≥ 8.33 ms | 48 | 0 | 48 eliminated |
 
-The generated plan covered 260 shader variants and 389 graphics states. The final warmup receipt confirmed 389/389 completion in 228.6 ms. Results are hardware, driver, project, and cache-state dependent; use the included runner to produce evidence for each target profile.
+The generated plan covered 388 shader variants and 389 graphics states. The final warmup receipt confirmed 389/389 completion in 243.9 ms. The external recorder was active for both measurements. Results are hardware, driver, project, and cache-state dependent; use the included runner to produce evidence for each target profile.
 
 ## What it adds beyond Unity
 
@@ -32,7 +34,8 @@ Unity and the graphics driver remain responsible for shader compilation and PSO 
 - cache-miss feedback files for the next training cycle;
 - build-time target/API validation and build receipts;
 - identical-workload cold/prewarmed benchmarks with raw samples;
-- JSON, Markdown, PNG, and animated GIF evidence.
+- synchronized actual-Player MP4/GIF capture with blank-frame validation;
+- JSON, Markdown, PNG, and raw-sample animated GIF evidence.
 
 The Unity API is experimental, so all direct API usage is isolated behind a small runtime/editor boundary. If Unity changes it, the application-facing trace, plan, benchmark, and receipt contracts remain stable.
 
@@ -75,10 +78,11 @@ For an end-to-end portfolio run from this repository:
 
 ```powershell
 python -m pip install -r Tools/requirements.txt
+ffmpeg -version
 pwsh Tools/Invoke-PsoShowcase.ps1
 ```
 
-The GPU player is intentionally visible during capture; a hidden Windows swapchain may stop presenting and produce an empty trace.
+The Windows showcase runner builds the training Player, records the cold trace and visible client area, installs the resulting plan, builds the final Player, records the prewarmed run, aligns both videos from the first visible tile, validates that captured pixels are non-blank, and emits both visual and numerical evidence. The GPU Player is intentionally visible during capture; a hidden or obscured Windows swapchain may stop presenting or produce invalid video.
 
 ## Runtime phases
 

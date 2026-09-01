@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "acceptanceRun": "20260901-142133",
+  "synchronizationMarker": "FIRST_VISIBLE_TILE_PIXEL",
+  "captureResolution": "1280x720",
+  "captureFrameRate": 60,
+  "requestedLeadSeconds": 0.5,
+  "effectiveLeadSeconds": 0.0,
+  "seekGuardSeconds": 0.03333333333333333,
+  "durationSeconds": 2.8,
+  "baselineFirstRevealSecondsInVideo": 0.1,
+  "optimizedFirstRevealSecondsInVideo": 1.217,
+  "baselineTrimSeconds": 0.06666666666666668,
+  "optimizedTrimSeconds": 1.1836666666666666
+}

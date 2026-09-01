@@ -7,7 +7,7 @@
     "unityVersion": "6000.5.2f1",
     "productName": "Shader Hitch Pipeline Showcase",
     "applicationVersion": "1.0",
-    "buildGuid": "de5cf0b03bf64dafb01a36923d43192f",
+    "buildGuid": "b80d0b99089d42d98c34bf3484e82495",
     "runtimePlatform": "WindowsPlayer",
     "graphicsDeviceType": "Direct3D12",
     "graphicsDeviceName": "AMD Radeon AI PRO R9700",
@@ -16,44 +16,44 @@
     "graphicsMemorySizeMb": 32476,
     "qualityLevelName": "Ultra"
   },
-  "baselineBuildGuid": "de5cf0b03bf64dafb01a36923d43192f",
-  "optimizedBuildGuid": "61b527a4c7394a47bd737287ad2d74c3",
+  "baselineBuildGuid": "b80d0b99089d42d98c34bf3484e82495",
+  "optimizedBuildGuid": "6eb3a21ab5dd4e14bb151a002a75fdc3",
   "sampleFrames": {
     "baseline": 240,
     "optimized": 240
   },
   "hitchThresholdMilliseconds": 8.33,
   "hitches": {
-    "baseline": 24,
+    "baseline": 48,
     "optimized": 0,
-    "eliminated": 24
+    "eliminated": 48
   },
   "metrics": {
     "mean": {
-      "baselineMilliseconds": 6.466370415000711,
-      "optimizedMilliseconds": 4.16718876416174,
-      "improvementPercent": 35.55598432012679
+      "baselineMilliseconds": 8.53506914912335,
+      "optimizedMilliseconds": 4.166708743044485,
+      "improvementPercent": 51.18131241534869
     },
     "p95": {
-      "baselineMilliseconds": 26.7375868745148,
-      "optimizedMilliseconds": 4.16929554194212,
-      "improvementPercent": 84.40661245343675
+      "baselineMilliseconds": 34.29967090487479,
+      "optimizedMilliseconds": 4.168601240962744,
+      "improvementPercent": 87.8465270045192
     },
     "p99": {
-      "baselineMilliseconds": 34.94126822799444,
-      "optimizedMilliseconds": 4.1723453579470515,
-      "improvementPercent": 88.05897561953911
+      "baselineMilliseconds": 37.467395439743996,
+      "optimizedMilliseconds": 4.169462500140071,
+      "improvementPercent": 88.87175782782792
     },
     "maximum": {
-      "baselineMilliseconds": 39.64300453662872,
-      "optimizedMilliseconds": 4.271003417670727,
-      "improvementPercent": 89.22633774207384
+      "baselineMilliseconds": 48.94299805164337,
+      "optimizedMilliseconds": 4.173901863396168,
+      "improvementPercent": 91.47191216404035
     }
   },
   "plan": {
-    "profileId": "cycle2-d3d12",
-    "planSha256": "96f6525f79f4860e6c27fcc50342901a1519b2198dc22e156c954ce994af2ca5",
-    "variantCount": 260,
+    "profileId": "showcase-d3d12-20260901-142133",
+    "planSha256": "d870032ac5f85c03acc590401b838d23b2705ebbd1fb2295a313e0ea5c348fa3",
+    "variantCount": 388,
     "graphicsStateCount": 389
   }
 }

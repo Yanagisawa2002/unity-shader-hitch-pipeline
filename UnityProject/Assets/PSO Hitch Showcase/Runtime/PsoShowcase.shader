@@ -31,6 +31,7 @@ Shader "Yanagisawa/Shader Hitch Showcase"
             #pragma multi_compile_local __ PSO_NOISE
             #pragma multi_compile_local __ PSO_FRESNEL2
             #pragma multi_compile_local __ PSO_GRADIENT
+            #pragma multi_compile_local __ PSO_CAPTURE_V2
             #include "UnityCG.cginc"
 
             struct Attributes
@@ -64,7 +65,9 @@ Shader "Yanagisawa/Shader Hitch Showcase"
             float4 Frag(Varyings input) : SV_Target
             {
                 float4 color = _BaseColor;
-                float radius = length(input.centered);
+                float radialEnergy = dot(input.centered, input.centered);
+                float radius = sqrt(radialEnergy);
+                color.rgb *= 0.996 + 0.004 * cos(radialEnergy * 5.5 + 0.17);
                 #if defined(PSO_RIM)
                     color.rgb += smoothstep(0.45, 0.95, radius) * 0.45;
                 #endif
@@ -93,6 +96,11 @@ Shader "Yanagisawa/Shader Hitch Showcase"
                 #endif
                 #if defined(PSO_GRADIENT)
                     color.rgb *= lerp(float3(0.45, 0.70, 1.0), float3(1.0, 0.55, 0.35), input.uv.y);
+                #endif
+                #if defined(PSO_CAPTURE_V2)
+                    float captureBand = 0.80 + 0.20 * sin((input.uv.x - input.uv.y) * 21.0);
+                    color.rgb = sqrt(saturate(color.rgb)) * captureBand;
+                    color.rgb += 0.025 * cos(float3(1.0, 1.7, 2.3) * input.uv.x * 13.0);
                 #endif
                 return color;
             }

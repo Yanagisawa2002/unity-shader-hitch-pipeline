@@ -22,7 +22,7 @@ session.json + .graphicsstate ── SHA-256 ──► Inbox
                                                 │
                       warmup/cache-miss/benchmark receipts
                                                 ▼
-                         JSON + Markdown + PNG + GIF evidence
+                actual Player MP4/GIF + JSON/Markdown/PNG evidence
 ```
 
 ## Runtime boundary
@@ -32,6 +32,8 @@ session.json + .graphicsstate ── SHA-256 ──► Inbox
 `PsoWarmupOrchestrator` loads only a verified plan. It rejects environment drift before loading any collection, schedules `WarmUpProgressively`, and adjusts each batch according to an exponentially weighted frame-time signal. The product exposes phases, not Unity-specific shader objects, to application code.
 
 `PsoBenchmarkController` runs from command-line configuration. A cold run bypasses warmup; an optimized run waits for plan completion and applies the same post-ready stabilization delay. It retains every frame sample so percentile claims can be audited or re-plotted.
+
+The showcase evidence runner captures the owned Player's visible client region without modifying the render loop, rejects blank video, detects the first visible tile transition in both recordings, and composes a synchronized side-by-side MP4/GIF. This visual path is evidence layered over the benchmark; it is not used to fabricate or replay frame timings.
 
 ## Editor boundary
 
