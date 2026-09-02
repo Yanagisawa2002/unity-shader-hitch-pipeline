@@ -49,3 +49,6 @@ Artifacts/Players/
 Artifacts/Captures/
 Artifacts/Reports/
 UnityProject/Builds/
+# Unity test runner output
+/UnityProject/TestResults/
+/UnityProject/Assets/ShaderHitchShowcaseGenerated/

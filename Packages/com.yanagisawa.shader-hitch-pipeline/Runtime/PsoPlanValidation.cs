@@ -101,6 +101,17 @@ namespace Yanagisawa.ShaderHitchPipeline
                         issues.Add(prefix + ".initialBatchSize is outside its bounds.");
                     if (phase.targetFrameMilliseconds <= 0.0)
                         issues.Add(prefix + ".targetFrameMilliseconds must be positive.");
+                    if (phase.deadlineMilliseconds < 0.0)
+                        issues.Add(prefix + ".deadlineMilliseconds cannot be negative.");
+                    if (phase.estimatedMillisecondsPerState <= 0.0)
+                        issues.Add(prefix +
+                                   ".estimatedMillisecondsPerState must be positive.");
+                    if (phase.expectedUseProbability < 0.0 ||
+                        phase.expectedUseProbability > 1.0)
+                        issues.Add(prefix +
+                                   ".expectedUseProbability must be between zero and one.");
+                    if (phase.hotSetTier < 0)
+                        issues.Add(prefix + ".hotSetTier cannot be negative.");
 
                     if (!validateFiles || string.IsNullOrEmpty(planDirectory) ||
                         string.IsNullOrWhiteSpace(phase.collectionFile))

@@ -4,6 +4,9 @@ param(
     [string]$Baseline,
     [Parameter(Mandatory = $true)]
     [string]$Optimized,
+    [string]$Naive,
+    [string]$NaiveWarmup,
+    [string]$OptimizedWarmup,
     [string]$Plan,
     [string]$Output = "Evidence/Latest",
     [string]$Python = "python"
@@ -19,6 +22,18 @@ $arguments = @(
 )
 if (-not [string]::IsNullOrWhiteSpace($Plan)) {
     $arguments += @("--plan", (Resolve-Path -LiteralPath $Plan).Path)
+}
+if (-not [string]::IsNullOrWhiteSpace($Naive)) {
+    $arguments += @("--naive", (Resolve-Path -LiteralPath $Naive).Path)
+}
+if (-not [string]::IsNullOrWhiteSpace($NaiveWarmup)) {
+    $arguments += @("--naive-warmup", (Resolve-Path -LiteralPath $NaiveWarmup).Path)
+}
+if (-not [string]::IsNullOrWhiteSpace($OptimizedWarmup)) {
+    $arguments += @(
+        "--optimized-warmup",
+        (Resolve-Path -LiteralPath $OptimizedWarmup).Path
+    )
 }
 
 & $Python @arguments

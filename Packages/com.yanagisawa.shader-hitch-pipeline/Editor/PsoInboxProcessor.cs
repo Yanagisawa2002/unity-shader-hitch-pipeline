@@ -85,6 +85,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             foreach (IGrouping<string, Candidate> phaseGroup in phaseGroups)
             {
                 string phaseName = PsoFileUtility.SanitizeFileName(phaseGroup.Key);
+                bool startupPhase = PhasePriority(phaseName) == 0;
                 var merged = new GraphicsStateCollection
                 {
                     runtimePlatform = first.platform,
@@ -128,13 +129,24 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     variantCount = merged.variantCount,
                     graphicsStateCount = merged.totalGraphicsStateCount,
                     required = true,
-                    prewarmAtStartup = PhasePriority(phaseName) == 0,
+                    prewarmAtStartup = startupPhase,
                     traceCacheMisses = true,
                     priority = priority++,
                     initialBatchSize = configuration.initialBatchSize,
                     minimumBatchSize = configuration.minimumBatchSize,
                     maximumBatchSize = configuration.maximumBatchSize,
                     targetFrameMilliseconds = configuration.targetFrameMilliseconds,
+                    deadlineMilliseconds = startupPhase
+                        ? configuration.startupDeadlineMilliseconds
+                        : configuration.deferredDeadlineMilliseconds,
+                    estimatedMillisecondsPerState =
+                        configuration.estimatedMillisecondsPerState,
+                    expectedUseProbability = startupPhase
+                        ? configuration.startupExpectedUseProbability
+                        : configuration.deferredExpectedUseProbability,
+                    hotSetTier = startupPhase
+                        ? configuration.startupHotSetTier
+                        : configuration.deferredHotSetTier,
                 });
             }
 

@@ -1,26 +1,27 @@
 # Shader Hitch Pipeline
 
-An independent Unity 6 UPM package for eliminating first-use shader and graphics-pipeline hitches on modern graphics APIs. It records the **actual shader variant + render-state combinations** seen by a player, produces a reproducible warmup profile, progressively creates the corresponding GPU representations, and proves the result with a controlled A/B run.
+An independent Unity 6 UPM package for eliminating first-use shader and graphics-pipeline hitches on modern graphics APIs. It records the **actual shader variant + render-state combinations** seen by a player, produces a reproducible warmup profile, schedules GPU-representation creation by deadline, measured cost, and hot-set value, and proves the result with a controlled A/B/C run.
 
 This is a performance pipeline, not a crash detector, culling system, asset simplifier, or streaming layer.
 
-![Actual D3D12 Player: cold first use versus prewarmed](Docs/Media/actual-comparison.gif)
+![Actual D3D12 Players: cold, Unity all-at-once, and deadline scheduled](Docs/Media/actual-comparison.gif)
 
-This is a synchronized capture of two **actual Unity Players**, not a chart animation or a reconstructed replay. The left Player creates previously unseen shader/graphics-state combinations during rendering; the right Player executes the same reveal after the captured states have been prewarmed. Red columns are real presented frames that exceeded 8.33 ms. The higher-quality [MP4](Docs/Media/actual-comparison.mp4), [poster frame](Docs/Media/actual-comparison.png), and secondary [raw-sample chart](Docs/Media/comparison.gif) are retained with the repository.
+This is a synchronized capture of three **actual Unity Players**, not a chart animation or reconstructed replay. The panels are cold first use, Unity's all-at-once collection warmup, and this package's deadline-scheduled progressive warmup. The workload and first visible tile are synchronized from video pixels after each Player's `WORKLOAD_START` marker. The moving scanline and clock are rendered by the Player; a hitch freezes or jumps them without any injected delay. Red columns are real presented frames that exceeded 8.33 ms. The higher-quality [MP4](Docs/Media/actual-comparison.mp4), [warmup-pressure MP4](Docs/Media/actual-warmup-comparison.mp4), [poster](Docs/Media/actual-comparison.png), and secondary [raw-sample chart](Docs/Media/comparison.gif) are retained with the repository.
 
 ## Measured result
 
-The included showcase was measured on Unity 6000.5.2f1, D3D12, and an AMD Radeon AI PRO R9700. Both runs contain 240 raw frame samples and the same 384-object reveal workload.
+The included showcase was measured on Unity 6000.5.2f1, D3D12, and an AMD Radeon AI PRO R9700. Each run contains 240 raw frame samples and the same 384-object reveal workload.
 
-| Metric | Cold first use | Prewarmed | Change |
-|---|---:|---:|---:|
-| Mean | 8.535 ms | 4.167 ms | 51.2% lower |
-| P95 | 34.300 ms | 4.169 ms | 87.8% lower |
-| P99 | 37.467 ms | 4.169 ms | 88.9% lower |
-| Maximum | 48.943 ms | 4.174 ms | 91.5% lower |
-| Frames ≥ 8.33 ms | 48 | 0 | 48 eliminated |
+| Metric | Cold first use | Unity all-at-once | Deadline scheduled | Scheduled vs cold |
+|---|---:|---:|---:|---:|
+| Mean | 8.861 ms | 4.169 ms | 4.201 ms | 52.6% lower |
+| P95 | 35.706 ms | 4.169 ms | 4.210 ms | 88.2% lower |
+| P99 | 40.674 ms | 4.203 ms | 4.279 ms | 89.5% lower |
+| Maximum | 46.387 ms | 4.436 ms | 9.799 ms | 78.9% lower |
+| Frames ≥ 8.33 ms | 48 | 0 | 1 | 47 eliminated |
+| Severe stalls ≥ 16.67 ms | 48 | 0 | 0 | 48 eliminated |
 
-The generated plan covered 388 shader variants and 389 graphics states. The final warmup receipt confirmed 389/389 completion in 243.9 ms. The external recorder was active for both measurements. Results are hardware, driver, project, and cache-state dependent; use the included runner to produce evidence for each target profile.
+The generated plan covered 388 shader variants and 389 graphics states. A two-repeat 24-candidate worker/batch search selected two async workers and an initial batch of 64 on this machine (577.8 ms median warmup, 30.6 ms median worst warmup frame). In the externally recorded acceptance run, all-at-once completed in 643.5 ms as one batch; scheduled completed in 774.6 ms across 20 batches. Scheduled reduced sustained warmup pressure—P95 fell from 127.0 ms to 12.9 ms—but retained one 178.9 ms capture-window outlier, so the full distribution is reported rather than reduced to a favorable maximum. The measured workload had one isolated 9.80 ms scheduled frame, but zero ≥16.67 ms severe stalls, zero `Shader.CreateGPUProgram` time, and a plan-scoped feedback trace of 389 expected / 389 observed states (zero misses). Results are hardware, driver, project, and cache-state dependent; use the included search and runner for each target profile.
 
 ## What it adds beyond Unity
 
@@ -30,11 +31,13 @@ Unity and the graphics driver remain responsible for shader compilation and PSO 
 - strict platform/API/quality isolation;
 - SHA-256 verification for every input collection and generated plan;
 - deterministic deduplication and merge receipts;
-- frame-budgeted progressive warmup with an adaptive batch size;
-- cache-miss feedback files for the next training cycle;
+- deadline-, observed-cost-, probability-, and hot-set-aware phase selection;
+- batch-boundary reprioritization with adaptive progressive warmup;
+- hardware-local async-worker/batch Pareto search with an applied recommendation;
+- plan-scoped, pre-seeded feedback tracing that reports true post-plan misses without misclassifying progressive warmup batches;
 - build-time target/API validation and build receipts;
-- identical-workload cold/prewarmed benchmarks with raw samples;
-- synchronized actual-Player MP4/GIF capture with blank-frame validation;
+- identical-workload cold/all-at-once/scheduled benchmarks with raw samples;
+- synchronized three-Player MP4/GIF capture with marker-bounded pixel alignment;
 - JSON, Markdown, PNG, and raw-sample animated GIF evidence.
 
 The Unity API is experimental, so all direct API usage is isolated behind a small runtime/editor boundary. If Unity changes it, the application-facing trace, plan, benchmark, and receipt contracts remain stable.
@@ -56,10 +59,18 @@ Generated player traces, plans, reports, and builds stay outside package source 
 
 ## Quick start
 
-1. Add `Packages/com.yanagisawa.shader-hitch-pipeline` as a local or Git UPM dependency.
-2. Import the **PSO Hitch Showcase** sample, or add the runtime package to your own player.
-3. Build a development player for D3D12, Metal, or Vulkan.
-4. Run a representative trace:
+Install the tagged package directly from GitHub with Unity Package Manager's
+**Add package from git URL** action:
+
+```text
+https://github.com/Yanagisawa2002/unity-shader-hitch-pipeline.git?path=/Packages/com.yanagisawa.shader-hitch-pipeline#v0.2.0
+```
+
+Then:
+
+1. Import the package's **PSO Hitch Showcase** sample, or add the runtime package to your own player.
+2. Build a development player for D3D12, Metal, or Vulkan.
+3. Run a representative trace:
 
 ```powershell
 YourGame.exe `
@@ -70,9 +81,9 @@ YourGame.exe `
   -pso-output C:\PsoArtifacts
 ```
 
-5. Copy or point the Editor at `C:\PsoArtifacts\Inbox`, then use **Tools > Shader Hitch Pipeline > Control Center** to process and install the plan.
-6. Rebuild. The build gate rejects a plan for the wrong runtime platform or graphics API.
-7. The final player automatically loads `StreamingAssets/ShaderHitchPipeline/plan.json` and prewarms phases marked for startup.
+4. Copy or point the Editor at `C:\PsoArtifacts\Inbox`, then use **Tools > Shader Hitch Pipeline > Control Center** to process and install the plan.
+5. Rebuild. The build gate rejects a plan for the wrong runtime platform or graphics API.
+6. The final player automatically loads `StreamingAssets/ShaderHitchPipeline/plan.json` and prewarms phases marked for startup.
 
 For an end-to-end portfolio run from this repository:
 
@@ -82,7 +93,7 @@ ffmpeg -version
 pwsh Tools/Invoke-PsoShowcase.ps1
 ```
 
-The Windows showcase runner builds the training Player, records the cold trace and visible client area, installs the resulting plan, builds the final Player, records the prewarmed run, aligns both videos from the first visible tile, validates that captured pixels are non-blank, and emits both visual and numerical evidence. The GPU Player is intentionally visible during capture; a hidden or obscured Windows swapchain may stop presenting or produce invalid video.
+The Windows showcase runner builds a cache-isolated training Player, records the cold trace and visible client area, installs the resulting plan, builds the matching final Player, searches worker/batch candidates, records the all-at-once and scheduled Players, and emits both visual and numerical evidence. Pixel synchronization cannot search before each Player's workload marker, and every capture is checked for blank/obscured output. The GPU Player is intentionally visible during capture; a hidden or obscured Windows swapchain may stop presenting or produce invalid video.
 
 ## Runtime phases
 
@@ -101,6 +112,8 @@ trace.BeginPhase("combat", "city", "rain");
 // Exercise the representative workload.
 trace.EndPhase();
 ```
+
+Each trace phase becomes a schedulable unit. Tier 0 is the critical hot set; higher tiers are progressively colder. A finite deadline is measured from phase activation. The scheduler first protects work whose estimated remaining cost threatens its deadline, then considers hot-set tier, expected-use probability per remaining millisecond, stable priority, and phase name. Batch costs are updated from completed jobs during the run.
 
 ## Support and constraints
 

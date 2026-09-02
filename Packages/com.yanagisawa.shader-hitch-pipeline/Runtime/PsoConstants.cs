@@ -2,8 +2,8 @@ namespace Yanagisawa.ShaderHitchPipeline
 {
     public static class PsoConstants
     {
-        public const int SchemaVersion = 1;
-        public const string PackageVersion = "0.1.0";
+        public const int SchemaVersion = 2;
+        public const string PackageVersion = "0.2.0";
         public const string DefaultStreamingSubdirectory = "ShaderHitchPipeline";
         public const string DefaultPlanFileName = "plan.json";
         public const string DefaultRuntimeDirectoryName = "ShaderHitchPipeline";
@@ -21,6 +21,12 @@ namespace Yanagisawa.ShaderHitchPipeline
         public const string DisableWarmupArgument = "-pso-disable-warmup";
         public const string WarmupPlanArgument = "-pso-warmup-plan";
         public const string WarmupPhaseArgument = "-pso-warmup-phase";
+        public const string WarmupStrategyArgument = "-pso-warmup-strategy";
+        public const string WarmupReceiptArgument = "-pso-warmup-receipt";
+        public const string WarmupInitialBatchArgument = "-pso-warmup-initial-batch";
+        public const string WarmupMinimumBatchArgument = "-pso-warmup-minimum-batch";
+        public const string WarmupMaximumBatchArgument = "-pso-warmup-maximum-batch";
+        public const string AsyncPsoJobCountArgument = "-max-async-pso-job-count";
         public const string BenchmarkArgument = "-pso-benchmark";
         public const string BenchmarkModeArgument = "-pso-benchmark-mode";
         public const string BenchmarkFramesArgument = "-pso-benchmark-frames";

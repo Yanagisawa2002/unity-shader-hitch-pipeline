@@ -79,6 +79,10 @@ namespace Yanagisawa.ShaderHitchPipeline
         public int minimumBatchSize = 1;
         public int maximumBatchSize = 64;
         public double targetFrameMilliseconds = 16.67;
+        public double deadlineMilliseconds;
+        public double estimatedMillisecondsPerState = 0.25;
+        public double expectedUseProbability = 1.0;
+        public int hotSetTier = 1;
     }
 
     [Serializable]
@@ -195,15 +199,41 @@ namespace Yanagisawa.ShaderHitchPipeline
     {
         public string phase;
         public string collectionFile;
+        public string strategy;
+        public int hotSetTier;
+        public double deadlineMilliseconds;
+        public double expectedUseProbability;
         public int totalGraphicsStates;
         public int completedGraphicsStates;
+        public int initialBatchSize;
         public int finalBatchSize;
+        public int batchCount;
+        public int schedulerSelectionCount;
         public double elapsedMilliseconds;
         public double maximumObservedFrameMilliseconds;
-        public int cacheMissGraphicsStates;
-        public string cacheMissCollectionFile;
-        public string cacheMissCollectionSha256;
+        public double initialEstimatedMillisecondsPerState;
+        public double observedMillisecondsPerState;
+        public double minimumSlackMilliseconds;
+        public bool deadlineMissed;
+        public PsoFrameStatistics warmupFrameTimes;
+        public int[] batchSizes = Array.Empty<int>();
+        public double[] batchDurationsMilliseconds = Array.Empty<double>();
         public bool completed;
+        public string error;
+    }
+
+    [Serializable]
+    public sealed class PsoCacheMissTraceReceipt
+    {
+        public bool requested;
+        public bool armed;
+        public string scope = "plan";
+        public int baselineGraphicsStates;
+        public int observedGraphicsStates;
+        public int cacheMissGraphicsStates;
+        public bool collectionContainsBaseline;
+        public string collectionFile;
+        public string collectionSha256;
         public string error;
     }
 
@@ -217,9 +247,14 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string endedUtc;
         public string planFile;
         public string planSha256;
+        public string strategy;
+        public int asyncPsoJobCount;
+        public int processorCount;
+        public double elapsedMilliseconds;
         public bool completed;
         public string error;
         public PsoEnvironmentSnapshot environment;
         public PsoWarmupPhaseReceipt[] phases = Array.Empty<PsoWarmupPhaseReceipt>();
+        public PsoCacheMissTraceReceipt cacheMissTrace;
     }
 }

@@ -6,7 +6,7 @@ Add the package directory through Package Manager, or reference a Git tag when t
 
 ## Capture design
 
-Choose phases at content boundaries: `startup`, `city`, `combat`, `weather-rain`, or similar. A phase should be early enough to prewarm ahead of use and small enough to fit its loading-screen budget.
+Choose phases at content boundaries: `startup`, `city`, `combat`, `weather-rain`, or similar. A phase should be early enough to prewarm ahead of use and small enough to fit its loading-screen budget. Put the must-not-hitch path in hot-set tier 0 and colder speculative work in higher tiers; do not label the entire application hot.
 
 Capture representative material keywords, vertex layouts, render targets, MSAA modes, depth/stencil formats, and render states. Modern PSO identity is broader than a shader keyword list, which is why a legacy `ShaderVariantCollection` alone is not sufficient on D3D12/Metal/Vulkan.
 
@@ -19,8 +19,9 @@ Run each coverage scenario more than once. The merge is idempotent: duplicate in
 3. Process the inbox and archive the merge receipt.
 4. Review state/variant growth. Unexpected large growth often signals keyword or render-state explosion.
 5. Install the selected profile and build the candidate player normally.
-6. Run cold/prewarmed benchmarks on the same hardware pool and driver image.
-7. Store raw benchmark receipts, warmup receipts, plan hash, build receipt, and comparison output.
+6. Search worker/batch policy on each controlled target GPU/driver image.
+7. Run cold, Unity all-at-once, and scheduled benchmarks on the same hardware pool and driver image.
+8. Store raw benchmark receipts, warmup receipts, policy-search receipt, plan hash, build receipt, and comparison output.
 
 ## Application hooks
 
@@ -30,6 +31,8 @@ No code is required for startup warmup when a valid plan is embedded. For later 
 if (PsoWarmupOrchestrator.Instance != null)
     PsoWarmupOrchestrator.Instance.ActivatePhase("combat");
 ```
+
+Deadlines are relative to activation, so activate before the content boundary rather than on the first render. Cost begins with `estimatedMillisecondsPerState` from the plan and is replaced by completed-batch observations during the run. A deadline of zero means no deadline; it does not mean immediate.
 
 For manual trace orchestration:
 
@@ -45,4 +48,6 @@ PsoSessionManifest manifest = controller.EndPhase();
 
 Recapture when shader source, shader stripping rules, render-pipeline version, render-target topology, graphics API, runtime platform, or quality configuration changes materially. Treat a plan as build input with provenance, not a permanent asset.
 
-Feed cache-miss collections into a later representative run only after review. A cache-miss trace is evidence that runtime content escaped the current plan; blindly adding every incidental editor/debug state can bloat startup work.
+Feed plan-feedback collections into a later representative run only after review. The file is deliberately pre-seeded with the current plan (`collectionContainsBaseline: true`); `cacheMissGraphicsStates` is the observed-minus-baseline delta, and the normal merge deduplicates all known states. A nonzero delta is evidence that runtime content escaped the current plan, but blindly accepting every incidental editor/debug state can bloat startup work.
+
+Policy-search recommendations are intentionally not universal. Keep the raw candidate matrix and rerun after GPU, driver, API, engine, or materially different shader-build changes. The tool never deletes implementation-owned driver caches.

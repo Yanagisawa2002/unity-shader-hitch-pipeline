@@ -191,13 +191,13 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         private bool ReadyToSample()
         {
-            if (!string.Equals(mode, "optimized", StringComparison.OrdinalIgnoreCase))
+            if (PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument))
                 return Time.realtimeSinceStartupAsDouble - waitingSince >= delaySeconds;
 
             PsoWarmupOrchestrator orchestrator = PsoWarmupOrchestrator.Instance;
             if (orchestrator == null || !orchestrator.HasLoadedPlan)
                 throw new InvalidOperationException(
-                    "Optimized benchmark requires a valid warmup plan.");
+                    "A prewarmed benchmark requires a valid warmup plan.");
             if (orchestrator.HasFailed)
                 throw new InvalidOperationException(
                     "Warmup failed before benchmark: " + orchestrator.Failure);

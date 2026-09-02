@@ -1,4 +1,5 @@
 {
+    "schemaVersion": 2,
     "inboxDirectory": "PsoArtifacts/Inbox",
     "profileOutputDirectory": "PsoArtifacts/Profiles",
     "installedPlanDirectory": "Assets/StreamingAssets/ShaderHitchPipeline",
@@ -10,5 +11,12 @@
     "initialBatchSize": 8,
     "minimumBatchSize": 1,
     "maximumBatchSize": 64,
-    "targetFrameMilliseconds": 16.67
+    "targetFrameMilliseconds": 16.67,
+    "startupDeadlineMilliseconds": 1000.0,
+    "deferredDeadlineMilliseconds": 0.0,
+    "estimatedMillisecondsPerState": 0.25,
+    "startupExpectedUseProbability": 1.0,
+    "deferredExpectedUseProbability": 0.5,
+    "startupHotSetTier": 0,
+    "deferredHotSetTier": 1
 }

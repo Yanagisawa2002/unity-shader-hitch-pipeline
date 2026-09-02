@@ -15,6 +15,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         private const int Rows = 16;
         private const int HistoryLength = 180;
         private const int RevealBatchSize = 8;
+        private const float HitchThresholdMilliseconds = 8.33f;
         private const double RevealIntervalSeconds = 1.0 / 60.0;
         private const string VisualMarkerArgument = "-pso-showcase-marker";
 
@@ -23,11 +24,19 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         private readonly float[] frameHistory = new float[HistoryLength];
         private Texture2D white;
         private int historyCursor;
+        private int historyCount;
         private int visibleCount;
+        private int hitchFrameCount;
         private double readyAt;
         private double nextRevealAt;
+        private double presentationEpoch;
+        private double measurementStartedAt;
+        private double missedPresentationMilliseconds;
+        private float currentFrameMilliseconds;
+        private float worstFrameMilliseconds;
         private bool sequenceStarted;
         private string mode;
+        private Color modeColor;
         private string visualMarkerFile;
 
         [SerializeField]
@@ -36,13 +45,13 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         private void Awake()
         {
             Application.targetFrameRate = 240;
+            Application.runInBackground = true;
             QualitySettings.vSyncCount = 0;
+            presentationEpoch = Time.realtimeSinceStartupAsDouble;
             visualMarkerFile = PsoCommandLine.Current.GetString(
                 VisualMarkerArgument,
                 string.Empty);
-            mode = PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument)
-                ? "BASELINE / COLD"
-                : "OPTIMIZED / PREWARMED";
+            ConfigureMode();
             SetupCamera();
             BuildTiles();
             white = new Texture2D(1, 1, TextureFormat.RGBA32, false);
@@ -59,10 +68,36 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             EmitVisualMarker("CAPTURE_READY", Time.realtimeSinceStartupAsDouble);
         }
 
+        private void ConfigureMode()
+        {
+            string requested = PsoCommandLine.Current.GetString(
+                PsoConstants.BenchmarkModeArgument,
+                PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument)
+                    ? "baseline"
+                    : "scheduled");
+            if (PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument) ||
+                string.Equals(requested, "baseline", StringComparison.OrdinalIgnoreCase))
+            {
+                mode = "COLD / NO WARMUP";
+                modeColor = new Color(1.0f, 0.34f, 0.30f);
+            }
+            else if (string.Equals(requested, "naive", StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(requested, "throughput", StringComparison.OrdinalIgnoreCase))
+            {
+                mode = "UNITY / ALL-AT-ONCE";
+                modeColor = new Color(1.0f, 0.72f, 0.24f);
+            }
+            else
+            {
+                mode = "OURS / DEADLINE SCHEDULED";
+                modeColor = new Color(0.32f, 0.92f, 0.68f);
+            }
+        }
+
         private void Update()
         {
-            frameHistory[historyCursor] = Time.unscaledDeltaTime * 1000.0f;
-            historyCursor = (historyCursor + 1) % frameHistory.Length;
+            if (sequenceStarted)
+                RecordMeasuredFrame();
 
             if (!sequenceStarted)
             {
@@ -79,28 +114,57 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 }
                 if (Time.realtimeSinceStartupAsDouble < readyAt)
                     return;
-                sequenceStarted = true;
-                nextRevealAt = Time.realtimeSinceStartupAsDouble;
-                EmitVisualMarker("WORKLOAD_START", nextRevealAt);
+                BeginMeasuredWorkload();
             }
 
             if (renderers.Count == 0 || visibleCount >= renderers.Count)
                 return;
 
+            // Pace first use at 60 reveal batches per second. A cold hitch delays the next
+            // batch instead of catching up, so an ordinary 60 FPS recording shows the real
+            // presentation freeze while every mode still executes the identical workload.
             double now = Time.realtimeSinceStartupAsDouble;
             if (now < nextRevealAt)
                 return;
-
-            // Pace first use at 60 reveal batches per second. A cold hitch delays the next
-            // batch instead of catching up, so an ordinary 60 FPS recording shows the real
-            // presentation freeze while both modes still execute the identical workload.
             nextRevealAt = now + RevealIntervalSeconds;
             int batchCount = Math.Min(RevealBatchSize, renderers.Count - visibleCount);
             for (int count = 0; count < batchCount; count++)
             {
-                int index = visibleCount;
-                renderers[index].enabled = true;
+                renderers[visibleCount].enabled = true;
                 visibleCount++;
+            }
+        }
+
+        private void BeginMeasuredWorkload()
+        {
+            sequenceStarted = true;
+            measurementStartedAt = Time.realtimeSinceStartupAsDouble;
+            presentationEpoch = measurementStartedAt;
+            nextRevealAt = measurementStartedAt;
+            Array.Clear(frameHistory, 0, frameHistory.Length);
+            historyCursor = 0;
+            historyCount = 0;
+            currentFrameMilliseconds = 0.0f;
+            worstFrameMilliseconds = 0.0f;
+            missedPresentationMilliseconds = 0.0;
+            hitchFrameCount = 0;
+            EmitVisualMarker("WORKLOAD_START", measurementStartedAt);
+        }
+
+        private void RecordMeasuredFrame()
+        {
+            currentFrameMilliseconds = Time.unscaledDeltaTime * 1000.0f;
+            frameHistory[historyCursor] = currentFrameMilliseconds;
+            historyCursor = (historyCursor + 1) % frameHistory.Length;
+            historyCount = Math.Min(HistoryLength, historyCount + 1);
+            worstFrameMilliseconds = Mathf.Max(
+                worstFrameMilliseconds,
+                currentFrameMilliseconds);
+            if (currentFrameMilliseconds >= HitchThresholdMilliseconds)
+            {
+                hitchFrameCount++;
+                missedPresentationMilliseconds +=
+                    currentFrameMilliseconds - HitchThresholdMilliseconds;
             }
         }
 
@@ -209,58 +273,173 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 fontSize = 13,
                 normal = { textColor = new Color(0.62f, 0.76f, 0.90f) },
             };
-            GUI.Label(new Rect(24, 15, 810, 34), "SHADER HITCH PIPELINE · " + mode, title);
-            GUI.Label(new Rect(25, 48, 700, 24),
-                (Columns * Rows) + " shader/PSO combinations · first-use frame time · " +
-                SystemInfo.graphicsDeviceType,
-                small);
-
             GUIStyle status = new GUIStyle(small)
             {
                 fontSize = 15,
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.UpperRight,
-                normal = { textColor = new Color(0.42f, 0.92f, 0.72f) },
+                normal = { textColor = modeColor },
             };
-            string statusText;
+
+            DrawPresentationMotion(small);
+            GUI.Label(new Rect(24, 15, 780, 34), "SHADER HITCH PIPELINE · " + mode, title);
+            GUI.Label(new Rect(25, 48, 760, 24),
+                (Columns * Rows) + " real shader/graphics-state combinations · " +
+                SystemInfo.graphicsDeviceType,
+                small);
+            GUI.Label(new Rect(Screen.width - 450, 19, 420, 30), StatusText(), status);
+
+            DrawMetricCard(
+                new Rect(24, 78, 150, 56),
+                "CURRENT",
+                currentFrameMilliseconds.ToString("F2", CultureInfo.InvariantCulture) + " ms",
+                small,
+                currentFrameMilliseconds >= HitchThresholdMilliseconds
+                    ? new Color(1.0f, 0.32f, 0.28f)
+                    : new Color(0.35f, 0.86f, 1.0f));
+            DrawMetricCard(
+                new Rect(184, 78, 150, 56),
+                "WORST",
+                worstFrameMilliseconds.ToString("F2", CultureInfo.InvariantCulture) + " ms",
+                small,
+                worstFrameMilliseconds >= HitchThresholdMilliseconds
+                    ? new Color(1.0f, 0.32f, 0.28f)
+                    : new Color(0.35f, 0.86f, 1.0f));
+            DrawMetricCard(
+                new Rect(344, 78, 192, 56),
+                "MISSED PRESENTATION",
+                missedPresentationMilliseconds.ToString("F1", CultureInfo.InvariantCulture) +
+                " ms · " + hitchFrameCount + " frames",
+                small,
+                hitchFrameCount > 0
+                    ? new Color(1.0f, 0.54f, 0.30f)
+                    : new Color(0.32f, 0.92f, 0.68f));
+
+            Rect graph = new Rect(24, Screen.height - 164, Screen.width - 48, 130);
+            DrawRect(graph, new Color(0.035f, 0.050f, 0.078f, 0.94f));
+            float thresholdY = graph.yMax -
+                               Mathf.Clamp01(HitchThresholdMilliseconds / 24.0f) *
+                               graph.height;
+            DrawRect(
+                new Rect(graph.x, thresholdY, graph.width, 1),
+                new Color(1.0f, 0.35f, 0.32f, 0.7f));
+            int firstSample = (historyCursor - historyCount + HistoryLength) % HistoryLength;
+            for (int offset = 0; offset < historyCount; offset++)
+            {
+                int sampleIndex = (firstSample + offset) % HistoryLength;
+                float milliseconds = frameHistory[sampleIndex];
+                float height = Mathf.Clamp01(milliseconds / 24.0f) * graph.height;
+                float x = graph.x + (offset * graph.width / HistoryLength);
+                Color color = milliseconds >= HitchThresholdMilliseconds
+                    ? new Color(1.0f, 0.25f, 0.22f, 0.95f)
+                    : new Color(0.18f, 0.78f, 1.0f, 0.90f);
+                DrawRect(
+                    new Rect(
+                        x,
+                        graph.yMax - height,
+                        Mathf.Max(1, graph.width / HistoryLength),
+                        height),
+                    color);
+            }
+            string measurementLabel = sequenceStarted
+                ? "Measurement reset at WORKLOAD_START · red = ≥ 8.33 ms / missed 120 FPS"
+                : "Measurement arms at WORKLOAD_START · presentation clock remains live";
+            GUI.Label(
+                new Rect(graph.x + 8, graph.y + 5, graph.width - 16, 22),
+                measurementLabel + " · states: " +
+                Mathf.Min(visibleCount, renderers.Count) + "/" + renderers.Count,
+                small);
+        }
+
+        private string StatusText()
+        {
             if (!sequenceStarted)
             {
-                statusText = readyAt < 0.0
+                return readyAt < 0.0
                     ? "PREWARMING CAPTURED STATES…"
-                    : "WORKLOAD IN " + Math.Max(0.0,
+                    : "WORKLOAD IN " + Math.Max(
+                        0.0,
                         readyAt - Time.realtimeSinceStartupAsDouble).ToString(
                             "F1",
                             CultureInfo.InvariantCulture) + " s";
             }
-            else if (visibleCount < renderers.Count)
-            {
-                statusText = "LIVE FIRST USE";
-            }
-            else
-            {
-                statusText = "384 / 384 COMPLETE";
-            }
-            GUI.Label(new Rect(Screen.width - 430, 19, 400, 30), statusText, status);
+            if (visibleCount < renderers.Count)
+                return "LIVE FIRST USE · T+" +
+                       (Time.realtimeSinceStartupAsDouble - measurementStartedAt).ToString(
+                           "F2",
+                           CultureInfo.InvariantCulture) + " s";
+            return "384 / 384 COMPLETE";
+        }
 
-            Rect graph = new Rect(24, Screen.height - 164, Screen.width - 48, 130);
-            DrawRect(graph, new Color(0.035f, 0.050f, 0.078f, 0.94f));
-            float thresholdY = graph.yMax - Mathf.Clamp01(8.33f / 24.0f) * graph.height;
-            DrawRect(new Rect(graph.x, thresholdY, graph.width, 1), new Color(1.0f, 0.35f, 0.32f, 0.7f));
-            for (int offset = 0; offset < frameHistory.Length; offset++)
+        private void DrawPresentationMotion(GUIStyle style)
+        {
+            double elapsed = Time.realtimeSinceStartupAsDouble - presentationEpoch;
+            float phase = (float)((elapsed * 0.34) % 1.0);
+            float x = 24.0f + phase * (Screen.width - 48.0f);
+            DrawRect(
+                new Rect(x - 5.0f, 142.0f, 11.0f, Screen.height - 318.0f),
+                new Color(0.15f, 0.85f, 1.0f, 0.08f));
+            DrawRect(
+                new Rect(x - 1.0f, 142.0f, 3.0f, Screen.height - 318.0f),
+                new Color(0.38f, 0.94f, 1.0f, 0.78f));
+
+            Vector2 center = new Vector2(Screen.width - 83.0f, 103.0f);
+            DrawRect(
+                new Rect(center.x - 39.0f, center.y - 28.0f, 78.0f, 56.0f),
+                new Color(0.035f, 0.050f, 0.078f, 0.92f));
+            float angle = (float)((elapsed * 360.0) % 360.0) - 90.0f;
+            float radians = angle * Mathf.Deg2Rad;
+            Vector2 hand = center + new Vector2(
+                Mathf.Cos(radians) * 19.0f,
+                Mathf.Sin(radians) * 19.0f);
+            DrawLine(center, hand, 3.0f, modeColor);
+            DrawRect(
+                new Rect(center.x - 2.0f, center.y - 2.0f, 4.0f, 4.0f),
+                Color.white);
+            GUIStyle clock = new GUIStyle(style)
             {
-                int sampleIndex = (historyCursor + offset) % frameHistory.Length;
-                float milliseconds = frameHistory[sampleIndex];
-                float height = Mathf.Clamp01(milliseconds / 24.0f) * graph.height;
-                float x = graph.x + (offset * graph.width / frameHistory.Length);
-                Color color = milliseconds >= 8.33f
-                    ? new Color(1.0f, 0.25f, 0.22f, 0.95f)
-                    : new Color(0.18f, 0.78f, 1.0f, 0.90f);
-                DrawRect(new Rect(x, graph.yMax - height, Mathf.Max(1, graph.width / frameHistory.Length), height), color);
-            }
-            GUI.Label(new Rect(graph.x + 8, graph.y + 5, graph.width - 16, 22),
-                "Frame time (red = ≥ 8.33 ms / missed 120 FPS) · combinations revealed: " +
-                Mathf.Min(visibleCount, renderers.Count) + "/" + renderers.Count,
-                small);
+                alignment = TextAnchor.MiddleRight,
+                fontStyle = FontStyle.Bold,
+                normal = { textColor = modeColor },
+            };
+            GUI.Label(
+                new Rect(center.x - 150.0f, center.y + 28.0f, 186.0f, 22.0f),
+                "PRESENT T+" + elapsed.ToString("F3", CultureInfo.InvariantCulture),
+                clock);
+        }
+
+        private void DrawMetricCard(
+            Rect rect,
+            string label,
+            string value,
+            GUIStyle baseStyle,
+            Color valueColor)
+        {
+            DrawRect(rect, new Color(0.035f, 0.050f, 0.078f, 0.90f));
+            GUIStyle labelStyle = new GUIStyle(baseStyle)
+            {
+                fontSize = 10,
+                normal = { textColor = new Color(0.52f, 0.67f, 0.80f) },
+            };
+            GUIStyle valueStyle = new GUIStyle(baseStyle)
+            {
+                fontSize = 15,
+                fontStyle = FontStyle.Bold,
+                normal = { textColor = valueColor },
+            };
+            GUI.Label(new Rect(rect.x + 8, rect.y + 4, rect.width - 16, 18), label, labelStyle);
+            GUI.Label(new Rect(rect.x + 8, rect.y + 23, rect.width - 16, 26), value, valueStyle);
+        }
+
+        private void DrawLine(Vector2 start, Vector2 end, float width, Color color)
+        {
+            Matrix4x4 previousMatrix = GUI.matrix;
+            float angle = Vector2.SignedAngle(Vector2.right, end - start);
+            GUIUtility.RotateAroundPivot(angle, start);
+            DrawRect(
+                new Rect(start.x, start.y - (width * 0.5f), Vector2.Distance(start, end), width),
+                color);
+            GUI.matrix = previousMatrix;
         }
 
         private void DrawRect(Rect rect, Color color)

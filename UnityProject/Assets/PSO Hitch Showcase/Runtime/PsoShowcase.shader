@@ -33,6 +33,7 @@ Shader "Yanagisawa/Shader Hitch Showcase"
             #pragma multi_compile_local __ PSO_GRADIENT
             #pragma multi_compile_local __ PSO_CAPTURE_V2
             #include "UnityCG.cginc"
+            #define PSO_SHOWCASE_CACHE_BUSTER 0u
 
             struct Attributes
             {
@@ -102,6 +103,12 @@ Shader "Yanagisawa/Shader Hitch Showcase"
                     color.rgb = sqrt(saturate(color.rgb)) * captureBand;
                     color.rgb += 0.025 * cos(float3(1.0, 1.7, 2.3) * input.uv.x * 13.0);
                 #endif
+                // The generated showcase shader replaces this compile-time value for
+                // each acceptance run. The sub-pixel delta changes real shader bytecode
+                // without creating a visible difference or synthetic timing stall.
+                color.r += (float)(PSO_SHOWCASE_CACHE_BUSTER & 65535u) / 4294967296.0;
+                color.g += (float)((PSO_SHOWCASE_CACHE_BUSTER >> 16) & 65535u) /
+                           4294967296.0;
                 return color;
             }
             ENDHLSL

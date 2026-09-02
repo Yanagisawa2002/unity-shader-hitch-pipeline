@@ -1,15 +1,70 @@
 {
-  "schemaVersion": 1,
-  "acceptanceRun": "20260901-142133",
+  "schemaVersion": 2,
+  "generatedUtc": "2026-09-02T02:58:52.357Z",
+  "pathBase": "alignmentFileDirectory",
   "synchronizationMarker": "FIRST_VISIBLE_TILE_PIXEL",
-  "captureResolution": "1280x720",
-  "captureFrameRate": 60,
   "requestedLeadSeconds": 0.5,
-  "effectiveLeadSeconds": 0.0,
+  "effectiveLeadSeconds": 0.416667,
   "seekGuardSeconds": 0.03333333333333333,
   "durationSeconds": 2.8,
-  "baselineFirstRevealSecondsInVideo": 0.1,
-  "optimizedFirstRevealSecondsInVideo": 1.217,
-  "baselineTrimSeconds": 0.06666666666666668,
-  "optimizedTrimSeconds": 1.1836666666666666
+  "warmupDurationSeconds": 1.5,
+  "baseline": {
+    "Mode": "baseline",
+    "Video": "../Captures/baseline.mp4",
+    "MarkerFile": "../Captures/baseline.mp4.markers.txt",
+    "WindowTitle": "Shader Hitch Pipeline Showcase",
+    "CaptureRegion": {
+      "X": 40,
+      "Y": 63,
+      "Width": 1280,
+      "Height": 720
+    },
+    "CaptureReadyRealtimeSeconds": 2.034493,
+    "WorkloadStartRealtimeSeconds": 3.03839,
+    "WorkloadStartSecondsInVideo": 0.2951925000000003,
+    "FirstRevealSecondsInVideo": 0.416667,
+    "FirstPresentedUiSecondsInVideo": 0.0
+  },
+  "naive": {
+    "Mode": "naive",
+    "Video": "../Captures/naive.mp4",
+    "MarkerFile": "../Captures/naive.mp4.markers.txt",
+    "WindowTitle": "Shader Hitch Pipeline Showcase",
+    "CaptureRegion": {
+      "X": 40,
+      "Y": 63,
+      "Width": 1280,
+      "Height": 720
+    },
+    "CaptureReadyRealtimeSeconds": 2.066543,
+    "WorkloadStartRealtimeSeconds": 3.706925,
+    "WorkloadStartSecondsInVideo": 1.2174195,
+    "FirstRevealSecondsInVideo": 1.233333,
+    "FirstPresentedUiSecondsInVideo": 0.0666667
+  },
+  "scheduled": {
+    "Mode": "scheduled",
+    "Video": "../Captures/scheduled.mp4",
+    "MarkerFile": "../Captures/scheduled.mp4.markers.txt",
+    "WindowTitle": "Shader Hitch Pipeline Showcase",
+    "CaptureRegion": {
+      "X": 40,
+      "Y": 63,
+      "Width": 1280,
+      "Height": 720
+    },
+    "CaptureReadyRealtimeSeconds": 2.067644,
+    "WorkloadStartRealtimeSeconds": 3.839872,
+    "WorkloadStartSecondsInVideo": 1.3509514,
+    "FirstRevealSecondsInVideo": 1.366667,
+    "FirstPresentedUiSecondsInVideo": 0.15
+  },
+  "baselineTrimSeconds": 0.0,
+  "naiveTrimSeconds": 0.7833326666666667,
+  "scheduledTrimSeconds": 0.9166666666666667,
+  "outputVideo": "actual-comparison.mp4",
+  "outputGif": "actual-comparison.gif",
+  "outputPoster": "actual-comparison.png",
+  "warmupVideo": "actual-warmup-comparison.mp4",
+  "warmupGif": "actual-warmup-comparison.gif"
 }

@@ -54,6 +54,26 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 "Maximum batch", configuration.maximumBatchSize);
             configuration.targetFrameMilliseconds = EditorGUILayout.DoubleField(
                 "Frame budget (ms)", configuration.targetFrameMilliseconds);
+            configuration.startupDeadlineMilliseconds = EditorGUILayout.DoubleField(
+                "Startup deadline (ms)", configuration.startupDeadlineMilliseconds);
+            configuration.deferredDeadlineMilliseconds = EditorGUILayout.DoubleField(
+                "Deferred deadline (ms)", configuration.deferredDeadlineMilliseconds);
+            configuration.estimatedMillisecondsPerState = EditorGUILayout.DoubleField(
+                "Estimated ms / state", configuration.estimatedMillisecondsPerState);
+            configuration.startupExpectedUseProbability = EditorGUILayout.Slider(
+                "Startup use probability",
+                (float)configuration.startupExpectedUseProbability,
+                0.0f,
+                1.0f);
+            configuration.deferredExpectedUseProbability = EditorGUILayout.Slider(
+                "Deferred use probability",
+                (float)configuration.deferredExpectedUseProbability,
+                0.0f,
+                1.0f);
+            configuration.startupHotSetTier = EditorGUILayout.IntField(
+                "Startup hot-set tier", configuration.startupHotSetTier);
+            configuration.deferredHotSetTier = EditorGUILayout.IntField(
+                "Deferred hot-set tier", configuration.deferredHotSetTier);
             configuration.validateInstalledPlanBeforeBuild = EditorGUILayout.Toggle(
                 "Fail invalid builds", configuration.validateInstalledPlanBeforeBuild);
 

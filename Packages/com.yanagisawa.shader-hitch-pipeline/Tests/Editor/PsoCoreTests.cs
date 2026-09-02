@@ -76,6 +76,75 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
         }
 
         [Test]
+        public void AdaptiveBatchPolicy_UsesObservedCostAndDeadlineToRaiseBatch()
+        {
+            var policy = new PsoAdaptiveBatchPolicy(2, 1, 64, 10.0, 0.5);
+            Assert.That(policy.ObserveBatch(4, 8.0), Is.EqualTo(2.0).Within(0.0001));
+
+            int batch = policy.RecommendBatchSize(
+                remainingStates: 40,
+                deadlineRemainingMilliseconds: 20.0,
+                hotSet: true);
+
+            Assert.That(batch, Is.EqualTo(20));
+        }
+
+        [Test]
+        public void DeadlineScheduler_PrioritizesAtRiskWorkBeforeHotSet()
+        {
+            var candidates = new[]
+            {
+                new PsoSchedulerCandidate(
+                    "hot",
+                    20,
+                    0,
+                    0,
+                    1000.0,
+                    100.0,
+                    1.0,
+                    1.0),
+                new PsoSchedulerCandidate(
+                    "deadline",
+                    20,
+                    1,
+                    2,
+                    150.0,
+                    100.0,
+                    1.0,
+                    0.5),
+            };
+
+            PsoSchedulingDecision decision = PsoDeadlineCostScheduler.SelectNext(
+                candidates,
+                40.0);
+
+            Assert.That(decision.Phase, Is.EqualTo("deadline"));
+            Assert.That(decision.DeadlineCritical, Is.True);
+        }
+
+        [Test]
+        public void DeadlineScheduler_UsesHotSetThenValueDensityWithoutDeadlineRisk()
+        {
+            var candidates = new[]
+            {
+                new PsoSchedulerCandidate("tail", 10, 0, 2, 0.0, 0.0, 1.0, 1.0),
+                new PsoSchedulerCandidate("hot", 100, 5, 0, 0.0, 0.0, 1.0, 0.5),
+            };
+            Assert.That(
+                PsoDeadlineCostScheduler.SelectNext(candidates, 40.0).Phase,
+                Is.EqualTo("hot"));
+
+            candidates = new[]
+            {
+                new PsoSchedulerCandidate("expensive", 100, 0, 1, 0.0, 0.0, 2.0, 1.0),
+                new PsoSchedulerCandidate("cheap", 10, 5, 1, 0.0, 0.0, 1.0, 0.8),
+            };
+            Assert.That(
+                PsoDeadlineCostScheduler.SelectNext(candidates, 40.0).Phase,
+                Is.EqualTo("cheap"));
+        }
+
+        [Test]
         public void ResolveChildPath_RejectsAbsoluteAndTraversalPaths()
         {
             Assert.Throws<InvalidOperationException>(() =>
@@ -115,6 +184,10 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
                         collectionSha256 = PsoFileUtility.ComputeSha256(collection),
                         variantCount = 4,
                         graphicsStateCount = 8,
+                        deadlineMilliseconds = 500.0,
+                        estimatedMillisecondsPerState = 0.5,
+                        expectedUseProbability = 1.0,
+                        hotSetTier = 0,
                     },
                 },
             };

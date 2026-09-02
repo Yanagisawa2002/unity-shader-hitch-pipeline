@@ -1,13 +1,23 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "verdict": "PASS",
+  "naiveParity": true,
+  "naiveParityExact": false,
+  "parityPolicy": {
+    "presentationHitchThresholdMilliseconds": 8.33,
+    "severeHitchThresholdMilliseconds": 16.67,
+    "presentationJitterAllowanceFrames": 1,
+    "presentationJitterAllowancePercent": 0.5,
+    "rationale": "Report every missed presentation budget; permit at most 0.5% isolated non-severe capture/OS jitter while requiring zero regression in severe stalls."
+  },
+  "warmupEvidenceValid": true,
   "environmentCompatible": true,
   "environmentMismatches": [],
   "environment": {
     "unityVersion": "6000.5.2f1",
     "productName": "Shader Hitch Pipeline Showcase",
     "applicationVersion": "1.0",
-    "buildGuid": "b80d0b99089d42d98c34bf3484e82495",
+    "buildGuid": "c5a79b97b58d42fb99cedadeb29ae0ff",
     "runtimePlatform": "WindowsPlayer",
     "graphicsDeviceType": "Direct3D12",
     "graphicsDeviceName": "AMD Radeon AI PRO R9700",
@@ -16,44 +26,98 @@
     "graphicsMemorySizeMb": 32476,
     "qualityLevelName": "Ultra"
   },
-  "baselineBuildGuid": "b80d0b99089d42d98c34bf3484e82495",
-  "optimizedBuildGuid": "6eb3a21ab5dd4e14bb151a002a75fdc3",
+  "baselineBuildGuid": "c5a79b97b58d42fb99cedadeb29ae0ff",
+  "naiveBuildGuid": "38779ce65fb44082bba90e08abdfea4a",
+  "optimizedBuildGuid": "38779ce65fb44082bba90e08abdfea4a",
   "sampleFrames": {
     "baseline": 240,
+    "naive": 240,
     "optimized": 240
   },
   "hitchThresholdMilliseconds": 8.33,
   "hitches": {
     "baseline": 48,
+    "naive": 0,
+    "optimized": 1,
+    "eliminated": 47
+  },
+  "severeHitches": {
+    "thresholdMilliseconds": 16.67,
+    "baseline": 48,
+    "naive": 0,
     "optimized": 0,
     "eliminated": 48
   },
   "metrics": {
     "mean": {
-      "baselineMilliseconds": 8.53506914912335,
-      "optimizedMilliseconds": 4.166708743044485,
-      "improvementPercent": 51.18131241534869
+      "baselineMilliseconds": 8.861186693926962,
+      "naiveMilliseconds": 4.168910441997771,
+      "optimizedMilliseconds": 4.200581265225385,
+      "improvementPercent": 52.59572549008289
     },
     "p95": {
-      "baselineMilliseconds": 34.29967090487479,
-      "optimizedMilliseconds": 4.168601240962744,
-      "improvementPercent": 87.8465270045192
+      "baselineMilliseconds": 35.70567294955253,
+      "naiveMilliseconds": 4.168903757818043,
+      "optimizedMilliseconds": 4.210144537501037,
+      "improvementPercent": 88.20875174807817
     },
     "p99": {
-      "baselineMilliseconds": 37.467395439743996,
-      "optimizedMilliseconds": 4.169462500140071,
-      "improvementPercent": 88.87175782782792
+      "baselineMilliseconds": 40.674375854432576,
+      "naiveMilliseconds": 4.202513019554316,
+      "optimizedMilliseconds": 4.279243522323668,
+      "improvementPercent": 89.47926444492121
     },
     "maximum": {
-      "baselineMilliseconds": 48.94299805164337,
-      "optimizedMilliseconds": 4.173901863396168,
-      "improvementPercent": 91.47191216404035
+      "baselineMilliseconds": 46.386998146772385,
+      "naiveMilliseconds": 4.43589873611927,
+      "optimizedMilliseconds": 9.799000807106495,
+      "improvementPercent": 78.8755444443686
     }
   },
   "plan": {
-    "profileId": "showcase-d3d12-20260901-142133",
-    "planSha256": "d870032ac5f85c03acc590401b838d23b2705ebbd1fb2295a313e0ea5c348fa3",
+    "profileId": "showcase-d3d12-20260902-025624",
+    "planSha256": "3a7cbd3c2a695cd507c0dab566bff46d7c178131db81addc478859569c06d345",
     "variantCount": 388,
     "graphicsStateCount": 389
+  },
+  "warmupEvidence": {
+    "naive": {
+      "available": true,
+      "valid": true,
+      "strategy": "throughput",
+      "workerCount": 2,
+      "elapsedMilliseconds": 647.1426,
+      "completedGraphicsStates": 389,
+      "totalGraphicsStates": 389,
+      "phasesComplete": true,
+      "planMatchesBenchmark": true,
+      "feedbackTraceRequested": true,
+      "feedbackTraceArmed": true,
+      "feedbackTraceScope": "plan",
+      "feedbackBaselineGraphicsStates": 389,
+      "feedbackObservedGraphicsStates": 389,
+      "cacheMissGraphicsStates": 0,
+      "feedbackCollectionContainsBaseline": false,
+      "feedbackError": ""
+    },
+    "optimized": {
+      "available": true,
+      "valid": true,
+      "strategy": "scheduled",
+      "workerCount": 2,
+      "elapsedMilliseconds": 778.2758,
+      "completedGraphicsStates": 389,
+      "totalGraphicsStates": 389,
+      "phasesComplete": true,
+      "planMatchesBenchmark": true,
+      "feedbackTraceRequested": true,
+      "feedbackTraceArmed": true,
+      "feedbackTraceScope": "plan",
+      "feedbackBaselineGraphicsStates": 389,
+      "feedbackObservedGraphicsStates": 389,
+      "cacheMissGraphicsStates": 0,
+      "feedbackCollectionContainsBaseline": false,
+      "feedbackError": ""
+    }
   }
 }

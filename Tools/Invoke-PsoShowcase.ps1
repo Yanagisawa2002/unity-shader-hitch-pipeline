@@ -9,6 +9,11 @@ param(
     [double]$CaptureSeconds = 6.0,
     [double]$VisualLeadSeconds = 0.5,
     [double]$VisualDurationSeconds = 2.8,
+    [double]$WarmupVisualDurationSeconds = 1.5,
+    [int[]]$AutoTuneWorkerCounts = @(1, 2, 4, 8),
+    [int[]]$AutoTuneBatchSizes = @(4, 16, 64),
+    [int]$AutoTuneRepetitions = 2,
+    [switch]$SkipAutoTune,
     [switch]$NoVisualCapture,
     [switch]$NoGif
 )
@@ -20,7 +25,8 @@ $profileId = "showcase-d3d12-$stamp"
 $runRoot = Join-Path $project "PsoArtifacts\ShowcaseRuns\$stamp"
 $player = Join-Path $project "Builds\Windows\ShaderHitchShowcase.exe"
 $baseline = Join-Path $runRoot "Benchmarks\baseline.benchmark.json"
-$optimized = Join-Path $runRoot "Benchmarks\optimized.benchmark.json"
+$naive = Join-Path $runRoot "Benchmarks\naive.benchmark.json"
+$scheduled = Join-Path $runRoot "Benchmarks\scheduled.benchmark.json"
 $profileRoot = Join-Path $runRoot "Profiles"
 $plan = Join-Path $profileRoot "$profileId\plan.json"
 $evidence = Join-Path $runRoot "Evidence"
@@ -68,6 +74,30 @@ function Invoke-UnityEditor([string[]]$Arguments, [string]$Label) {
 
 function ConvertTo-InvariantNumber([double]$Value) {
     return $Value.ToString("0.######", [Globalization.CultureInfo]::InvariantCulture)
+}
+
+function ConvertTo-EvidencePath([string]$Path, [string]$EvidenceDirectory) {
+    if ([string]::IsNullOrWhiteSpace($Path)) {
+        return ""
+    }
+    return [System.IO.Path]::GetRelativePath(
+        $EvidenceDirectory,
+        [System.IO.Path]::GetFullPath($Path)).Replace("\", "/")
+}
+
+function ConvertTo-EvidenceCapture([object]$Capture, [string]$EvidenceDirectory) {
+    return [ordered]@{
+        Mode = $Capture.Mode
+        Video = ConvertTo-EvidencePath $Capture.Video $EvidenceDirectory
+        MarkerFile = ConvertTo-EvidencePath $Capture.MarkerFile $EvidenceDirectory
+        WindowTitle = $Capture.WindowTitle
+        CaptureRegion = $Capture.CaptureRegion
+        CaptureReadyRealtimeSeconds = $Capture.CaptureReadyRealtimeSeconds
+        WorkloadStartRealtimeSeconds = $Capture.WorkloadStartRealtimeSeconds
+        WorkloadStartSecondsInVideo = $Capture.WorkloadStartSecondsInVideo
+        FirstRevealSecondsInVideo = $Capture.FirstRevealSecondsInVideo
+        FirstPresentedUiSecondsInVideo = $Capture.FirstPresentedUiSecondsInVideo
+    }
 }
 
 function Invoke-Ffmpeg([string[]]$Arguments, [string]$Label, [string]$Log) {
@@ -290,7 +320,8 @@ function Assert-CapturePixels(
 function Get-FirstRevealSeconds(
     [string]$Capture,
     [pscustomobject]$CaptureRegion,
-    [string]$Mode
+    [string]$Mode,
+    [double]$MinimumSeconds
 ) {
     $cropX = [Math]::Floor($CaptureRegion.Width * 0.25)
     $cropY = [Math]::Floor($CaptureRegion.Height * 0.2222)
@@ -333,29 +364,76 @@ function Get-FirstRevealSeconds(
         throw "$Mode reveal detection received too few video frames."
     }
 
-    $minimumLuma = ($samples.AverageLuma | Measure-Object -Minimum).Minimum
-    $backgroundLimit = $minimumLuma + 0.25
-    $revealLimit = $minimumLuma + 0.8
-    $backgroundEnd = -1
-    for ($index = 0; $index -le $samples.Count - 4; $index++) {
-        if ($samples[$index].AverageLuma -le $backgroundLimit -and
-            $samples[$index + 1].AverageLuma -le $backgroundLimit -and
-            $samples[$index + 2].AverageLuma -le $backgroundLimit) {
-            $backgroundEnd = $index + 2
-            break
-        }
+    $referenceCount = [Math]::Min(24, [Math]::Floor($samples.Count / 4))
+    if ($referenceCount -lt 8) {
+        throw "$Mode reveal detection has too little pre-roll for a background reference."
     }
-    if ($backgroundEnd -lt 0) {
-        throw "$Mode reveal detection did not find an empty-scene reference."
-    }
+    $referenceLuma = @(
+        $samples | Select-Object -First $referenceCount |
+            ForEach-Object { $_.AverageLuma } | Sort-Object
+    )
+    $backgroundLuma = [double]$referenceLuma[
+        [Math]::Floor($referenceLuma.Count / 2)]
+    # The live presentation scanline is intentionally bright but narrow. Require a
+    # persistent multi-frame luma increase so it cannot be mistaken for tile reveal.
+    $revealLimit = $backgroundLuma + 2.0
+    $backgroundEnd = $referenceCount - 1
 
-    for ($index = $backgroundEnd + 1; $index -lt $samples.Count - 1; $index++) {
-        if ($samples[$index].AverageLuma -gt $revealLimit -and
-            $samples[$index + 1].AverageLuma -gt $revealLimit) {
+    for ($index = $backgroundEnd + 1; $index -lt $samples.Count - 3; $index++) {
+        if ($samples[$index].Time -ge $MinimumSeconds -and
+            $samples[$index].AverageLuma -gt $revealLimit -and
+            $samples[$index + 1].AverageLuma -gt $revealLimit -and
+            $samples[$index + 2].AverageLuma -gt $revealLimit -and
+            $samples[$index + 3].AverageLuma -gt $revealLimit) {
             return $samples[$index].Time
         }
     }
     throw "$Mode reveal detection did not find the first visible tile."
+}
+
+function Get-FirstPresentedUiSeconds(
+    [string]$Capture,
+    [pscustomobject]$CaptureRegion,
+    [string]$Mode
+) {
+    $cropHeight = [Math]::Min(140, $CaptureRegion.Height)
+    $statisticsLog = $Capture + ".uistats.log"
+    Invoke-Ffmpeg `
+        -Label "$Mode-ui-detection" `
+        -Log $statisticsLog `
+        -Arguments @(
+            "-y",
+            "-i", $Capture,
+            "-vf", "crop=$($CaptureRegion.Width)`:$cropHeight`:0`:0,signalstats,metadata=print",
+            "-f", "null",
+            "NUL"
+        )
+
+    $samples = [System.Collections.Generic.List[object]]::new()
+    $sampleTime = $null
+    foreach ($line in (Get-Content -LiteralPath $statisticsLog)) {
+        if ($line -match '^\[Parsed_metadata[^]]*\] frame:\s*\d+\s+pts:\s*\d+\s+pts_time:([0-9.]+)') {
+            $sampleTime = [double]::Parse(
+                $Matches[1],
+                [Globalization.CultureInfo]::InvariantCulture)
+        } elseif ($null -ne $sampleTime -and
+                  $line -match 'lavfi\.signalstats\.YMAX=([0-9.]+)') {
+            $samples.Add([pscustomobject]@{
+                Time = $sampleTime
+                MaximumLuma = [double]::Parse(
+                    $Matches[1],
+                    [Globalization.CultureInfo]::InvariantCulture)
+            })
+            $sampleTime = $null
+        }
+    }
+    for ($index = 0; $index -lt $samples.Count - 1; $index++) {
+        if ($samples[$index].MaximumLuma -ge 160.0 -and
+            $samples[$index + 1].MaximumLuma -ge 160.0) {
+            return $samples[$index].Time
+        }
+    }
+    throw "$Mode UI detection did not find two presented title frames."
 }
 
 function Invoke-ShowcasePlayer(
@@ -363,6 +441,10 @@ function Invoke-ShowcasePlayer(
     [string]$Report,
     [string]$Log,
     [string]$Capture,
+    [string]$Strategy = "",
+    [int]$AsyncJobCount = 0,
+    [int]$InitialBatchSize = 0,
+    [string]$WarmupReceipt = "",
     [switch]$Trace,
     [switch]$DisableWarmup
 ) {
@@ -391,6 +473,18 @@ function Invoke-ShowcasePlayer(
     }
     if ($DisableWarmup) {
         $arguments += "-pso-disable-warmup"
+    }
+    if (-not [string]::IsNullOrWhiteSpace($Strategy)) {
+        $arguments += @("-pso-warmup-strategy", $Strategy)
+    }
+    if ($AsyncJobCount -gt 0) {
+        $arguments += @("-max-async-pso-job-count", $AsyncJobCount.ToString())
+    }
+    if ($InitialBatchSize -gt 0) {
+        $arguments += @("-pso-warmup-initial-batch", $InitialBatchSize.ToString())
+    }
+    if (-not [string]::IsNullOrWhiteSpace($WarmupReceipt)) {
+        $arguments += @("-pso-warmup-receipt", $WarmupReceipt)
     }
     $markerFile = ""
     if (-not [string]::IsNullOrWhiteSpace($Capture)) {
@@ -480,6 +574,11 @@ function Invoke-ShowcasePlayer(
     $firstRevealSeconds = Get-FirstRevealSeconds `
         -Capture $Capture `
         -CaptureRegion $captureRect `
+        -Mode $Mode `
+        -MinimumSeconds $workloadStartInVideo
+    $firstPresentedUiSeconds = Get-FirstPresentedUiSeconds `
+        -Capture $Capture `
+        -CaptureRegion $captureRect `
         -Mode $Mode
     Assert-CapturePixels `
         -Capture $Capture `
@@ -498,6 +597,7 @@ function Invoke-ShowcasePlayer(
         WorkloadStartRealtimeSeconds = $workloadStart.RealtimeSeconds
         WorkloadStartSecondsInVideo = $workloadStartInVideo
         FirstRevealSecondsInVideo = $firstRevealSeconds
+        FirstPresentedUiSecondsInVideo = $firstPresentedUiSeconds
     }
     $captureMetadata | ConvertTo-Json -Depth 4 | Set-Content `
         -LiteralPath ($Capture + ".capture.json") `
@@ -507,7 +607,8 @@ function Invoke-ShowcasePlayer(
 
 function New-ActualVisualEvidence(
     [pscustomobject]$BaselineCapture,
-    [pscustomobject]$OptimizedCapture,
+    [pscustomobject]$NaiveCapture,
+    [pscustomobject]$ScheduledCapture,
     [string]$OutputDirectory
 ) {
     New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
@@ -515,7 +616,9 @@ function New-ActualVisualEvidence(
         $VisualLeadSeconds,
         [Math]::Min(
             $BaselineCapture.FirstRevealSecondsInVideo,
-            $OptimizedCapture.FirstRevealSecondsInVideo))
+            [Math]::Min(
+                $NaiveCapture.FirstRevealSecondsInVideo,
+                $ScheduledCapture.FirstRevealSecondsInVideo)))
     if ($effectiveLeadSeconds -lt 0.25) {
         # A very short pre-roll mostly contains swapchain/DWM settling. Start at the
         # first visible tile instead; runs with enough clean pre-roll retain the
@@ -531,13 +634,21 @@ function New-ActualVisualEvidence(
         $BaselineCapture.FirstRevealSecondsInVideo -
         $effectiveLeadSeconds -
         $seekGuardSeconds)
-    $optimizedTrim = [Math]::Max(
+    $naiveTrim = [Math]::Max(
         0.0,
-        $OptimizedCapture.FirstRevealSecondsInVideo -
+        $NaiveCapture.FirstRevealSecondsInVideo -
+        $effectiveLeadSeconds -
+        $seekGuardSeconds)
+    $scheduledTrim = [Math]::Max(
+        0.0,
+        $ScheduledCapture.FirstRevealSecondsInVideo -
         $effectiveLeadSeconds -
         $seekGuardSeconds)
     $actualMp4 = Join-Path $OutputDirectory "actual-comparison.mp4"
     $actualGif = Join-Path $OutputDirectory "actual-comparison.gif"
+    $actualPng = Join-Path $OutputDirectory "actual-comparison.png"
+    $warmupMp4 = Join-Path $OutputDirectory "actual-warmup-comparison.mp4"
+    $warmupGif = Join-Path $OutputDirectory "actual-warmup-comparison.gif"
     $alignment = Join-Path $OutputDirectory "visual-alignment.json"
 
     Invoke-Ffmpeg `
@@ -547,10 +658,12 @@ function New-ActualVisualEvidence(
             "-y",
             "-ss", (ConvertTo-InvariantNumber $baselineTrim),
             "-i", $BaselineCapture.Video,
-            "-ss", (ConvertTo-InvariantNumber $optimizedTrim),
-            "-i", $OptimizedCapture.Video,
+            "-ss", (ConvertTo-InvariantNumber $naiveTrim),
+            "-i", $NaiveCapture.Video,
+            "-ss", (ConvertTo-InvariantNumber $scheduledTrim),
+            "-i", $ScheduledCapture.Video,
             "-filter_complex",
-            "[0:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[left];[1:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[right];[left][right]hstack=inputs=2[comparison]",
+            "[0:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[cold];[1:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[naive];[2:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[ours];[cold][naive][ours]hstack=inputs=3[comparison]",
             "-map", "[comparison]",
             "-t", (ConvertTo-InvariantNumber $VisualDurationSeconds),
             "-an",
@@ -562,6 +675,42 @@ function New-ActualVisualEvidence(
             $actualMp4
         )
 
+    Invoke-Ffmpeg `
+        -Label "actual-warmup-triptych" `
+        -Log ($warmupMp4 + ".ffmpeg.log") `
+        -Arguments @(
+            "-y",
+            "-ss", (ConvertTo-InvariantNumber $BaselineCapture.FirstPresentedUiSecondsInVideo),
+            "-i", $BaselineCapture.Video,
+            "-ss", (ConvertTo-InvariantNumber $NaiveCapture.FirstPresentedUiSecondsInVideo),
+            "-i", $NaiveCapture.Video,
+            "-ss", (ConvertTo-InvariantNumber $ScheduledCapture.FirstPresentedUiSecondsInVideo),
+            "-i", $ScheduledCapture.Video,
+            "-filter_complex",
+            "[0:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[cold];[1:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[naive];[2:v]fps=60,scale=640:360:flags=lanczos,setsar=1,setpts=PTS-STARTPTS[ours];[cold][naive][ours]hstack=inputs=3[comparison]",
+            "-map", "[comparison]",
+            "-t", (ConvertTo-InvariantNumber $WarmupVisualDurationSeconds),
+            "-an",
+            "-c:v", "libx264",
+            "-preset", "slow",
+            "-crf", "17",
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart",
+            $warmupMp4
+        )
+
+    Invoke-Ffmpeg `
+        -Label "actual-poster" `
+        -Log ($actualPng + ".ffmpeg.log") `
+        -Arguments @(
+            "-y",
+            "-ss", "1.0",
+            "-i", $actualMp4,
+            "-frames:v", "1",
+            "-update", "1",
+            $actualPng
+        )
+
     if (-not $NoGif) {
         Invoke-Ffmpeg `
             -Label "actual-gif" `
@@ -570,38 +719,67 @@ function New-ActualVisualEvidence(
                 "-y",
                 "-i", $actualMp4,
                 "-filter_complex",
-                "[0:v]fps=20,scale=960:-2:flags=lanczos,split[frames][palette_source];[palette_source]palettegen=max_colors=128:stats_mode=diff[palette];[frames][palette]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle[gif]",
+                "[0:v]fps=20,scale=1440:-2:flags=lanczos,split[frames][palette_source];[palette_source]palettegen=max_colors=128:stats_mode=diff[palette];[frames][palette]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle[gif]",
                 "-map", "[gif]",
                 "-loop", "0",
                 $actualGif
             )
+        Invoke-Ffmpeg `
+            -Label "actual-warmup-gif" `
+            -Log ($warmupGif + ".ffmpeg.log") `
+            -Arguments @(
+                "-y",
+                "-i", $warmupMp4,
+                "-filter_complex",
+                "[0:v]fps=20,scale=1440:-2:flags=lanczos,split[frames][palette_source];[palette_source]palettegen=max_colors=128:stats_mode=diff[palette];[frames][palette]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle[gif]",
+                "-map", "[gif]",
+                "-loop", "0",
+                $warmupGif
+            )
     }
 
     [ordered]@{
-        schemaVersion = 1
+        schemaVersion = 2
         generatedUtc = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+        pathBase = "alignmentFileDirectory"
         synchronizationMarker = "FIRST_VISIBLE_TILE_PIXEL"
         requestedLeadSeconds = $VisualLeadSeconds
         effectiveLeadSeconds = $effectiveLeadSeconds
         seekGuardSeconds = $seekGuardSeconds
         durationSeconds = $VisualDurationSeconds
-        baseline = $BaselineCapture
-        optimized = $OptimizedCapture
+        warmupDurationSeconds = $WarmupVisualDurationSeconds
+        baseline = ConvertTo-EvidenceCapture $BaselineCapture $OutputDirectory
+        naive = ConvertTo-EvidenceCapture $NaiveCapture $OutputDirectory
+        scheduled = ConvertTo-EvidenceCapture $ScheduledCapture $OutputDirectory
         baselineTrimSeconds = $baselineTrim
-        optimizedTrimSeconds = $optimizedTrim
-        outputVideo = $actualMp4
-        outputGif = if ($NoGif) { "" } else { $actualGif }
+        naiveTrimSeconds = $naiveTrim
+        scheduledTrimSeconds = $scheduledTrim
+        outputVideo = ConvertTo-EvidencePath $actualMp4 $OutputDirectory
+        outputGif = if ($NoGif) {
+            ""
+        } else {
+            ConvertTo-EvidencePath $actualGif $OutputDirectory
+        }
+        outputPoster = ConvertTo-EvidencePath $actualPng $OutputDirectory
+        warmupVideo = ConvertTo-EvidencePath $warmupMp4 $OutputDirectory
+        warmupGif = if ($NoGif) {
+            ""
+        } else {
+            ConvertTo-EvidencePath $warmupGif $OutputDirectory
+        }
     } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $alignment -Encoding utf8NoBOM
 
     Write-Host "Actual player comparison: $actualMp4"
     if (-not $NoGif) {
         Write-Host "Actual player GIF: $actualGif"
     }
+    Write-Host "Warmup pressure comparison: $warmupMp4"
 }
 
 Invoke-UnityEditor @(
     "-executeMethod",
     "Yanagisawa.ShaderHitchPipeline.Showcase.Editor.PsoShowcaseBuilder.BuildWindowsPlayer",
+    "-pso-showcase-cache-buster", $stamp,
     "-pso-training-build",
     "-quit",
     "-logFile", "Logs/showcase-training-$stamp.log"
@@ -640,32 +818,82 @@ Invoke-UnityEditor @(
 Invoke-UnityEditor @(
     "-executeMethod",
     "Yanagisawa.ShaderHitchPipeline.Showcase.Editor.PsoShowcaseBuilder.BuildWindowsPlayer",
+    "-pso-showcase-cache-buster", $stamp,
     "-quit",
     "-logFile", "Logs/showcase-final-$stamp.log"
 ) "final-build"
 
-$optimizedCapturePath = if ($NoVisualCapture) {
+$selectedWorkerCount = 0
+$selectedBatchSize = 0
+if (-not $SkipAutoTune) {
+    $policySearchOutput = Join-Path $runRoot "PolicySearch"
+    & (Join-Path $PSScriptRoot "Find-PsoWarmupPolicy.ps1") `
+        -Player $player `
+        -Plan $plan `
+        -Output $policySearchOutput `
+        -WorkerCounts $AutoTuneWorkerCounts `
+        -BatchSizes $AutoTuneBatchSizes `
+        -Repetitions $AutoTuneRepetitions `
+        -TargetFrameMilliseconds 16.67
+    $recommendationFile = Get-ChildItem `
+        -LiteralPath $policySearchOutput `
+        -Filter "recommendation.json" `
+        -File `
+        -Recurse | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
+    if ($null -eq $recommendationFile) {
+        throw "Policy search did not emit recommendation.json."
+    }
+    $recommendation = Get-Content `
+        -Raw `
+        -LiteralPath $recommendationFile.FullName | ConvertFrom-Json
+    $selectedWorkerCount = [int]$recommendation.workerCount
+    $selectedBatchSize = [int]$recommendation.batchSize
+}
+
+$naiveCapturePath = if ($NoVisualCapture) {
     ""
 } else {
-    Join-Path $captures "optimized.mp4"
+    Join-Path $captures "naive.mp4"
 }
-$optimizedCapture = Invoke-ShowcasePlayer `
-    -Mode "optimized" `
-    -Report $optimized `
-    -Log (Join-Path $runRoot "optimized-player.log") `
-    -Capture $optimizedCapturePath
+$naiveCapture = Invoke-ShowcasePlayer `
+    -Mode "naive" `
+    -Report $naive `
+    -Log (Join-Path $runRoot "naive-player.log") `
+    -Capture $naiveCapturePath `
+    -Strategy "throughput" `
+    -AsyncJobCount $selectedWorkerCount `
+    -WarmupReceipt (Join-Path $runRoot "Receipts\naive.warmup.json")
+
+$scheduledCapturePath = if ($NoVisualCapture) {
+    ""
+} else {
+    Join-Path $captures "scheduled.mp4"
+}
+$scheduledCapture = Invoke-ShowcasePlayer `
+    -Mode "scheduled" `
+    -Report $scheduled `
+    -Log (Join-Path $runRoot "scheduled-player.log") `
+    -Capture $scheduledCapturePath `
+    -Strategy "scheduled" `
+    -AsyncJobCount $selectedWorkerCount `
+    -InitialBatchSize $selectedBatchSize `
+    -WarmupReceipt (Join-Path $runRoot "Receipts\scheduled.warmup.json")
 
 if (-not $NoVisualCapture) {
     New-ActualVisualEvidence `
         -BaselineCapture $baselineCapture `
-        -OptimizedCapture $optimizedCapture `
+        -NaiveCapture $naiveCapture `
+        -ScheduledCapture $scheduledCapture `
         -OutputDirectory $evidence
 }
 
 $reportArguments = @(
     (Join-Path $PSScriptRoot "pso_report.py"),
     "--baseline", $baseline,
-    "--optimized", $optimized,
+    "--naive", $naive,
+    "--optimized", $scheduled,
+    "--naive-warmup", (Join-Path $runRoot "Receipts\naive.warmup.json"),
+    "--optimized-warmup", (Join-Path $runRoot "Receipts\scheduled.warmup.json"),
     "--plan", $plan,
     "--output", $evidence
 )
