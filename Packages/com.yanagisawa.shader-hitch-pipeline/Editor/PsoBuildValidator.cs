@@ -24,9 +24,16 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             validatedPlanPath = string.Empty;
             validatedPlanHash = string.Empty;
             validatedApis = null;
-            if (PsoCommandLine.Current.HasFlag(PsoConstants.TrainingBuildArgument))
+            bool trainingBuild =
+                PsoCommandLine.Current.HasFlag(PsoConstants.TrainingBuildArgument);
+            bool baselineBuild =
+                PsoCommandLine.Current.HasFlag(PsoConstants.BaselineBuildArgument);
+            if (trainingBuild || baselineBuild)
             {
-                Debug.Log("[ShaderHitchPipeline] Training build intentionally has no warmup plan.");
+                Debug.Log(
+                    "[ShaderHitchPipeline] " +
+                    (trainingBuild ? "Training" : "Cold-baseline") +
+                    " build intentionally bypasses the installed warmup-plan gate.");
                 return;
             }
 

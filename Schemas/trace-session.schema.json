@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Yanagisawa2002/unity-shader-hitch-pipeline/blob/main/Schemas/trace-session.schema.json",
+  "title": "Shader Hitch Pipeline trace session",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "sessionId",
+    "phase",
+    "adapterId",
+    "artifactType",
+    "collectionFile",
+    "collectionSha256",
+    "graphicsStateCount",
+    "environment"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 3 },
+    "packageVersion": { "type": "string" },
+    "sessionId": { "type": "string", "minLength": 1 },
+    "phase": { "type": "string", "minLength": 1 },
+    "startedUtc": { "type": "string" },
+    "endedUtc": { "type": "string" },
+    "adapterId": { "type": "string", "minLength": 1 },
+    "artifactType": { "type": "string", "minLength": 1 },
+    "collectionFile": { "type": "string", "minLength": 1 },
+    "collectionSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "variantCount": { "type": "integer", "minimum": 0 },
+    "graphicsStateCount": { "type": "integer", "minimum": 0 },
+    "saved": { "type": "boolean" },
+    "sentToEditor": { "type": "boolean" },
+    "error": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "environment": { "$ref": "#/$defs/environment" }
+  },
+  "$defs": {
+    "environment": {
+      "type": "object",
+      "required": ["engineName", "engineVersion", "runtimePlatform", "graphicsDeviceType"],
+      "properties": {
+        "engineName": { "type": "string" },
+        "engineVersion": { "type": "string" },
+        "unityVersion": { "type": "string" },
+        "runtimePlatform": { "type": "string" },
+        "graphicsDeviceType": { "type": "string" },
+        "graphicsDeviceName": { "type": "string" },
+        "graphicsDeviceVendor": { "type": "string" },
+        "graphicsDeviceVersion": { "type": "string" },
+        "graphicsMemorySizeMb": { "type": "integer", "minimum": 0 },
+        "qualityLevelName": { "type": "string" },
+        "operatingSystem": { "type": "string" }
+      }
+    }
+  }
+}

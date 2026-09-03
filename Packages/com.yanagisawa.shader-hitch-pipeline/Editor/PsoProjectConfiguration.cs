@@ -1,9 +1,17 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Yanagisawa.ShaderHitchPipeline.Editor
 {
+    [Serializable]
+    public sealed class PsoPhaseShaderFilter
+    {
+        public string phase = string.Empty;
+        public string[] shaderNames = Array.Empty<string>();
+    }
+
     [Serializable]
     public sealed class PsoProjectConfiguration
     {
@@ -27,10 +35,18 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
         public double startupDeadlineMilliseconds = 1000.0;
         public double deferredDeadlineMilliseconds;
         public double estimatedMillisecondsPerState = 0.25;
+        public int bootstrapBatchSize = 1;
+        public double budgetSafetyMarginMilliseconds = 2.0;
+        public double budgetCostSafetyMultiplier = 1.5;
+        public int budgetCooldownFrames = 8;
+        public bool preinteractiveBootstrap = true;
         public double startupExpectedUseProbability = 1.0;
         public double deferredExpectedUseProbability = 0.5;
         public int startupHotSetTier;
         public int deferredHotSetTier = 1;
+        public string[] excludedPhases = Array.Empty<string>();
+        public PsoPhaseShaderFilter[] phaseShaderFilters =
+            Array.Empty<PsoPhaseShaderFilter>();
 
         public static PsoProjectConfiguration Load()
         {
@@ -43,7 +59,6 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 return new PsoProjectConfiguration();
             if (result.schemaVersion < 2)
             {
-                result.schemaVersion = PsoConstants.SchemaVersion;
                 result.startupDeadlineMilliseconds = 1000.0;
                 result.deferredDeadlineMilliseconds = 0.0;
                 result.estimatedMillisecondsPerState = 0.25;
@@ -52,6 +67,15 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 result.startupHotSetTier = 0;
                 result.deferredHotSetTier = 1;
             }
+            if (result.schemaVersion < 3)
+            {
+                result.bootstrapBatchSize = 1;
+                result.budgetSafetyMarginMilliseconds = 2.0;
+                result.budgetCostSafetyMultiplier = 1.5;
+                result.budgetCooldownFrames = 8;
+                result.preinteractiveBootstrap = true;
+            }
+            result.schemaVersion = PsoConstants.SchemaVersion;
             return result;
         }
 
@@ -87,6 +111,20 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             if (estimatedMillisecondsPerState <= 0.0)
                 throw new InvalidOperationException(
                     "estimatedMillisecondsPerState must be positive.");
+            if (bootstrapBatchSize < minimumBatchSize ||
+                bootstrapBatchSize > maximumBatchSize)
+                throw new InvalidOperationException(
+                    "bootstrapBatchSize is outside the configured batch bounds.");
+            if (budgetSafetyMarginMilliseconds < 0.0 ||
+                budgetSafetyMarginMilliseconds >= targetFrameMilliseconds)
+                throw new InvalidOperationException(
+                    "budgetSafetyMarginMilliseconds must be below the frame budget.");
+            if (budgetCostSafetyMultiplier < 1.0)
+                throw new InvalidOperationException(
+                    "budgetCostSafetyMultiplier must be at least one.");
+            if (budgetCooldownFrames < 0)
+                throw new InvalidOperationException(
+                    "budgetCooldownFrames cannot be negative.");
             if (startupExpectedUseProbability < 0.0 ||
                 startupExpectedUseProbability > 1.0 ||
                 deferredExpectedUseProbability < 0.0 ||
@@ -95,6 +133,32 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     "Expected-use probabilities must be between zero and one.");
             if (startupHotSetTier < 0 || deferredHotSetTier < 0)
                 throw new InvalidOperationException("Hot-set tiers cannot be negative.");
+            var excluded = new System.Collections.Generic.HashSet<string>(
+                StringComparer.OrdinalIgnoreCase);
+            foreach (string phase in excludedPhases ?? Array.Empty<string>())
+            {
+                if (string.IsNullOrWhiteSpace(phase) || !excluded.Add(phase))
+                    throw new InvalidOperationException(
+                        "excludedPhases must contain unique, non-empty phase names.");
+            }
+            var filtered = new System.Collections.Generic.HashSet<string>(
+                StringComparer.OrdinalIgnoreCase);
+            foreach (PsoPhaseShaderFilter filter in
+                     phaseShaderFilters ?? Array.Empty<PsoPhaseShaderFilter>())
+            {
+                if (filter == null || string.IsNullOrWhiteSpace(filter.phase) ||
+                    !filtered.Add(filter.phase))
+                {
+                    throw new InvalidOperationException(
+                        "phaseShaderFilters must contain unique, non-empty phase names.");
+                }
+                string[] shaderNames = filter.shaderNames ?? Array.Empty<string>();
+                if (shaderNames.Length == 0 || shaderNames.Any(string.IsNullOrWhiteSpace))
+                {
+                    throw new InvalidOperationException(
+                        "Each phase shader filter requires at least one shader name.");
+                }
+            }
         }
     }
 }

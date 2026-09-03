@@ -52,3 +52,12 @@ UnityProject/Builds/
 # Unity test runner output
 /UnityProject/TestResults/
 /UnityProject/Assets/ShaderHitchShowcaseGenerated/
+/UnityProject/Assets/DeadlineRunGenerated/
+/UnityProject/Assets/DeadlineRunGenerated.meta
+/TestResults/
+/.tmp-*.mp4
+
+# Engine-neutral .NET portability projects (Unity-generated .csproj files stay ignored)
+!DotNet/**/*.csproj
+DotNet/**/bin/
+DotNet/**/obj/

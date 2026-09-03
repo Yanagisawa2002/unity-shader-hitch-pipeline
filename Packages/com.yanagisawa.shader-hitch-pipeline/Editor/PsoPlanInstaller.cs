@@ -4,6 +4,11 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+#if UNITY_6000_5_OR_NEWER
+using GraphicsStateCollection = UnityEngine.Rendering.GraphicsStateCollection;
+#else
+using GraphicsStateCollection = UnityEngine.Experimental.Rendering.GraphicsStateCollection;
+#endif
 
 namespace Yanagisawa.ShaderHitchPipeline.Editor
 {

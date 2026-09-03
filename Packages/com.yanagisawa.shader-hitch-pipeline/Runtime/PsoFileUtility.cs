@@ -91,11 +91,25 @@ namespace Yanagisawa.ShaderHitchPipeline
                 throw new InvalidOperationException("Could not resolve output directory for " + path);
 
             Directory.CreateDirectory(directory);
-            string temporary = fullPath + ".tmp-" + Guid.NewGuid().ToString("N");
-            File.WriteAllText(temporary, contents, new UTF8Encoding(false));
-            if (File.Exists(fullPath))
-                File.Delete(fullPath);
-            File.Move(temporary, fullPath);
+            // Keep the atomic sibling name independent of the destination file
+            // name. Appending a full GUID to an already descriptive artifact
+            // name can cross the legacy Windows MAX_PATH boundary even when the
+            // final receipt path itself is valid.
+            string temporary = Path.Combine(
+                directory,
+                ".pso-" + Guid.NewGuid().ToString("N").Substring(0, 12) + ".tmp");
+            try
+            {
+                File.WriteAllText(temporary, contents, new UTF8Encoding(false));
+                if (File.Exists(fullPath))
+                    File.Delete(fullPath);
+                File.Move(temporary, fullPath);
+            }
+            finally
+            {
+                if (File.Exists(temporary))
+                    File.Delete(temporary);
+            }
         }
 
         public static T ReadJson<T>(string path) where T : class

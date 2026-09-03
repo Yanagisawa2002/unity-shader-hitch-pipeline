@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 6,
+  "repository": "https://github.com/Unity-Technologies/megacity-metro.git",
+  "branch": "master",
+  "commit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "license": "Unity Companion License",
+  "integrationKind": "external-adapter",
+  "renderingIntegration": "entities-graphics-context-plus-precreated-pso-district",
+  "runtimeReveal": "camera-culling-mask-only",
+  "benchmarkLayer": 28,
+  "contextRendererLayersStamped": false,
+  "deterministicCorridor": {
+    "nearMeters": 100.0,
+    "farMeters": 800.0,
+    "halfWidthMeters": 350.0,
+    "authoringRendererCount": 6947,
+    "materialSlotCount": 7365,
+    "stockShaderCount": 23
+  },
+  "controlledFirstUseWorkload": {
+    "materialInstanceCount": 48,
+    "recordedGraphicsStateCount": "trace-derived",
+    "shaderAllowlist": [
+      "Hidden/Yanagisawa/Megacity Metro PSO Reveal Generated"
+    ],
+    "excludedPlanPhases": [
+      "startup"
+    ],
+    "createdBeforeMeasurement": true,
+    "cameraLocalUntil": "CONTENT_REQUEST",
+    "frozenBeforeRevealSeconds": 0.25,
+    "steadyStateTransformWritesPerFrame": 0,
+    "visibleUntil": "CONTENT_COMPLETE",
+    "acceptanceIntervalSeconds": 12.0,
+    "measuredInstantiation": false,
+    "measuredStreaming": false,
+    "cacheIsolation": "per-build-shader-bytecode"
+  },
+  "deterministicPresentation": {
+    "simulationTimeScale": 0.0,
+    "cameraPath": "unscaled-realtime scripted forward travel with bounded sinusoidal lateral, vertical, and yaw motion",
+    "cameraForwardMetersPerSecond": 2.5,
+    "cameraLateralAmplitudeMeters": 1.35,
+    "cameraVerticalAmplitudeMeters": 0.35,
+    "cameraYawAmplitudeDegrees": 1.8,
+    "executionOrder": 32000,
+    "startupQuiescence": {
+      "requiredContinuousSeconds": 3.0,
+      "frameCeilingMilliseconds": 14.0,
+      "timeoutSeconds": 60.0,
+      "startsAfterControlledEnvironment": true,
+      "cameraMotionActiveDuringGate": true,
+      "measuredWindowStartsAfterPass": true
+    },
+    "entitiesInitializationGroupsFrozen": true,
+    "entitiesSimulationGroupsFrozen": true,
+    "entitiesPresentationGroupsRemainActive": true,
+    "vSyncCount": 0,
+    "targetFrameRate": 240,
+    "pacingPolicy": "4x the 60 Hz presentation budget to retain regular compositor idle slots",
+    "purpose": "retain real Megacity rendering while excluding unrelated gameplay simulation variance from the PSO deadline window",
+    "nativeFrameTimingEvidence": {
+      "enabledAtBuild": true,
+      "minimumCoverage": 0.95,
+      "components": [
+        "cpuTotal",
+        "cpuMainThread",
+        "cpuMainThreadPresentWait",
+        "cpuRenderThread",
+        "gpu"
+      ]
+    }
+  },
+  "assetsRedistributed": false,
+  "benchmarkPhase": "megacity-metro-reveal",
+  "qualityLevel": "Medium",
+  "visualAcceptance": {
+    "baselineMinimumMilliseconds": 80.0,
+    "scheduledMissThresholdMilliseconds": 16.67,
+    "scheduledAllowedMissedFrames": 0
+  }
+}

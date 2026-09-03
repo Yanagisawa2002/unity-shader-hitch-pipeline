@@ -151,6 +151,11 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
                 PipelineEditor.PsoProjectConfiguration.Load();
             configuration.targetRuntimePlatform = RuntimePlatform.WindowsPlayer.ToString();
             configuration.targetGraphicsDeviceType = GraphicsDeviceType.Direct3D12.ToString();
+            configuration.deferredDeadlineMilliseconds =
+                PsoShowcaseController.DeferredDeadlineSeconds * 1000.0;
+            configuration.deferredExpectedUseProbability = 1.0;
+            configuration.deferredHotSetTier = 1;
+            configuration.preinteractiveBootstrap = true;
             configuration.Save();
         }
     }
