@@ -27,6 +27,7 @@ public sealed class StreamingFixture : MonoBehaviour
     private float started;
     private IEnumerator Start()
     {
+        Application.runInBackground = true;
         root = Path.GetFullPath(PsoCommandLine.Current.GetString("-stream-evidence", "StreamingEvidence"));
         Directory.CreateDirectory(root); started = Time.realtimeSinceStartup;
         mode = PsoCommandLine.Current.GetString("-stream-mode", "smoke");
@@ -67,14 +68,27 @@ public sealed class StreamingFixture : MonoBehaviour
             var handle = Addressables.LoadAssetAsync<GameObject>("stream-r" + revision);
             while (!handle.IsDone) { Timeout(); yield return null; }
             Check(handle.Status == AsyncOperationStatus.Succeeded, "Real Addressables trace load failed.");
+            var camera = FindFirstObjectByType<Camera>(); camera.enabled = false;
+            var target = new RenderTexture(64, 64, 24, RenderTextureFormat.ARGB32); target.Create();
+            camera.targetTexture = target;
             using (var trace = new PsoUnityGraphicsStateTraceBackend())
             {
                 var instance = Instantiate(handle.Result);
-                for (int frame = 0; frame < 24; frame++) yield return null;
+                // A hidden batchmode window need not present. Explicit offscreen rendering and readback
+                // verify real GPU work without making the fixture depend on desktop visibility.
+                for (int frame = 0; frame < 24; frame++) { camera.Render(); yield return null; }
+                var previousTarget = RenderTexture.active; RenderTexture.active = target;
+                var pixel = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+                pixel.ReadPixels(new Rect(32, 32, 1, 1), 0, 0); pixel.Apply();
+                Color actual = pixel.GetPixel(0, 0);
+                Check(revision == 1 ? actual.b > 0.8f && actual.r < 0.2f : actual.r > 0.8f && actual.b < 0.2f,
+                    "GPU readback must show the real revision material, not the background or error shader.");
+                RenderTexture.active = previousTarget; Destroy(pixel);
                 var result = trace.Finish(tracePath, false);
                 Check(result.saved && result.stateCount > 0, "Trace must capture actual rendered PSOs."); receipt.traceStates = result.stateCount;
                 Destroy(instance); yield return null;
             }
+            camera.targetTexture = null; target.Release(); Destroy(target);
             Addressables.Release(handle); receipt.collectionHash = Hash(File.ReadAllBytes(tracePath));
             receipt.contentId = "room"; receipt.contentRevision = "r" + revision; receipt.passed = true;
             File.WriteAllText(Path.Combine(root, "trace-r" + revision + ".json"), JsonUtility.ToJson(receipt, true));

@@ -84,7 +84,9 @@ The Player builds two actual Addressables prefab/material
 revisions (blue/red) plus an explicitly shared shader bundle. Its bootstrap scene
 holds no direct reference to those materials or that shader. The build creates
 real local bundles/catalog and a Windows D3D12 Player. A trace process loads and
-renders each revision and writes a separate nonempty graphics-state collection.
+explicitly renders each revision to a 64x64 render texture, checks a GPU pixel
+readback against the revision color, and writes a separate nonempty graphics-state
+collection. It does not rely on a hidden window presenting.
 A second process loads the built bundles and tests overlapping owners, native
 dedup/subset submission, unload while submitted, fence release, reload, changed
 content, cancellation, attestation failure and a missing Addressables key.
