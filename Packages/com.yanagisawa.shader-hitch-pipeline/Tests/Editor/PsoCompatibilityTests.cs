@@ -143,6 +143,14 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
         }
 
         [Test]
+        public void OriginalMeasuredPlanRetainsItsStoredHash()
+        {
+            string path = Path.GetFullPath(Path.Combine(Application.dataPath, "../../Docs/Evidence/hotset-json-roundtrip/original.json"));
+            var plan = PsoFileUtility.ReadJson<PsoWarmupPlanDocument>(path);
+            Assert.AreEqual(plan.planSha256, PsoPlanValidation.ComputeContentHash(plan));
+        }
+
+        [Test]
         public void BuildOptionsAreActualInputs()
         {
             var release = PsoBuildIdentityCapture.Capture(BuildTarget.StandaloneWindows64, BuildOptions.None);

@@ -146,7 +146,8 @@ JSON, but Unity's first read changed only
 The new serialized document therefore had a different hash. The original plan,
 first/second read results and exact hashes are retained in
 `Docs/Evidence/hotset-json-roundtrip/`; `PsoHotsetJsonRoundtripProbe.Run` reproduces
-the issue in the Editor. This is a shared hash/write/read contract regression,
-not justification to disable integrity checks. The fixture normalizes before
-hashing and immediately verifies the saved file; integration must fix the common
-numerical serialization contract and add the preserved case to its tests.
+the native-reader issue in the Editor. The integration now restores floating-point
+values from their original JSON tokens in `PsoDocumentJson`, preserving the existing
+writer and hash byte contract. The original plan, legacy and versioned plans, cost
+cache roundtrips and one-ULP tampering are regression tested. The fixture-specific
+normalization workaround has been removed; file verification remains strict.

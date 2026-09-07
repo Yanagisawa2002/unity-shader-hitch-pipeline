@@ -204,9 +204,9 @@ function Invoke-UnityEditor([string[]]$Arguments, [string]$Label) {
         -FilePath $Unity `
         -ArgumentList (ConvertTo-ArgumentLine $all) `
         -WorkingDirectory $project `
-        -Wait `
         -PassThru `
         -WindowStyle Hidden
+    $process.WaitForExit()
     if ($process.ExitCode -ne 0) {
         throw "$Label failed with exit code $($process.ExitCode)."
     }
