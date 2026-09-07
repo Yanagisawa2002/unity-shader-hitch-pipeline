@@ -183,7 +183,8 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
             if (mode == "discover")
             {
                 catalog = new HotsetCatalog { buildGuid = Application.buildGUID, environment = PsoUnityEnvironment.Capture(),
-                    shaderSha256 = shaderSha256, observedDriverVersion = ObservedDriver(), costExecutionContext = CostContext(), compatibilityNamespace = "fixture-build:" + Application.buildGUID,
+                    shaderSha256 = shaderSha256, observedDriverVersion = ObservedDriver(), costExecutionContext = CostContext(),
+                    compatibilityNamespace = PsoCompatibility.CollectionKey(PsoUnityEnvironment.Capture()),
                     units = new PsoHotsetUnit[4] };
                 for (int i = 0; i < 4; i++)
                 {
@@ -217,6 +218,9 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
                 var plan = new PsoWarmupPlanDocument {
                     profileId = "hotset-fixture", runtimePlatform = Application.platform.ToString(),
                     graphicsDeviceType = SystemInfo.graphicsDeviceType.ToString(), qualityLevelName = PsoUnityEnvironment.CurrentQualityName(),
+                    compatibility = new PsoCompatibilityContract { version = PsoCompatibility.Version,
+                        collectionEnvironment = catalog.environment, costEnvironment = null,
+                        costModelVersion = PsoCompatibility.CostModelVersion },
                     phases = catalog.units.Select((unit, i) => new PsoWarmupPhasePlan {
                         phase = unit.id, collectionFile = Path.GetFileName(CollectionPath(i)), collectionSha256 = unit.collectionSha256,
                         graphicsStateCount = unit.graphicsStateCount, required = unit.requiredStartup, prewarmAtStartup = true,
@@ -225,7 +229,7 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
                 // Normalize measured floating-point values through Unity's serializer
                 // before hashing, then verify the actual file using the production reader.
                 for (int pass = 0; pass < 3; pass++)
-                    plan = JsonUtility.FromJson<PsoWarmupPlanDocument>(JsonUtility.ToJson(plan, true));
+                    plan = PsoDocumentJson.Parse<PsoWarmupPlanDocument>(PsoDocumentJson.Serialize(plan, true));
                 plan.planSha256 = PsoPlanValidation.ComputeContentHash(plan);
                 Write("fixture-plan.json", plan);
                 PsoPlanValidation.LoadAndValidate(Path.Combine(root, "fixture-plan.json"), true, true);
@@ -393,6 +397,13 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
         }
         private bool CatalogMatchesCurrent()
         {
+            if (catalog == null || catalog.environment == null) return false;
+            var current = PsoUnityEnvironment.Capture();
+            var compatibility = PsoCompatibility.Evaluate(new PsoCompatibilityContract {
+                version = PsoCompatibility.Version, collectionEnvironment = catalog.environment }, current);
+            if (!compatibility.collectionCompatible || catalog.compatibilityNamespace != PsoCompatibility.CollectionKey(current) ||
+                string.IsNullOrWhiteSpace(current.driverIdentity) || current.driverIdentitySource != PsoCompatibility.DriverIdentitySource ||
+                catalog.environment.driverIdentity != current.driverIdentity) return false;
             return catalog != null && catalog.environment != null && catalog.buildGuid == Application.buildGUID &&
                 catalog.shaderSha256 == shaderSha256 && catalog.observedDriverVersion == ObservedDriver() && catalog.costExecutionContext == CostContext() &&
                 catalog.environment.graphicsDeviceVersion == SystemInfo.graphicsDeviceVersion &&

@@ -28,8 +28,10 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
             PlayerSettings.defaultScreenHeight = 360;
             PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
             string output = Path.GetFullPath(PsoCommandLine.Current.GetString("-hotset-player", "Builds/Hotset/Hotset.exe"));
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { path },
-                locationPathName = output, target = BuildTarget.StandaloneWindows64, options = BuildOptions.Development });
+            var options = new BuildPlayerOptions { scenes = new[] { path },
+                locationPathName = output, target = BuildTarget.StandaloneWindows64, options = BuildOptions.Development };
+            Yanagisawa.ShaderHitchPipeline.Editor.PsoBuildIdentityCapture.DeclareBuildInputs(options);
+            var report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Hotset fixture build failed");
         }
     }
