@@ -47,7 +47,7 @@ function Invoke-FixtureRun([string]$Mode, [string]$Directory, [bool]$VerifyNativ
     }
     if (!$SmokeOnly) { Invoke-FixtureRun 'trace' $EvidenceRoot $true }
     Invoke-FixtureRun 'smoke' $EvidenceRoot $true
-    $hashes = @(Get-ChildItem $EvidenceRoot -File | Sort-Object Name | ForEach-Object {
+    $hashes = @(Get-ChildItem $EvidenceRoot -File | Where-Object { $_.Name -ne 'provenance.json' } | Sort-Object Name | ForEach-Object {
         @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
     })
     $playerDirectory = Split-Path $player
