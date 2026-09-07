@@ -15,7 +15,11 @@ retain their original meaning and source identity.
   `Local\CodexR9700VNextUnityGpu` mutex via the supplied validation runner.
   One acquisition encloses child process lifetimes; no nested lock acquisition.
 - Process-cold means a fresh Player process. The driver cache is uncontrolled.
-  No global cache deletion, elevation, user-process termination, or GUI control.
+  No global cache deletion, user-process termination, or GUI control. Ordinary
+  builds remain non-elevated. The user's later permission-repair instruction
+  allows a single reviewed five-run Windows capture through standard RunAs/UAC
+  after the parent-managed capture probe succeeds; no persistent elevated
+  service, account changes or policy changes are permitted.
 - Preserve failures, unsupported metrics, raw logs and hashes. Engine frame
   timestamps are proxies for first presentation; only OS evidence can establish
   actual presentation. Missing data cannot become zero.
