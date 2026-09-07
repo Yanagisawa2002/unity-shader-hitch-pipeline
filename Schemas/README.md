@@ -32,3 +32,5 @@ python Tools/validate_pso_documents.py `
   --plan path/to/plan.json `
   --warmup path/to/warmup.json
 ```
+
+Plan schema v3 also supports the additive version-1 `compatibility` contract. Legacy plans remain valid but unattested. `cost-cache.schema.json` describes optional measured cost seeds; schema validation alone does not establish integrity or current-build compatibility. See [compatibility](../Docs/COMPATIBILITY.md).

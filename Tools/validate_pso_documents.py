@@ -14,6 +14,7 @@ SCHEMAS = {
     "trace": "trace-session.schema.json",
     "plan": "warmup-plan.schema.json",
     "warmup": "warmup-receipt.schema.json",
+    "cost_cache": "cost-cache.schema.json",
 }
 
 
@@ -36,6 +37,7 @@ def main() -> int:
     parser.add_argument("--trace", action="append", type=Path, default=[])
     parser.add_argument("--plan", action="append", type=Path, default=[])
     parser.add_argument("--warmup", action="append", type=Path, default=[])
+    parser.add_argument("--cost-cache", action="append", type=Path, default=[])
     args = parser.parse_args()
 
     failures: list[str] = []

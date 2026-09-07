@@ -16,7 +16,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             try
             {
                 plan.planSha256 = string.Empty;
-                return PsoFileUtility.ComputeTextSha256(JsonUtility.ToJson(plan, true));
+                return PsoFileUtility.ComputeTextSha256(PsoDocumentJson.Serialize(plan, true));
             }
             finally
             {
@@ -45,6 +45,12 @@ namespace Yanagisawa.ShaderHitchPipeline
 
             if (validateEnvironment)
             {
+                if (plan.compatibility != null)
+                {
+                    PsoCompatibilityResult compatibility = PsoCompatibility.Evaluate(
+                        plan.compatibility, PsoUnityEnvironment.Capture());
+                    issues.AddRange(compatibility.collectionReasons);
+                }
                 string currentPlatform = Application.platform.ToString();
                 string currentApi = SystemInfo.graphicsDeviceType.ToString();
                 string currentQuality = CurrentQualityName();

@@ -20,6 +20,16 @@ namespace Yanagisawa.ShaderHitchPipeline
 
             if (plan.schemaVersion != PsoConstants.SchemaVersion)
                 issues.Add("Unsupported schemaVersion: " + plan.schemaVersion + ".");
+            if (plan.compatibility != null)
+            {
+                PsoCompatibilityResult compatibility = PsoCompatibility.Evaluate(
+                    plan.compatibility, plan.compatibility.collectionEnvironment);
+                issues.AddRange(compatibility.collectionReasons);
+                PsoEnvironmentSnapshot recorded = plan.compatibility.collectionEnvironment;
+                if (recorded != null && (plan.runtimePlatform != recorded.runtimePlatform ||
+                    plan.graphicsDeviceType != recorded.graphicsDeviceType || plan.qualityLevelName != recorded.qualityLevelName))
+                    issues.Add("Plan profile differs from collection compatibility environment.");
+            }
             if (string.IsNullOrWhiteSpace(plan.profileId))
                 issues.Add("profileId is required.");
             if (string.IsNullOrWhiteSpace(plan.adapterId))

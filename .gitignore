@@ -61,3 +61,7 @@ UnityProject/Builds/
 !DotNet/**/*.csproj
 DotNet/**/bin/
 DotNet/**/obj/
+
+# Generated current-build identity and local compatibility validation artifacts
+UnityProject/Assets/Resources/PsoBuildIdentity.json*
+work/
