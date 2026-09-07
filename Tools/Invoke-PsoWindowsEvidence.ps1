@@ -1,310 +1,147 @@
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Player,
+    [Parameter(Mandatory)][string]$Player,
     [string[]]$PlayerArguments = @(),
-    [Parameter(Mandatory = $true)]
-    [string]$PresentMon,
-    [string]$Output = "PsoArtifacts\WindowsEvidence",
-    [string]$WarmupReceipt = "",
-    [ValidateRange(1, 3600)]
-    [int]$CaptureSeconds = 30,
-    [ValidateRange(1, 7200)]
-    [int]$PlayerTimeoutSeconds = 120,
-    [double]$TargetFrameMilliseconds = 0.0,
-    [switch]$CaptureEtw,
-    [string]$Python = "python"
+    [Parameter(Mandatory)][string]$PresentMon,
+    [string]$Output = 'PsoArtifacts/WindowsEvidence',
+    [string]$WarmupReceipt = '', [string]$BenchmarkReceipt = '',
+    [string]$Markers = '', [string]$BuildManifest = '',
+    [ValidateRange(1,3600)][int]$CaptureSeconds = 120,
+    [ValidateRange(1,3600)][int]$PlayerTimeoutSeconds = 110,
+    [double]$TargetFrameMilliseconds = 0,
+    [switch]$CaptureEtw, [switch]$CaptureUnavailableContinueEngine,
+    [switch]$ProbeOnly, [string]$Python = 'python'
 )
-
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = 'Stop'
 $playerPath = (Resolve-Path -LiteralPath $Player).Path
 $presentMonPath = (Resolve-Path -LiteralPath $PresentMon).Path
-$outputRoot = [System.IO.Path]::GetFullPath($Output)
-$warmupPath = if ([string]::IsNullOrWhiteSpace($WarmupReceipt)) {
-    ""
-} else {
-    [System.IO.Path]::GetFullPath($WarmupReceipt)
+$outputRoot = [IO.Path]::GetFullPath($Output)
+if ((Test-Path -LiteralPath $outputRoot) -and @(Get-ChildItem -LiteralPath $outputRoot -Force).Count) { throw 'Evidence output must be empty; refusing stale files or overwrites.' }
+foreach ($receipt in @($WarmupReceipt,$BenchmarkReceipt,$Markers)) {
+    if ($receipt -and (Test-Path -LiteralPath $receipt)) { throw "Refusing stale receipt: $receipt" }
 }
-$analyzer = Join-Path $PSScriptRoot "pso_windows_evidence.py"
-if (-not (Test-Path -LiteralPath $analyzer)) {
-    throw "PresentMon analyzer is missing: $analyzer"
+if ($CaptureSeconds -le $PlayerTimeoutSeconds -and -not $ProbeOnly) { throw 'CaptureSeconds must exceed PlayerTimeoutSeconds.' }
+New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
+$sessionName = 'ShaderHitchPipeline-' + [Guid]::NewGuid().ToString('N')
+$errors = [Collections.Generic.List[string]]::new()
+$commands = [Collections.Generic.List[object]]::new()
+$analyzer = Join-Path $PSScriptRoot 'pso_windows_evidence.py'
+$csv = Join-Path $outputRoot 'presentmon.csv'; $etl = Join-Path $outputRoot 'gpu.etl'
+$wpr = (Get-Command wpr -ErrorAction SilentlyContinue).Source
+$pm = $null; $ownedPlayer = $null; $wprStarted = $false
+$started = ''; $ended = ''; $processId = $null; $playerExit = $null; $pmExit = $null; $analyzerExit = $null
+function FileRecord([string]$Path) {
+    $exists = $Path -and (Test-Path -LiteralPath $Path -PathType Leaf)
+    return [ordered]@{path=$Path; exists=[bool]$exists; bytes=$(if ($exists) {(Get-Item -LiteralPath $Path).Length} else {0}); sha256=$(if ($exists) {(Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()} else {''})}
 }
-
-New-Item -ItemType Directory -Path $outputRoot -Force | Out-Null
-$sessionName = "ShaderHitchPipeline-" + [Guid]::NewGuid().ToString("N")
-$presentMonCsv = Join-Path $outputRoot "presentmon.csv"
-$presentMonStdout = Join-Path $outputRoot "presentmon.stdout.log"
-$presentMonStderr = Join-Path $outputRoot "presentmon.stderr.log"
-$playerStdout = Join-Path $outputRoot "player.stdout.log"
-$playerStderr = Join-Path $outputRoot "player.stderr.log"
-$etlPath = Join-Path $outputRoot "gpu.etl"
-$manifestPath = Join-Path $outputRoot "windows-evidence-manifest.json"
-
-function ConvertTo-ArgumentLine([string[]]$Arguments) {
-    return ($Arguments | ForEach-Object {
-        if ($_ -match '[\s"]') {
-            '"' + $_.Replace('"', '\"') + '"'
-        } else {
-            $_
-        }
-    }) -join ' '
+function StartOwned([string]$File, [string[]]$Arguments, [string]$Prefix) {
+    # ArgumentList performs Windows argv quoting, including trailing backslashes.
+    $info = [Diagnostics.ProcessStartInfo]::new($File)
+    $info.UseShellExecute = $false; $info.CreateNoWindow = $true
+    $info.WindowStyle = [Diagnostics.ProcessWindowStyle]::Hidden
+    $info.WorkingDirectory = Split-Path -Parent $File
+    $info.RedirectStandardOutput = $true; $info.RedirectStandardError = $true
+    foreach ($argument in $Arguments) { $info.ArgumentList.Add($argument) }
+    $proc = [Diagnostics.Process]::new(); $proc.StartInfo = $info; [void]$proc.Start()
+    return @{process=$proc; stdout=$proc.StandardOutput.ReadToEndAsync(); stderr=$proc.StandardError.ReadToEndAsync(); prefix=$Prefix}
 }
-
-function Get-OptionalHash([string]$Path) {
-    if ([string]::IsNullOrWhiteSpace($Path) -or
-        -not (Test-Path -LiteralPath $Path -PathType Leaf)) {
-        return ""
-    }
-    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+function SaveOwned($Owned) {
+    if ($null -eq $Owned) { return }
+    $Owned.stdout.GetAwaiter().GetResult() | Set-Content (Join-Path $outputRoot ($Owned.prefix+'.stdout.log')) -Encoding utf8NoBOM
+    $Owned.stderr.GetAwaiter().GetResult() | Set-Content (Join-Path $outputRoot ($Owned.prefix+'.stderr.log')) -Encoding utf8NoBOM
 }
-
-function Get-FileRecord([string]$Path) {
-    $exists = -not [string]::IsNullOrWhiteSpace($Path) -and
-        (Test-Path -LiteralPath $Path -PathType Leaf)
-    return [ordered]@{
-        path = if ($exists) { [System.IO.Path]::GetFullPath($Path) } else { $Path }
-        exists = $exists
-        bytes = if ($exists) { (Get-Item -LiteralPath $Path).Length } else { 0 }
-        sha256 = Get-OptionalHash $Path
-    }
+function WprCommand([string[]]$Arguments, [string]$Label) {
+    if (-not $wpr) { return @{exitCode=$null; text='wpr.exe unavailable'} }
+    $owned = StartOwned $wpr $Arguments $Label
+    if (-not $owned.process.WaitForExit(30000)) { $owned.process.Kill(); $owned.process.WaitForExit(); $errors.Add("WPR $Label timed out; recording state unknown") }
+    SaveOwned $owned
+    $result = @{exitCode=$owned.process.ExitCode; text=($owned.stdout.Result + $owned.stderr.Result)}
+    $commands.Add(@{tool='wpr'; arguments=$Arguments; exitCode=$result.exitCode; output=$result.text})
+    return $result
 }
-
-$processName = [System.IO.Path]::GetFileNameWithoutExtension($playerPath)
-$existing = @(Get-Process -Name $processName -ErrorAction SilentlyContinue)
-if ($existing.Count -gt 0) {
-    throw "Refusing an ambiguous capture: $processName is already running."
-}
-
-$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-$principal = [Security.Principal.WindowsPrincipal]::new($identity)
-$isAdministrator = $principal.IsInRole(
-    [Security.Principal.WindowsBuiltInRole]::Administrator)
-$presentMonVersion = (& $presentMonPath --help 2>&1 | Select-Object -First 1).ToString()
-$wprStatusBefore = (& wpr -status 2>&1) -join [Environment]::NewLine
-
-if ($CaptureEtw -and $wprStatusBefore -notmatch 'WPR is not recording') {
-    throw "WPR already owns a recording session. Stop it before requesting -CaptureEtw."
-}
-
-$presentMonArguments = @(
-    "--process_name", ([System.IO.Path]::GetFileName($playerPath)),
-    "--output_file", $presentMonCsv,
-    "--date_time",
-    "--timed", $CaptureSeconds.ToString(),
-    "--terminate_after_timed",
-    "--terminate_on_proc_exit",
-    "--no_console_stats",
-    "--stop_existing_session",
-    "--session_name", $sessionName,
-    "--v2_metrics"
-)
-
-$presentMonProcess = $null
-$playerProcess = $null
-$wprStarted = $false
-$failure = ""
-$playerStartedUtc = ""
-$playerEndedUtc = ""
-$presentMonExitCode = $null
-$playerExitCode = $null
-$analyzerExitCode = $null
-
+$pmArgs = @('--process_name',[IO.Path]::GetFileName($playerPath),'--output_file',$csv,'--date_time','--timed',"$CaptureSeconds",'--terminate_after_timed','--terminate_on_proc_exit','--no_console_stats','--session_name',$sessionName,'--v2_metrics')
+$interference = @(Get-Process | Select-Object ProcessName,Id)
 try {
+    if (@(Get-Process -Name ([IO.Path]::GetFileNameWithoutExtension($playerPath)) -ErrorAction SilentlyContinue).Count) { throw 'Player with same name already running; refusing ambiguous capture.' }
     if ($CaptureEtw) {
-        & wpr -start GPU -filemode
-        if ($LASTEXITCODE -ne 0) {
-            throw "WPR failed to start the built-in GPU profile (exit $LASTEXITCODE)."
+        $status = WprCommand @('-status') 'wpr-status'
+        if ($status.text -match 'WPR is not recording') {
+            $start = WprCommand @('-start','GPU','-filemode') 'wpr-start'
+            $wprStarted = $start.exitCode -eq 0
+            if (-not $wprStarted) { $errors.Add("WPR start failed (exit $($start.exitCode)): $($start.text)") }
+        } else { $errors.Add("WPR status active or unknown; recording untouched (exit $($status.exitCode)): $($status.text)") }
+    }
+    # PresentMon is probed independently even if WPR is denied.
+    $pm = StartOwned $presentMonPath $pmArgs 'presentmon'
+    Start-Sleep -Milliseconds 1000
+    if ($pm.process.HasExited) {
+        $pmExit = $pm.process.ExitCode; SaveOwned $pm
+        $errors.Add("PresentMon start failed (exit $pmExit): $($pm.stdout.Result) $($pm.stderr.Result)")
+    }
+    if (-not $ProbeOnly -and ($errors.Count -eq 0 -or $CaptureUnavailableContinueEngine)) {
+        $started = [DateTime]::UtcNow.ToString('o')
+        $ownedPlayer = StartOwned $playerPath $PlayerArguments 'player'
+        $processId = $ownedPlayer.process.Id
+        if (-not $ownedPlayer.process.WaitForExit($PlayerTimeoutSeconds * 1000)) {
+            $ownedPlayer.process.Kill($true); $ownedPlayer.process.WaitForExit()
+            $errors.Add("Owned Player exceeded timeout of $PlayerTimeoutSeconds seconds")
         }
-        $wprStarted = $true
+        $ended = [DateTime]::UtcNow.ToString('o'); $playerExit = $ownedPlayer.process.ExitCode; SaveOwned $ownedPlayer
+        if ($playerExit -ne 0) { $errors.Add("Player exit $playerExit") }
+        if (-not $pm.process.HasExited) { [void]$pm.process.WaitForExit(10000) }
     }
-
-    $presentMonProcess = Start-Process `
-        -FilePath $presentMonPath `
-        -ArgumentList (ConvertTo-ArgumentLine $presentMonArguments) `
-        -WorkingDirectory $outputRoot `
-        -RedirectStandardOutput $presentMonStdout `
-        -RedirectStandardError $presentMonStderr `
-        -PassThru `
-        -WindowStyle Hidden
-    Start-Sleep -Milliseconds 500
-    if ($presentMonProcess.HasExited) {
-        $presentMonExitCode = $presentMonProcess.ExitCode
-        $detail = if (Test-Path -LiteralPath $presentMonStderr) {
-            Get-Content -Raw -LiteralPath $presentMonStderr
-        } else {
-            ""
+} catch { $errors.Add($_.Exception.ToString()) }
+finally {
+    if ($ownedPlayer -and -not $ownedPlayer.process.HasExited) { $ownedPlayer.process.Kill($true); $ownedPlayer.process.WaitForExit(); SaveOwned $ownedPlayer }
+    if ($pm) {
+        if (-not $pm.process.HasExited) {
+            $stop = StartOwned $presentMonPath @('--terminate_existing_session','--session_name',$sessionName,'--no_csv','--no_console_stats') 'presentmon-stop'
+            if (-not $stop.process.WaitForExit(5000)) { $stop.process.Kill(); $stop.process.WaitForExit() }
+            SaveOwned $stop
+            if (-not $pm.process.WaitForExit(5000)) { $pm.process.Kill(); $pm.process.WaitForExit(); $errors.Add('PresentMon did not stop cleanly') }
         }
-        throw "PresentMon could not begin capture (exit $presentMonExitCode). $detail"
-    }
-
-    $playerStartedUtc = [DateTime]::UtcNow.ToString("o")
-    $playerProcess = Start-Process `
-        -FilePath $playerPath `
-        -ArgumentList (ConvertTo-ArgumentLine $PlayerArguments) `
-        -WorkingDirectory (Split-Path -Parent $playerPath) `
-        -RedirectStandardOutput $playerStdout `
-        -RedirectStandardError $playerStderr `
-        -PassThru `
-        -WindowStyle Hidden
-    if (-not $playerProcess.WaitForExit($PlayerTimeoutSeconds * 1000)) {
-        [void]$playerProcess.CloseMainWindow()
-        if (-not $playerProcess.WaitForExit(3000)) {
-            $playerProcess.Kill()
-            $playerProcess.WaitForExit()
-        }
-        throw "Player exceeded the $PlayerTimeoutSeconds second evidence timeout."
-    }
-    $playerEndedUtc = [DateTime]::UtcNow.ToString("o")
-    $playerExitCode = $playerProcess.ExitCode
-    if ($playerExitCode -ne 0) {
-        throw "Player exited with code $playerExitCode."
-    }
-
-    if (-not $presentMonProcess.WaitForExit(15000)) {
-        & $presentMonPath `
-            --terminate_existing_session `
-            --session_name $sessionName `
-            --no_csv `
-            --no_console_stats | Out-Null
-        [void]$presentMonProcess.WaitForExit(5000)
-    }
-    if ($presentMonProcess.HasExited) {
-        $presentMonExitCode = $presentMonProcess.ExitCode
-    }
-    if ($null -eq $presentMonExitCode -or $presentMonExitCode -ne 0) {
-        throw "PresentMon capture failed or did not terminate cleanly."
-    }
-    if (-not (Test-Path -LiteralPath $presentMonCsv -PathType Leaf)) {
-        throw "PresentMon emitted no CSV: $presentMonCsv"
-    }
-} catch {
-    $failure = $_.Exception.ToString()
-} finally {
-    if ($playerProcess -ne $null -and -not $playerProcess.HasExited) {
-        $playerProcess.Kill()
-        $playerProcess.WaitForExit()
-        $playerEndedUtc = [DateTime]::UtcNow.ToString("o")
-        $playerExitCode = $playerProcess.ExitCode
-    }
-    if ($presentMonProcess -ne $null -and -not $presentMonProcess.HasExited) {
-        & $presentMonPath `
-            --terminate_existing_session `
-            --session_name $sessionName `
-            --no_csv `
-            --no_console_stats | Out-Null
-        if (-not $presentMonProcess.WaitForExit(5000)) {
-            $presentMonProcess.Kill()
-            $presentMonProcess.WaitForExit()
-        }
-        $presentMonExitCode = $presentMonProcess.ExitCode
+        $pmExit = $pm.process.ExitCode; SaveOwned $pm
     }
     if ($wprStarted) {
-        & wpr -stop $etlPath
-        if ($LASTEXITCODE -ne 0 -and [string]::IsNullOrWhiteSpace($failure)) {
-            $failure = "WPR failed to stop and save the ETL (exit $LASTEXITCODE)."
-        }
+        $stop = WprCommand @('-stop',$etl) 'wpr-stop'
+        if ($stop.exitCode -ne 0) { $errors.Add("WPR stop failed (exit $($stop.exitCode)): $($stop.text)") }
     }
 }
-
-if ([string]::IsNullOrWhiteSpace($failure) -and
-    -not [string]::IsNullOrWhiteSpace($warmupPath) -and
-    -not (Test-Path -LiteralPath $warmupPath -PathType Leaf)) {
-    $failure = "Warmup receipt was not emitted: $warmupPath"
+if (-not $ProbeOnly -and $processId -and (Test-Path -LiteralPath $csv)) {
+    $analysisArgs = @($analyzer,'--presentmon-csv',$csv,'--process-id',"$processId",'--local-utc-offset-minutes',"$([int][TimeZoneInfo]::Local.GetUtcOffset([DateTime]::Now).TotalMinutes)",'--output',$outputRoot)
+    if ($WarmupReceipt) { $analysisArgs += @('--warmup-receipt',$WarmupReceipt) }
+    if ($Markers) { $analysisArgs += @('--markers',$Markers) }
+    if ($TargetFrameMilliseconds -gt 0) { $analysisArgs += @('--target-ms',$TargetFrameMilliseconds.ToString([Globalization.CultureInfo]::InvariantCulture)) }
+    & $Python @analysisArgs *> (Join-Path $outputRoot 'analyzer.log')
+    $analyzerExit = $LASTEXITCODE
+    if ($analyzerExit -ne 0) { $errors.Add("Analyzer exit $analyzerExit") }
 }
-
-if ([string]::IsNullOrWhiteSpace($failure)) {
-    $offsetMinutes = [int][TimeZoneInfo]::Local.GetUtcOffset([DateTime]::Now).TotalMinutes
-    $analyzerArguments = @(
-        $analyzer,
-        "--presentmon-csv", $presentMonCsv,
-        "--local-utc-offset-minutes", $offsetMinutes.ToString(),
-        "--output", $outputRoot
-    )
-    if (-not [string]::IsNullOrWhiteSpace($warmupPath)) {
-        $analyzerArguments += @("--warmup-receipt", $warmupPath)
-    }
-    if ($TargetFrameMilliseconds -gt 0.0) {
-        $analyzerArguments += @(
-            "--target-ms",
-            $TargetFrameMilliseconds.ToString(
-                [Globalization.CultureInfo]::InvariantCulture)
-        )
-    }
-    & $Python @analyzerArguments
-    $analyzerExitCode = $LASTEXITCODE
-    if ($analyzerExitCode -ne 0) {
-        $failure = "PresentMon analyzer failed with exit $analyzerExitCode."
+if (-not $ProbeOnly) {
+    if ($pmExit -ne 0) { $errors.Add("PresentMon capture exit $pmExit") }
+    foreach ($required in @($WarmupReceipt,$BenchmarkReceipt,$Markers,$BuildManifest,$csv)) {
+        if (-not $required -or -not (Test-Path -LiteralPath $required -PathType Leaf)) { $errors.Add("Required artifact missing: $required") }
     }
 }
-
-$gpuDevices = @(Get-CimInstance Win32_VideoController | ForEach-Object {
-    [ordered]@{
-        name = $_.Name
-        driverVersion = $_.DriverVersion
-        pnpDeviceId = $_.PNPDeviceID
-        adapterRamBytes = [long]$_.AdapterRAM
-    }
-})
-$operatingSystem = Get-CimInstance Win32_OperatingSystem
-$processor = Get-CimInstance Win32_Processor | Select-Object -First 1
+if ($CaptureEtw -and -not (Test-Path -LiteralPath $etl)) { $errors.Add('Required GPU ETL unavailable') }
+$buildFiles = if ($ProbeOnly) { @() } else { @(Get-ChildItem -LiteralPath (Split-Path -Parent $playerPath) -Recurse -File | Where-Object { $_.FullName -notlike "$outputRoot*" } | Sort-Object FullName | ForEach-Object { FileRecord $_.FullName }) }
+$artifacts = [ordered]@{presentMonCsv=(FileRecord $csv); presentMonSummary=(FileRecord (Join-Path $outputRoot 'presentmon-summary.json')); etl=(FileRecord $etl); warmupReceipt=(FileRecord $WarmupReceipt); benchmarkReceipt=(FileRecord $BenchmarkReceipt); markers=(FileRecord $Markers); buildManifest=(FileRecord $BuildManifest)}
+$logIndex = [Array]::IndexOf($PlayerArguments, '-logFile')
+if ($logIndex -ge 0 -and $logIndex + 1 -lt $PlayerArguments.Count) { $artifacts.playerLog = FileRecord $PlayerArguments[$logIndex + 1] }
+if ($WarmupReceipt -and (Test-Path -LiteralPath $WarmupReceipt)) {
+    try { $warmupData = Get-Content -Raw -LiteralPath $WarmupReceipt | ConvertFrom-Json; $artifacts.warmupPlan = FileRecord $warmupData.planFile }
+    catch { $errors.Add("Warmup receipt JSON could not be read: $_") }
+}
+$logs = @(Get-ChildItem -LiteralPath $outputRoot -Filter '*.log' | ForEach-Object { FileRecord $_.FullName })
+$identity = [Security.Principal.WindowsPrincipal]::new([Security.Principal.WindowsIdentity]::GetCurrent())
 $manifest = [ordered]@{
-    schemaVersion = 1
-    generatedUtc = [DateTime]::UtcNow.ToString("o")
-    completed = [string]::IsNullOrWhiteSpace($failure)
-    error = $failure
-    privilege = [ordered]@{
-        isAdministrator = $isAdministrator
-        note = "PresentMon and WPR require ETW session rights (administrator or Performance Log Users)."
-    }
-    target = [ordered]@{
-        player = $playerPath
-        playerSha256 = Get-OptionalHash $playerPath
-        arguments = $PlayerArguments
-        startedUtc = $playerStartedUtc
-        endedUtc = $playerEndedUtc
-        exitCode = $playerExitCode
-    }
-    tools = [ordered]@{
-        presentMon = $presentMonPath
-        presentMonSha256 = Get-OptionalHash $presentMonPath
-        presentMonVersion = $presentMonVersion
-        presentMonArguments = $presentMonArguments
-        presentMonExitCode = $presentMonExitCode
-        wprStatusBefore = $wprStatusBefore
-        etwProfile = if ($CaptureEtw) { "GPU (built-in, file mode)" } else { "disabled" }
-        analyzer = $analyzer
-        analyzerSha256 = Get-OptionalHash $analyzer
-        analyzerExitCode = $analyzerExitCode
-    }
-    environment = [ordered]@{
-        computerName = [Environment]::MachineName
-        operatingSystem = $operatingSystem.Caption
-        operatingSystemVersion = $operatingSystem.Version
-        processor = $processor.Name
-        logicalProcessorCount = [Environment]::ProcessorCount
-        gpuDevices = $gpuDevices
-    }
-    artifacts = [ordered]@{
-        presentMonCsv = Get-FileRecord $presentMonCsv
-        presentMonSummary = Get-FileRecord (Join-Path $outputRoot "presentmon-summary.json")
-        etl = Get-FileRecord $(if ($CaptureEtw) { $etlPath } else { "" })
-        warmupReceipt = Get-FileRecord $warmupPath
-        playerStdout = Get-FileRecord $playerStdout
-        playerStderr = Get-FileRecord $playerStderr
-        presentMonStdout = Get-FileRecord $presentMonStdout
-        presentMonStderr = Get-FileRecord $presentMonStderr
-    }
+    schemaVersion=2; generatedUtc=[DateTime]::UtcNow.ToString('o'); sessionId=$sessionName
+    completed=($errors.Count -eq 0 -and -not $ProbeOnly -and $analyzerExit -eq 0); probeOnly=[bool]$ProbeOnly; errors=@($errors)
+    cache=@{process='process-cold'; driver='unknown-preserved'; globalCachesModified=$false}
+    privilege=@{isAdministrator=$identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)}
+    target=@{player=$playerPath; playerSha256=(FileRecord $playerPath).sha256; arguments=$PlayerArguments; processId=$processId; startedUtc=$started; endedUtc=$ended; exitCode=$playerExit; buildFiles=$buildFiles}
+    tools=@{presentMon=(FileRecord $presentMonPath); presentMonFileVersion=(Get-Item -LiteralPath $presentMonPath).VersionInfo.FileVersion; presentMonArguments=$pmArgs; presentMonExitCode=$pmExit; wpr=(FileRecord $wpr); wprCommands=@($commands); etwProfile=$(if ($CaptureEtw) {'GPU (built-in, file mode)'} else {'disabled'}); analyzer=(FileRecord $analyzer); analyzerExitCode=$analyzerExit; wrapper=(FileRecord $PSCommandPath)}
+    environment=@{operatingSystem=(Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,BuildNumber); processor=(Get-CimInstance Win32_Processor | Select-Object -First 1 -ExpandProperty Name); gpuDevices=@(Get-CimInstance Win32_VideoController | Select-Object Name,DriverVersion,PNPDeviceID); processSnapshotBefore=$interference; interference='Uncontrolled external applications; process snapshot retained; clocks and vendor cache state not controlled'}
+    artifacts=$artifacts; logs=$logs
 }
-$manifest | ConvertTo-Json -Depth 10 | Set-Content `
-    -LiteralPath $manifestPath `
-    -Encoding utf8NoBOM
-
-if (-not [string]::IsNullOrWhiteSpace($failure)) {
-    throw $failure
-}
-
-Write-Host "PresentMon summary: $(Join-Path $outputRoot 'presentmon-summary.json')"
-if ($CaptureEtw) {
-    Write-Host "GPU ETL: $etlPath"
-}
-Write-Host "Evidence manifest: $manifestPath"
+$manifest | ConvertTo-Json -Depth 15 | Set-Content (Join-Path $outputRoot 'windows-evidence-manifest.json') -Encoding utf8NoBOM
+if ($errors.Count) { throw ($errors -join [Environment]::NewLine) }

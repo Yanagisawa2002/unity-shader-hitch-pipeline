@@ -61,3 +61,6 @@ UnityProject/Builds/
 !DotNet/**/*.csproj
 DotNet/**/bin/
 DotNet/**/obj/
+
+# Task-local capture tools and scratch evidence
+/work/

@@ -326,6 +326,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public void Write(string marker, double realtimeSeconds)
         {
+            PsoSystemMarkers.Emit(marker, logScope);
             string line = marker + " realtime=" +
                           realtimeSeconds.ToString("F6", CultureInfo.InvariantCulture);
             pending.Append(line).AppendLine();
