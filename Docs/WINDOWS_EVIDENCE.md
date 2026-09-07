@@ -91,7 +91,9 @@ errors. Final exit remains unsuccessful until all required OS evidence passes.
 
 `Invoke-PsoWindowsEvidence.ps1` schema v2 starts WPR's built-in GPU file-mode
 profile on run 1 and independently starts a unique PresentMon session before the
-owned Player. It never stops an unrelated recording. Unknown WPR status fails
+owned Player. The measured Player has a visible, non-minimized window so DXGI can
+present; capture helpers remain hidden. Hiding a Unity Player can produce no
+presentation CSV and unfinished background warmup. It never stops an unrelated recording. Unknown WPR status fails
 closed. `-ProbeOnly -CaptureEtw` tests rights without launching the Player;
 `-CaptureUnavailableContinueEngine` allows engine evidence despite denied capture.
 All helper stdout/stderr, command exits, actual PID, process UTC interval,
@@ -99,7 +101,11 @@ hardware/driver/OS identity, process snapshot, Player build inventory, plan,
 receipts, tools and analysis hashes are retained. Capture timeout must exceed
 Player timeout. The wrapper refuses nonempty outputs and stale receipt paths.
 
-`PsoSystemMarkers` is opt-in. It buffers phase start/end, benchmark start/end and
+`PsoSystemMarkers` is opt-in. On Windows it calls native `QueryPerformanceCounter`
+and `QueryPerformanceFrequency`, and records `clockSource` explicitly. Unity's
+managed Stopwatch may have a process-relative epoch and cannot supply absolute
+ETW clock anchors. Live PresentMon capture uses `--qpc_time`, avoiding wall-clock
+formatting and timezone ambiguity. It buffers phase start/end, benchmark start/end and
 scenario markers with PID, session ID, frame number, realtime, UTC and QPC anchors;
 disk writes occur at benchmark completion/shutdown. These are **sidecar clock
 anchors, not native ETW provider events**. QPC continuity must agree with UTC within

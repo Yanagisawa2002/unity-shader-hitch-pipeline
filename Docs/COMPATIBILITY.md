@@ -96,7 +96,9 @@ the existing measured online model and safety margins. These numbers are priors,
 never measured guarantees or a hard bound on opaque driver calls.
 
 `PsoWarmupOrchestrator.SaveCostCache(path)` exports estimates only after successful
-warmup and only from phases with actual progressive batch observations. Native bulk
+warmup and only from phases whose varied steady-state progressive batches have
+actually fitted a slope (`HasMeasuredCostSlope`). A cold batch or repeated equal-size
+batches do not establish a slope and cannot export the unchanged initial prior. Native bulk
 warmup is excluded from this model. `-pso-cost-cache <path>` optionally imports a
 version-1 cache before scheduler creation. `PsoCostCacheStorage.TryApply` checks the
 cache checksum, exact plan and per-phase collection hashes, model version, nonempty
