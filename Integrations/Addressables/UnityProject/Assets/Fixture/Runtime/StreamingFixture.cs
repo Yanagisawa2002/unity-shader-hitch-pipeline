@@ -113,7 +113,7 @@ public sealed class StreamingFixture : MonoBehaviour
                 captured.gpu == receipt.gpu && captured.unityVersion == receipt.unityVersion &&
                 captured.collectionHash == Hash(File.ReadAllBytes(Path.Combine(root, "fixture-r" + revision + ".graphicsstate"))),
                 "Unknown/changed content requires its own matching trace and build provenance.");
-            Check(asset != null && asset.name == "Streaming-r" + revision, "Loaded key/revision mapping mismatch.");
+            Check(asset != null && asset.name == "r" + revision, "Loaded key/revision mapping mismatch: " + (asset == null ? "null" : asset.name));
             var material = asset.GetComponent<Renderer>().sharedMaterial;
             Check(material.shader != null && material.shader.name == "ShaderHitchPipeline/StreamingFixture" && material.shader.isSupported,
                 "Actual bundle shader must be loaded before collection registration.");

@@ -78,7 +78,7 @@ this implementation must not be promoted as a measured large-content speedup.
 ## Real fixture and smoke
 
 The independent `UnityProject` uses the existing `-pso-training-build` path to
-build a trace-capable fixture before its dynamic content collections exist; it
+build a Development Player fixture before its dynamic content collections exist; it
 does not pretend to pass the static installed-plan production build gate.
 The Player builds two actual Addressables prefab/material
 revisions (blue/red) plus an explicitly shared shader bundle. Its bootstrap scene
@@ -86,7 +86,10 @@ holds no direct reference to those materials or that shader. The build creates
 real local bundles/catalog and a Windows D3D12 Player. A trace process loads and
 explicitly renders each revision to a 64x64 render texture, checks a GPU pixel
 readback against the revision color, and writes a separate nonempty graphics-state
-collection. It does not rely on a hidden window presenting.
+collection. It does not rely on a hidden window presenting. On the tested Unity
+6000.5.2f1 build, the non-Development Player passed GPU pixel readback but recorded
+zero graphics states; that failed attempt is retained. The actual tracing/runtime
+smoke therefore uses Development Player, matching the repository's tracing samples.
 A second process loads the built bundles and tests overlapping owners, native
 dedup/subset submission, unload while submitted, fence release, reload, changed
 content, cancellation, attestation failure and a missing Addressables key.
