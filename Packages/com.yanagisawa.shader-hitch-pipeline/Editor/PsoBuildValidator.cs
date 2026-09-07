@@ -47,6 +47,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 validatedPlan = PsoPlanInstaller.ValidateInstalled(configuration);
                 validatedPlanHash = PsoFileUtility.ComputeSha256(validatedPlanPath);
                 ValidateTarget(report.summary.platform, validatedPlan, out validatedApis);
+                ValidateBuildIdentity(validatedPlan, report.summary.platform, report.summary.options);
                 Debug.Log("[ShaderHitchPipeline] Build gate accepted plan '" +
                           validatedPlan.profileId + "' (" + validatedPlan.planSha256 + ").");
             }
@@ -82,6 +83,22 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             PsoFileUtility.WriteJsonAtomic(file, receipt);
             Debug.Log("[ShaderHitchPipeline] Build receipt: " + file);
             validatedPlan = null;
+        }
+
+        public static void ValidateBuildIdentity(PsoWarmupPlanDocument plan, BuildTarget target, BuildOptions options = BuildOptions.None)
+        {
+            if (plan.compatibility == null)
+            {
+                Debug.LogWarning("[ShaderHitchPipeline] Legacy plan: no current-build attestation; retrace to migrate.");
+                return;
+            }
+            PsoEnvironmentSnapshot expected = plan.compatibility.collectionEnvironment;
+            PsoContentIdentity actual = PsoBuildIdentityCapture.CaptureCurrentBuild(target, options);
+            if (expected == null || expected.unityVersion != Application.unityVersion ||
+                expected.identity == null || expected.identity.buildInputSha256 != actual.buildInputSha256 ||
+                expected.identity.shaderSha256 != actual.shaderSha256 || expected.identity.contentSha256 != actual.contentSha256 ||
+                expected.identity.contentId != actual.contentId || expected.identity.contentRevision != actual.contentRevision)
+                throw new InvalidDataException("Current build/shader/content inputs differ from traced plan; retrace before building warmup Player.");
         }
 
         public static void ValidateTarget(

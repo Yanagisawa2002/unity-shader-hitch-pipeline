@@ -65,6 +65,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             Array.Empty<PsoSchedulerCandidate[]>();
 
         private PsoWarmupPlanDocument plan;
+        public PsoCompatibilityResult Compatibility { get; private set; }
         private PhaseExecution scheduled;
         private Stopwatch runStopwatch;
         private GraphicsStateCollection feedbackTraceCollection;
@@ -167,12 +168,26 @@ namespace Yanagisawa.ShaderHitchPipeline
             DisposeActivatedBackends();
             StopFeedbackTrace();
 
+            plan = null;
             planPath = Path.GetFullPath(requestedPlanPath);
             plan = PsoPlanValidation.LoadAndValidate(
                 planPath,
                 validateEnvironment,
                 true);
             planHash = PsoFileUtility.ComputeSha256(planPath);
+            Compatibility = PsoCompatibility.Evaluate(plan.compatibility, PsoUnityEnvironment.Capture());
+            // Strict plans cannot bypass current-build identity through validateEnvironment=false.
+            if (!Compatibility.legacy && !Compatibility.collectionCompatible)
+            {
+                plan = null;
+                throw new InvalidDataException(string.Join(Environment.NewLine, Compatibility.collectionReasons));
+            }
+            PsoCompatibility.ResetCostPriors(plan, Compatibility);
+            Debug.Log("[ShaderHitchPipeline] Compatibility: " + JsonUtility.ToJson(Compatibility));
+            string costCachePath = PsoCommandLine.Current.GetString("-pso-cost-cache", string.Empty);
+            if (!string.IsNullOrWhiteSpace(costCachePath) &&
+                !PsoCostCacheStorage.TryApply(costCachePath, plan, out string[] cacheReasons))
+                Debug.LogWarning("[ShaderHitchPipeline] Cost cache ignored: " + string.Join("; ", cacheReasons));
             outputRoot = Path.GetFullPath(
                 string.IsNullOrWhiteSpace(requestedOutputRoot)
                     ? PsoFileUtility.DefaultRuntimeOutputRoot()
@@ -233,6 +248,21 @@ namespace Yanagisawa.ShaderHitchPipeline
             Debug.Log("[ShaderHitchPipeline] Loaded plan '" + plan.profileId +
                       "' with " + plan.phases.Length + " phases; strategy=" +
                       strategy + ".");
+        }
+
+        public void SaveCostCache(string path)
+        {
+            if (!IsComplete) throw new InvalidOperationException("Cost export requires completed warmup.");
+            var entries = new List<PsoCostCacheEntry>();
+            foreach (PhaseExecution item in activatedExecutions)
+                if (item.policy != null && !item.nativeAsyncBulkDeadline && item.batchDurations.Count > 0 && item.receipt.completed)
+                    entries.Add(new PsoCostCacheEntry
+                    {
+                        phase = item.plan.phase, collectionSha256 = item.plan.collectionSha256,
+                        millisecondsPerState = item.policy.EstimatedMillisecondsPerState,
+                        observedBatches = item.batchDurations.Count
+                    });
+            PsoCostCacheStorage.Save(path, plan, entries.ToArray());
         }
 
         public void ActivateStartupPhases()

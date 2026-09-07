@@ -80,7 +80,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public static void WriteJsonAtomic(string path, object document, bool pretty = true)
         {
-            WriteTextAtomic(path, JsonUtility.ToJson(document, pretty));
+            WriteTextAtomic(path, PsoDocumentJson.Serialize(document, pretty));
         }
 
         public static void WriteTextAtomic(string path, string contents)
@@ -116,7 +116,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException("JSON file was not found.", path);
-            T result = JsonUtility.FromJson<T>(File.ReadAllText(path));
+            T result = PsoDocumentJson.Parse<T>(File.ReadAllText(path));
             if (result == null)
                 throw new InvalidDataException("Could not parse JSON document: " + path);
             return result;

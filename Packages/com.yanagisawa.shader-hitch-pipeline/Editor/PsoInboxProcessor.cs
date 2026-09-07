@@ -190,6 +190,12 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
 
             var plan = new PsoWarmupPlanDocument
             {
+                compatibility = first.manifest.environment.identity == null ? null : new PsoCompatibilityContract
+                {
+                    version = PsoCompatibility.Version,
+                    collectionEnvironment = first.manifest.environment,
+                    costModelVersion = PsoCompatibility.CostModelVersion
+                },
                 profileId = configuration.profileId,
                 generatedUtc = PsoFileUtility.UtcNowText(),
                 runtimePlatform = first.platform.ToString(),
@@ -311,6 +317,10 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                         "Collection counts differ from the session manifest.");
                 string key = manifest.adapterId + "|" + platform + "|" +
                              graphicsApi + "|" + quality;
+                if (manifest.environment.identity != null)
+                    key += "|identity-v1|" + PsoCompatibility.CollectionKey(manifest.environment);
+                else
+                    key += "|legacy-unattested";
                 candidates.Add(new Candidate
                 {
                     manifestPath = manifestPath,

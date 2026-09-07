@@ -3,6 +3,13 @@ using System;
 namespace Yanagisawa.ShaderHitchPipeline
 {
     [Serializable]
+    public sealed class PsoDriverModuleIdentity
+    {
+        public string file;
+        public string sha256;
+    }
+
+    [Serializable]
     public sealed class PsoEnvironmentSnapshot
     {
         public string unityVersion;
@@ -19,6 +26,19 @@ namespace Yanagisawa.ShaderHitchPipeline
         public int graphicsMemorySizeMb;
         public string qualityLevelName;
         public string operatingSystem;
+        public int graphicsDeviceId;
+        public int graphicsDeviceVendorId;
+        public string processorType;
+        public int processorCount;
+        public string renderingThreadingMode;
+        public string costExecutionContext;
+        public string driverIdentity;
+        public string driverIdentitySource;
+        public string driverVersion;
+        public string driverIdentityError;
+        public string driverRegistryIdentity;
+        public PsoDriverModuleIdentity[] driverModules = Array.Empty<PsoDriverModuleIdentity>();
+        public PsoContentIdentity identity;
 
     }
 
@@ -87,6 +107,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string[] sourceSessionHashes = Array.Empty<string>();
         public PsoWarmupPhasePlan[] phases = Array.Empty<PsoWarmupPhasePlan>();
         public string planSha256;
+        public PsoCompatibilityContract compatibility;
     }
 
     [Serializable]
