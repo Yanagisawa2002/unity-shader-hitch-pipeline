@@ -141,9 +141,17 @@ namespace Yanagisawa.ShaderHitchPipeline
                 owner.phases.Add(phase.Key, list);
             }
             // Attach the replacement first: a retained shader shared across revisions cannot transiently unload.
-            foreach (var previous in owners.ToArray())
-                if (previous.ContentId == contentId && previous.ContentRevision != contentRevision) Unload(previous);
             owners.Add(owner);
+            try
+            {
+                foreach (var previous in owners.ToArray())
+                    if (previous.ContentId == contentId && previous.ContentRevision != contentRevision) Unload(previous);
+            }
+            catch
+            {
+                // A faulty old asset release must not leave an unreachable new owner installed.
+                Unload(owner); throw;
+            }
             return owner;
         }
 
@@ -248,8 +256,12 @@ namespace Yanagisawa.ShaderHitchPipeline
         public void Dispose()
         {
             Check(); if (disposed) return;
-            foreach (var owner in owners.ToArray()) Unload(owner);
-            Drain(); disposed = true;
+            var errors = new List<Exception>();
+            foreach (var owner in owners.ToArray())
+                try { Unload(owner); } catch (Exception error) { errors.Add(error); }
+            try { Drain(); } catch (Exception error) { errors.Add(error); }
+            if (errors.Count != 0) throw new AggregateException("Streaming shutdown did not finish cleanly.", errors);
+            disposed = true;
         }
     }
 }

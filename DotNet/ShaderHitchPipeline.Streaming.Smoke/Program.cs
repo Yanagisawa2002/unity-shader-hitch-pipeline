@@ -100,6 +100,12 @@ static class Program
         Throws(() => core.Drain(), "Release callback errors must remain observable.");
         Require(releasedAfterFailure == 1 && core.RetainedStateCount == 0 && !core.HasSubmittedWork,
             "One failing post-fence callback must not strand another owner's pin."); core.Dispose();
+        core = new PsoStreamingCoordinator(new Backend()); assets = new PsoRetainedAsset(() => throw new Exception("old owner release"));
+        a = core.RegisterLoaded("bad-release", "r1", "b", Plan("x"), assets); assets.Dispose();
+        otherAssets = new PsoRetainedAsset(() => {});
+        Throws(() => core.RegisterLoaded("bad-release", "r2", "b", Plan("x"), otherAssets), "Failed old release should fail registration visibly.");
+        Require(core.RetainedStateCount == 0 && otherAssets.ReferenceCount == 1, "Failed revision registration must not strand an unreachable replacement.");
+        otherAssets.Dispose(); core.Dispose();
         Console.WriteLine("STREAMING_SMOKE_OK checks=" + checks);
     }
     sealed class Backend : IPsoStreamingBackend
