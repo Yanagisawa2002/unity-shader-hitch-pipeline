@@ -61,3 +61,6 @@ UnityProject/Builds/
 !DotNet/**/*.csproj
 DotNet/**/bin/
 DotNet/**/obj/
+
+/UnityProject/Assets/HotsetFixtureGenerated/
+/UnityProject/Assets/HotsetFixtureGenerated.meta

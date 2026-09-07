@@ -80,6 +80,11 @@ namespace Yanagisawa.ShaderHitchPipeline
         private string failure;
         private bool quitting;
         private bool completionRaised;
+        private PsoHotsetDecision startupHotset;
+        public PsoHotsetDecision StartupHotset => startupHotset;
+        // Install a current-build collection AND cost compatibility proof. An absent
+        // bridge conservatively allows only caller-required startup work.
+        public static Func<PsoWarmupPlanDocument, PsoStartupHotsetDocument, bool> StartupHotsetCompatibilityValidator;
 
         public static PsoWarmupOrchestrator Instance => instance;
         public bool HasLoadedPlan => plan != null;
@@ -134,14 +139,22 @@ namespace Yanagisawa.ShaderHitchPipeline
                 PsoConstants.OutputArgument,
                 PsoFileUtility.DefaultRuntimeOutputRoot());
             orchestrator.LoadPlan(requestedPlan, requestedOutput, true);
+            string hotsetFile = commandLine.GetString("-pso-startup-hotset", string.Empty);
+            if (!string.IsNullOrWhiteSpace(hotsetFile))
+            {
+                PsoStartupHotsetDocument policy = null;
+                try { policy = JsonUtility.FromJson<PsoStartupHotsetDocument>(File.ReadAllText(hotsetFile)); }
+                catch (Exception exception) { Debug.LogWarning("[ShaderHitchPipeline] Hotset policy fallback: " + exception.Message); }
+                orchestrator.ConfigureStartupHotset(policy);
+            }
 
             string explicitPhase = commandLine.GetString(
                 PsoConstants.WarmupPhaseArgument,
                 string.Empty);
+            if (orchestrator.startupHotset != null || string.IsNullOrWhiteSpace(explicitPhase))
+                orchestrator.ActivateStartupPhases();
             if (!string.IsNullOrWhiteSpace(explicitPhase))
                 orchestrator.ActivatePhase(explicitPhase);
-            else
-                orchestrator.ActivateStartupPhases();
             orchestrator.RunPreinteractiveBootstrap();
         }
 
@@ -197,6 +210,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             failed = false;
             failure = string.Empty;
             completionRaised = false;
+            startupHotset = null;
             activated.Clear();
             workItems.Clear();
             phaseReceipts.Clear();
@@ -235,13 +249,30 @@ namespace Yanagisawa.ShaderHitchPipeline
                       strategy + ".");
         }
 
+        /// <summary>Opt-in selection after validated LoadPlan, before any activation.</summary>
+        public void ConfigureStartupHotset(PsoStartupHotsetDocument policy)
+        {
+            EnsurePlan();
+            if (activated.Count != 0) throw new InvalidOperationException("Configure hotset before activation.");
+            startupHotset = PsoStartupHotset.PrepareValidated(plan, planHash, policy, StartupHotsetCompatibilityValidator);
+            PsoFileUtility.WriteJsonAtomic(Path.Combine(outputRoot, "Receipts", runId + ".hotset.json"), startupHotset);
+        }
+
+        public void ActivateStartupHotsetAndGate(PsoStartupHotsetDocument policy)
+        {
+            ConfigureStartupHotset(policy);
+            ActivateStartupPhases();
+            RunPreinteractiveBootstrap();
+        }
+
         public void ActivateStartupPhases()
         {
             EnsurePlan();
             var startup = new List<PsoWarmupPhasePlan>();
             for (int index = 0; index < plan.phases.Length; index++)
             {
-                if (plan.phases[index].prewarmAtStartup)
+                if (startupHotset == null ? plan.phases[index].prewarmAtStartup :
+                    Array.IndexOf(startupHotset.startupUnitIds, plan.phases[index].phase) >= 0)
                     startup.Add(plan.phases[index]);
             }
             startup.Sort(ComparePlans);
@@ -657,6 +688,8 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         private bool ShouldRunPreinteractiveBootstrap(PhaseExecution execution)
         {
+            if (startupHotset != null && Array.IndexOf(startupHotset.startupUnitIds, execution.plan.phase) >= 0)
+                return true; // Explicit policy promises a gate for selected and caller-required startup units.
             return execution.plan.preinteractiveBootstrap &&
                    string.Equals(
                        strategy,

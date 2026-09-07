@@ -57,3 +57,5 @@ Console.WriteLine("CORE_SMOKE_OK phase={0} coldBatch={1} schema={2}",
     decision.Phase,
     probe.BatchSize,
     plan.schemaVersion);
+
+HotsetTests.Run();
