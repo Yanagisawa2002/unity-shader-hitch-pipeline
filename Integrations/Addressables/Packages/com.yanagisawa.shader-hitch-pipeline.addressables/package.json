@@ -1,0 +1,11 @@
+{
+  "name": "com.yanagisawa.shader-hitch-pipeline.addressables",
+  "version": "0.1.0",
+  "displayName": "Shader Hitch Pipeline Addressables",
+  "description": "Optional loaded-content and fenced PSO streaming adapter.",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.yanagisawa.shader-hitch-pipeline": "0.3.0",
+    "com.unity.addressables": "2.7.6"
+  }
+}

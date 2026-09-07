@@ -61,3 +61,12 @@ UnityProject/Builds/
 !DotNet/**/*.csproj
 DotNet/**/bin/
 DotNet/**/obj/
+
+# Reproducibly generated optional Addressables fixture assets and build settings
+Integrations/Addressables/UnityProject/Assets/FixtureGenerated/
+Integrations/Addressables/UnityProject/Assets/FixtureGenerated.meta
+Integrations/Addressables/UnityProject/Assets/AddressableAssetsData/
+Integrations/Addressables/UnityProject/Assets/AddressableAssetsData.meta
+Integrations/Addressables/UnityProject/Assets/StreamingAssets/
+Integrations/Addressables/UnityProject/Assets/StreamingAssets.meta
+/work/
