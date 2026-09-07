@@ -96,7 +96,7 @@ public sealed class StreamingFixture : MonoBehaviour
             Check(captured.passed && captured.contentId == "room" && captured.contentRevision == "r" + revision &&
                 captured.buildGuid == receipt.buildGuid && captured.contentDigest == receipt.contentDigest &&
                 captured.gpu == receipt.gpu && captured.unityVersion == receipt.unityVersion &&
-                captured.collectionHash == Hash(File.ReadAllBytes(Path.Combine(root, "fixture-r" + revision + ".graphicsstate")))),
+                captured.collectionHash == Hash(File.ReadAllBytes(Path.Combine(root, "fixture-r" + revision + ".graphicsstate"))),
                 "Unknown/changed content requires its own matching trace and build provenance.");
             Check(asset != null && asset.name == "Streaming-r" + revision, "Loaded key/revision mapping mismatch.");
             var material = asset.GetComponent<Renderer>().sharedMaterial;
