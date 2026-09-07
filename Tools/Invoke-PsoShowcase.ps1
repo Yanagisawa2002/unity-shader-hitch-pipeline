@@ -2106,13 +2106,17 @@ Invoke-UnityEditor @(
     "-logFile", "Logs/$runLabel-install-$stamp.log"
 ) "install"
 
-Invoke-UnityEditor @(
+$finalBuildArguments = @(
     "-executeMethod",
     $builderMethod,
     $cacheBusterArgument, $stamp,
     "-quit",
     "-logFile", "Logs/$runLabel-final-$stamp.log"
-) "final-build"
+)
+if (-not $isDeadlineRun) {
+    $finalBuildArguments += "-pso-reuse-generated-scene"
+}
+Invoke-UnityEditor $finalBuildArguments "final-build"
 
 $selectedWorkerCount = 0
 $selectedBatchSize = 0
