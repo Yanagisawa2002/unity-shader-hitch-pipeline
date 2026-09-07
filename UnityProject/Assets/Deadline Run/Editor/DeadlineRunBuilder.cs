@@ -50,6 +50,7 @@ namespace Yanagisawa.ShaderHitchPipeline.DeadlineRun.Editor
                     ? BuildOptions.Development
                     : BuildOptions.None,
             };
+            PipelineEditor.PsoBuildIdentityCapture.DeclareBuildInputs(options);
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
             {

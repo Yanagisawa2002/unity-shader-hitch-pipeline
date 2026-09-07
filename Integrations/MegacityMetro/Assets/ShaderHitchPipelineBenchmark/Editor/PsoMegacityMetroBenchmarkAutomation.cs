@@ -278,6 +278,7 @@ namespace Yanagisawa.ShaderHitchPipeline.MegacityMetro.Editor
                 target = BuildTarget.StandaloneWindows64,
                 options = trainingBuild ? BuildOptions.Development : BuildOptions.None,
             };
+            PipelineEditor.PsoBuildIdentityCapture.DeclareBuildInputs(options);
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
             {
