@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Yanagisawa.ShaderHitchPipeline
@@ -18,6 +19,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             public string name;
             public string phase;
             public string utc;
+            public string clockSource;
             public long qpc;
             public long qpcFrequency;
             public long qpcBracketTicks;
@@ -30,6 +32,28 @@ namespace Yanagisawa.ShaderHitchPipeline
         private static string path;
         private static bool initialized;
 
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+        [DllImport("kernel32.dll")]
+        private static extern bool QueryPerformanceCounter(out long value);
+        [DllImport("kernel32.dll")]
+        private static extern bool QueryPerformanceFrequency(out long value);
+        private const string ClockSource = "windows-query-performance-counter-v1";
+        private static long ReadCounter()
+        {
+            if (!QueryPerformanceCounter(out long value)) throw new InvalidOperationException("Native QPC unavailable.");
+            return value;
+        }
+        private static long ReadFrequency()
+        {
+            if (!QueryPerformanceFrequency(out long value) || value <= 0) throw new InvalidOperationException("Native QPC frequency unavailable.");
+            return value;
+        }
+#else
+        private const string ClockSource = "managed-stopwatch-process-clock-v1";
+        private static long ReadCounter() => Stopwatch.GetTimestamp();
+        private static long ReadFrequency() => Stopwatch.Frequency;
+#endif
+
         public static void Emit(string name, string phase = "")
         {
             if (!initialized)
@@ -41,13 +65,17 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (string.IsNullOrWhiteSpace(path)) return;
             // UTC read is bracketed by QPC samples; retain uncertainty instead of
             // presenting a sidecar anchor as an ETW provider event.
-            long before = Stopwatch.GetTimestamp();
+            // Unity's managed Stopwatch can use a process-relative epoch. ETW
+            // uses native absolute QPC, so Windows markers must call that API.
+            long frequency = ReadFrequency();
+            long before = ReadCounter();
             string utc = DateTime.UtcNow.ToString("o");
-            long after = Stopwatch.GetTimestamp();
+            long after = ReadCounter();
             Rows.Add(JsonUtility.ToJson(new Marker {
                 processId = Process.GetCurrentProcess().Id, sessionId = SessionId,
                 name = name, phase = phase, utc = utc,
-                qpc = before + (after - before) / 2, qpcFrequency = Stopwatch.Frequency,
+                clockSource = ClockSource,
+                qpc = before + (after - before) / 2, qpcFrequency = frequency,
                 qpcBracketTicks = after - before,
                 frame = Time.frameCount, realtimeSeconds = Time.realtimeSinceStartupAsDouble
             }));

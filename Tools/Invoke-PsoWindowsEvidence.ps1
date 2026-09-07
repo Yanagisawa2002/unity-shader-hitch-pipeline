@@ -61,7 +61,7 @@ function WprCommand([string[]]$Arguments, [string]$Label) {
     $commands.Add(@{tool='wpr'; arguments=$Arguments; exitCode=$result.exitCode; output=$result.text})
     return $result
 }
-$pmArgs = @('--process_name',[IO.Path]::GetFileName($playerPath),'--output_file',$csv,'--date_time','--timed',"$CaptureSeconds",'--terminate_after_timed','--terminate_on_proc_exit','--no_console_stats','--session_name',$sessionName,'--v2_metrics')
+$pmArgs = @('--process_name',[IO.Path]::GetFileName($playerPath),'--output_file',$csv,'--qpc_time','--timed',"$CaptureSeconds",'--terminate_after_timed','--terminate_on_proc_exit','--no_console_stats','--session_name',$sessionName,'--v2_metrics')
 $interference = @(Get-Process | Select-Object ProcessName,Id)
 try {
     if (@(Get-Process -Name ([IO.Path]::GetFileNameWithoutExtension($playerPath)) -ErrorAction SilentlyContinue).Count) { throw 'Player with same name already running; refusing ambiguous capture.' }
