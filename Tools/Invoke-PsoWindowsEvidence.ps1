@@ -8,6 +8,7 @@ param(
     [string]$Markers = '', [string]$BuildManifest = '',
     [ValidateRange(1,3600)][int]$CaptureSeconds = 120,
     [ValidateRange(1,3600)][int]$PlayerTimeoutSeconds = 110,
+    [ValidateRange(0,60)][int]$WprPreRollSeconds = 0,
     [double]$TargetFrameMilliseconds = 0,
     [switch]$CaptureEtw, [switch]$CaptureUnavailableContinueEngine,
     [switch]$ProbeOnly, [string]$Python = 'python'
@@ -72,6 +73,12 @@ try {
             $wprStarted = $start.exitCode -eq 0
             if (-not $wprStarted) { $errors.Add("WPR start failed (exit $($start.exitCode)): $($start.text)") }
         } else { $errors.Add("WPR status active or unknown; recording untouched (exit $($status.exitCode)): $($status.text)") }
+    }
+    if ($wprStarted -and $WprPreRollSeconds -gt 0) {
+        # Bounded, declared recorder pre-roll; all target work remains captured.
+        # This cannot relax the workload, budget, clock or receipt acceptance gates.
+        $commands.Add(@{tool='capture-preroll'; seconds=$WprPreRollSeconds; startedUtc=[DateTime]::UtcNow.ToString('o')})
+        Start-Sleep -Seconds $WprPreRollSeconds
     }
     # PresentMon is probed independently even if WPR is denied.
     $pm = StartOwned $presentMonPath $pmArgs 'presentmon'

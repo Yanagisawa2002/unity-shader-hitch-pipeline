@@ -44,7 +44,8 @@ $results = [Collections.Generic.List[object]]::new()
             & $captureScript -Player $matrixConfig.player -PresentMon $matrixConfig.presentMon -BuildManifest $matrixConfig.buildManifest `
                 -PlayerArguments $arguments -WarmupReceipt $warmup -BenchmarkReceipt $benchmark -Markers $markers `
                 -Output (Join-Path $runDirectory 'windows') -CaptureEtw:($run -eq 1) -CaptureUnavailableContinueEngine `
-                -CaptureSeconds $matrixConfig.captureSeconds -PlayerTimeoutSeconds $matrixConfig.playerTimeoutSeconds -Python $Python
+                -CaptureSeconds $matrixConfig.captureSeconds -PlayerTimeoutSeconds $matrixConfig.playerTimeoutSeconds -Python $Python `
+                -WprPreRollSeconds ([int]$matrixConfig.wprPreRollSeconds)
         } catch { $failure = $_.Exception.ToString() }
         $results.Add(@{run=$run; captureError=$failure; directory=$runDirectory})
         # Always retain all five independent attempts, including denied capture logs.
