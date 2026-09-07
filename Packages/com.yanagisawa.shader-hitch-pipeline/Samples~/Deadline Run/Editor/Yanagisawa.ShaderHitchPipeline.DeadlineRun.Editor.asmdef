@@ -1,0 +1,21 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.DeadlineRun.Editor",
+  "rootNamespace": "Yanagisawa.ShaderHitchPipeline.DeadlineRun.Editor",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
+    "Yanagisawa.ShaderHitchPipeline.Runtime",
+    "Yanagisawa.ShaderHitchPipeline.Editor",
+    "Yanagisawa.ShaderHitchPipeline.DeadlineRun"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

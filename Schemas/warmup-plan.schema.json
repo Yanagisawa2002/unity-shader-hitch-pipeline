@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Yanagisawa2002/unity-shader-hitch-pipeline/blob/main/Schemas/warmup-plan.schema.json",
+  "title": "Shader Hitch Pipeline warmup plan",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "adapterId",
+    "adapterVersion",
+    "runtimePlatform",
+    "graphicsDeviceType",
+    "phases",
+    "planSha256"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 3 },
+    "packageVersion": { "type": "string" },
+    "profileId": { "type": "string", "minLength": 1 },
+    "generatedUtc": { "type": "string" },
+    "adapterId": { "type": "string", "minLength": 1 },
+    "adapterVersion": { "type": "string", "minLength": 1 },
+    "runtimePlatform": { "type": "string", "minLength": 1 },
+    "graphicsDeviceType": { "type": "string", "minLength": 1 },
+    "qualityLevelName": { "type": "string" },
+    "sourceSessionCount": { "type": "integer", "minimum": 1 },
+    "sourceSessionHashes": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/phase" }
+    },
+    "planSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "required": [
+        "phase",
+        "collectionFile",
+        "collectionSha256",
+        "graphicsStateCount",
+        "targetFrameMilliseconds",
+        "estimatedMillisecondsPerState",
+        "bootstrapBatchSize",
+        "budgetSafetyMarginMilliseconds",
+        "budgetCostSafetyMultiplier",
+        "budgetCooldownFrames",
+        "preinteractiveBootstrap"
+      ],
+      "properties": {
+        "phase": { "type": "string", "minLength": 1 },
+        "collectionFile": { "type": "string", "minLength": 1 },
+        "collectionSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "variantCount": { "type": "integer", "minimum": 0 },
+        "graphicsStateCount": { "type": "integer", "minimum": 1 },
+        "required": { "type": "boolean" },
+        "prewarmAtStartup": { "type": "boolean" },
+        "traceCacheMisses": { "type": "boolean" },
+        "priority": { "type": "integer" },
+        "initialBatchSize": { "type": "integer", "minimum": 1 },
+        "minimumBatchSize": { "type": "integer", "minimum": 1 },
+        "maximumBatchSize": { "type": "integer", "minimum": 1 },
+        "targetFrameMilliseconds": { "type": "number", "exclusiveMinimum": 0 },
+        "deadlineMilliseconds": { "type": "number", "minimum": 0 },
+        "estimatedMillisecondsPerState": { "type": "number", "exclusiveMinimum": 0 },
+        "expectedUseProbability": { "type": "number", "minimum": 0, "maximum": 1 },
+        "hotSetTier": { "type": "integer", "minimum": 0 },
+        "bootstrapBatchSize": { "type": "integer", "minimum": 1 },
+        "budgetSafetyMarginMilliseconds": { "type": "number", "minimum": 0 },
+        "budgetCostSafetyMultiplier": { "type": "number", "minimum": 1 },
+        "budgetCooldownFrames": { "type": "integer", "minimum": 0 }
+        ,
+        "preinteractiveBootstrap": { "type": "boolean" }
+      }
+    }
+  }
+}

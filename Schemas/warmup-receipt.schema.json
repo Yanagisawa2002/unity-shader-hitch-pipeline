@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Yanagisawa2002/unity-shader-hitch-pipeline/blob/main/Schemas/warmup-receipt.schema.json",
+  "title": "Shader Hitch Pipeline warmup receipt",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "planSha256",
+    "strategy",
+    "completed",
+    "environment",
+    "phases"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 3 },
+    "packageVersion": { "type": "string" },
+    "runId": { "type": "string" },
+    "planSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "strategy": { "enum": ["scheduled", "throughput"] },
+    "asyncPsoJobCount": { "type": "integer" },
+    "processorCount": { "type": "integer", "minimum": 1 },
+    "elapsedMilliseconds": { "type": "number", "minimum": 0 },
+    "completed": { "type": "boolean" },
+    "error": { "type": "string" },
+    "environment": { "type": "object" },
+    "phases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/phaseReceipt" }
+    },
+    "cacheMissTrace": { "type": "object" }
+  },
+  "$defs": {
+    "phaseReceipt": {
+      "type": "object",
+      "required": [
+        "phase",
+        "budgetPolicy",
+        "hardFrameBudgetMilliseconds",
+        "hardBudgetGuaranteeScope",
+        "budgetViolationCount",
+        "hardFrameBudgetMet",
+        "hardFrameBudgetFeasible",
+        "schedulerAdmissionBudgetMet",
+        "hardFrameBudgetOutcome",
+        "preinteractiveBootstrapEnabled",
+        "preinteractiveBootstrapMilliseconds",
+        "batchSizes",
+        "safeBatchSizes",
+        "predictedBatchDurationsMilliseconds",
+        "batchDurationsMilliseconds",
+        "admissionReasons"
+      ],
+      "properties": {
+        "phase": { "type": "string" },
+        "budgetPolicy": { "enum": ["strict-admission", "throughput-control"] },
+        "hardFrameBudgetMilliseconds": { "type": "number", "exclusiveMinimum": 0 },
+        "budgetSafetyMarginMilliseconds": { "type": "number", "minimum": 0 },
+        "budgetCostSafetyMultiplier": { "type": "number", "minimum": 1 },
+        "bootstrapBatchSize": { "type": "integer", "minimum": 1 },
+        "preinteractiveBootstrapEnabled": { "type": "boolean" },
+        "preinteractiveBootstrapBatchCount": { "type": "integer", "minimum": 0 },
+        "preinteractiveBootstrapMilliseconds": { "type": "number", "minimum": 0 },
+        "coldStartBatchMilliseconds": { "type": "number", "minimum": 0 },
+        "budgetViolationCount": { "type": "integer", "minimum": 0 },
+        "minimumBatchBudgetViolationCount": { "type": "integer", "minimum": 0 },
+        "circuitBreakerTripCount": { "type": "integer", "minimum": 0 },
+        "deferredFrameCount": { "type": "integer", "minimum": 0 },
+        "deadlineInfeasibleBatchCount": { "type": "integer", "minimum": 0 },
+        "hardFrameBudgetMet": { "type": "boolean" },
+        "hardFrameBudgetFeasible": { "type": "boolean" },
+        "schedulerAdmissionBudgetMet": { "type": "boolean" },
+        "maximumBudgetOverrunMilliseconds": { "type": "number", "minimum": 0 },
+        "hardFrameBudgetOutcome": {
+          "enum": [
+            "met",
+            "violated-model-error",
+            "unachievable-at-minimum-batch",
+            "not-applicable-throughput"
+          ]
+        },
+        "hardBudgetGuaranteeScope": {
+          "enum": [
+            "strict-admission; opaque-backend-observed-not-preemptible",
+            "interactive-frames-after-preinteractive-bootstrap; opaque-backend-admission-not-preemptible",
+            "none; throughput-control"
+          ]
+        },
+        "warmupFrameTimeSamplesMilliseconds": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "batchSizes": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+        "safeBatchSizes": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+        "deadlineBatchSizes": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+        "predictedBatchDurationsMilliseconds": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "batchDurationsMilliseconds": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "admissionReasons": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

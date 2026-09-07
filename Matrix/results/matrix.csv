@@ -1,0 +1,7 @@
+vendor,hardwareTarget,sceneTarget,sceneKind,status,runCount,presentMonCount,etwCount,medianBenchmarkP99Milliseconds,medianWarmupMaximumMilliseconds,medianPreinteractiveGateMilliseconds,allEngineBudgetsMet,allPresentBudgetsMet,reason
+NVIDIA,nvidia-d3d12,showcase-controlled,controlled,pending-hardware,0,0,0,0.0,0.0,0.0,False,False,no completed public run
+NVIDIA,nvidia-d3d12,unity-megacity-metro,public-large-scene,pending-hardware,0,0,0,0.0,0.0,0.0,False,False,no completed public run
+AMD,amd-d3d12,showcase-controlled,controlled,provisional,5,0,0,4.229210321791471,0.0,29.891500000000182,True,False,"needs 0 more runs, 5 PresentMon captures, and 1 ETL"
+AMD,amd-d3d12,unity-megacity-metro,public-large-scene,pending-run,0,0,0,0.0,0.0,0.0,False,False,no completed public run
+Intel,intel-d3d12,showcase-controlled,controlled,pending-hardware,0,0,0,0.0,0.0,0.0,False,False,no completed public run
+Intel,intel-d3d12,unity-megacity-metro,public-large-scene,pending-hardware,0,0,0,0.0,0.0,0.0,False,False,no completed public run

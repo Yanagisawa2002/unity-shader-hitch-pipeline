@@ -12,14 +12,20 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
     public sealed class PsoShowcaseController : MonoBehaviour
     {
         private const int Columns = 24;
-        private const int Rows = 16;
+        private const int TotalStateTiles = 384;
+        private const int StartupSeedTileCount = 8;
+        private const int DeferredStateTileCount = TotalStateTiles - StartupSeedTileCount;
         private const int HistoryLength = 180;
-        private const int RevealBatchSize = 8;
+        private const int RevealBatchSize = 2;
+        private const int StartupTraceFrameCount = 12;
         private const float HitchThresholdMilliseconds = 8.33f;
-        private const double RevealIntervalSeconds = 1.0 / 60.0;
+        public const double ContentRequestDelaySeconds = 0.65;
+        public const double DeferredDeadlineSeconds = 1.50;
         private const string VisualMarkerArgument = "-pso-showcase-marker";
+        private const string DeferredPhase = "combat";
 
-        private readonly List<MeshRenderer> renderers = new List<MeshRenderer>();
+        private readonly List<MeshRenderer> deferredRenderers = new List<MeshRenderer>();
+        private readonly List<Transform> motionTiles = new List<Transform>();
         private readonly List<Material> materials = new List<Material>();
         private readonly float[] frameHistory = new float[HistoryLength];
         private Texture2D white;
@@ -28,13 +34,24 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
         private int visibleCount;
         private int hitchFrameCount;
         private double readyAt;
-        private double nextRevealAt;
+        private double contentRequestAt;
+        private double contentRevealAt;
+        private double deferredReadyAt = -1.0;
+        private double lastHitchAt = -1.0;
         private double presentationEpoch;
         private double measurementStartedAt;
         private double missedPresentationMilliseconds;
         private float currentFrameMilliseconds;
         private float worstFrameMilliseconds;
+        private float lastHitchFrameMilliseconds;
         private bool sequenceStarted;
+        private bool contentRequested;
+        private bool contentRevealStarted;
+        private bool deferredActivated;
+        private bool deferredReady;
+        private bool deadlineMissed;
+        private int startupTraceFrames;
+        private bool traceDeferredPhaseStarted;
         private string mode;
         private Color modeColor;
         private string visualMarkerFile;
@@ -96,12 +113,15 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
 
         private void Update()
         {
-            if (sequenceStarted)
+            UpdateMotionScene();
+            AdvanceTrainingTrace();
+
+            if (contentRequested)
                 RecordMeasuredFrame();
 
             if (!sequenceStarted)
             {
-                if (!WarmupReady())
+                if (!StartupWarmupReady())
                     return;
                 if (readyAt < 0.0)
                 {
@@ -117,30 +137,108 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 BeginMeasuredWorkload();
             }
 
-            if (renderers.Count == 0 || visibleCount >= renderers.Count)
+            double now = Time.realtimeSinceStartupAsDouble;
+            if (!contentRequested && now >= contentRequestAt)
+                RequestDeferredContent(now);
+            if (deferredActivated && !deferredReady)
+                CheckDeferredReady(now);
+            if (!contentRevealStarted && now >= contentRevealAt)
+                BeginContentReveal(now);
+            if (!contentRevealStarted ||
+                deferredRenderers.Count == 0 ||
+                visibleCount >= deferredRenderers.Count)
                 return;
 
-            // Pace first use at 60 reveal batches per second. A cold hitch delays the next
-            // batch instead of catching up, so an ordinary 60 FPS recording shows the real
-            // presentation freeze while every mode still executes the identical workload.
-            double now = Time.realtimeSinceStartupAsDouble;
-            if (now < nextRevealAt)
-                return;
-            nextRevealAt = now + RevealIntervalSeconds;
-            int batchCount = Math.Min(RevealBatchSize, renderers.Count - visibleCount);
+            // Pace first use at two states per presentation (target 240 Hz): the same
+            // nominal 480 states/s reveal rate as eight states at 60 Hz, without creating
+            // a showcase-only renderer activation batch. A cold hitch naturally lowers
+            // presentation frequency while every mode still executes identical work.
+            int batchCount = Math.Min(
+                RevealBatchSize,
+                deferredRenderers.Count - visibleCount);
             for (int count = 0; count < batchCount; count++)
             {
-                renderers[visibleCount].enabled = true;
+                deferredRenderers[visibleCount].enabled = true;
                 visibleCount++;
             }
+            if (visibleCount == deferredRenderers.Count)
+                EmitVisualMarker("CONTENT_COMPLETE", now);
+        }
+
+        private void AdvanceTrainingTrace()
+        {
+            if (traceDeferredPhaseStarted)
+                return;
+            PsoTraceController trace = PsoTraceController.Instance;
+            if (trace == null || !trace.IsTracing ||
+                !string.Equals(trace.ActivePhase, "startup", StringComparison.OrdinalIgnoreCase))
+                return;
+
+            startupTraceFrames++;
+            if (startupTraceFrames < StartupTraceFrameCount)
+                return;
+
+            traceDeferredPhaseStarted = true;
+            trace.BeginPhase(DeferredPhase, "showcase", "deferred", "deadline");
+            EmitVisualMarker("TRACE_DEFERRED_BEGIN", Time.realtimeSinceStartupAsDouble);
+        }
+
+        private void RequestDeferredContent(double now)
+        {
+            // The on-screen comparison is scoped to the deferred experiment. Capture and
+            // player startup can legitimately jitter before this point, but those frames
+            // are unrelated to either deferred policy. The benchmark receipt still keeps
+            // the full WORKLOAD_START sequence; only the presentation HUD is re-armed here.
+            ResetPresentationEvidence(now);
+            contentRequested = true;
+            EmitVisualMarker("CONTENT_REQUEST", now);
+
+            if (IsBaselineMode())
+                return;
+
+            PsoWarmupOrchestrator orchestrator = PsoWarmupOrchestrator.Instance;
+            if (orchestrator == null)
+                throw new InvalidOperationException(
+                    "Deferred showcase mode requires a warmup orchestrator.");
+            deferredActivated = orchestrator.ActivatePhase(DeferredPhase);
+            if (!deferredActivated)
+                throw new InvalidOperationException(
+                    "The installed plan has no deferred '" + DeferredPhase + "' phase.");
+        }
+
+        private void CheckDeferredReady(double now)
+        {
+            PsoWarmupOrchestrator orchestrator = PsoWarmupOrchestrator.Instance;
+            if (orchestrator == null || orchestrator.HasFailed)
+                return;
+            if (!orchestrator.IsComplete)
+                return;
+
+            deferredReady = true;
+            deferredReadyAt = now;
+            EmitVisualMarker("DEFERRED_READY", now);
+        }
+
+        private void BeginContentReveal(double now)
+        {
+            contentRevealStarted = true;
+            deadlineMissed = deferredActivated && !deferredReady;
+            EmitVisualMarker("CONTENT_REVEAL", now);
         }
 
         private void BeginMeasuredWorkload()
         {
             sequenceStarted = true;
             measurementStartedAt = Time.realtimeSinceStartupAsDouble;
-            presentationEpoch = measurementStartedAt;
-            nextRevealAt = measurementStartedAt;
+            contentRequestAt = measurementStartedAt + ContentRequestDelaySeconds;
+            contentRevealAt = contentRequestAt + DeferredDeadlineSeconds;
+            ResetPresentationEvidence(measurementStartedAt);
+            EmitVisualMarker("WORKLOAD_START", measurementStartedAt);
+        }
+
+        private void ResetPresentationEvidence(double epoch)
+        {
+            presentationEpoch = epoch;
             Array.Clear(frameHistory, 0, frameHistory.Length);
             historyCursor = 0;
             historyCount = 0;
@@ -148,7 +246,8 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             worstFrameMilliseconds = 0.0f;
             missedPresentationMilliseconds = 0.0;
             hitchFrameCount = 0;
-            EmitVisualMarker("WORKLOAD_START", measurementStartedAt);
+            lastHitchFrameMilliseconds = 0.0f;
+            lastHitchAt = -1.0;
         }
 
         private void RecordMeasuredFrame()
@@ -163,17 +262,50 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             if (currentFrameMilliseconds >= HitchThresholdMilliseconds)
             {
                 hitchFrameCount++;
+                lastHitchFrameMilliseconds = currentFrameMilliseconds;
+                lastHitchAt = Time.realtimeSinceStartupAsDouble;
                 missedPresentationMilliseconds +=
                     currentFrameMilliseconds - HitchThresholdMilliseconds;
             }
         }
 
-        private bool WarmupReady()
+        private bool StartupWarmupReady()
         {
-            if (PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument))
+            if (IsBaselineMode())
                 return true;
             PsoWarmupOrchestrator orchestrator = PsoWarmupOrchestrator.Instance;
             return orchestrator == null || orchestrator.IsComplete;
+        }
+
+        private bool IsBaselineMode()
+        {
+            return PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument) ||
+                   string.Equals(mode, "COLD / NO WARMUP", StringComparison.Ordinal);
+        }
+
+        private void UpdateMotionScene()
+        {
+            double elapsed = Time.realtimeSinceStartupAsDouble;
+            for (int index = 0; index < motionTiles.Count; index++)
+            {
+                Transform tile = motionTiles[index];
+                float x = Mathf.Repeat((float)(elapsed * 2.6) + index * 1.35f, 10.8f) - 5.4f;
+                float y = 2.65f + Mathf.Sin((float)(elapsed * 2.2) + index * 0.73f) * 0.38f;
+                tile.localPosition = new Vector3(x, y, index * 0.002f);
+                tile.localRotation = Quaternion.Euler(
+                    0.0f,
+                    0.0f,
+                    (float)(elapsed * 95.0) + index * 31.0f);
+            }
+
+            Camera camera = Camera.main;
+            if (camera != null)
+            {
+                camera.transform.position = new Vector3(
+                    Mathf.Sin((float)(elapsed * 0.9)) * 0.16f,
+                    Mathf.Cos((float)(elapsed * 0.7)) * 0.08f,
+                    -10.0f);
+            }
         }
 
         private void SetupCamera()
@@ -206,7 +338,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 "PSO_RIM", "PSO_PATTERN", "PSO_EMISSION", "PSO_CLIP", "PSO_WARP",
                 "PSO_NOISE", "PSO_FRESNEL2", "PSO_GRADIENT", "PSO_CAPTURE_V2",
             };
-            for (int index = 0; index < Columns * Rows; index++)
+            for (int index = 0; index < TotalStateTiles; index++)
             {
                 var material = new Material(shader)
                 {
@@ -221,7 +353,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
 
                 material.SetColor(
                     "_BaseColor",
-                    Color.HSVToRGB(index / (float)(Columns * Rows), 0.72f, 0.95f));
+                    Color.HSVToRGB(index / (float)TotalStateTiles, 0.72f, 0.95f));
                 material.SetInt("_SrcBlend", (int)(index % 3 == 0
                     ? BlendMode.SrcAlpha
                     : index % 3 == 1 ? BlendMode.One : BlendMode.DstColor));
@@ -240,20 +372,34 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                 GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 tile.name = "Combination " + index;
                 tile.transform.SetParent(transform, false);
-                int column = index % Columns;
-                int row = index / Columns;
-                tile.transform.localPosition = new Vector3(
-                    (column - ((Columns - 1) * 0.5f)) * 0.32f,
-                    (((Rows - 1) * 0.5f) - row) * 0.32f - 0.45f,
-                    (index % 7) * 0.002f);
-                tile.transform.localScale = Vector3.one * 0.27f;
                 Collider collider = tile.GetComponent<Collider>();
                 if (collider != null)
                     Destroy(collider);
                 MeshRenderer renderer = tile.GetComponent<MeshRenderer>();
                 renderer.sharedMaterial = material;
-                renderer.enabled = false;
-                renderers.Add(renderer);
+                if (index < StartupSeedTileCount)
+                {
+                    tile.name = "Startup Motion Seed " + index;
+                    tile.transform.localScale = Vector3.one * 0.34f;
+                    renderer.enabled = true;
+                    motionTiles.Add(tile.transform);
+                }
+                else
+                {
+                    int deferredIndex = index - StartupSeedTileCount;
+                    int deferredRows = Mathf.CeilToInt(
+                        DeferredStateTileCount / (float)Columns);
+                    int column = deferredIndex % Columns;
+                    int row = deferredIndex / Columns;
+                    tile.name = "Deferred Combination " + deferredIndex;
+                    tile.transform.localPosition = new Vector3(
+                        (column - ((Columns - 1) * 0.5f)) * 0.32f,
+                        (((deferredRows - 1) * 0.5f) - row) * 0.32f - 0.55f,
+                        (deferredIndex % 7) * 0.002f);
+                    tile.transform.localScale = Vector3.one * 0.27f;
+                    renderer.enabled = false;
+                    deferredRenderers.Add(renderer);
+                }
             }
         }
 
@@ -264,7 +410,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
 
             GUIStyle title = new GUIStyle(GUI.skin.label)
             {
-                fontSize = 22,
+                fontSize = 24,
                 fontStyle = FontStyle.Bold,
                 normal = { textColor = new Color(0.88f, 0.94f, 1.0f) },
             };
@@ -275,22 +421,27 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             };
             GUIStyle status = new GUIStyle(small)
             {
-                fontSize = 15,
+                fontSize = 21,
                 fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.UpperRight,
+                alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = modeColor },
             };
 
             DrawPresentationMotion(small);
             GUI.Label(new Rect(24, 15, 780, 34), "SHADER HITCH PIPELINE · " + mode, title);
             GUI.Label(new Rect(25, 48, 760, 24),
-                (Columns * Rows) + " real shader/graphics-state combinations · " +
+                StartupSeedTileCount + " startup seed + " + DeferredStateTileCount +
+                " deferred shader/graphics-state combinations · " +
                 SystemInfo.graphicsDeviceType,
                 small);
-            GUI.Label(new Rect(Screen.width - 450, 19, 420, 30), StatusText(), status);
+
+            Rect statusBanner = new Rect(24, 76, Screen.width - 48, 54);
+            DrawRect(statusBanner, new Color(0.035f, 0.050f, 0.078f, 0.96f));
+            DrawRect(new Rect(statusBanner.x, statusBanner.y, 8, statusBanner.height), modeColor);
+            GUI.Label(statusBanner, StatusText(), status);
 
             DrawMetricCard(
-                new Rect(24, 78, 150, 56),
+                new Rect(24, 140, 190, 60),
                 "CURRENT",
                 currentFrameMilliseconds.ToString("F2", CultureInfo.InvariantCulture) + " ms",
                 small,
@@ -298,7 +449,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                     ? new Color(1.0f, 0.32f, 0.28f)
                     : new Color(0.35f, 0.86f, 1.0f));
             DrawMetricCard(
-                new Rect(184, 78, 150, 56),
+                new Rect(224, 140, 190, 60),
                 "WORST",
                 worstFrameMilliseconds.ToString("F2", CultureInfo.InvariantCulture) + " ms",
                 small,
@@ -306,7 +457,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                     ? new Color(1.0f, 0.32f, 0.28f)
                     : new Color(0.35f, 0.86f, 1.0f));
             DrawMetricCard(
-                new Rect(344, 78, 192, 56),
+                new Rect(424, 140, 270, 60),
                 "MISSED PRESENTATION",
                 missedPresentationMilliseconds.ToString("F1", CultureInfo.InvariantCulture) +
                 " ms · " + hitchFrameCount + " frames",
@@ -315,7 +466,45 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                     ? new Color(1.0f, 0.54f, 0.30f)
                     : new Color(0.32f, 0.92f, 0.68f));
 
-            Rect graph = new Rect(24, Screen.height - 164, Screen.width - 48, 130);
+            DrawMetricCard(
+                new Rect(704, 140, 250, 60),
+                "DEFERRED DEADLINE",
+                DeadlineMetricText(),
+                small,
+                deadlineMissed
+                    ? new Color(1.0f, 0.32f, 0.28f)
+                    : deferredReady
+                        ? new Color(0.32f, 0.92f, 0.68f)
+                        : modeColor);
+
+            if (lastHitchAt >= 0.0 &&
+                Time.realtimeSinceStartupAsDouble - lastHitchAt <= 0.36)
+            {
+                Color alert = new Color(1.0f, 0.16f, 0.12f, 0.92f);
+                DrawRect(new Rect(0, 0, Screen.width, 10), alert);
+                DrawRect(new Rect(0, Screen.height - 10, Screen.width, 10), alert);
+                DrawRect(new Rect(0, 0, 10, Screen.height), alert);
+                DrawRect(new Rect(Screen.width - 10, 0, 10, Screen.height), alert);
+                GUIStyle hitchStyle = new GUIStyle(status)
+                {
+                    fontSize = 28,
+                    normal = { textColor = Color.white },
+                };
+                Rect hitchBanner = new Rect(
+                    Screen.width * 0.5f - 230.0f,
+                    212.0f,
+                    460.0f,
+                    52.0f);
+                DrawRect(hitchBanner, new Color(0.72f, 0.04f, 0.03f, 0.94f));
+                GUI.Label(
+                    hitchBanner,
+                    "ACTUAL " + lastHitchFrameMilliseconds.ToString(
+                        "F1",
+                        CultureInfo.InvariantCulture) + " ms FRAME",
+                    hitchStyle);
+            }
+
+            Rect graph = new Rect(24, Screen.height - 170, Screen.width - 48, 136);
             DrawRect(graph, new Color(0.035f, 0.050f, 0.078f, 0.94f));
             float thresholdY = graph.yMax -
                                Mathf.Clamp01(HitchThresholdMilliseconds / 24.0f) *
@@ -341,13 +530,16 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
                         height),
                     color);
             }
-            string measurementLabel = sequenceStarted
-                ? "Measurement reset at WORKLOAD_START · red = ≥ 8.33 ms / missed 120 FPS"
+            string measurementLabel = contentRequested
+                ? "Measurement reset at CONTENT_REQUEST · red = ≥ 8.33 ms / missed 120 FPS"
+                : sequenceStarted
+                ? "Measurement arms at CONTENT_REQUEST · red = ≥ 8.33 ms / missed 120 FPS"
                 : "Measurement arms at WORKLOAD_START · presentation clock remains live";
             GUI.Label(
                 new Rect(graph.x + 8, graph.y + 5, graph.width - 16, 22),
                 measurementLabel + " · states: " +
-                Mathf.Min(visibleCount, renderers.Count) + "/" + renderers.Count,
+                Mathf.Min(visibleCount, deferredRenderers.Count) + "/" +
+                deferredRenderers.Count,
                 small);
         }
 
@@ -356,19 +548,62 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             if (!sequenceStarted)
             {
                 return readyAt < 0.0
-                    ? "PREWARMING CAPTURED STATES…"
-                    : "WORKLOAD IN " + Math.Max(
+                    ? "STARTUP HOT SET · PREPARING INTERACTIVE FRAME DOMAIN"
+                    : "GAMEPLAY STARTS IN " + Math.Max(
                         0.0,
                         readyAt - Time.realtimeSinceStartupAsDouble).ToString(
                             "F1",
                             CultureInfo.InvariantCulture) + " s";
             }
-            if (visibleCount < renderers.Count)
-                return "LIVE FIRST USE · T+" +
-                       (Time.realtimeSinceStartupAsDouble - measurementStartedAt).ToString(
-                           "F2",
-                           CultureInfo.InvariantCulture) + " s";
-            return "384 / 384 COMPLETE";
+            double now = Time.realtimeSinceStartupAsDouble;
+            if (!contentRequested)
+            {
+                return "GAMEPLAY LIVE · CONTENT REQUEST IN " + Math.Max(
+                    0.0,
+                    contentRequestAt - now).ToString("F1", CultureInfo.InvariantCulture) +
+                       " s";
+            }
+            if (!contentRevealStarted)
+            {
+                double remaining = Math.Max(0.0, contentRevealAt - now);
+                if (IsBaselineMode())
+                    return "NO PREWARM · CONTENT NEEDED IN " +
+                           remaining.ToString("F1", CultureInfo.InvariantCulture) + " s";
+                if (deferredReady)
+                    return "READY BEFORE DEADLINE · GAMEPLAY NEVER STOPPED";
+                return string.Equals(mode, "UNITY / ALL-AT-ONCE", StringComparison.Ordinal)
+                    ? "ALL-AT-ONCE WARMUP ACTIVE · WATCH THE MOTION"
+                    : "DEADLINE SCHEDULER ACTIVE · " +
+                      remaining.ToString("F1", CultureInfo.InvariantCulture) + " s LEFT";
+            }
+            if (visibleCount < deferredRenderers.Count)
+                return "CONTENT REVEAL · " + visibleCount + " / " +
+                       deferredRenderers.Count + " STATES";
+            return "DEFERRED CONTENT COMPLETE · " + deferredRenderers.Count + " / " +
+                   deferredRenderers.Count;
+        }
+
+        private string DeadlineMetricText()
+        {
+            if (!sequenceStarted || !contentRequested)
+                return "ARMED · " + DeferredDeadlineSeconds.ToString(
+                    "F1",
+                    CultureInfo.InvariantCulture) + " s";
+            if (deadlineMissed)
+                return "MISSED";
+            if (deferredReadyAt >= 0.0)
+            {
+                return Math.Max(0.0, contentRevealAt - deferredReadyAt).ToString(
+                    "F2",
+                    CultureInfo.InvariantCulture) + " s EARLY";
+            }
+            if (IsBaselineMode())
+                return "NO PLAN";
+            return Math.Max(
+                0.0,
+                contentRevealAt - Time.realtimeSinceStartupAsDouble).ToString(
+                    "F2",
+                    CultureInfo.InvariantCulture) + " s LEFT";
         }
 
         private void DrawPresentationMotion(GUIStyle style)
@@ -377,13 +612,13 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
             float phase = (float)((elapsed * 0.34) % 1.0);
             float x = 24.0f + phase * (Screen.width - 48.0f);
             DrawRect(
-                new Rect(x - 5.0f, 142.0f, 11.0f, Screen.height - 318.0f),
+                new Rect(x - 7.0f, 208.0f, 15.0f, Screen.height - 392.0f),
                 new Color(0.15f, 0.85f, 1.0f, 0.08f));
             DrawRect(
-                new Rect(x - 1.0f, 142.0f, 3.0f, Screen.height - 318.0f),
+                new Rect(x - 1.5f, 208.0f, 4.0f, Screen.height - 392.0f),
                 new Color(0.38f, 0.94f, 1.0f, 0.78f));
 
-            Vector2 center = new Vector2(Screen.width - 83.0f, 103.0f);
+            Vector2 center = new Vector2(Screen.width - 78.0f, 170.0f);
             DrawRect(
                 new Rect(center.x - 39.0f, center.y - 28.0f, 78.0f, 56.0f),
                 new Color(0.035f, 0.050f, 0.078f, 0.92f));

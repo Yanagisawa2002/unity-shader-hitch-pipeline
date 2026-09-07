@@ -2,8 +2,8 @@ namespace Yanagisawa.ShaderHitchPipeline
 {
     public static class PsoConstants
     {
-        public const int SchemaVersion = 2;
-        public const string PackageVersion = "0.2.0";
+        public const int SchemaVersion = 3;
+        public const string PackageVersion = "0.3.0";
         public const string DefaultStreamingSubdirectory = "ShaderHitchPipeline";
         public const string DefaultPlanFileName = "plan.json";
         public const string DefaultRuntimeDirectoryName = "ShaderHitchPipeline";
@@ -26,7 +26,18 @@ namespace Yanagisawa.ShaderHitchPipeline
         public const string WarmupInitialBatchArgument = "-pso-warmup-initial-batch";
         public const string WarmupMinimumBatchArgument = "-pso-warmup-minimum-batch";
         public const string WarmupMaximumBatchArgument = "-pso-warmup-maximum-batch";
+        public const string WarmupBootstrapBatchArgument = "-pso-warmup-bootstrap-batch";
+        public const string WarmupBudgetSafetyMarginArgument =
+            "-pso-warmup-budget-safety-margin-ms";
+        public const string WarmupBudgetCostSafetyMultiplierArgument =
+            "-pso-warmup-budget-cost-safety-multiplier";
+        public const string WarmupBudgetCooldownFramesArgument =
+            "-pso-warmup-budget-cooldown-frames";
+        public const string DisablePreinteractiveBootstrapArgument =
+            "-pso-disable-preinteractive-bootstrap";
         public const string AsyncPsoJobCountArgument = "-max-async-pso-job-count";
+        public const string DeadlineBackendModeArgument =
+            "-pso-deadline-backend-mode";
         public const string BenchmarkArgument = "-pso-benchmark";
         public const string BenchmarkModeArgument = "-pso-benchmark-mode";
         public const string BenchmarkFramesArgument = "-pso-benchmark-frames";
@@ -37,12 +48,17 @@ namespace Yanagisawa.ShaderHitchPipeline
         public const string BenchmarkHitchThresholdArgument = "-pso-hitch-threshold-ms";
         public const string BenchmarkWarmupTimeoutArgument =
             "-pso-benchmark-warmup-timeout-seconds";
+        public const string ScenarioMarkerArgument = "-pso-scenario-marker";
+        public const string ScenarioReportArgument = "-pso-scenario-report";
+        public const string ScenarioQuitOnCompleteArgument =
+            "-pso-scenario-quit-on-complete";
 
         public const string InboxArgument = "-pso-inbox";
         public const string ProfileOutputArgument = "-pso-profile-output";
         public const string ProfileArgument = "-pso-profile";
         public const string InstallPlanArgument = "-pso-install-plan";
         public const string TrainingBuildArgument = "-pso-training-build";
+        public const string BaselineBuildArgument = "-pso-baseline-build";
         public const string BuildOutputArgument = "-pso-build-output";
     }
 }

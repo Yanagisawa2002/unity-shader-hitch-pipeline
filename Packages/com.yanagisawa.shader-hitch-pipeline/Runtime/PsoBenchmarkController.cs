@@ -86,6 +86,8 @@ namespace Yanagisawa.ShaderHitchPipeline
         private bool noQuit;
         private bool sampling;
         private bool finished;
+        private bool scenarioMeasurementGated;
+        private double measurementStartedAt = -1.0;
         private double hitchThresholdMilliseconds;
         private double optimizedReadyAt = -1.0;
         private double warmupTimeoutSeconds;
@@ -115,6 +117,10 @@ namespace Yanagisawa.ShaderHitchPipeline
                 600,
                 30,
                 1000000);
+            // A scenario-gated 12-second run can retain more frames than the
+            // compatibility frame-count argument. Reserve enough space before
+            // measurement so list growth cannot manufacture a timed allocation.
+            frameTimes.Capacity = Math.Max(requestedFrames, 4096);
             discardFrames = commandLine.GetInt(
                 PsoConstants.BenchmarkDiscardFramesArgument,
                 60,
@@ -162,12 +168,21 @@ namespace Yanagisawa.ShaderHitchPipeline
 
             try
             {
+                if (scenarioMeasurementGated &&
+                    PsoBenchmarkMeasurementGate.IsClosed)
+                {
+                    Finish(string.Empty);
+                    return;
+                }
+
                 if (!sampling)
                 {
                     if (!ReadyToSample())
                         return;
                     sampling = true;
-                    Debug.Log("[ShaderHitchPipeline] Benchmark sampling started.");
+                    measurementStartedAt = scenarioMeasurementGated
+                        ? PsoBenchmarkMeasurementGate.OpenedAt
+                        : Time.realtimeSinceStartupAsDouble;
                 }
 
                 if (discarded < discardFrames)
@@ -180,7 +195,8 @@ namespace Yanagisawa.ShaderHitchPipeline
                 for (int index = 0; index < markers.Count; index++)
                     markers[index].Sample();
 
-                if (frameTimes.Count >= requestedFrames)
+                if (!scenarioMeasurementGated &&
+                    frameTimes.Count >= requestedFrames)
                     Finish(string.Empty);
             }
             catch (Exception exception)
@@ -191,7 +207,39 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         private bool ReadyToSample()
         {
-            if (PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument))
+            double now = Time.realtimeSinceStartupAsDouble;
+            bool warmupDisabled = PsoCommandLine.Current.HasFlag(
+                PsoConstants.DisableWarmupArgument);
+            if (PsoBenchmarkMeasurementGate.IsRequired)
+            {
+                scenarioMeasurementGated = true;
+                if (now - waitingSince > warmupTimeoutSeconds)
+                {
+                    throw new TimeoutException(
+                        "Scenario measurement did not arm within " +
+                        warmupTimeoutSeconds + " seconds.");
+                }
+                if (!warmupDisabled)
+                {
+                    PsoWarmupOrchestrator gatedOrchestrator =
+                        PsoWarmupOrchestrator.Instance;
+                    if (gatedOrchestrator == null ||
+                        !gatedOrchestrator.HasLoadedPlan)
+                    {
+                        throw new InvalidOperationException(
+                            "A scenario benchmark requires a valid warmup plan.");
+                    }
+                    if (gatedOrchestrator.HasFailed)
+                    {
+                        throw new InvalidOperationException(
+                            "Warmup failed before scenario measurement: " +
+                            gatedOrchestrator.Failure);
+                    }
+                }
+                return PsoBenchmarkMeasurementGate.IsOpen;
+            }
+
+            if (warmupDisabled)
                 return Time.realtimeSinceStartupAsDouble - waitingSince >= delaySeconds;
 
             PsoWarmupOrchestrator orchestrator = PsoWarmupOrchestrator.Instance;
@@ -201,7 +249,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (orchestrator.HasFailed)
                 throw new InvalidOperationException(
                     "Warmup failed before benchmark: " + orchestrator.Failure);
-            if (Time.realtimeSinceStartupAsDouble - waitingSince > warmupTimeoutSeconds)
+            if (now - waitingSince > warmupTimeoutSeconds)
                 throw new TimeoutException(
                     "Warmup did not complete within " + warmupTimeoutSeconds + " seconds.");
             if (!orchestrator.IsComplete)
@@ -241,9 +289,25 @@ namespace Yanagisawa.ShaderHitchPipeline
                 planSha256 = warmup == null ? string.Empty : warmup.PlanHash,
                 discardFrames = discardFrames,
                 requestedSampleFrames = requestedFrames,
-                completed = string.IsNullOrEmpty(error) && frameTimes.Count == requestedFrames,
+                actualSampleFrames = frameTimes.Count,
+                scenarioMeasurementGated = scenarioMeasurementGated,
+                measurementDurationSeconds = scenarioMeasurementGated &&
+                    PsoBenchmarkMeasurementGate.IsClosed
+                        ? Math.Max(
+                            0.0,
+                            PsoBenchmarkMeasurementGate.ClosedAt -
+                            PsoBenchmarkMeasurementGate.OpenedAt)
+                        : Math.Max(
+                            0.0,
+                            Time.realtimeSinceStartupAsDouble -
+                            measurementStartedAt),
+                completed = string.IsNullOrEmpty(error) &&
+                    (scenarioMeasurementGated
+                        ? PsoBenchmarkMeasurementGate.IsClosed &&
+                          frameTimes.Count > 0
+                        : frameTimes.Count == requestedFrames),
                 error = error,
-                environment = PsoEnvironmentSnapshot.Capture(),
+                environment = PsoUnityEnvironment.Capture(),
                 frameTimes = PsoStatistics.Calculate(
                     frameTimes,
                     hitchThresholdMilliseconds),
@@ -251,6 +315,8 @@ namespace Yanagisawa.ShaderHitchPipeline
                 profilerMarkers = markerStatistics,
             };
             PsoFileUtility.WriteJsonAtomic(reportPath, receipt);
+            if (scenarioMeasurementGated)
+                PsoBenchmarkMeasurementGate.MarkSamplerFinalized();
             Debug.Log("[ShaderHitchPipeline] Benchmark report: " + reportPath);
 
             if (!noQuit)
@@ -262,6 +328,14 @@ namespace Yanagisawa.ShaderHitchPipeline
             for (int index = 0; index < markers.Count; index++)
                 markers[index].Dispose();
             markers.Clear();
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (finished)
+                return;
+            noQuit = true;
+            Finish("Application quit before benchmark measurement completed.");
         }
     }
 }
