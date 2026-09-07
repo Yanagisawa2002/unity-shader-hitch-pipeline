@@ -2,7 +2,9 @@
 
 An independent Unity 6 UPM package for eliminating first-use shader and graphics-pipeline hitches on modern graphics APIs. It records the **actual shader variant + render-state combinations** seen by a player, gates the required startup hot set before the first presented frame, schedules deferred work by hard admission budget, deadline, measured cost, and hot-set value, and proves the result with a controlled A/B/C run.
 
-This is a performance pipeline, not a crash detector, culling system, asset simplifier, or streaming layer.
+This is a performance pipeline. An opt-in [Addressables integration](Integrations/Addressables/README.md)
+adds loaded-content PSO registration, incremental deduplication and fenced resource retention;
+the base package remains usable without Addressables.
 
 ## Deadline Run hero benchmark (accepted)
 

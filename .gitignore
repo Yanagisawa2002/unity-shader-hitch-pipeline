@@ -67,3 +67,13 @@ UnityProject/Assets/Resources/PsoBuildIdentity.json*
 work/
 /UnityProject/Assets/HotsetFixtureGenerated/
 /UnityProject/Assets/HotsetFixtureGenerated.meta
+# Reproducibly generated optional Addressables fixture assets and build settings
+Integrations/Addressables/UnityProject/Assets/FixtureGenerated/
+Integrations/Addressables/UnityProject/Assets/FixtureGenerated.meta
+Integrations/Addressables/UnityProject/Assets/AddressableAssetsData/
+Integrations/Addressables/UnityProject/Assets/AddressableAssetsData.meta
+Integrations/Addressables/UnityProject/Assets/StreamingAssets/
+Integrations/Addressables/UnityProject/Assets/StreamingAssets.meta
+/work/
+Integrations/Addressables/UnityProject/ProjectSettings/*.asset
+Integrations/Addressables/UnityProject/ProjectSettings/SceneTemplateSettings.json
