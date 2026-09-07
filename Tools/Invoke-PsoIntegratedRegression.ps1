@@ -37,7 +37,7 @@ try {
             if ($LASTEXITCODE -ne 0) { throw 'Python regression failed.' }
             $receipt.checks += @{ name = 'python-unittest'; result = 'passed'; log = 'python-tests.log' }
 
-            & dotnet run --project DotNet/ShaderHitchPipeline.Core.Smoke/ShaderHitchPipeline.Core.Smoke.csproj 2>&1 |
+            & dotnet run --disable-build-servers --property:UseSharedCompilation=false --project DotNet/ShaderHitchPipeline.Core.Smoke/ShaderHitchPipeline.Core.Smoke.csproj 2>&1 |
                 Tee-Object -FilePath (Join-Path $outputRoot 'core-smoke.log')
             if ($LASTEXITCODE -ne 0) { throw 'Engine-neutral core smoke failed.' }
             $receipt.checks += @{ name = 'core-smoke'; result = 'passed'; log = 'core-smoke.log' }
