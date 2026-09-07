@@ -3,7 +3,7 @@
 This opt-in adapter is separate from the base package. The base `UnityProject` and
 engine-neutral .NET core do not depend on Addressables. Install the local package
 `Packages/com.yanagisawa.shader-hitch-pipeline.addressables` alongside the base
-package; its pinned Addressables version is 2.7.6. The fixture uses Unity 6000.5.2f1.
+package; its pinned Addressables version is 2.10.3. The fixture uses Unity 6000.5.2f1.
 
 ## Lifecycle and identity
 

@@ -140,6 +140,14 @@ public sealed class StreamingFixture : MonoBehaviour
         var rejected = loader.Load("stream-r2", "reject", "r1", paths, attest(1));
         while (!rejected.IsFinished) { Timeout(); loader.Tick(); yield return null; }
         Check(rejected.Failure != null && rejected.Owner == null && rejected.Asset == null, "A real r2 asset paired with r1 metadata must reject before opening the collection and release its load.");
+        var wrongCount = new Dictionary<string, PsoStreamingCollectionAsset> { ["main"] = new PsoStreamingCollectionAsset(tracePath, prior.collectionHash, prior.traceStates + 1) };
+        var countFailure = loader.Load("stream-r1", "wrong-count", "r1", wrongCount, attest(1));
+        while (!countFailure.IsFinished) { Timeout(); loader.Tick(); yield return null; }
+        Check(countFailure.Failure != null && countFailure.Owner == null && countFailure.Asset == null, "Partial native resolution/count mismatch must reject and release.");
+        var wrongHash = new Dictionary<string, PsoStreamingCollectionAsset> { ["main"] = new PsoStreamingCollectionAsset(tracePath, new string('0', 64), prior.traceStates) };
+        var hashFailure = loader.Load("stream-r1", "wrong-hash", "r1", wrongHash, attest(1));
+        while (!hashFailure.IsFinished) { Timeout(); loader.Tick(); yield return null; }
+        Check(hashFailure.Failure != null && hashFailure.Owner == null && hashFailure.Asset == null, "Artifact hash mismatch must reject and release.");
         var stale = loader.Load("stream-r1", "late-revision", "r1", paths, attest(1));
         var latest = loader.Load("stream-r2", "late-revision", "r2", revisedPaths, attest(2));
         while (!stale.IsFinished || !latest.IsFinished) { Timeout(); loader.Tick(); yield return null; }
