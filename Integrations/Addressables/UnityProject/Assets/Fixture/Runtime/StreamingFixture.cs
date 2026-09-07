@@ -19,6 +19,7 @@ public sealed class StreamingFixture : MonoBehaviour
         public string contentId, contentRevision;
         public PsoEnvironmentSnapshot environment;
         public bool passed;
+        public bool developmentBuild;
         public int checks, traceStates, submittedStates, submittedBatches;
     }
     private string root, mode;
@@ -32,7 +33,7 @@ public sealed class StreamingFixture : MonoBehaviour
         Directory.CreateDirectory(root); started = Time.realtimeSinceStartup;
         mode = PsoCommandLine.Current.GetString("-stream-mode", "smoke");
         receipt = new Receipt { mode = mode, buildGuid = Application.buildGUID, unityVersion = Application.unityVersion,
-            gpu = SystemInfo.graphicsDeviceName, driver = SystemInfo.graphicsDeviceVersion, environment = PsoUnityEnvironment.Capture() };
+            gpu = SystemInfo.graphicsDeviceName, driver = SystemInfo.graphicsDeviceVersion, environment = PsoUnityEnvironment.Capture(), developmentBuild = Debug.isDebugBuild };
         IEnumerator test = Run();
         while (true)
         {

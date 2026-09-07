@@ -47,7 +47,7 @@ public static class StreamingFixtureBuilder
         PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
         string output = PsoCommandLine.Current.GetString("-stream-output", "Builds/StreamingFixture.exe");
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { scenePath },
-            target = BuildTarget.StandaloneWindows64, locationPathName = Path.GetFullPath(output), options = BuildOptions.None });
+            target = BuildTarget.StandaloneWindows64, locationPathName = Path.GetFullPath(output), options = BuildOptions.Development });
         if (report.summary.result != BuildResult.Succeeded) throw new Exception("Fixture Player build failed: " + report.summary.result);
         Debug.Log("STREAMING_FIXTURE_BUILD_OK");
     }
