@@ -687,6 +687,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase
 
         private void EmitVisualMarker(string marker, double realtimeSeconds)
         {
+            PsoSystemMarkers.Emit("showcase-" + marker);
             string line = marker + " realtime=" +
                           realtimeSeconds.ToString("F6", CultureInfo.InvariantCulture);
             Debug.Log("[ShaderHitchPipeline.Showcase] " + line);
