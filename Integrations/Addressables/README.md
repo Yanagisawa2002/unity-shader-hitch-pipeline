@@ -77,7 +77,10 @@ this implementation must not be promoted as a measured large-content speedup.
 
 ## Real fixture and smoke
 
-The independent `UnityProject` builds two actual Addressables prefab/material
+The independent `UnityProject` uses the existing `-pso-training-build` path to
+build a trace-capable fixture before its dynamic content collections exist; it
+does not pretend to pass the static installed-plan production build gate.
+The Player builds two actual Addressables prefab/material
 revisions (blue/red) plus an explicitly shared shader bundle. Its bootstrap scene
 holds no direct reference to those materials or that shader. The build creates
 real local bundles/catalog and a Windows D3D12 Player. A trace process loads and

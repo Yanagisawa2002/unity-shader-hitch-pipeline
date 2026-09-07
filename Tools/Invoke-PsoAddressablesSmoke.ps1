@@ -19,7 +19,7 @@ function Invoke-OwnedProcess([string]$Executable, [string[]]$Arguments) {
 }
 & $SerializationScript -Action {
     if (!$SkipBuild) {
-        Invoke-OwnedProcess $Unity @('-batchmode', '-quit', '-projectPath', ('"' + $project + '"'),
+        Invoke-OwnedProcess $Unity @('-batchmode', '-quit', '-pso-training-build', '-projectPath', ('"' + $project + '"'),
             '-buildTarget', 'Win64', '-executeMethod', 'StreamingFixtureBuilder.Build',
             '-stream-output', ('"' + $player + '"'), '-logFile', ('"' + (Join-Path $EvidenceRoot 'build.log') + '"'))
     }
