@@ -128,3 +128,10 @@ See [Architecture](Docs/ARCHITECTURE.md), [CLI reference](Docs/CLI.md), [integra
 ## Ownership
 
 Copyright © 2026 Edwin Liu. All rights reserved. See [LICENSE.md](LICENSE.md) and [PROVENANCE.md](PROVENANCE.md). This repository is an independent clean-room implementation and contains no employer-project source or assets.
+
+## Benchmark reproduction permission
+
+The [limited benchmark reproduction permission](LICENSE.md#limited-benchmark-reproduction-permission)
+allows anyone to run the benchmarks and required project components, make local
+changes needed for reproduction, and publish measurement results. Other plugin
+rights remain reserved; this is not an MIT or general open-source license.
