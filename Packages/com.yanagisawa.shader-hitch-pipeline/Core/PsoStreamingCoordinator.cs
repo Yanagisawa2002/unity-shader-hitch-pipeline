@@ -178,8 +178,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         private static void ReleaseOwner(PsoStreamOwner owner)
         {
             if (!owner.IsUnloaded || owner.pins != 0 || owner.released) return;
-            owner.released = true; owner.asset.Release();
-            owner.phases.Clear();
+            owner.released = true; owner.phases.Clear(); owner.asset.Release();
         }
         private void Prune()
         {
@@ -235,8 +234,14 @@ namespace Yanagisawa.ShaderHitchPipeline
         {
             flight.Clear();
             var release = new List<PsoStreamOwner>(pins); pins.Clear();
-            foreach (var owner in release) { owner.pins--; ReleaseOwner(owner); }
+            var errors = new List<Exception>();
+            foreach (var owner in release)
+            {
+                owner.pins--;
+                try { ReleaseOwner(owner); } catch (Exception error) { errors.Add(error); }
+            }
             Prune();
+            if (errors.Count != 0) throw new AggregateException("Streaming asset release failed after the job fence.", errors);
         }
         /// <summary>Blocking shutdown fence. Does not submit queued work. If the fence throws, resources remain retained.</summary>
         public void Drain() { Check(); if (batch != null) FinishBatch(); }

@@ -90,6 +90,16 @@ static class Program
             Require(drainedReleases == 1 && !br.IsComplete && backend.count == 2, "Revision needs separate work after old job fence.");
             core.Dispose(); Require(drainedReleases == 2, "Repeated revision cycles must not leak.");
         }
+        backend = new Backend(); core = new PsoStreamingCoordinator(backend); int releasedAfterFailure = 0;
+        assets = new PsoRetainedAsset(() => throw new Exception("release callback failed"));
+        a = core.RegisterLoaded("release-a", "r", "b", Plan("x"), assets); assets.Dispose();
+        var otherAssets = new PsoRetainedAsset(() => releasedAfterFailure++);
+        b = core.RegisterLoaded("release-b", "r", "b", Plan("x"), otherAssets); otherAssets.Dispose();
+        core.RequestPhase(a, "main"); core.RequestPhase(b, "main"); core.Tick();
+        core.Unload(a); core.Unload(b);
+        Throws(() => core.Drain(), "Release callback errors must remain observable.");
+        Require(releasedAfterFailure == 1 && core.RetainedStateCount == 0 && !core.HasSubmittedWork,
+            "One failing post-fence callback must not strand another owner's pin."); core.Dispose();
         Console.WriteLine("STREAMING_SMOKE_OK checks=" + checks);
     }
     sealed class Backend : IPsoStreamingBackend
