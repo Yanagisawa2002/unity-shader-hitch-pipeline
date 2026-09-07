@@ -47,6 +47,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
                 target = BuildTarget.StandaloneWindows64,
                 options = BuildOptions.Development,
             };
+            PipelineEditor.PsoBuildIdentityCapture.DeclareBuildInputs(options);
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
                 throw new InvalidOperationException(
