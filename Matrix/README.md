@@ -49,3 +49,11 @@ python Tools/pso_matrix.py aggregate `
 
 Run ETW capture from an elevated shell or an account in **Performance Log
 Users**. The capture wrapper refuses to disturb an existing WPR session.
+
+For vNext, use `Tools/Invoke-PsoSystemMatrix.ps1` with the frozen five-run
+declaration and build attestation described in `Docs/WINDOWS_EVIDENCE.md`.
+It continues the five engine workloads when capture privileges are denied, but
+the required OS gate remains blocked. Schema-v2 acceptance rehashes raw artifacts,
+recomputes PresentMon metrics, verifies PID/phase/UTC correlation and actual
+completed workload counts. Historical receipts remain provisional and are not
+silently upgraded to system proof.

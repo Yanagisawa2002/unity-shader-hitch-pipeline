@@ -82,13 +82,13 @@ def metric_summary(values: list[float], target_ms: float) -> dict[str, Any]:
     if not values:
         return {
             "sampleCount": 0,
-            "meanMilliseconds": 0.0,
-            "p50Milliseconds": 0.0,
-            "p95Milliseconds": 0.0,
-            "p99Milliseconds": 0.0,
-            "maximumMilliseconds": 0.0,
-            "overBudgetCount": 0,
-            "overBudgetPercent": 0.0,
+            "meanMilliseconds": None,
+            "p50Milliseconds": None,
+            "p95Milliseconds": None,
+            "p99Milliseconds": None,
+            "maximumMilliseconds": None,
+            "overBudgetCount": None,
+            "overBudgetPercent": None,
         }
     over = sum(value > target_ms for value in values)
     return {
@@ -163,6 +163,8 @@ def build_summary(
     warmup_path: Path | None,
     target_ms: float | None,
     local_offset_minutes: int,
+    process_id: int | None = None,
+    markers_path: Path | None = None,
 ) -> dict[str, Any]:
     with csv_path.open("r", encoding="utf-8-sig", newline="") as stream:
         reader = csv.DictReader(stream)
@@ -171,9 +173,20 @@ def build_summary(
         fieldnames = list(reader.fieldnames)
         rows = list(reader)
     total_csv_rows = len(rows)
+    pid_column = select_column(fieldnames, ("ProcessID",))
+    if process_id is not None:
+        if pid_column is None:
+            raise ValueError("PresentMon CSV has no process ID column.")
+        rows = [row for row in rows if parse_number(row.get(pid_column)) == process_id]
+    elif pid_column and len({row.get(pid_column) for row in rows}) > 1:
+        raise ValueError("Multiple processes in CSV; select --process-id explicitly.")
+    if not rows:
+        raise ValueError("No PresentMon rows for the selected process.")
 
     warmup, warmup_start, warmup_end, receipt_target = load_warmup_window(warmup_path)
     effective_target = target_ms or receipt_target or 16.67
+    if not math.isfinite(effective_target) or effective_target <= 0 or (target_ms is not None and target_ms <= 0):
+        raise ValueError("Frame target must be positive and finite.")
     columns = {
         key: select_column(fieldnames, aliases)
         for key, aliases in METRIC_ALIASES.items()
@@ -191,7 +204,10 @@ def build_summary(
             if row_time is not None and warmup_start <= row_time <= warmup_end:
                 warmup_rows.append(row)
 
-    analysis_rows = warmup_rows or rows
+    # A requested but uncorrelated interval must never become a full-capture pass.
+    analysis_rows = warmup_rows if warmup_path is not None else rows
+    correlation_status = "not-requested" if warmup_path is None else (
+        "matched" if warmup_rows else "unavailable-or-empty-window")
     metrics: dict[str, Any] = {}
     for key, column in columns.items():
         values = [] if column is None else [
@@ -235,7 +251,7 @@ def build_summary(
     )
     frame_metric = metrics["presentedFrameMilliseconds"]
     result = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "generatedUtc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source": {
             "presentMonCsv": str(csv_path.resolve()),
@@ -251,6 +267,8 @@ def build_summary(
             "analyzedRows": len(analysis_rows),
             "timeColumn": time_column or "",
             "localUtcOffsetMinutes": local_offset_minutes,
+            "processId": process_id,
+            "correlationStatus": correlation_status,
         },
         "metrics": metrics,
         "tailFrames": tails,
@@ -262,7 +280,7 @@ def build_summary(
             ),
             "scope": "dominant-swap-chain/warmup-window"
             if warmup_rows
-            else "dominant-swap-chain/full-capture",
+            else ("uncorrelated-warmup-window" if warmup_path else "dominant-swap-chain/full-capture"),
         },
         "notes": [
             "FrameTime/MsBetweenAppStart measures CPU-present cadence.",
@@ -270,6 +288,46 @@ def build_summary(
             "A PresentMon row is evidence of correlation, not proof that a single subsystem caused the tail.",
         ],
     }
+    if markers_path is not None:
+        markers = [json.loads(line) for line in markers_path.read_text(encoding="utf-8-sig").splitlines() if line.strip()]
+        if not markers or process_id is None or any(m.get("processId") != process_id for m in markers):
+            raise ValueError("Marker PID does not match the selected process or markers are empty.")
+        sessions = {m.get("sessionId") for m in markers}
+        if len(sessions) != 1 or not next(iter(sessions)):
+            raise ValueError("Markers must belong to one nonempty process session.")
+        previous = None
+        for marker in markers:
+            stamp = parse_utc(marker.get("utc"))
+            if stamp is None or marker.get("qpcFrequency", 0) <= 0:
+                raise ValueError("Invalid marker clock anchor.")
+            if marker.get("qpcBracketTicks", 0) / marker["qpcFrequency"] > 0.010:
+                raise ValueError("Marker UTC/QPC sampling uncertainty exceeds 10 ms.")
+            if previous:
+                if marker["qpcFrequency"] != previous["qpcFrequency"]:
+                    raise ValueError("Marker QPC frequency changed within one process.")
+                elapsed_qpc = (marker["qpc"] - previous["qpc"]) / marker["qpcFrequency"]
+                elapsed_utc = (stamp - parse_utc(previous["utc"])).total_seconds()
+                if elapsed_qpc < 0 or abs(elapsed_utc - elapsed_qpc) > 0.010:
+                    raise ValueError("UTC/QPC clock discontinuity exceeds 10 ms.")
+            previous = marker
+        phase_windows = []
+        active = {}
+        for marker in markers:
+            phase = marker.get("phase", "")
+            if marker["name"] == "phase-start":
+                if phase in active:
+                    raise ValueError("Duplicate phase start without end.")
+                active[phase] = marker
+            elif marker["name"] == "phase-end":
+                start = active.pop(phase, None)
+                if start is None:
+                    raise ValueError("Phase end without start.")
+                start_time, end_time = parse_utc(start["utc"]), parse_utc(marker["utc"])
+                selected = [row for row in rows if time_column and (t := parse_presentmon_time(row.get(time_column, ""), local_offset_minutes)) is not None and start_time <= t <= end_time]
+                phase_windows.append({"phase": phase, "startedUtc": start["utc"], "endedUtc": marker["utc"], "rows": len(selected),
+                    "presentedCadence": metric_summary([v for row in selected if frame_column and (v := parse_number(row.get(frame_column))) is not None and v >= 0], effective_target)})
+        result["phaseCorrelation"] = {"method": "same-host UTC anchors with QPC continuity check; not native ETW events", "sessionId": next(iter(sessions)), "windows": phase_windows, "unfinishedPhases": sorted(active)}
+        result["source"].update({"markers": str(markers_path.resolve()), "markersSha256": sha256(markers_path)})
     return result
 
 
@@ -286,8 +344,8 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
         item = metrics[key]
         rows.append(
             f"| {label} | {item['sourceColumn'] or 'unavailable'} | "
-            f"{item['sampleCount']} | {item['p99Milliseconds']:.3f} | "
-            f"{item['maximumMilliseconds']:.3f} | {item['overBudgetCount']} |"
+            f"{item['sampleCount']} | {item['p99Milliseconds']} | "
+            f"{item['maximumMilliseconds']} | {item['overBudgetCount']} |"
         )
     verdict = summary["budgetVerdict"]
     text = f"""# PresentMon / ETW frame evidence
@@ -312,6 +370,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--presentmon-csv", required=True, type=Path)
     parser.add_argument("--warmup-receipt", type=Path)
+    parser.add_argument("--process-id", type=int)
+    parser.add_argument("--markers", type=Path)
     parser.add_argument("--target-ms", type=float)
     parser.add_argument("--local-utc-offset-minutes", type=int, default=0)
     parser.add_argument("--output", required=True, type=Path)
@@ -322,6 +382,8 @@ def main() -> int:
         args.warmup_receipt,
         args.target_ms,
         args.local_utc_offset_minutes,
+        args.process_id,
+        args.markers,
     )
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "presentmon-summary.json").write_text(

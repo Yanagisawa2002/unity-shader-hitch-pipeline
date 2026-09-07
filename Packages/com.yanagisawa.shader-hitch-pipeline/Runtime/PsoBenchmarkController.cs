@@ -144,6 +144,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             noQuit = commandLine.HasFlag(PsoConstants.BenchmarkNoQuitArgument);
             runId = PsoFileUtility.CreateRunId(mode);
             startedUtc = PsoFileUtility.UtcNowText();
+            PsoSystemMarkers.Emit("benchmark-start", mode);
 
             string defaultReport = Path.Combine(
                 PsoFileUtility.DefaultRuntimeOutputRoot(),
@@ -265,6 +266,8 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (finished)
                 return;
             finished = true;
+            PsoSystemMarkers.Emit("benchmark-end", mode);
+            PsoSystemMarkers.Flush();
 
             PsoTraceController trace = PsoTraceController.Instance;
             if (trace != null && trace.IsTracing)

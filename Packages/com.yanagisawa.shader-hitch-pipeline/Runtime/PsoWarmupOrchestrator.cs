@@ -637,6 +637,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             preparedExecutions.Remove(phase.phase);
             double now = Time.realtimeSinceStartupAsDouble;
             execution.activatedAt = now;
+            PsoSystemMarkers.Emit("phase-start", phase.phase);
             execution.stopwatch.Restart();
             phaseReceipts.Add(execution.receipt);
             activatedExecutions.Add(execution);
@@ -1077,6 +1078,7 @@ namespace Yanagisawa.ShaderHitchPipeline
                         ? "violated-model-error"
                         : "unachievable-at-minimum-batch";
             execution.receipt.completed = true;
+            PsoSystemMarkers.Emit("phase-end", execution.plan.phase);
 
             if (!ShouldDeferEvidenceWrite())
             {

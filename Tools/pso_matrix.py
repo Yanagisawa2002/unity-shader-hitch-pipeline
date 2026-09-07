@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from pso_system_acceptance import validate_manifest, validate_group
+
 
 def load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8-sig"))
@@ -111,10 +113,8 @@ def presentmon_metrics(summary: dict[str, Any] | None) -> dict[str, Any]:
     presented = summary.get("metrics", {}).get("presentedFrameMilliseconds", {})
     return {
         "available": int(presented.get("sampleCount", 0)) > 0,
-        "p99PresentedMilliseconds": float(presented.get("p99Milliseconds", 0.0)),
-        "maximumPresentedMilliseconds": float(
-            presented.get("maximumMilliseconds", 0.0)
-        ),
+        "p99PresentedMilliseconds": presented.get("p99Milliseconds"),
+        "maximumPresentedMilliseconds": presented.get("maximumMilliseconds"),
         "presentBudgetMet": summary.get("budgetVerdict", {}).get(
             "presentMonPresentedFramesMet"
         )
@@ -150,9 +150,16 @@ def command_record(args: argparse.Namespace) -> int:
 
     has_etl = False
     windows_complete = False
+    verification = None
     if windows is not None:
-        windows_complete = windows.get("completed") is True
-        has_etl = windows.get("artifacts", {}).get("etl", {}).get("exists") is True
+        verification = validate_manifest(args.windows_manifest)
+        windows_complete = verification["valid"]
+        has_etl = verification["hasEtw"]
+        for key, supplied in (("benchmarkReceipt", args.benchmark), ("warmupReceipt", args.warmup), ("presentMonSummary", args.presentmon)):
+            if supplied is None or windows.get("artifacts", {}).get(key, {}).get("sha256") != sha256(supplied):
+                raise ValueError(f"Supplied {key} does not match Windows capture.")
+        if args.pipeline_revision != verification["buildIdentity"][0]:
+            raise ValueError("Pipeline revision differs from captured build attestation.")
 
     result = {
         "schemaVersion": 1,
@@ -170,6 +177,7 @@ def command_record(args: argparse.Namespace) -> int:
         "warmup": warmup_metrics(warmup),
         "presentMon": presentmon_metrics(presentmon),
         "evidence": {
+            "systemVerification": verification,
             "windowsManifestComplete": windows_complete,
             "hasPresentMon": presentmon is not None,
             "hasEtw": has_etl,
@@ -216,6 +224,10 @@ def command_aggregate(args: argparse.Namespace) -> int:
                 and run.get("sceneTarget") == scene["id"]
                 and run.get("completed") is True
             ]
+            historical_count = sum(not r.get("evidence", {}).get("systemVerification") for r in matching)
+            formal = [r for r in matching if r.get("evidence", {}).get("systemVerification")]
+            if formal:
+                matching = formal
             present_count = sum(
                 run.get("presentMon", {}).get("available") is True for run in matching
             )
@@ -227,6 +239,13 @@ def command_aggregate(args: argparse.Namespace) -> int:
                 and present_count == len(matching)
                 and etw_count >= 1
             )
+            # Old/publication receipts stay historical. Re-open the five raw manifests
+            # on every aggregation so copied run JSON or subsequently tampered CSV
+            # cannot upgrade a cell to reproducible.
+            manifests = [Path(r.get("evidence", {}).get("systemVerification", {}).get("manifest", "__missing__"))
+                         for r in matching if r.get("evidence", {}).get("systemVerification")]
+            system_gate = validate_group(manifests)
+            reproducible = reproducible and system_gate["completed"]
             if reproducible:
                 status = "reproducible"
                 reason = "requirements-met"
@@ -235,7 +254,7 @@ def command_aggregate(args: argparse.Namespace) -> int:
                 reason = (
                     f"needs {max(0, minimum - len(matching))} more runs, "
                     f"{max(0, len(matching) - present_count)} PresentMon captures, "
-                    f"and {max(0, 1 - etw_count)} ETL"
+                    f"and {max(0, 1 - etw_count)} ETL; " + "; ".join(system_gate["errors"])
                 )
             else:
                 status = "pending-hardware" if hardware["vendor"] != "AMD" else "pending-run"
@@ -250,6 +269,7 @@ def command_aggregate(args: argparse.Namespace) -> int:
                     "status": status,
                     "reason": reason,
                     "runCount": len(matching),
+                    "historicalEngineRunCount": historical_count,
                     "presentMonCount": present_count,
                     "etwCount": etw_count,
                     "medianBenchmarkP99Milliseconds": median(
