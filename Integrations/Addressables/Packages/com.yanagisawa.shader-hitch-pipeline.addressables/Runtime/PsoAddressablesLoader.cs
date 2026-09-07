@@ -14,6 +14,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Addressables
         internal Dictionary<string, PsoStreamingCollectionAsset> paths;
         internal Func<GameObject, string> validateLoaded;
         internal bool released;
+        internal int loadedFrame = -1;
         public bool IsCancelled { get; internal set; }
         public bool IsFinished { get; internal set; }
         public string Failure { get; internal set; }
@@ -64,6 +65,13 @@ namespace Yanagisawa.ShaderHitchPipeline.Addressables
             foreach (var load in loads.ToArray())
             {
                 if (load.IsFinished || !load.handle.IsDone) continue;
+                // Addressables completion can occur inside the current frame's loading callbacks.
+                // Let Unity finish that frame's shader registration/deduplication before resolving GSC GUIDs.
+                if (!load.IsCancelled && load.handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    if (load.loadedFrame < 0) { load.loadedFrame = Time.frameCount; continue; }
+                    if (Time.frameCount == load.loadedFrame) continue;
+                }
                 load.IsFinished = true;
                 if (load.IsCancelled) { Release(load); continue; }
                 if (load.handle.Status != AsyncOperationStatus.Succeeded)
