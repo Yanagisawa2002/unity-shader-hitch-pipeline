@@ -1,0 +1,54 @@
+[
+  {
+    "sha256": "8f9376d55485537ef341e2cfbff35c97c629c988f84c9c4c0c352497bc6f07d4",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\build-addressables-2.7.6-failed.log"
+  },
+  {
+    "sha256": "fc4330254e39ddfa75818d3ae66c319f3a89631db2100420cd91a44051e004f5",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\build-fixture-syntax-failed.log"
+  },
+  {
+    "sha256": "1f607b896a60565212f2a66d976aba080c0798a14445ffeba95d24c2c3f7b2a5",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\build-missing-static-plan-failed.log"
+  },
+  {
+    "sha256": "e60f5da7942228a5bceedfd2dae8f93b50e6eb014671f2e43a12f616306ffb18",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\smoke-prefab-name-failed.json"
+  },
+  {
+    "sha256": "a2f365fb6b043a533c8b2b0e98518f8bcaa4a7b712ed390a036c6f42e77cd5d2",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\smoke-prefab-name-failed.log"
+  },
+  {
+    "sha256": "71ea4de6972a48e9ce143da4ac51962ed6f70acb19910e4a77ee470f29c85947",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\trace-no-present-failed.json"
+  },
+  {
+    "sha256": "ba52a25f28a6472a70f5ef262db80a203358a34442dcd123351246152a527d11",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\trace-no-present-failed.log"
+  },
+  {
+    "sha256": "d51a306bb2fb456257ddbdaad66bd89c088f2ac6a4a2d8bcab9cda4f1bb1acbc",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\trace-release-offscreen-failed.json"
+  },
+  {
+    "sha256": "92a40f60df88822024aa6a35b7e44b61424282f94adcf61286bff67b96601f38",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-smoke-20260907\\trace-release-offscreen-failed.log"
+  },
+  {
+    "sha256": "14696a624cc5a073796525641bc70e0df22788c6daedf7f58b45e9cd7c6abc55",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-final-20260907\\smoke.json"
+  },
+  {
+    "sha256": "21fcc9e3bfc3862bc20198f832b71e51acf0bd40171735e11bd978d4a6c85137",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-final-20260907\\smoke.log"
+  },
+  {
+    "sha256": "5dfabf49a4a6d1dbb692be02c9ea895096ce54877f3f590e5941efa0d15402fa",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-after-load-frame-20260907\\smoke.json"
+  },
+  {
+    "sha256": "e6be24a5c053a825a551912b398f9194b9e061fad88baafdcf37ce327843ec7a",
+    "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Evidence\\Local\\addressables-after-load-frame-20260907\\smoke.log"
+  }
+]

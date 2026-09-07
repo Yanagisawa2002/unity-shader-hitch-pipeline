@@ -11,10 +11,13 @@ Create one `PsoAddressablesLoader` on the Unity main thread. Call
 `Load(addressablePrefabKey, contentId, contentRevision, collections, validateLoaded)`
 and pump `Tick`. Addressables first loads the prefab and its material/shader
 dependencies. Only after successful completion does the required attestation
-callback run; only after it succeeds does the adapter open collection files.
-Each phase maps to an immutable `PsoStreamingCollectionAsset(path, sha256, expectedStateCount)`
-from the attested plan. The adapter verifies bytes before native load and exact
-resolved state count afterwards, rejecting partial or empty shader resolution.
+callback run; only after it succeeds does the adapter load the native collection
+assets through Addressables. Each phase maps to an immutable
+`PsoStreamingCollectionAsset(originPath, sha256, expectedStateCount, addressableKey)`
+from the attested plan. The adapter verifies the retained original capture bytes
+and the loaded collection's exact resolved state count. The attestation must bind
+the original artifact to the loaded bundle/catalog mapping; hashing a loose file
+does not attest an arbitrary loaded asset.
 The callback must verify loaded catalog/bundle revision and digest, current build
 and shader identities, collection compatibility and artifact hashes. Return the
 attested compatible namespace; throw on unknown/stale/incompatible identities.
@@ -34,7 +37,8 @@ deadline policy. A host can use its scheduling policy to choose when/count to ti
 
 `load.Unload()` is idempotent. It removes unsubmitted work and retires the owner.
 Submitted work cannot be cancelled: its collections and **all participating owner
-asset leases** remain retained until `Complete` fences the job. `Drain` blocks on
+asset leases** (both prefab and native GSC Addressables handles) remain retained
+until `Complete` fences the job. `Drain` blocks on
 submitted work without submitting pending work. An operation failure with a proven
 fence is reported by `IPsoStreamingBatchResult.Failure`; a throwing/unknown fence
 keeps resources retained and propagates the error for retry/diagnosis. Backends
@@ -53,7 +57,8 @@ The engine-neutral `PsoRetainedAsset` provides explicit reference-counted leases
 for non-Addressables integrations. The caller releases its original reference
 after registrations. Release callbacks must run on the creating thread and should
 not throw. The APIs support overlapping requests on that thread, not parallel
-calls from worker threads.
+calls from worker threads. Gameplay instances created from the prefab must be
+destroyed before releasing their content owner, or have separately retained leases.
 
 ## Shader state deduplication
 
@@ -64,7 +69,13 @@ hashes or partial managed-state fields. Shared shaders must be explicit shared
 bundle dependencies, as in this fixture; duplicated shader assets may resolve to
 different Unity Shader objects and conservatively remain distinct. Assets load
 before collections and stay loaded through warmup, respecting Unity shader load
-and deduplication order.
+and deduplication order. The `.graphicsstate` asset must itself be imported and
+included in an Addressables group. A raw `LoadFromFile` path did **not** resolve
+the bundle shader GUID in the tested separate Player process, even after a frame
+delay; both failures are retained. The optional adapter therefore requires the
+native collection address. The base Unity backend retains its raw-file import
+path for other integrations whose shaders are resolvable in that context.
+This follows [Unity's Addressables/GSC resolution notes](https://issuetracker.unity.com/issues/21757/graphics-state-collection-warm-up-does-not-work-when-using-with-addressables-shaders).
 
 Canonical state IDs are session-local and valid only while a retained import
 references them. Namespace and content revision also participate in the core key;
@@ -80,7 +91,7 @@ this implementation must not be promoted as a measured large-content speedup.
 The independent `UnityProject` uses the existing `-pso-training-build` path to
 build a Development Player fixture before its dynamic content collections exist; it
 does not pretend to pass the static installed-plan production build gate.
-The Player builds two actual Addressables prefab/material
+The fixture builds two actual Addressables prefab/material
 revisions (blue/red) plus an explicitly shared shader bundle. Its bootstrap scene
 holds no direct reference to those materials or that shader. The build creates
 real local bundles/catalog and a Windows D3D12 Player. A trace process loads and
@@ -90,7 +101,15 @@ collection. It does not rely on a hidden window presenting. On the tested Unity
 6000.5.2f1 build, the non-Development Player passed GPU pixel readback but recorded
 zero graphics states; that failed attempt is retained. The actual tracing/runtime
 smoke therefore uses Development Player, matching the repository's tracing samples.
-A second process loads the built bundles and tests overlapping owners, native
+The initial captures are imported into a Collections Addressables group. The
+already explicit SharedShaders assignment prevents the GSC and prefab bundles
+from embedding separate copies of the custom shader. A final Player is built,
+then frozen. Its independent trace loads each bundled native GSC and constructs
+a native union with the live trace: variant and graphics-state counts must match
+on both sides and remain unchanged by the union. Original source hashes and this
+exact native validation are retained separately; a new build is not declared
+compatible just because a filename or count was relabeled.
+A further process loads the built bundles and tests overlapping owners, native
 dedup/subset submission, unload while submitted, fence release, reload, changed
 content, cancellation, attestation failure and a missing Addressables key.
 
@@ -108,7 +127,10 @@ Run from PowerShell (all Unity/GPU operations remain within the provided lock):
   -EvidenceRoot '<repo>/Evidence/Local/addressables-smoke'
 ```
 
-`-SkipBuild` reruns trace/smoke against an existing fixture Player. Receipts,
+`-SeedTraceRoot` reuses an existing initial capture as the source to import; the
+final frozen Player still performs its own full native validation. `-SkipBuild`
+reruns final trace/smoke against the existing Player. `-SmokeOnly` resumes only
+smoke against an existing frozen Player and its already validated trace. Receipts,
 raw logs, collection files and artifact/binary SHA256 provenance go to the evidence
 directory. Expected missing-key Addressables errors appear in the smoke log;
 success requires both process exit code zero and `passed: true`, never merely the
