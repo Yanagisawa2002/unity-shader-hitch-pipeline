@@ -9,6 +9,7 @@ param(
     [ValidateRange(1,3600)][int]$CaptureSeconds = 120,
     [ValidateRange(1,3600)][int]$PlayerTimeoutSeconds = 110,
     [ValidateRange(0,60)][int]$WprPreRollSeconds = 0,
+    [ValidateRange(0,60)][int]$PrePlayerWaitSeconds = 0,
     [double]$TargetFrameMilliseconds = 0,
     [switch]$CaptureEtw, [switch]$CaptureUnavailableContinueEngine,
     [switch]$ProbeOnly, [string]$Python = 'python'
@@ -22,6 +23,7 @@ foreach ($receipt in @($WarmupReceipt,$BenchmarkReceipt,$Markers)) {
     if ($receipt -and (Test-Path -LiteralPath $receipt)) { throw "Refusing stale receipt: $receipt" }
 }
 if ($CaptureSeconds -le $PlayerTimeoutSeconds -and -not $ProbeOnly) { throw 'CaptureSeconds must exceed PlayerTimeoutSeconds.' }
+if ($PrePlayerWaitSeconds -gt 0 -and $CaptureSeconds -le ($PlayerTimeoutSeconds + $PrePlayerWaitSeconds + 1)) { throw 'Capture must include the common pre-player wait plus the full Player timeout.' }
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 $sessionName = 'ShaderHitchPipeline-' + [Guid]::NewGuid().ToString('N')
 $errors = [Collections.Generic.List[string]]::new()
@@ -88,6 +90,10 @@ try {
         $errors.Add("PresentMon start failed (exit $pmExit): $($pm.stdout.Result) $($pm.stderr.Result)")
     }
     if (-not $ProbeOnly -and ($errors.Count -eq 0 -or $CaptureUnavailableContinueEngine)) {
+        if ($PrePlayerWaitSeconds -gt 0) {
+            $commands.Add(@{tool='common-pre-player-wait'; seconds=$PrePlayerWaitSeconds; startedUtc=[DateTime]::UtcNow.ToString('o')})
+            Start-Sleep -Seconds $PrePlayerWaitSeconds
+        }
         $started = [DateTime]::UtcNow.ToString('o')
         $ownedPlayer = StartOwned $playerPath $PlayerArguments 'player' $true
         $processId = $ownedPlayer.process.Id

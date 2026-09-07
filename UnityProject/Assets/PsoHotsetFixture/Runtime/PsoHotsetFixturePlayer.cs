@@ -392,6 +392,8 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
                 case "train-b": return new[] { 0, 1, 2, 1, 1 };
                 case "held-a": return new[] { 0, 2, 1, 3, 1 };
                 case "held-b": return new[] { 0, 3, 2, 3, 2 };
+                case "next-held-a": return new[] { 0, 3, 1, 2, 3 };
+                case "next-held-b": return new[] { 0, 2, 3, 1, 2 };
                 default: throw new ArgumentException("Unknown fixed route " + id);
             }
         }
