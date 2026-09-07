@@ -17,13 +17,14 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string Path { get; }
         public string Sha256 { get; }
         public int ExpectedStateCount { get; }
-        public PsoStreamingCollectionAsset(string path, string sha256, int expectedStateCount)
+        public string AddressableKey { get; }
+        public PsoStreamingCollectionAsset(string path, string sha256, int expectedStateCount, string addressableKey = null)
         {
             if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("A collection path is required.");
             if (sha256 == null || sha256.Length != 64) throw new ArgumentException("A SHA256 artifact digest is required.");
             foreach (char c in sha256) if (!Uri.IsHexDigit(c)) throw new ArgumentException("Invalid SHA256 digest.");
             if (expectedStateCount < 1) throw new ArgumentOutOfRangeException(nameof(expectedStateCount));
-            Path = System.IO.Path.GetFullPath(path); Sha256 = sha256; ExpectedStateCount = expectedStateCount;
+            Path = System.IO.Path.GetFullPath(path); Sha256 = sha256; ExpectedStateCount = expectedStateCount; AddressableKey = addressableKey;
         }
     }
 
@@ -47,7 +48,8 @@ namespace Yanagisawa.ShaderHitchPipeline
         /// Each path is a complete collection file, opened only now, so Unity resolves the loaded bundle shaders.
         /// Takes ownership of releaseAssets even on failure.</summary>
         public PsoStreamOwner RegisterLoaded(PsoStreamingCoordinator coordinator, string contentId, string contentRevision,
-            string compatibilityIdentity, IReadOnlyDictionary<string, PsoStreamingCollectionAsset> collections, Action releaseAssets)
+            string compatibilityIdentity, IReadOnlyDictionary<string, PsoStreamingCollectionAsset> collections, Action releaseAssets,
+            IReadOnlyDictionary<string, GraphicsStateCollection> loadedCollections = null)
         {
             if (releaseAssets == null) throw new ArgumentNullException(nameof(releaseAssets));
             var retained = new HashSet<Record>();
@@ -63,10 +65,12 @@ namespace Yanagisawa.ShaderHitchPipeline
                 {
                     if (phase.Value == null || !string.Equals(PsoFileUtility.ComputeSha256(phase.Value.Path), phase.Value.Sha256, StringComparison.OrdinalIgnoreCase))
                         throw new InvalidDataException("Streaming collection artifact integrity mismatch: " + phase.Key);
-                    var source = new GraphicsStateCollection();
+                    bool ownsSource = loadedCollections == null;
+                    var source = ownsSource ? new GraphicsStateCollection() : loadedCollections[phase.Key];
                     try
                     {
-                        if (!source.LoadFromFile(phase.Value.Path)) throw new IOException("Cannot load streaming collection: " + phase.Value.Path);
+                        if (source == null) throw new InvalidDataException("Loaded collection is missing.");
+                        if (ownsSource && !source.LoadFromFile(phase.Value.Path)) throw new IOException("Cannot load streaming collection: " + phase.Value.Path);
                         if (source.runtimePlatform != Application.platform || source.graphicsDeviceType != SystemInfo.graphicsDeviceType)
                             throw new InvalidDataException("Streaming collection platform/API mismatch.");
                         if (source.totalGraphicsStateCount != phase.Value.ExpectedStateCount)
@@ -88,7 +92,7 @@ namespace Yanagisawa.ShaderHitchPipeline
                             throw new InvalidDataException("Collection contains unresolved or omitted graphics states.");
                         phases.Add(phase.Key, list);
                     }
-                    finally { UnityEngine.Object.Destroy(source); }
+                    finally { if (ownsSource) UnityEngine.Object.Destroy(source); }
                 }
                 return coordinator.RegisterLoaded(contentId, contentRevision, compatibilityIdentity, phases, asset);
             }

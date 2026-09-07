@@ -33,6 +33,25 @@ public static class StreamingFixtureBuilder
             PrefabUtility.SaveAsPrefabAsset(cube, path + ".prefab"); UnityEngine.Object.DestroyImmediate(cube);
             Add(settings, "Content-r" + revision, path + ".prefab", "stream-r" + revision);
         }
+        string collectionsSource = PsoCommandLine.Current.GetString("-stream-collections-source", string.Empty);
+        if (!string.IsNullOrWhiteSpace(collectionsSource))
+        {
+            Directory.CreateDirectory("Assets/StreamingAssets");
+            for (int revision = 1; revision <= 2; revision++)
+            {
+                string path = generated + "/pso-r" + revision + ".graphicsstate";
+                File.Copy(Path.Combine(collectionsSource, "fixture-r" + revision + ".graphicsstate"), path, true);
+                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+                Add(settings, "Collections", path, "stream-pso-r" + revision);
+                File.Copy(Path.Combine(collectionsSource, "trace-r" + revision + ".json"),
+                    "Assets/StreamingAssets/fixture-import-r" + revision + ".json", true);
+                File.Copy(Path.Combine(collectionsSource, "fixture-r" + revision + ".graphicsstate"),
+                    "Assets/StreamingAssets/fixture-origin-r" + revision + ".bytes", true);
+            }
+            // The shader is explicitly assigned to SharedShaders, so native GSC dependencies and both
+            // prefab bundles point to one shader bundle instead of copying the shader into each group.
+            AssetDatabase.Refresh();
+        }
         AssetDatabase.SaveAssets();
         settings.BuildAddressablesWithPlayerBuild = AddressableAssetSettings.PlayerBuildOption.DoNotBuildWithPlayer;
         AddressableAssetSettings.BuildPlayerContent(out var contentResult);

@@ -3,7 +3,9 @@ param(
     [string]$Unity = 'C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Unity.exe',
     [Parameter(Mandatory = $true)][string]$SerializationScript,
     [string]$EvidenceRoot = '',
-    [switch]$SkipBuild
+    [switch]$SkipBuild,
+    [switch]$SmokeOnly,
+    [string]$SeedTraceRoot = ''
 )
 $ErrorActionPreference = 'Stop'
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
@@ -17,19 +19,34 @@ function Invoke-OwnedProcess([string]$Executable, [string[]]$Arguments) {
     $process.WaitForExit()
     if ($process.ExitCode -ne 0) { throw "$Executable failed with exit code $($process.ExitCode); see logs in $EvidenceRoot" }
 }
+function Invoke-FixtureBuild([string]$Log, [string]$Source = '') {
+    $buildArguments = @('-batchmode', '-quit', '-pso-training-build', '-projectPath', ('"' + $project + '"'),
+        '-buildTarget', 'Win64', '-executeMethod', 'StreamingFixtureBuilder.Build',
+        '-stream-output', ('"' + $player + '"'), '-logFile', ('"' + $Log + '"'))
+    if ($Source) { $buildArguments += @('-stream-collections-source', ('"' + $Source + '"')) }
+    Invoke-OwnedProcess $Unity $buildArguments
+}
+function Invoke-FixtureRun([string]$Mode, [string]$Directory, [bool]$VerifyNative) {
+    New-Item -ItemType Directory -Force $Directory | Out-Null
+    $runArguments = @('-batchmode', '-force-d3d12', '-screen-fullscreen', '0',
+        '-stream-mode', $Mode, '-stream-evidence', ('"' + $Directory + '"'),
+        '-logFile', ('"' + (Join-Path $Directory ($Mode + '.log')) + '"'))
+    if ($VerifyNative) { $runArguments += '-stream-verify-native' }
+    Invoke-OwnedProcess $player $runArguments
+    $receipt = Get-Content -Raw (Join-Path $Directory ($Mode + '.json')) | ConvertFrom-Json
+    if (!$receipt.passed) { throw "$Mode fixture failed: $($receipt.error)" }
+}
 & $SerializationScript -Action {
-    if (!$SkipBuild) {
-        Invoke-OwnedProcess $Unity @('-batchmode', '-quit', '-pso-training-build', '-projectPath', ('"' + $project + '"'),
-            '-buildTarget', 'Win64', '-executeMethod', 'StreamingFixtureBuilder.Build',
-            '-stream-output', ('"' + $player + '"'), '-logFile', ('"' + (Join-Path $EvidenceRoot 'build.log') + '"'))
+    if (!$SkipBuild -and !$SmokeOnly) {
+        if (!$SeedTraceRoot) {
+            $SeedTraceRoot = Join-Path $EvidenceRoot 'seed'
+            Invoke-FixtureBuild (Join-Path $EvidenceRoot 'seed-build.log')
+            Invoke-FixtureRun 'trace' $SeedTraceRoot $false
+        }
+        Invoke-FixtureBuild (Join-Path $EvidenceRoot 'build.log') $SeedTraceRoot
     }
-    foreach ($mode in @('trace', 'smoke')) {
-        Invoke-OwnedProcess $player @('-batchmode', '-force-d3d12', '-screen-fullscreen', '0',
-            '-stream-mode', $mode, '-stream-evidence', ('"' + $EvidenceRoot + '"'),
-            '-logFile', ('"' + (Join-Path $EvidenceRoot ($mode + '.log')) + '"'))
-        $receipt = Get-Content -Raw (Join-Path $EvidenceRoot ($mode + '.json')) | ConvertFrom-Json
-        if (!$receipt.passed) { throw "$mode fixture failed: $($receipt.error)" }
-    }
+    if (!$SmokeOnly) { Invoke-FixtureRun 'trace' $EvidenceRoot $true }
+    Invoke-FixtureRun 'smoke' $EvidenceRoot $true
     $hashes = @(Get-ChildItem $EvidenceRoot -File | Sort-Object Name | ForEach-Object {
         @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
     })
@@ -40,7 +57,7 @@ function Invoke-OwnedProcess([string]$Executable, [string[]]$Arguments) {
     })
     $provenance = @{
         schemaVersion = 1; scope = 'correctness smoke; not formal timing or OS capture';
-        sourceCommit = (& git -C $repo rev-parse HEAD); sourceStatus = @(& git -C $repo status --short);
+        sourceCommit = (& git -C $repo rev-parse HEAD); sourceStatus = @(& git -C $repo status --short); seedTraceRoot = $SeedTraceRoot;
         unity = $Unity; player = $player; playerSha256 = (Get-FileHash $player -Algorithm SHA256).Hash.ToLowerInvariant();
         unitySha256 = (Get-FileHash $Unity -Algorithm SHA256).Hash.ToLowerInvariant();
         artifacts = $hashes; playerFiles = $playerFiles; utc = [DateTime]::UtcNow.ToString('o')
