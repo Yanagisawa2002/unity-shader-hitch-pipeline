@@ -23,6 +23,14 @@ static class IntegrationSmoke
 
     public static void Run()
     {
+        var measuredPolicy = new PsoAdaptiveBatchPolicy(1, 1, 64, 16.67, 0.25);
+        Check(!measuredPolicy.HasMeasuredCostSlope, "initial prior is not measured cost");
+        measuredPolicy.ObserveBatch(1, 10);
+        measuredPolicy.ObserveBatch(1, 1);
+        measuredPolicy.ObserveBatch(1, 1.1);
+        Check(!measuredPolicy.HasMeasuredCostSlope, "cold or equal-size batches cannot fit slope");
+        measuredPolicy.ObserveBatch(2, 1.5);
+        Check(measuredPolicy.HasMeasuredCostSlope, "varied steady samples establish measured slope");
         var recorded = Environment();
         var plan = new PsoWarmupPlanDocument
         {

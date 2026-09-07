@@ -34,11 +34,13 @@ function FileRecord([string]$Path) {
     $exists = $Path -and (Test-Path -LiteralPath $Path -PathType Leaf)
     return [ordered]@{path=$Path; exists=[bool]$exists; bytes=$(if ($exists) {(Get-Item -LiteralPath $Path).Length} else {0}); sha256=$(if ($exists) {(Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()} else {''})}
 }
-function StartOwned([string]$File, [string[]]$Arguments, [string]$Prefix) {
+function StartOwned([string]$File, [string[]]$Arguments, [string]$Prefix, [bool]$VisiblePlayer = $false) {
     # ArgumentList performs Windows argv quoting, including trailing backslashes.
     $info = [Diagnostics.ProcessStartInfo]::new($File)
     $info.UseShellExecute = $false; $info.CreateNoWindow = $true
-    $info.WindowStyle = [Diagnostics.ProcessWindowStyle]::Hidden
+    # Actual presentation requires a visible, non-minimized swap chain. Only the
+    # measured Player uses Normal; capture and analysis helpers stay hidden.
+    $info.WindowStyle = if ($VisiblePlayer) { [Diagnostics.ProcessWindowStyle]::Normal } else { [Diagnostics.ProcessWindowStyle]::Hidden }
     $info.WorkingDirectory = Split-Path -Parent $File
     $info.RedirectStandardOutput = $true; $info.RedirectStandardError = $true
     foreach ($argument in $Arguments) { $info.ArgumentList.Add($argument) }
@@ -80,7 +82,7 @@ try {
     }
     if (-not $ProbeOnly -and ($errors.Count -eq 0 -or $CaptureUnavailableContinueEngine)) {
         $started = [DateTime]::UtcNow.ToString('o')
-        $ownedPlayer = StartOwned $playerPath $PlayerArguments 'player'
+        $ownedPlayer = StartOwned $playerPath $PlayerArguments 'player' $true
         $processId = $ownedPlayer.process.Id
         if (-not $ownedPlayer.process.WaitForExit($PlayerTimeoutSeconds * 1000)) {
             $ownedPlayer.process.Kill($true); $ownedPlayer.process.WaitForExit()

@@ -280,12 +280,12 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (!IsComplete) throw new InvalidOperationException("Cost export requires completed warmup.");
             var entries = new List<PsoCostCacheEntry>();
             foreach (PhaseExecution item in activatedExecutions)
-                if (item.policy != null && !item.nativeAsyncBulkDeadline && item.batchDurations.Count > 0 && item.receipt.completed)
+                if (item.policy != null && item.policy.HasMeasuredCostSlope && !item.nativeAsyncBulkDeadline && item.receipt.completed)
                     entries.Add(new PsoCostCacheEntry
                     {
                         phase = item.plan.phase, collectionSha256 = item.plan.collectionSha256,
                         millisecondsPerState = item.policy.EstimatedMillisecondsPerState,
-                        observedBatches = item.batchDurations.Count
+                        observedBatches = item.policy.BatchObservationCount
                     });
             PsoCostCacheStorage.Save(path, plan, entries.ToArray());
         }

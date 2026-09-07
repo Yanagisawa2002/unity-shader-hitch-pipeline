@@ -130,6 +130,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         public int CurrentBatchSize { get; private set; }
         public double FrameEwmaMilliseconds => frameEwma;
         public double EstimatedMillisecondsPerState => millisecondsPerState;
+        public bool HasMeasuredCostSlope { get; private set; }
         public double EstimatedFixedBatchMilliseconds => fixedBatchMilliseconds;
         public double TargetFrameMilliseconds => targetFrameMilliseconds;
         public double SafetyMarginMilliseconds => safetyMarginMilliseconds;
@@ -258,6 +259,7 @@ namespace Yanagisawa.ShaderHitchPipeline
                          (regressionSumStates * regressionSumDuration)) /
                         denominator;
                     millisecondsPerState = Math.Max(0.000001, slope);
+                    HasMeasuredCostSlope = true;
                     fixedBatchMilliseconds = Math.Max(
                         0.0,
                         (regressionSumDuration -
