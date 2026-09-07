@@ -137,3 +137,16 @@ startup API smoke elapsed additionally includes selection/receipt work. Driver P
 external alignment. First-render is an engine proxy; actual OS first-present and
 the separate five-process system capture gate remain integrator responsibilities.
 This tiny fixture cannot establish a production advantage or a frame-time bound.
+
+## Shared serializer regression
+
+The actual v3 discovery/calibration fixture produced a valid hash over its written
+JSON, but Unity's first read changed only
+`phases[1].estimatedMillisecondsPerState` from `0.10332000000000001` to `0.10332`.
+The new serialized document therefore had a different hash. The original plan,
+first/second read results and exact hashes are retained in
+`Docs/Evidence/hotset-json-roundtrip/`; `PsoHotsetJsonRoundtripProbe.Run` reproduces
+the issue in the Editor. This is a shared hash/write/read contract regression,
+not justification to disable integrity checks. The fixture normalizes before
+hashing and immediately verifies the saved file; integration must fix the common
+numerical serialization contract and add the preserved case to its tests.
