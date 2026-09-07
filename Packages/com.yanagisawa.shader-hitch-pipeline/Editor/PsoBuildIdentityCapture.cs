@@ -25,6 +25,9 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
         {
             if (options.scenes == null || options.scenes.Length == 0)
                 throw new ArgumentException("Declare the actual nonempty BuildPlayerOptions.scenes list.");
+            // Builders may have just changed PlayerSettings. Persist those actual
+            // inputs before the preprocess callback hashes ProjectSettings bytes.
+            AssetDatabase.SaveAssets();
             options.scenes = (string[])options.scenes.Clone();
             options.extraScriptingDefines = options.extraScriptingDefines == null ? Array.Empty<string>() : (string[])options.extraScriptingDefines.Clone();
             pendingBuild = options;

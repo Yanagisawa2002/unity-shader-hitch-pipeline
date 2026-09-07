@@ -13,7 +13,7 @@
     "maximumBatchSize": 64,
     "targetFrameMilliseconds": 16.67,
     "startupDeadlineMilliseconds": 1000.0,
-    "deferredDeadlineMilliseconds": 2500.0,
+    "deferredDeadlineMilliseconds": 1500.0,
     "estimatedMillisecondsPerState": 0.25,
     "bootstrapBatchSize": 1,
     "budgetSafetyMarginMilliseconds": 2.0,
