@@ -58,3 +58,5 @@ Console.WriteLine("CORE_SMOKE_OK phase={0} coldBatch={1} schema={2}",
     probe.BatchSize,
     plan.schemaVersion);
 CompatibilitySmoke.Run();
+HotsetTests.Run();
+IntegrationSmoke.Run();

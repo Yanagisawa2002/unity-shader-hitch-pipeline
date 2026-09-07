@@ -65,3 +65,5 @@ DotNet/**/obj/
 # Generated current-build identity and local compatibility validation artifacts
 UnityProject/Assets/Resources/PsoBuildIdentity.json*
 work/
+/UnityProject/Assets/HotsetFixtureGenerated/
+/UnityProject/Assets/HotsetFixtureGenerated.meta

@@ -1,0 +1,1 @@
+{"name":"PsoHotsetFixture.Editor","references":["PsoHotsetFixture","Yanagisawa.ShaderHitchPipeline.Core","Yanagisawa.ShaderHitchPipeline.Runtime"],"includePlatforms":["Editor"]}
