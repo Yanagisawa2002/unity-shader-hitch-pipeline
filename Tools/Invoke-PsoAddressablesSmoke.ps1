@@ -33,12 +33,17 @@ function Invoke-OwnedProcess([string]$Executable, [string[]]$Arguments) {
     $hashes = @(Get-ChildItem $EvidenceRoot -File | Sort-Object Name | ForEach-Object {
         @{ path = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
     })
+    $playerDirectory = Split-Path $player
+    $playerFiles = @(Get-ChildItem $playerDirectory -File -Recurse | Sort-Object FullName | ForEach-Object {
+        @{ path = $_.FullName.Substring($playerDirectory.Length + 1).Replace('\', '/');
+           sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
+    })
     $provenance = @{
         schemaVersion = 1; scope = 'correctness smoke; not formal timing or OS capture';
         sourceCommit = (& git -C $repo rev-parse HEAD); sourceStatus = @(& git -C $repo status --short);
         unity = $Unity; player = $player; playerSha256 = (Get-FileHash $player -Algorithm SHA256).Hash.ToLowerInvariant();
         unitySha256 = (Get-FileHash $Unity -Algorithm SHA256).Hash.ToLowerInvariant();
-        artifacts = $hashes; utc = [DateTime]::UtcNow.ToString('o')
+        artifacts = $hashes; playerFiles = $playerFiles; utc = [DateTime]::UtcNow.ToString('o')
     }
     $provenance | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 (Join-Path $EvidenceRoot 'provenance.json')
     Write-Output "ADDRESSABLES_SMOKE_OK $EvidenceRoot"
