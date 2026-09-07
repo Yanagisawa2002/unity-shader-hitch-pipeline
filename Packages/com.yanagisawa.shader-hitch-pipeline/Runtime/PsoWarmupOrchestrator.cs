@@ -185,9 +185,16 @@ namespace Yanagisawa.ShaderHitchPipeline
             PsoCompatibility.ResetCostPriors(plan, Compatibility);
             Debug.Log("[ShaderHitchPipeline] Compatibility: " + JsonUtility.ToJson(Compatibility));
             string costCachePath = PsoCommandLine.Current.GetString("-pso-cost-cache", string.Empty);
-            if (!string.IsNullOrWhiteSpace(costCachePath) &&
-                !PsoCostCacheStorage.TryApply(costCachePath, plan, out string[] cacheReasons))
-                Debug.LogWarning("[ShaderHitchPipeline] Cost cache ignored: " + string.Join("; ", cacheReasons));
+            CostCacheRequested = !string.IsNullOrWhiteSpace(costCachePath);
+            CostCacheApplied = false;
+            CostCacheReasons = Array.Empty<string>();
+            if (CostCacheRequested)
+            {
+                CostCacheApplied = PsoCostCacheStorage.TryApply(costCachePath, plan, out string[] cacheReasons);
+                CostCacheReasons = cacheReasons;
+                if (!CostCacheApplied)
+                    Debug.LogWarning("[ShaderHitchPipeline] Cost cache ignored: " + string.Join("; ", cacheReasons));
+            }
             outputRoot = Path.GetFullPath(
                 string.IsNullOrWhiteSpace(requestedOutputRoot)
                     ? PsoFileUtility.DefaultRuntimeOutputRoot()
@@ -249,6 +256,10 @@ namespace Yanagisawa.ShaderHitchPipeline
                       "' with " + plan.phases.Length + " phases; strategy=" +
                       strategy + ".");
         }
+
+        public bool CostCacheRequested { get; private set; }
+        public bool CostCacheApplied { get; private set; }
+        public string[] CostCacheReasons { get; private set; } = Array.Empty<string>();
 
         public void SaveCostCache(string path)
         {
