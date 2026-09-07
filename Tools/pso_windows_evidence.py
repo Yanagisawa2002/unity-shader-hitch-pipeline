@@ -120,6 +120,10 @@ def parse_presentmon_time(value: str, offset_minutes: int) -> datetime | None:
     text = value.strip()
     if not text:
         return None
+    # PresentMon 2.5.1 also emits unpadded month/day. Normalize syntax only;
+    # the supplied local offset is authoritative, never inferred from receipts.
+    text = re.sub(r"^(\d{4})-(\d{1,2})-(\d{1,2})(?=[ T])",
+                  lambda m: f"{m[1]}-{int(m[2]):02d}-{int(m[3]):02d}", text)
     try:
         parsed = datetime.fromisoformat(text)
     except ValueError:
@@ -128,6 +132,63 @@ def parse_presentmon_time(value: str, offset_minutes: int) -> datetime | None:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=local_zone)
     return parsed.astimezone(timezone.utc)
+
+
+NATIVE_QPC_SOURCE = "windows-query-performance-counter-v1"
+
+
+def parse_qpc(value: Any) -> int:
+    """Do not round absolute counter ticks through an IEEE-754 float."""
+    if isinstance(value, bool) or not re.fullmatch(r"\d+", str(value).strip()):
+        raise ValueError("QPC values must be nonnegative integer ticks.")
+    return int(str(value).strip())
+
+
+def load_markers(path: Path | None, process_id: int | None,
+                 native_qpc: bool) -> list[dict[str, Any]]:
+    if path is None:
+        if native_qpc:
+            raise ValueError("QPC CSV requires native QPC/UTC markers; no date-time fallback.")
+        return []
+    markers = [json.loads(line) for line in path.read_text(encoding="utf-8-sig").splitlines() if line.strip()]
+    if not markers or type(process_id) is not int or process_id <= 0 or any(
+        type(m.get("processId")) is not int or m["processId"] != process_id for m in markers
+    ):
+        raise ValueError("Marker PID does not match the selected process or markers are empty.")
+    sessions = {m.get("sessionId") for m in markers}
+    if len(sessions) != 1 or not isinstance(next(iter(sessions)), str) or not next(iter(sessions)):
+        raise ValueError("Markers must belong to one nonempty process session.")
+    previous = None
+    first = None
+    for marker in markers:
+        if native_qpc and marker.get("clockSource") != NATIVE_QPC_SOURCE:
+            raise ValueError("QPC CSV requires clockSource=" + NATIVE_QPC_SOURCE)
+        stamp = parse_utc(marker.get("utc"))
+        # QPC anchors must explicitly identify UTC/offset, unlike legacy date input.
+        if native_qpc and (not stamp or datetime.fromisoformat(marker["utc"].replace("Z", "+00:00")).tzinfo is None):
+            raise ValueError("Native QPC marker UTC anchor must have an explicit timezone.")
+        frequency = parse_qpc(marker.get("qpcFrequency"))
+        counter = parse_qpc(marker.get("qpc"))
+        bracket = parse_qpc(marker.get("qpcBracketTicks") if native_qpc else marker.get("qpcBracketTicks", 0))
+        if stamp is None or frequency <= 0:
+            raise ValueError("Invalid marker clock anchor.")
+        if bracket / frequency > 0.010:
+            raise ValueError("Marker UTC/QPC sampling uncertainty exceeds 10 ms.")
+        if previous:
+            if frequency != previous[2]:
+                raise ValueError("Marker QPC frequency changed within one process.")
+            if counter < previous[1] or stamp < previous[0]:
+                raise ValueError("Marker UTC/QPC clock moved backwards.")
+            # Check both local discontinuities and cumulative drift from the fixed
+            # anchor used for CSV conversion. No fitted offset or drift correction.
+            for anchor in (previous, first):
+                if abs((stamp - anchor[0]).total_seconds() - (counter - anchor[1]) / frequency) > 0.010:
+                    raise ValueError("UTC/QPC clock discontinuity exceeds 10 ms.")
+        previous = (stamp, counter, frequency)
+        first = first or previous
+    if native_qpc and (len(markers) < 2 or previous[1] <= first[1]):
+        raise ValueError("Native QPC correlation requires at least two advancing clock anchors.")
+    return markers
 
 
 def dominant_swap_chain(rows: list[dict[str, str]], column: str | None) -> tuple[str, list[dict[str, str]]]:
@@ -193,14 +254,27 @@ def build_summary(
     }
     swap_column = select_column(fieldnames, ("SwapChainAddress",))
     selected_swap, rows = dominant_swap_chain(rows, swap_column)
-    time_column = select_column(fieldnames, ("CPUStartDateTime", "TimeInDateTime"))
+    qpc_column = select_column(fieldnames, ("CPUStartQPC", "TimeInQPC"))
+    time_column = qpc_column or select_column(fieldnames, ("CPUStartDateTime", "TimeInDateTime"))
+    markers = load_markers(markers_path, process_id, qpc_column is not None)
+    row_times = {}
+    if qpc_column:
+        anchor = markers[0]
+        anchor_utc = parse_utc(anchor["utc"])
+        anchor_qpc = parse_qpc(anchor["qpc"])
+        frequency = parse_qpc(anchor["qpcFrequency"])
+        for row in rows:
+            try:
+                row_times[id(row)] = anchor_utc + timedelta(seconds=(parse_qpc(row.get(qpc_column)) - anchor_qpc) / frequency)
+            except OverflowError as error:
+                raise ValueError("QPC row cannot be mapped to the declared UTC anchor.") from error
+    elif time_column:
+        row_times = {id(row): parse_presentmon_time(row.get(time_column, ""), local_offset_minutes) for row in rows}
 
     warmup_rows: list[dict[str, str]] = []
     if time_column and warmup_start and warmup_end:
         for row in rows:
-            row_time = parse_presentmon_time(
-                row.get(time_column, ""), local_offset_minutes
-            )
+            row_time = row_times.get(id(row))
             if row_time is not None and warmup_start <= row_time <= warmup_end:
                 warmup_rows.append(row)
 
@@ -231,6 +305,8 @@ def build_summary(
                 "cpuStart": row.get(time_column, "") if time_column else "",
                 "presentedFrameMilliseconds": parse_number(row.get(frame_column)),
             }
+            if qpc_column:
+                tail["cpuStartUtc"] = row_times[id(row)].isoformat().replace("+00:00", "Z")
             for key in (
                 "displayedFrameMilliseconds",
                 "cpuBusyMilliseconds",
@@ -288,28 +364,15 @@ def build_summary(
             "A PresentMon row is evidence of correlation, not proof that a single subsystem caused the tail.",
         ],
     }
+    if qpc_column:
+        result["rowSelection"]["clockCorrelation"] = {
+            "method": "native-qpc-to-utc-fixed-first-marker",
+            "clockSource": NATIVE_QPC_SOURCE,
+            "anchorUtc": anchor["utc"], "anchorQpc": anchor_qpc,
+            "qpcFrequency": frequency, "anchorBracketTicks": anchor["qpcBracketTicks"],
+            "anchorCount": len(markers), "localUtcOffsetApplied": False,
+        }
     if markers_path is not None:
-        markers = [json.loads(line) for line in markers_path.read_text(encoding="utf-8-sig").splitlines() if line.strip()]
-        if not markers or process_id is None or any(m.get("processId") != process_id for m in markers):
-            raise ValueError("Marker PID does not match the selected process or markers are empty.")
-        sessions = {m.get("sessionId") for m in markers}
-        if len(sessions) != 1 or not next(iter(sessions)):
-            raise ValueError("Markers must belong to one nonempty process session.")
-        previous = None
-        for marker in markers:
-            stamp = parse_utc(marker.get("utc"))
-            if stamp is None or marker.get("qpcFrequency", 0) <= 0:
-                raise ValueError("Invalid marker clock anchor.")
-            if marker.get("qpcBracketTicks", 0) / marker["qpcFrequency"] > 0.010:
-                raise ValueError("Marker UTC/QPC sampling uncertainty exceeds 10 ms.")
-            if previous:
-                if marker["qpcFrequency"] != previous["qpcFrequency"]:
-                    raise ValueError("Marker QPC frequency changed within one process.")
-                elapsed_qpc = (marker["qpc"] - previous["qpc"]) / marker["qpcFrequency"]
-                elapsed_utc = (stamp - parse_utc(previous["utc"])).total_seconds()
-                if elapsed_qpc < 0 or abs(elapsed_utc - elapsed_qpc) > 0.010:
-                    raise ValueError("UTC/QPC clock discontinuity exceeds 10 ms.")
-            previous = marker
         phase_windows = []
         active = {}
         for marker in markers:
@@ -323,10 +386,11 @@ def build_summary(
                 if start is None:
                     raise ValueError("Phase end without start.")
                 start_time, end_time = parse_utc(start["utc"]), parse_utc(marker["utc"])
-                selected = [row for row in rows if time_column and (t := parse_presentmon_time(row.get(time_column, ""), local_offset_minutes)) is not None and start_time <= t <= end_time]
+                selected = [row for row in rows if (t := row_times.get(id(row))) is not None and start_time <= t <= end_time]
                 phase_windows.append({"phase": phase, "startedUtc": start["utc"], "endedUtc": marker["utc"], "rows": len(selected),
                     "presentedCadence": metric_summary([v for row in selected if frame_column and (v := parse_number(row.get(frame_column))) is not None and v >= 0], effective_target)})
-        result["phaseCorrelation"] = {"method": "same-host UTC anchors with QPC continuity check; not native ETW events", "sessionId": next(iter(sessions)), "windows": phase_windows, "unfinishedPhases": sorted(active)}
+        method = "native QPC rows mapped by fixed UTC anchor; not native ETW marker events" if qpc_column else "same-host UTC anchors with QPC continuity check; not native ETW events"
+        result["phaseCorrelation"] = {"method": method, "sessionId": markers[0]["sessionId"], "windows": phase_windows, "unfinishedPhases": sorted(active)}
         result["source"].update({"markers": str(markers_path.resolve()), "markersSha256": sha256(markers_path)})
     return result
 
