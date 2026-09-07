@@ -106,6 +106,12 @@ static class Program
         Throws(() => core.RegisterLoaded("bad-release", "r2", "b", Plan("x"), otherAssets), "Failed old release should fail registration visibly.");
         Require(core.RetainedStateCount == 0 && otherAssets.ReferenceCount == 1, "Failed revision registration must not strand an unreachable replacement.");
         otherAssets.Dispose(); core.Dispose();
+        backend = new Backend(); core = new PsoStreamingCoordinator(backend);
+        var twoPhases = Plan("x", "y"); twoPhases["later"] = Plan("y", "z")["main"];
+        assets = new PsoRetainedAsset(() => {}); a = core.RegisterLoaded("phases", "r", "b", twoPhases, assets); assets.Dispose();
+        ar = core.RequestPhase(a, "main"); br = core.RequestPhase(a, "later"); ar.Dispose();
+        core.Tick(); Require(backend.count == 2, "Cancelling startup must preserve overlapping later-phase demand only.");
+        core.Drain(); Require(br.IsComplete && ar.IsCancelled, "Distinct concurrent phase results must remain independent."); core.Dispose();
         Console.WriteLine("STREAMING_SMOKE_OK checks=" + checks);
     }
     sealed class Backend : IPsoStreamingBackend
