@@ -65,8 +65,10 @@ public static class StreamingFixtureBuilder
         PlayerSettings.defaultScreenWidth = 480; PlayerSettings.defaultScreenHeight = 320;
         PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
         string output = PsoCommandLine.Current.GetString("-stream-output", "Builds/StreamingFixture.exe");
-        var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { scenePath },
-            target = BuildTarget.StandaloneWindows64, locationPathName = Path.GetFullPath(output), options = BuildOptions.Development });
+        var options = new BuildPlayerOptions { scenes = new[] { scenePath },
+            target = BuildTarget.StandaloneWindows64, locationPathName = Path.GetFullPath(output), options = BuildOptions.Development };
+        Yanagisawa.ShaderHitchPipeline.Editor.PsoBuildIdentityCapture.DeclareBuildInputs(options);
+        var report = BuildPipeline.BuildPlayer(options);
         if (report.summary.result != BuildResult.Succeeded) throw new Exception("Fixture Player build failed: " + report.summary.result);
         Debug.Log("STREAMING_FIXTURE_BUILD_OK");
     }

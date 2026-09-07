@@ -149,9 +149,12 @@ public sealed class StreamingFixture : MonoBehaviour
             Check(material.shader != null && material.shader.name == "ShaderHitchPipeline/StreamingFixture" && material.shader.isSupported,
                 "Actual bundle shader must be loaded before collection registration.");
             Check(material.GetColor("_Tint") == (revision == 1 ? Color.blue : Color.red), "Revision must load different real material content.");
-            // This bounded fixture attests one exact build and the complete shipped catalog/bundle tree. Production
-            // projects should use PsoCompatibility with their trusted catalog revision mapping, not this fixture policy.
-            return receipt.buildGuid + ":" + receipt.contentDigest;
+            // Validate the shared actual-build contract as well as the native collection,
+            // loaded material revision and complete shipped bundle/catalog tree above.
+            string contentNamespace = PsoIntegratedCompatibility.RequireCollectionNamespace(
+                new PsoCompatibilityContract { version = 1, collectionEnvironment = captured.environment },
+                PsoUnityEnvironment.Capture());
+            return contentNamespace + ":" + receipt.contentDigest;
         };
         var a = loader.Load("stream-r1", "room", "r1", paths, attest(1));
         var b = loader.Load("stream-r1", "room", "r1", paths, attest(1));

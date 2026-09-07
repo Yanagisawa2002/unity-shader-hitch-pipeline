@@ -37,6 +37,23 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (at != json.Length) throw new InvalidDataException("Trailing JSON data.");
         }
         public string Get(string name) => members.TryGetValue(name, out int[] range) ? json.Substring(range[0], range[1] - range[0]) : null;
+        public static string[] ArrayValues(string arrayJson)
+        {
+            var scanner = new PsoJsonObject("{\"v\":" + arrayJson + "}");
+            int at = 5;
+            scanner.Space(ref at); scanner.Expect(ref at, '['); scanner.Space(ref at);
+            var values = new List<string>();
+            if (scanner.json[at] == ']') return values.ToArray();
+            while (true)
+            {
+                scanner.Space(ref at); int start = at;
+                scanner.Value(ref at, 0);
+                values.Add(scanner.json.Substring(start, at - start));
+                scanner.Space(ref at);
+                if (scanner.json[at] == ']') return values.ToArray();
+                scanner.Expect(ref at, ',');
+            }
+        }
         public string Replace(string name, string rawValue)
         {
             if (!members.TryGetValue(name, out int[] range)) throw new InvalidDataException("Missing JSON member: " + name);

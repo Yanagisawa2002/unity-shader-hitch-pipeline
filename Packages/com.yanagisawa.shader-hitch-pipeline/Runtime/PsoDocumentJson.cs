@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using System.Reflection;
 using UnityEngine;
 
 namespace Yanagisawa.ShaderHitchPipeline
@@ -7,7 +10,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         public static T Parse<T>(string json) where T : class
         {
             var fields = new PsoJsonObject(json);
-            T document = JsonUtility.FromJson<T>(json);
+            T document = ReadExact<T>(json);
             if (document is PsoWarmupPlanDocument plan)
             {
                 string contractJson = fields.Get("compatibility");
@@ -29,7 +32,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         public static string Serialize(object document, bool pretty = true)
         {
             if (document is PsoWarmupPlanDocument legacy && legacy.compatibility == null)
-                return JsonUtility.ToJson(JsonUtility.FromJson<PsoLegacyPlanHashDocument>(JsonUtility.ToJson(legacy)), pretty);
+                return JsonUtility.ToJson(ReadExact<PsoLegacyPlanHashDocument>(JsonUtility.ToJson(legacy)), pretty);
             string json = JsonUtility.ToJson(document, pretty);
             if (document is PsoWarmupPlanDocument plan)
             {
@@ -54,7 +57,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         {
             if (Absent(json)) return null;
             var fields = new PsoJsonObject(json);
-            var environment = JsonUtility.FromJson<PsoEnvironmentSnapshot>(json);
+            var environment = ReadExact<PsoEnvironmentSnapshot>(json);
             if (Absent(fields.Get("identity"))) environment.identity = null;
             return environment;
         }
@@ -63,6 +66,44 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (environment == null) return "null";
             string json = JsonUtility.ToJson(environment, pretty);
             return environment.identity == null ? new PsoJsonObject(json).Replace("identity", "null") : json;
+        }
+
+        // Unity 6000.5's native reader can round a double by one ULP (for example
+        // 0.10332000000000001 becomes 0.10332). Recover scalar values from their
+        // original JSON tokens, preserving the existing writer/hash byte contract.
+        private static T ReadExact<T>(string json)
+        {
+            T value = JsonUtility.FromJson<T>(json);
+            RestoreNumbers(value, json);
+            return value;
+        }
+
+        private static void RestoreNumbers(object value, string json)
+        {
+            if (value == null || json == null || json == "null") return;
+            var fields = new PsoJsonObject(json);
+            foreach (FieldInfo field in value.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
+            {
+                string token = fields.Get(field.Name);
+                if (token == null || token == "null") continue;
+                if (field.FieldType == typeof(double))
+                    field.SetValue(value, double.Parse(token, NumberStyles.Float, CultureInfo.InvariantCulture));
+                else if (field.FieldType == typeof(float))
+                    field.SetValue(value, float.Parse(token, NumberStyles.Float, CultureInfo.InvariantCulture));
+                else if (field.FieldType.IsArray && field.GetValue(value) is Array array)
+                {
+                    string[] tokens = PsoJsonObject.ArrayValues(token);
+                    Type element = field.FieldType.GetElementType();
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        if (element == typeof(double)) array.SetValue(double.Parse(tokens[i], NumberStyles.Float, CultureInfo.InvariantCulture), i);
+                        else if (element == typeof(float)) array.SetValue(float.Parse(tokens[i], NumberStyles.Float, CultureInfo.InvariantCulture), i);
+                        else if (!element.IsPrimitive && element != typeof(string)) RestoreNumbers(array.GetValue(i), tokens[i]);
+                    }
+                }
+                else if (!field.FieldType.IsPrimitive && !field.FieldType.IsEnum && field.FieldType != typeof(string))
+                    RestoreNumbers(field.GetValue(value), token);
+            }
         }
     }
 }

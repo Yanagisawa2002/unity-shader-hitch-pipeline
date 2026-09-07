@@ -42,6 +42,11 @@ try {
             if ($LASTEXITCODE -ne 0) { throw 'Engine-neutral core smoke failed.' }
             $receipt.checks += @{ name = 'core-smoke'; result = 'passed'; log = 'core-smoke.log' }
 
+            & dotnet run --disable-build-servers --property:UseSharedCompilation=false --project DotNet/ShaderHitchPipeline.Streaming.Smoke/ShaderHitchPipeline.Streaming.Smoke.csproj 2>&1 |
+                Tee-Object -FilePath (Join-Path $outputRoot 'streaming-smoke.log')
+            if ($LASTEXITCODE -ne 0) { throw 'Engine-neutral streaming smoke failed.' }
+            $receipt.checks += @{ name = 'streaming-smoke'; result = 'passed'; log = 'streaming-smoke.log' }
+
             $results = Join-Path $outputRoot 'editmode.xml'
             $log = Join-Path $outputRoot 'unity-editmode.log'
             $unityArguments = @(

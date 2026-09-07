@@ -119,6 +119,30 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
         }
 
         [Test]
+        public void MeasuredDoubleSurvivesPlanAndCacheHashRoundtrip()
+        {
+            double measured = double.Parse("0.10332000000000001", System.Globalization.CultureInfo.InvariantCulture);
+            foreach (bool legacy in new[] { false, true })
+            {
+                var plan = new PsoWarmupPlanDocument {
+                    compatibility = legacy ? null : new PsoCompatibilityContract { version = 1 },
+                    phases = new[] { new PsoWarmupPhasePlan { estimatedMillisecondsPerState = measured } }
+                };
+                plan.planSha256 = PsoPlanValidation.ComputeContentHash(plan);
+                var read = PsoDocumentJson.Parse<PsoWarmupPlanDocument>(PsoDocumentJson.Serialize(plan));
+                Assert.AreEqual(BitConverter.DoubleToInt64Bits(measured), BitConverter.DoubleToInt64Bits(read.phases[0].estimatedMillisecondsPerState));
+                Assert.AreEqual(plan.planSha256, PsoPlanValidation.ComputeContentHash(read));
+                read.phases[0].estimatedMillisecondsPerState = 0.10332;
+                Assert.AreNotEqual(plan.planSha256, PsoPlanValidation.ComputeContentHash(read));
+            }
+            var cache = new PsoCostCacheDocument { entries = new[] { new PsoCostCacheEntry { millisecondsPerState = measured } } };
+            cache.cacheSha256 = PsoCostCacheStorage.ComputeHash(cache);
+            var cacheRead = PsoDocumentJson.Parse<PsoCostCacheDocument>(PsoDocumentJson.Serialize(cache));
+            Assert.AreEqual(BitConverter.DoubleToInt64Bits(measured), BitConverter.DoubleToInt64Bits(cacheRead.entries[0].millisecondsPerState));
+            Assert.AreEqual(cache.cacheSha256, PsoCostCacheStorage.ComputeHash(cacheRead));
+        }
+
+        [Test]
         public void BuildOptionsAreActualInputs()
         {
             var release = PsoBuildIdentityCapture.Capture(BuildTarget.StandaloneWindows64, BuildOptions.None);
