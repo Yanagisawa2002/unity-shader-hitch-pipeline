@@ -1,8 +1,8 @@
 # Integration guide
 
 The September 8 default workflow is **compile and deterministic CPU validation**;
-runtime capture/search/Player steps below are retained for future explicitly
-authorized runs. Use `Tools/Invoke-PsoValidation.ps1` for this branch's safe entry.
+runtime capture/search/Player steps below remain separate, explicitly invoked
+stages. Use `Tools/Invoke-PsoValidation.ps1` for this branch's safe entry.
 New policy and native external-scene work is **Unmeasured**.
 
 For an unmodified official workload, use the [native Megacity scene adapter](../Integrations/MegacityMetroNative/README.md).

@@ -40,17 +40,22 @@ compatibility errors; it is not an asmdef import, IL post-processing, Entities
 source-generation, shader compilation or Player build test. These unperformed
 checks remain separate from the successful API reference build.
 
-## Runtime gates
+## Runtime entrypoints
 
-Ten retained historical runner entrypoints require
-`-AllowPerformanceExecution` before doing work. This includes the old broad
-`Invoke-PsoIntegratedRegression.ps1`, which may run Editor tests outside the
-allowlist. The flag is for a future explicitly authorized runtime run; this
-repair never sets it. Safe CI never calls these runners.
+Historical runners remain ordinary, explicitly named commands such as
+`Invoke-PsoShowcase.ps1`, `Find-PsoWarmupPolicy.ps1` and
+`Invoke-PsoMegacityMetro.ps1`. They can start a Player, warmup, profiling or
+performance work and are excluded from the safe entry/CI. The old broad
+`Invoke-PsoIntegratedRegression.ps1` also includes Editor tests outside the CPU
+allowlist. None of those commands was invoked in this repair.
 
 External source verification and manifest preparation use
 `Tools/pso_external_host.py`; it has only `verify` and `prepare`, and no run mode.
-It never upgrades a modified or unhydrated checkout to a ready/compiled result.
+Its `preparationOnly: true` result describes this tool's capability, not a product
+execution restriction. It never labels a modified or unhydrated checkout ready.
+No chat authorization token or source edit is required to use the separate
+runtime entrypoints. Actual identity, source, budget and resource safety checks
+remain enforced.
 
 ## Evidence boundary
 

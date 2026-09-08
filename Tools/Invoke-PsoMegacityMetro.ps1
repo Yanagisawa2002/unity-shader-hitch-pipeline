@@ -1,6 +1,5 @@
 [CmdletBinding()]
 param(
-    [switch]$AllowPerformanceExecution,
     [Parameter(Mandatory = $true)]
     [string]$ProjectPath,
     [string]$Unity =
@@ -26,13 +25,9 @@ param(
     [switch]$NoGif
 )
 
-. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
-Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
-
 $ErrorActionPreference = "Stop"
 $runner = Join-Path $PSScriptRoot "Invoke-PsoShowcase.ps1"
 $arguments = @{
-    AllowPerformanceExecution = $AllowPerformanceExecution.IsPresent
     Unity = $Unity
     ProjectPath = $ProjectPath
     Python = $Python

@@ -15,8 +15,8 @@ require explicit selection.
 
 ## What the historical evidence establishes
 
-The original showcase reported warmup-window P95 of **127.0 → 12.9 ms** against
-Unity all-at-once, with total warmup **643.5 → 774.6 ms (about 20% longer)** and a
+The original showcase reported warmup-window P95 of **127.0 â†’ 12.9 ms** against
+Unity all-at-once, with total warmup **643.5 â†’ 774.6 ms (about 20% longer)** and a
 **178.9 ms outlier**. After warmup, workload P95 was **4.169 ms all-at-once versus
 4.210 ms scheduled**. The **88.2%** reduction versus cold first use demonstrates
 the benefit of prewarming; it does not isolate the scheduler's contribution.
@@ -65,8 +65,8 @@ This entry runs an explicit allowlist of deterministic CPU checks. Optional
 [Unity API reference compilation](Docs/NON_PERFORMANCE_VALIDATION.md) validates
 source against installed Editor DLLs without starting Editor or Player. PR CI
 uses the same CPU entry on Windows and Linux. Historical runtime/capture/search
-scripts reject execution by default; enabling them requires new explicit user
-authorization and `-AllowPerformanceExecution`.
+scripts remain separate, explicitly invoked commands. Safe validation and CI
+do not call them.
 
 ## Production integration
 
@@ -75,7 +75,7 @@ The optional native scene and Addressables dependencies remain outside the base
 package. Generated traces, installed plans, build identity and local preparations
 remain separate from source assets.
 
-- [Trace → plan → build → runtime → feedback](Docs/INTEGRATION.md): separate capture sessions and compatible collection merging, declared actual build inputs, plan installation and missed-state feedback.
+- [Trace â†’ plan â†’ build â†’ runtime â†’ feedback](Docs/INTEGRATION.md): separate capture sessions and compatible collection merging, declared actual build inputs, plan installation and missed-state feedback.
 - [Compatibility](Docs/COMPATIBILITY.md): engine patch, shader/content/build identity, platform/API/quality, device and cost environment invalidation.
 - [Streaming ownership](Integrations/Addressables/README.md): retain material/shader assets until submitted jobs fence; cancel queued demand and reject stale revisions.
 - [Scheduling options](Docs/SCHEDULING_OPTIONS.md): fixed-progressive and observed-budget selection, independent priority/adaptation controls, cancellation, reactivation and status.
@@ -96,13 +96,13 @@ DotNet/                                       CPU checks and reference-only comp
 Integrations/MegacityMetroNative/              Pinned original-scene observer
 Integrations/MegacityMetro/                    Historical controlled reveal
 Integrations/Addressables/                     Optional streaming integration
-Tools/                                        Validation, preparation, gated historical runners
+Tools/                                        Validation, preparation, separate historical runners
 Docs/                                         Contracts and explicitly sourced history
 ```
 
 ## Ownership
 
-Copyright © 2026 Edwin Liu. See [LICENSE.md](LICENSE.md) and
+Copyright Â© 2026 Edwin Liu. See [LICENSE.md](LICENSE.md) and
 [PROVENANCE.md](PROVENANCE.md). No employer content is included. Megacity assets
 are not redistributed; the pinned upstream [license notice](https://github.com/Unity-Technologies/megacity-metro/blob/07652ee74a1f322c2c3e607020f07be720175680/LICENCE.md)
 identifies the Unity Companion License. The repository's limited benchmark

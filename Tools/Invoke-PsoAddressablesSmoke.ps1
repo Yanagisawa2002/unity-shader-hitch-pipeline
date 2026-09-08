@@ -1,6 +1,5 @@
 [CmdletBinding()]
 param(
-    [switch]$AllowPerformanceExecution,
     [string]$Unity = 'C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Unity.exe',
     [Parameter(Mandatory = $true)][string]$SerializationScript,
     [string]$EvidenceRoot = '',
@@ -8,9 +7,6 @@ param(
     [switch]$SmokeOnly,
     [string]$SeedTraceRoot = ''
 )
-. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
-Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
-
 $ErrorActionPreference = 'Stop'
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $project = Join-Path $repo 'Integrations/Addressables/UnityProject'

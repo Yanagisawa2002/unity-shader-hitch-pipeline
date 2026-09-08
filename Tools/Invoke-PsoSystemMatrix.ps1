@@ -1,14 +1,10 @@
 [CmdletBinding()]
 param(
-    [switch]$AllowPerformanceExecution,
     [Parameter(Mandatory)][string]$Declaration,
     [Parameter(Mandatory)][string]$Output,
     [Parameter(Mandatory)][string]$SerializedRunner,
     [string]$Python = 'python'
 )
-. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
-Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
-
 $ErrorActionPreference = 'Stop'
 $declarationPath = (Resolve-Path -LiteralPath $Declaration).Path
 $matrixConfig = Get-Content -Raw -LiteralPath $declarationPath | ConvertFrom-Json
@@ -45,7 +41,7 @@ $results = [Collections.Generic.List[object]]::new()
         $arguments += @('-pso-output',$runDirectory,'-pso-warmup-receipt',$warmup,'-pso-benchmark-report',$benchmark,'-pso-system-markers',$markers,'-logFile',(Join-Path $runDirectory 'player.log'))
         $failure = ''
         try {
-            & $captureScript -AllowPerformanceExecution:$AllowPerformanceExecution -Player $matrixConfig.player -PresentMon $matrixConfig.presentMon -BuildManifest $matrixConfig.buildManifest `
+            & $captureScript -Player $matrixConfig.player -PresentMon $matrixConfig.presentMon -BuildManifest $matrixConfig.buildManifest `
                 -PlayerArguments $arguments -WarmupReceipt $warmup -BenchmarkReceipt $benchmark -Markers $markers `
                 -Output (Join-Path $runDirectory 'windows') -CaptureEtw:($run -eq 1) -CaptureUnavailableContinueEngine `
                 -CaptureSeconds $matrixConfig.captureSeconds -PlayerTimeoutSeconds $matrixConfig.playerTimeoutSeconds -Python $Python `

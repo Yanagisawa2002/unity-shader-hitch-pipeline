@@ -1,6 +1,5 @@
 [CmdletBinding()]
 param(
-    [switch]$AllowPerformanceExecution,
     [string]$Unity = "C:\Program Files\Unity\Hub\Editor\6000.5.2f1\Editor\Unity.exe",
     [string]$ProjectPath = (Join-Path $PSScriptRoot "..\UnityProject"),
     [string]$Python = "python",
@@ -23,13 +22,9 @@ param(
     [string]$ComposeExistingRun = ""
 )
 
-. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
-Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
-
 $ErrorActionPreference = "Stop"
 $runner = Join-Path $PSScriptRoot "Invoke-PsoShowcase.ps1"
 $arguments = @{
-    AllowPerformanceExecution = $AllowPerformanceExecution.IsPresent
     Unity = $Unity
     ProjectPath = $ProjectPath
     Python = $Python

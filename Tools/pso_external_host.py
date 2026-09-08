@@ -132,7 +132,7 @@ def inspect(repo: Path, lock: dict, objects_only: bool = False) -> tuple[dict, d
                 sourceCommit=commit, sourceTree=lock["tree"], sourceVerified=True,
                 checkoutVerified=not objects_only and not issues, lfsPayloadsVerified=lfs_verified,
                 checkoutIssues=issues, preparationMode="git-objects-only" if objects_only else "verified-checkout",
-                measurementStatus="Unmeasured", performanceExecutionAllowed=False,
+                measurementStatus="Unmeasured", preparationOnly=True,
                 compileStatus="NotCompiled", runtimeStatus="NotRun"), blobs
 
 
@@ -170,7 +170,7 @@ def prepare(repo: Path, output: Path, lock: dict, objects_only: bool = False) ->
         for file in sorted(package.rglob("*")):
             if file.is_file():
                 report["adapterPackageFiles"].append({"path": file.relative_to(ROOT).as_posix(), "sha256": digest(file.read_bytes())})
-    report["nextAction"] = "Review overlay; obtain a pristine hydrated checkout and explicit runtime authorization before any execution"
+    report["nextAction"] = "Review overlay; verify a pristine hydrated checkout, resolve the dependency graph, and use the separate build/runtime commands"
     (output / "workload-contract.json").write_text(json.dumps(recipe, indent=2) + "\n", encoding="utf-8")
     (output / "preparation.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return report
@@ -196,7 +196,7 @@ def main() -> int:
         return 0
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         print(json.dumps({"result": "Rejected", "error": str(error), "measurementStatus": "Unmeasured",
-                          "performanceExecutionAllowed": False}))
+                          "preparationOnly": True}))
         return 2
 
 

@@ -15,8 +15,6 @@ namespace Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor
         public static void BuildWindowsPlayer()
         {
             var command = PsoCommandLine.Current;
-            if (!command.HasFlag("-pso-native-build"))
-                throw new BuildFailedException("Native host build is opt-in: requires -pso-native-build.");
             if (Application.unityVersion != "6000.1.0f1")
                 throw new BuildFailedException("Native host source lock requires Unity 6000.1.0f1; lock a separate cell before upgrading.");
             string output = command.GetString("-pso-native-build-output", string.Empty);

@@ -1,4 +1,4 @@
-# Original Megacity Metro scene adapter — Unmeasured
+# Original Megacity Metro scene adapter â€” Unmeasured
 
 This optional UPM package observes the official application's Entities SubScene
 loading lifecycle. It preserves the original workload: Menu then Main, original
@@ -65,7 +65,7 @@ No package or Editor upgrade is silently accepted.
 
 `PsoNativeHostBuild.BuildWindowsPlayer` is an explicit build helper that declares
 the actual Menu/Main build options to the existing identity capture. It requires
-`-pso-native-build`, `-pso-native-build-output`, the pinned Editor, and an explicitly
+`-pso-native-build-output`, the pinned Editor, and an explicitly
 configured D3D12 Windows cell. It rejects changed scene order and existing output
 directories. It does not alter target settings or auto-run the Player. Training
 uses the existing `-pso-training-build` plan-gate exception; final builds validate
@@ -114,7 +114,8 @@ The old [controlled Megacity reveal](../MegacityMetro/README.md) remains histori
 evidence with 48 generated material instances and restricted rendering conditions.
 Its timing or zero-miss results cannot be copied to this original-scene cell.
 
-Before any runtime execution, obtain new explicit authorization and complete the
-missing dependencies, route/cache protocol, trace, plan and current-build identity.
+Runtime use requires the dependencies, route/cache protocol, trace, plan and
+current-build identity. Use the explicitly named build and Player commands
+separately from preparation; no chat permission or token is part of the API.
 Reference-only compilation cannot verify asset import, Entities code generation,
 Player correctness, driver behavior or performance.

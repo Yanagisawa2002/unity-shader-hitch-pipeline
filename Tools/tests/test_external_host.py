@@ -40,7 +40,7 @@ class ExternalHostTests(unittest.TestCase):
         with patch.object(host, "git", side_effect=self.git):
             report, _ = host.inspect(self.root, self.lock)
         self.assertTrue(report["checkoutVerified"])
-        self.assertFalse(report["performanceExecutionAllowed"])
+        self.assertTrue(report["preparationOnly"])
         self.assertEqual(report["compileStatus"], "NotCompiled")
         self.assertEqual(report["runtimeStatus"], "NotRun")
         self.assertEqual(report["measurementStatus"], "Unmeasured")
@@ -123,7 +123,7 @@ class ExternalHostTests(unittest.TestCase):
     def test_checked_in_recipe_retains_unknown_evidence(self):
         contract = json.loads((host.ROOT / "Integrations/MegacityMetroNative/workload-contract.json").read_text())
         self.assertEqual(contract["kind"], "external-application-scene")
-        self.assertFalse(contract["performanceExecutionAllowed"])
+        self.assertTrue(contract["preparationOnly"])
         self.assertEqual([x["name"] for x in contract["arms"]], ["cold", "all-at-once", "fixed-progressive", "observed-budget"])
         for key in ("playerBuildGuid", "shaderBuildIdentity", "planSha256", "collectionSha256"):
             self.assertIsNone(contract["sharedInputs"][key])

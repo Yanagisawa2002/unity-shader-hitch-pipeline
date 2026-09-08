@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "kind": "external-application-scene",
   "measurementStatus": "Unmeasured",
-  "performanceExecutionAllowed": false,
   "sourceCommit": "07652ee74a1f322c2c3e607020f07be720175680",
   "unityVersion": "6000.1.0f1",
   "workload": {
@@ -88,12 +87,12 @@
     ]
   },
   "executionBlockers": [
-    "New explicit user authorization",
     "Pristine hydrated source checkout",
     "Pinned resolved dependency graph after UPM addition",
     "Declared current build inputs",
     "Native route and cache protocol",
     "Representative trace and compatible installed plan",
     "Native Editor import and build validation"
-  ]
+  ],
+  "preparationOnly": true
 }

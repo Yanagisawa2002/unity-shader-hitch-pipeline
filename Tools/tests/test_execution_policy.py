@@ -4,7 +4,7 @@ import unittest
 
 
 class ExecutionPolicyTests(unittest.TestCase):
-    def test_historical_runtime_entrypoints_require_explicit_opt_in_first(self):
+    def test_historical_runtime_entrypoints_remain_normal_explicit_commands(self):
         root = Path(__file__).resolve().parents[1]
         names = ("Invoke-PsoShowcase", "Find-PsoWarmupPolicy", "Invoke-PsoDeadlineRun", "Invoke-PsoMegacityMetro",
                  "Invoke-PsoAddressablesSmoke", "Invoke-PsoHotsetFixture", "Invoke-PsoSystemMatrix",
@@ -12,11 +12,9 @@ class ExecutionPolicyTests(unittest.TestCase):
         for name in names:
             with self.subTest(script=name):
                 text = (root / (name + ".ps1")).read_text(encoding="utf-8-sig")
-                self.assertIn("[switch]$AllowPerformanceExecution", text)
-                gate = text.index("Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution")
-                self.assertLess(gate, text.index("$ErrorActionPreference"))
-                for operation in ("Start-Process", "New-Item", "& $runner", "& $SerializedRunner", "& $SerializationScript"):
-                    if operation in text: self.assertLess(gate, text.index(operation))
+                self.assertNotIn("AllowPerformanceExecution", text)
+                self.assertNotIn("PsoExecutionPolicy", text)
+                self.assertNotIn("user authorization", text)
 
     def test_safe_entry_does_not_call_unity_or_discover_tests(self):
         root = Path(__file__).resolve().parents[1]
