@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "sourceTree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "sourceVerified": true,
+  "checkoutVerified": false,
+  "lfsPayloadsVerified": false,
+  "adapterSourceCommit": "4f20523d5ff9c76ea1f964a0f22ab755b49929f5",
+  "adapterSourceDirty": false,
+  "measurementStatus": "Unmeasured",
+  "preparationOnly": true,
+  "compileStatus": "NotCompiled",
+  "runtimeStatus": "NotRun",
+  "sourceLockSha256": "300a307840eae4a84b5ffd65572f2243b31be7e488bbcf851ea5699cc4ebed69",
+  "workloadContractSha256": "f0e2d57eae0c8295de3192056870d9fd457194c33f377186bb1139c2a9bab95a",
+  "manifestOverlaySha256": "bc1d2e9b056517ec66f4e709e6f4484fedc870f0308501a217c17e5cd7824dd1",
+  "kind": "source-preparation-functional-verification",
+  "lockedSmallFiles": 14,
+  "adapterPackageFilesVerified": 149,
+  "strictOldCheckoutRejection": {
+    "result": "Rejected",
+    "error": "Checkout contains local changes or untracked files",
+    "measurementStatus": "Unmeasured",
+    "preparationOnly": true
+  },
+  "preparationReceiptSha256": "e6f5c02e5b3ea82f5db915866ff4a8208b895172a63938beee4c95ad80a7b18d"
+}
