@@ -12,6 +12,7 @@ TESTS = (
     "test_external_host",
     "test_execution_policy",
     "test_scheduling_schema",
+    "test_warmup_evidence",
 )
 
 if __name__ == "__main__":

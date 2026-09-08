@@ -63,7 +63,7 @@ def summarize_warmup(
     benchmark: dict[str, Any],
 ) -> dict[str, Any]:
     if receipt is None:
-        return {"available": False, "valid": True}
+        return {"available": False, "valid": False, "feedbackStatus": "Unavailable"}
 
     phases = receipt.get("phases") or []
     completed_states = sum(int(phase.get("completedGraphicsStates", 0)) for phase in phases)
@@ -75,12 +75,18 @@ def summarize_warmup(
     feedback = receipt.get("cacheMissTrace") or {}
     feedback_requested = bool(feedback.get("requested"))
     feedback_armed = bool(feedback.get("armed"))
-    feedback_ready = not feedback_requested or feedback_armed
     feedback_error = str(feedback.get("error") or "")
-    cache_misses = int(feedback.get("cacheMissGraphicsStates", 0))
-    plan_matches = receipt.get("planSha256") == benchmark.get("planSha256")
+    feedback_counts = [feedback.get(key) for key in ("baselineGraphicsStates", "observedGraphicsStates", "cacheMissGraphicsStates")]
+    counts_valid = all(type(value) is int and value >= 0 for value in feedback_counts)
+    if counts_valid:
+        counts_valid = feedback_counts[0] > 0 and feedback_counts[1] >= feedback_counts[0] and feedback_counts[2] == feedback_counts[1] - feedback_counts[0]
+    feedback_ready = (feedback_requested and feedback_armed and not feedback_error and counts_valid
+                      and feedback.get("scope") == "plan" and feedback.get("collectionContainsBaseline") is True)
+    cache_misses = feedback_counts[2] if feedback_ready else None
+    plan_hash = receipt.get("planSha256")
+    plan_matches = isinstance(plan_hash, str) and len(plan_hash) == 64 and plan_hash == benchmark.get("planSha256")
     strict_admission = (
-        receipt.get("strategy") == "scheduled"
+        receipt.get("strategy") in ("scheduled", "observed-budget", "fixed-progressive")
         and int(receipt.get("schemaVersion", 0)) >= 3
     )
     hard_budget_met = (
@@ -110,7 +116,9 @@ def summarize_warmup(
         {str(phase.get("hardFrameBudgetOutcome", "unspecified")) for phase in phases}
     )
     valid = (
-        phases_complete
+        receipt.get("completed") is True
+        and not receipt.get("error")
+        and phases_complete
         and plan_matches
         and feedback_ready
         and not feedback_error
@@ -172,13 +180,10 @@ def summarize_warmup(
         "planMatchesBenchmark": plan_matches,
         "feedbackTraceRequested": feedback_requested,
         "feedbackTraceArmed": feedback_armed,
+        "feedbackStatus": "Available" if feedback_ready else "Unavailable",
         "feedbackTraceScope": feedback.get("scope", ""),
-        "feedbackBaselineGraphicsStates": int(
-            feedback.get("baselineGraphicsStates", 0)
-        ),
-        "feedbackObservedGraphicsStates": int(
-            feedback.get("observedGraphicsStates", 0)
-        ),
+        "feedbackBaselineGraphicsStates": feedback_counts[0] if feedback_ready else None,
+        "feedbackObservedGraphicsStates": feedback_counts[1] if feedback_ready else None,
         "cacheMissGraphicsStates": cache_misses,
         "feedbackCollectionContainsBaseline": bool(
             feedback.get("collectionContainsBaseline")
@@ -323,9 +328,8 @@ def build_report(
         ),
         "optimized": summarize_warmup(optimized_warmup, optimized),
     }
-    warmup_evidence_valid = all(
-        item["valid"] for item in warmup_evidence.values()
-    )
+    warmup_evidence_valid = warmup_evidence["optimized"]["valid"] and (
+        naive is None or warmup_evidence["naive"]["valid"])
 
     def has_real_deferred_phase(summary: dict[str, Any]) -> bool:
         return any(
@@ -436,7 +440,7 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         if not warmup["available"]
         else (
             f"{warmup['completedGraphicsStates']}/{warmup['totalGraphicsStates']} states, "
-            f"plan-scoped feedback trace miss count {warmup['cacheMissGraphicsStates']}, "
+            f"plan-scoped feedback trace miss count {warmup['cacheMissGraphicsStates'] if warmup['cacheMissGraphicsStates'] is not None else 'unavailable'}, "
             f"hard budget met {warmup['hardFrameBudgetMet']} "
             f"({warmup['budgetViolationCount']} violations; "
             f"outcome {','.join(warmup['hardFrameBudgetOutcomes'])}); "
