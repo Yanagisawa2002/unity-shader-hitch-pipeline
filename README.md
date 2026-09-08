@@ -23,6 +23,24 @@ The included showcase was measured on Unity 6000.5.2f1, D3D12, and an AMD Radeon
 
 The generated plan covered 388 shader variants and 389 graphics states. A two-repeat 24-candidate worker/batch search selected two async workers and an initial batch of 64 on this machine (577.8 ms median warmup, 30.6 ms median worst warmup frame). In the externally recorded acceptance run, all-at-once completed in 643.5 ms as one batch; scheduled completed in 774.6 ms across 20 batches. Scheduled reduced sustained warmup pressure—P95 fell from 127.0 ms to 12.9 ms—but retained one 178.9 ms capture-window outlier, so the full distribution is reported rather than reduced to a favorable maximum. The measured workload had one isolated 9.80 ms scheduled frame, but zero ≥16.67 ms severe stalls, zero `Shader.CreateGPUProgram` time, and a plan-scoped feedback trace of 389 expected / 389 observed states (zero misses). Results are hardware, driver, project, and cache-state dependent; use the included search and runner for each target profile.
 
+## When to use scheduled warmup
+
+Use this package when warmup must share a frame budget with loading UI or other
+work, or when later content has a known activation deadline. If a blocking load
+screen can absorb all warmup, Unity's all-at-once path remains a strong baseline.
+
+| Decision | Evidence from the retained showcase |
+| --- | --- |
+| Smooth the warmup period | Scheduled warmup reduced capture-window P95 from 127.0 ms to 12.9 ms, but still had a 178.9 ms outlier. It does not guarantee hitch-free warmup. |
+| Minimize total warmup time | All-at-once completed in 643.5 ms; scheduled took 774.6 ms across 20 batches. Scheduling traded completion time for lower sustained pressure. |
+| Minimize frame times after warmup | All-at-once had lower workload P95 (4.169 vs 4.210 ms) and maximum (4.436 vs 9.799 ms), with zero vs one frame at or above 8.33 ms. |
+| Prepare later phases | Trace, phase planning, deadline scheduling and feedback are the package's integration features; their value depends on the application's content schedule. |
+
+Warmup-window statistics and post-warmup workload statistics describe different
+intervals. The large gains versus cold first use demonstrate the value of
+prewarming; they do not establish that progressive scheduling beats Unity's
+all-at-once warmup on every metric. See the [measurement protocol](Docs/BENCHMARK_METHODOLOGY.md).
+
 ## What it adds beyond Unity
 
 Unity and the graphics driver remain responsible for shader compilation and PSO creation. This package deliberately does not recreate either. It adds the missing production workflow around Unity's `GraphicsStateCollection`:
