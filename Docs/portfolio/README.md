@@ -1,6 +1,6 @@
 # Portfolio figure
 
-The two panels separate scene-reveal frame times from the warmup interval; the flow above is schematic.
+This figure is retained historical evidence from report snapshot `f352210`; it was not regenerated during the 2026-09-08 repair. The two panels separate scene-reveal frame times from the warmup interval; the flow above is schematic.
 
 ## Reproduce
 
@@ -15,6 +15,6 @@ The renderer verifies source SHA-256 hashes (CRLF normalized to LF) before plott
 
 ## Sources
 
-- [Docs/BENCHMARK_METHODOLOGY.md](../../Docs/BENCHMARK_METHODOLOGY.md)
+- [Docs/BENCHMARK_METHODOLOGY.md](../../Docs/History/f352210/BENCHMARK_METHODOLOGY.md)
 
 The flow/memory/timing illustrations are schematics. Only explicitly labeled measurements represent recorded experiments. Confidence intervals are copied from source reports, not recomputed.

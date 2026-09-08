@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [switch]$AllowPerformanceExecution,
     [string]$Unity = "C:\Program Files\Unity\Hub\Editor\6000.5.2f1\Editor\Unity.exe",
     [string]$ProjectPath = (Join-Path $PSScriptRoot "..\UnityProject"),
     [string]$Python = "python",
@@ -37,6 +38,9 @@ param(
     [ValidateSet("auto", "progressive", "native-async-bulk")]
     [string]$ReplayDeadlineBackendMode = "auto"
 )
+
+. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
+Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
 
 $ErrorActionPreference = "Stop"
 $project = [System.IO.Path]::GetFullPath($ProjectPath)
@@ -2128,7 +2132,7 @@ $selectedDeadlineBackendMode = "auto"
 if (-not $SkipAutoTune) {
     $policySearchOutput = Join-Path $runRoot "PolicySearch"
     $policySearchSampleFrames = if ($isMegacityMetro) { 2400 } else { 1080 }
-    & (Join-Path $PSScriptRoot "Find-PsoWarmupPolicy.ps1") `
+    & (Join-Path $PSScriptRoot "Find-PsoWarmupPolicy.ps1") -AllowPerformanceExecution:$AllowPerformanceExecution `
         -Player $player `
         -Plan $plan `
         -Output $policySearchOutput `

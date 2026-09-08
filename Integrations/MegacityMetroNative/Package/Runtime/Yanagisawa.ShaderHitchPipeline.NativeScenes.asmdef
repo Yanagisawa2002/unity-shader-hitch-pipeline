@@ -1,0 +1,5 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.NativeScenes",
+  "references": ["Yanagisawa.ShaderHitchPipeline.Core", "Yanagisawa.ShaderHitchPipeline.Runtime", "Unity.Entities", "Unity.Scenes", "Unity.Collections"],
+  "autoReferenced": true
+}

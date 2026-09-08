@@ -2,6 +2,13 @@
 
 ## 0.3.0 — Unreleased
 
+September 8 repair: new policy and external-scene changes are **Unmeasured**.
+Retained measurements in the earlier entries below refer to their historical
+source/cells. The repair adds generation-aware content lifecycle, atomic
+publication, finite/portable-path validation, opt-in scheduling alternatives,
+fence/cancellation feedback and deferred shader-resolution integrity. Existing
+policy defaults are not replaced by an unmeasured alternative.
+
 - Added Deadline Run: a 12-second tunnel-to-combat
   scene, 320-combination real reveal, world-space continuity evidence, two-up hero and
   three-way technical compositor, and an 80 ms cold / zero 16.67 ms scheduled

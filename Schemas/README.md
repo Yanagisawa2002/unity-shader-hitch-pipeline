@@ -7,6 +7,12 @@ producer/consumer of that artifact; the core never assumes a Unity file format.
 - `trace-session.schema.json`: one representative trace and its environment.
 - `warmup-plan.schema.json`: verified phase, deadline, cost, hot-set, and hard-budget policy.
 - `warmup-receipt.schema.json`: exact admissions, predictions, batches, violations, and completion evidence.
+- `scheduling-feedback.schema.json`: separate v1 policy flags, activation generations, cancellations, native completion proof and retained fences. Validate with `Tools/validate_pso_documents.py --scheduling FILE`.
+
+The warmup receipt retains historical enum labels and additionally accepts
+`fixed-progressive`, `observed-budget`, an `incomplete` outcome, and an explicit
+full-batch native admission scope without a hard latency bound. The v3 plan
+schema is unchanged. Permutation progress is not a graphics-state coverage count.
 
 The receipt separates `preinteractiveBootstrapMilliseconds` from interactive
 frame samples. `hardBudgetGuaranteeScope` is mandatory: startup-gated scheduled

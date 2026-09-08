@@ -1,5 +1,12 @@
 # Megacity Metro external validation adapter
 
+**Historical controlled PSO-isolation experiment.** This adapter adds 48 generated
+material instances and changes scene conditions. It is not the original upstream
+workload or a standard benchmark. The new [native-scene adapter](../MegacityMetroNative/README.md)
+preserves upstream content and is Unmeasured. Results below belong only to this
+retained controlled cell. Runtime scripts now reject execution unless a future
+run is explicitly authorized and `-AllowPerformanceExecution` is supplied.
+
 This integration validates the Shader Hitch Pipeline in Unity's public,
 large-scale Megacity Metro project without copying or modifying its assets in
 this repository.

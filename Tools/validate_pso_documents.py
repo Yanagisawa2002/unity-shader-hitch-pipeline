@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -15,11 +16,22 @@ SCHEMAS = {
     "plan": "warmup-plan.schema.json",
     "warmup": "warmup-receipt.schema.json",
     "cost_cache": "cost-cache.schema.json",
+    "scheduling": "scheduling-feedback.schema.json",
 }
 
 
 def validate(document_path: Path, schema_path: Path) -> list[str]:
-    document = json.loads(document_path.read_text(encoding="utf-8-sig"))
+    def reject_constant(value):
+        raise ValueError("Non-finite JSON number: " + value)
+    def finite_float(value):
+        result = float(value)
+        if not math.isfinite(result):
+            reject_constant(value)
+        return result
+    try:
+        document = json.loads(document_path.read_text(encoding="utf-8-sig"), parse_constant=reject_constant, parse_float=finite_float)
+    except ValueError as error:
+        return [f"{document_path}: {error}"]
     schema = json.loads(schema_path.read_text(encoding="utf-8-sig"))
     errors = sorted(
         Draft202012Validator(schema).iter_errors(document),
@@ -38,6 +50,7 @@ def main() -> int:
     parser.add_argument("--plan", action="append", type=Path, default=[])
     parser.add_argument("--warmup", action="append", type=Path, default=[])
     parser.add_argument("--cost-cache", action="append", type=Path, default=[])
+    parser.add_argument("--scheduling", action="append", type=Path, default=[])
     args = parser.parse_args()
 
     failures: list[str] = []

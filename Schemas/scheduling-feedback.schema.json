@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yanagisawa2002.github.io/unity-shader-hitch-pipeline/schemas/scheduling-feedback.schema.json",
+  "title": "Unmeasured scheduler lifecycle feedback v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "planSha256",
+    "policy",
+    "implementation",
+    "performanceClaim",
+    "latencyGuarantee",
+    "deadlinesEnabled",
+    "adaptiveCostEnabled",
+    "hotSetPriorityEnabled",
+    "costPriorityEnabled",
+    "conservativeAdmission",
+    "completed",
+    "hasInFlightBatch",
+    "hasPendingRetirement",
+    "fixedBatchSize",
+    "activations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "planSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "policy": {
+      "enum": [
+        "scheduled",
+        "throughput",
+        "fixed-progressive",
+        "observed-budget"
+      ]
+    },
+    "implementation": {
+      "const": "scheduler-lifecycle-v1"
+    },
+    "performanceClaim": {
+      "const": "Unmeasured; no comparative result"
+    },
+    "latencyGuarantee": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deadlinesEnabled": {
+      "type": "boolean"
+    },
+    "adaptiveCostEnabled": {
+      "type": "boolean"
+    },
+    "hotSetPriorityEnabled": {
+      "type": "boolean"
+    },
+    "costPriorityEnabled": {
+      "type": "boolean"
+    },
+    "conservativeAdmission": {
+      "type": "boolean"
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "hasInFlightBatch": {
+      "type": "boolean"
+    },
+    "hasPendingRetirement": {
+      "type": "boolean"
+    },
+    "fixedBatchSize": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "activations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "phase",
+          "lastAdmissionReason",
+          "costInvalidationReason",
+          "failure",
+          "state",
+          "activation",
+          "completedPermutations",
+          "totalGraphicsStates",
+          "costGeneration",
+          "deferredFrames",
+          "backendReportedWarmedUp",
+          "hasInFlightBatch",
+          "ownerReleased",
+          "deadlineMissed",
+          "deadlineFeasible",
+          "requiresNonInteractiveWindow",
+          "elapsedMilliseconds"
+        ],
+        "properties": {
+          "phase": {
+            "type": "string"
+          },
+          "lastAdmissionReason": {
+            "type": "string"
+          },
+          "costInvalidationReason": {
+            "type": "string"
+          },
+          "failure": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "enum": [
+              "Prepared",
+              "Pending",
+              "Running",
+              "Completed",
+              "Cancelled",
+              "Unloaded",
+              "Faulted"
+            ]
+          },
+          "activation": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "completedPermutations": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalGraphicsStates": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "costGeneration": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "deferredFrames": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "backendReportedWarmedUp": {
+            "type": "boolean"
+          },
+          "hasInFlightBatch": {
+            "type": "boolean"
+          },
+          "ownerReleased": {
+            "type": "boolean"
+          },
+          "deadlineMissed": {
+            "type": "boolean"
+          },
+          "deadlineFeasible": {
+            "type": "boolean"
+          },
+          "requiresNonInteractiveWindow": {
+            "type": "boolean"
+          },
+          "elapsedMilliseconds": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "Completed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "backendReportedWarmedUp": {
+                  "const": true
+                },
+                "hasInFlightBatch": {
+                  "const": false
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "hasInFlightBatch": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "ownerReleased": {
+                  "const": false
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "completed": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "hasInFlightBatch": {
+            "const": false
+          },
+          "hasPendingRetirement": {
+            "const": false
+          }
+        }
+      }
+    }
+  ]
+}

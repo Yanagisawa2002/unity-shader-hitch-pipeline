@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — Unreleased (2026-09-08 integration)
+
+- Preserve existing vNext compatibility, streaming and source-bound historical results.
+- Add pinned original Megacity scene preparation and an optional asynchronous scene observer; no generated workload or asset redistribution.
+- Add generation-aware content lifecycle, safe atomic receipt replacement, portable collection paths and finite input validation.
+- Integrate optional fixed-progressive/observed-budget scheduling, activation/fence feedback and deferred shader-resolution checks.
+- Add default-blocked historical runtime entries, CPU-only PR validation and separate-assembly Unity API reference compilation.
+- Keep all new behavior Unmeasured; no Editor/Player/performance execution in this repair.
+
 ## 0.2.0 - 2026-09-02
 
 - Added deadline-, observed-cost-, and hot-set-aware batch scheduling.

@@ -1,0 +1,36 @@
+name: Compile and deterministic CPU checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  cpu:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r Tools/requirements-validation.txt
+      - name: Explicit CPU-only checks
+        shell: pwsh
+        run: ./Tools/Invoke-PsoValidation.ps1
+      - name: Verify PowerShell syntax without invoking scripts
+        shell: pwsh
+        run: |
+          $issues = @()
+          Get-ChildItem Tools -Filter *.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$errors) | Out-Null
+            $issues += $errors
+          }
+          if ($issues.Count) { $issues | Format-List; exit 1 }

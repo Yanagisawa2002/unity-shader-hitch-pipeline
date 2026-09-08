@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [switch]$AllowPerformanceExecution,
     [string]$Unity = 'C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Unity.exe',
     [string]$ProjectPath = (Join-Path $PSScriptRoot '../UnityProject'),
     [string]$OutputRoot = '',
@@ -8,6 +9,9 @@ param(
     [switch]$BuildOnly,
     [switch]$NextHeldOut
 )
+. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
+Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
+
 $ErrorActionPreference = 'Stop'
 # Caller must hold Invoke-SerializedValidation.ps1's shared mutex for the whole call.
 $project = [IO.Path]::GetFullPath($ProjectPath)

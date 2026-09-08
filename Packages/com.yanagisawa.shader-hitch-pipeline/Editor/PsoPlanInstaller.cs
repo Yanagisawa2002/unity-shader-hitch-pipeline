@@ -119,21 +119,25 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     directory,
                     phase.collectionFile);
                 var collection = new GraphicsStateCollection();
-                if (!collection.LoadFromFile(path))
-                    throw new InvalidDataException(
-                        "Unity could not load collection for phase " + phase.phase + ".");
-                if (collection.runtimePlatform != platform ||
-                    collection.graphicsDeviceType != graphicsApi ||
-                    !string.Equals(
-                        collection.qualityLevelName ?? string.Empty,
-                        plan.qualityLevelName ?? string.Empty,
-                        StringComparison.Ordinal))
-                    throw new InvalidDataException(
-                        "Collection metadata does not match plan for phase " + phase.phase + ".");
-                if (collection.variantCount != phase.variantCount ||
-                    collection.totalGraphicsStateCount != phase.graphicsStateCount)
-                    throw new InvalidDataException(
-                        "Collection counts do not match plan for phase " + phase.phase + ".");
+                try
+                {
+                    if (!collection.LoadFromFile(path))
+                        throw new InvalidDataException(
+                            "Unity could not load collection for phase " + phase.phase + ".");
+                    if (collection.runtimePlatform != platform ||
+                        collection.graphicsDeviceType != graphicsApi ||
+                        !string.Equals(
+                            collection.qualityLevelName ?? string.Empty,
+                            plan.qualityLevelName ?? string.Empty,
+                            StringComparison.Ordinal))
+                        throw new InvalidDataException(
+                            "Collection metadata does not match plan for phase " + phase.phase + ".");
+                    if (collection.variantCount != phase.variantCount ||
+                        collection.totalGraphicsStateCount != phase.graphicsStateCount)
+                        throw new InvalidDataException(
+                            "Collection counts do not match plan for phase " + phase.phase + ".");
+                }
+                finally { UnityEngine.Object.DestroyImmediate(collection); }
             }
         }
 
@@ -142,7 +146,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             string assets = Path.GetFullPath("Assets")
                 .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             string requiredPrefix = assets + Path.DirectorySeparatorChar;
-            if (!destination.StartsWith(requiredPrefix, StringComparison.OrdinalIgnoreCase))
+            if (!destination.StartsWith(requiredPrefix, Path.DirectorySeparatorChar == '\\' ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
                 throw new InvalidOperationException(
                     "Installed plan directory must be below this Unity project's Assets directory.");
         }

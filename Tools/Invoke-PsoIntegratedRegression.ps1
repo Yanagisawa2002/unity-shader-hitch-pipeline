@@ -1,10 +1,14 @@
 [CmdletBinding()]
 param(
+    [switch]$AllowPerformanceExecution,
     [Parameter(Mandatory = $true)][string]$ValidationLockRunner,
     [Parameter(Mandatory = $true)][string]$Output,
     [string]$Unity = 'C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Unity.exe',
     [string]$Python = 'python'
 )
+
+. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
+Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
 
 $ErrorActionPreference = 'Stop'
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))

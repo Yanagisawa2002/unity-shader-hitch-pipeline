@@ -1,10 +1,14 @@
 [CmdletBinding()]
 param(
+    [switch]$AllowPerformanceExecution,
     [Parameter(Mandatory)][string]$Declaration,
     [Parameter(Mandatory)][string]$Output,
     [Parameter(Mandatory)][string]$SerializedRunner,
     [Parameter(Mandatory)][string]$Python
 )
+. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
+Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
+
 $ErrorActionPreference = 'Stop'
 $config = Get-Content -Raw -LiteralPath $Declaration | ConvertFrom-Json
 $root = [IO.Path]::GetFullPath($Output)
@@ -34,7 +38,7 @@ $attempts = [Collections.Generic.List[object]]::new()
         $arguments=@($config.playerArguments)+@('-pso-output',$run,'-pso-warmup-receipt',$warmup,'-pso-benchmark-report',$benchmark,'-pso-system-markers',$markers,'-logFile',(Join-Path $run 'player.log'))
         $errorText=''
         try {
-            & (Join-Path $PSScriptRoot 'Invoke-PsoWindowsEvidence.ps1') -Player $config.player -PresentMon $config.presentMon -BuildManifest $config.buildManifest `
+            & (Join-Path $PSScriptRoot 'Invoke-PsoWindowsEvidence.ps1') -AllowPerformanceExecution:$AllowPerformanceExecution -Player $config.player -PresentMon $config.presentMon -BuildManifest $config.buildManifest `
                 -PlayerArguments $arguments -WarmupReceipt $warmup -BenchmarkReceipt $benchmark -Markers $markers -Output (Join-Path $run 'windows') `
                 -CaptureEtw:($arm -eq 'wpr') -CaptureSeconds 180 -PlayerTimeoutSeconds 150 -PrePlayerWaitSeconds 20 -Python $Python
         } catch { $errorText=$_.Exception.ToString() }

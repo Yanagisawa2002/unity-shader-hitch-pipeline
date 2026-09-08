@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [switch]$AllowPerformanceExecution,
     [Parameter(Mandatory)][string]$Player,
     [string[]]$PlayerArguments = @(),
     [Parameter(Mandatory)][string]$PresentMon,
@@ -14,6 +15,9 @@ param(
     [switch]$CaptureEtw, [switch]$CaptureUnavailableContinueEngine,
     [switch]$ProbeOnly, [string]$Python = 'python'
 )
+. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
+Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
+
 $ErrorActionPreference = 'Stop'
 $playerPath = (Resolve-Path -LiteralPath $Player).Path
 $presentMonPath = (Resolve-Path -LiteralPath $PresentMon).Path

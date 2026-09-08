@@ -1,5 +1,17 @@
 # Integration guide
 
+The September 8 default workflow is **compile and deterministic CPU validation**;
+runtime capture/search/Player steps below are retained for future explicitly
+authorized runs. Use `Tools/Invoke-PsoValidation.ps1` for this branch's safe entry.
+New policy and native external-scene work is **Unmeasured**.
+
+For an unmodified official workload, use the [native Megacity scene adapter](../Integrations/MegacityMetroNative/README.md).
+Its source/asset lock, additive UPM overlay, declared Menu/Main build helper and
+async content lifecycle are separate from the historical generated reveal.
+The [scheduling contract](SCHEDULING_OPTIONS.md) documents cancellation, late shader
+resolution and unavailable feedback. New builds must declare the actual
+`BuildPlayerOptions` before building so trace/plan/build identity can be checked.
+
 ## Package installation
 
 Add the package directory through Package Manager, or reference a Git tag when this repository is hosted under your personal account. The package contains runtime and editor assemblies; generated profiles remain in the consuming project's ignored artifact directories.

@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [switch]$AllowPerformanceExecution,
     [Parameter(Mandatory = $true)]
     [string]$Player,
     [Parameter(Mandatory = $true)]
@@ -36,6 +37,9 @@ param(
     [ValidateSet("auto", "progressive", "native-async-bulk")]
     [string]$DeadlineBackendMode = "auto"
 )
+
+. (Join-Path $PSScriptRoot 'PsoExecutionPolicy.ps1')
+Assert-PsoRuntimeExecutionAllowed -AllowPerformanceExecution:$AllowPerformanceExecution
 
 $ErrorActionPreference = "Stop"
 $playerPath = (Resolve-Path -LiteralPath $Player).Path

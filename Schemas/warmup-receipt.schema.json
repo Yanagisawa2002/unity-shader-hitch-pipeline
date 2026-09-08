@@ -28,7 +28,9 @@
     "strategy": {
       "enum": [
         "scheduled",
-        "throughput"
+        "throughput",
+        "fixed-progressive",
+        "observed-budget"
       ]
     },
     "asyncPsoJobCount": {
@@ -161,14 +163,16 @@
             "met",
             "violated-model-error",
             "unachievable-at-minimum-batch",
-            "not-applicable-throughput"
+            "not-applicable-throughput",
+            "incomplete"
           ]
         },
         "hardBudgetGuaranteeScope": {
           "enum": [
             "strict-admission; opaque-backend-observed-not-preemptible",
             "interactive-frames-after-preinteractive-bootstrap; opaque-backend-admission-not-preemptible",
-            "none; throughput-control"
+            "none; throughput-control",
+            "estimated-full-batch-admission; native-async-bulk-not-preemptible; no-hard-latency-bound"
           ]
         },
         "warmupFrameTimeSamplesMilliseconds": {

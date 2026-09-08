@@ -59,6 +59,13 @@ namespace Yanagisawa.ShaderHitchPipeline
                     issues.Add("Duplicate phase: " + phase.phase + ".");
                 if (string.IsNullOrWhiteSpace(phase.collectionFile))
                     issues.Add(prefix + ".collectionFile is required.");
+                if (phase.graphicsStateCount < 0 || phase.variantCount < 0)
+                    issues.Add(prefix + " state/variant counts cannot be negative.");
+                foreach (double number in new[] { phase.targetFrameMilliseconds, phase.deadlineMilliseconds,
+                    phase.estimatedMillisecondsPerState, phase.budgetSafetyMarginMilliseconds,
+                    phase.budgetCostSafetyMultiplier, phase.expectedUseProbability })
+                    if (double.IsNaN(number) || double.IsInfinity(number))
+                    { issues.Add(prefix + " scheduling values must be finite."); break; }
                 if (phase.minimumBatchSize < 1)
                     issues.Add(prefix + ".minimumBatchSize must be positive.");
                 if (phase.maximumBatchSize < phase.minimumBatchSize)

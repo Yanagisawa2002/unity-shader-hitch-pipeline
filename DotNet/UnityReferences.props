@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>UNITY_EDITOR;$(UnityApiDefines)</DefineConstants>
+    <Deterministic>true</Deterministic>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(UnityManagedPath)/UnityEngine.dll" Private="false" />
+    <Reference Include="$(UnityManagedPath)/UnityEngine/UnityEngine*.dll" Private="false" />
+    <Reference Include="$(UnityManagedPath)/UnityEngine/Unity.Scripting.dll" Private="false" Condition="Exists('$(UnityManagedPath)/UnityEngine/Unity.Scripting.dll')" />
+  </ItemGroup>
+  <Target Name="RequireReferenceAssemblies" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(UnityManagedPath)/UnityEngine/UnityEngine.CoreModule.dll')" Text="Set UnityManagedPath to the pinned Editor/Data/Managed directory. This project only compiles; it never starts Unity." />
+  </Target>
+</Project>

@@ -60,3 +60,5 @@ Console.WriteLine("CORE_SMOKE_OK phase={0} coldBatch={1} schema={2}",
 CompatibilitySmoke.Run();
 HotsetTests.Run();
 IntegrationSmoke.Run();
+ContentLifecycleTests.Run();
+ProductionTests.Run();

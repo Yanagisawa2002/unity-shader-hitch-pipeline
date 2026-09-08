@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../UnityReferences.props" />
+  <PropertyGroup><AssemblyName>Yanagisawa.ShaderHitchPipeline.Runtime</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ShaderHitchPipeline.Core/ShaderHitchPipeline.Core.csproj" />
+    <Compile Include="../../Packages/com.yanagisawa.shader-hitch-pipeline/Runtime/*.cs" />
+  </ItemGroup>
+</Project>
