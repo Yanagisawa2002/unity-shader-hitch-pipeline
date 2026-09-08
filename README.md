@@ -1,45 +1,45 @@
 # Shader Hitch Pipeline
 
-An independent Unity 6 UPM package for eliminating first-use shader and graphics-pipeline hitches on modern graphics APIs. It records the **actual shader variant + render-state combinations** seen by a player, produces a reproducible warmup profile, schedules GPU-representation creation by deadline, measured cost, and hot-set value, and proves the result with a controlled A/B/C run.
+**Schedule Unity shader and pipeline warmup around the frames that need it.**
 
-This is a performance pipeline, not a crash detector, culling system, asset simplifier, or streaming layer.
+First-use shader compilation and graphics-pipeline creation can interrupt a
+scene reveal. I built a Unity 6 package that records the states a Player uses,
+plans warmup by phase, and schedules batches by deadline and measured cost.
 
-![Actual D3D12 Players: cold, Unity all-at-once, and deadline scheduled](Docs/Media/actual-comparison.gif)
+## Results
 
-This is a synchronized capture of three **actual Unity Players**, not a chart animation or reconstructed replay. The panels are cold first use, Unity's all-at-once collection warmup, and this package's deadline-scheduled progressive warmup. The workload and first visible tile are synchronized from video pixels after each Player's `WORKLOAD_START` marker. The moving scanline and clock are rendered by the Player; a hitch freezes or jumps them without any injected delay. Red columns are real presented frames that exceeded 8.33 ms. The higher-quality [MP4](Docs/Media/actual-comparison.mp4), [warmup-pressure MP4](Docs/Media/actual-warmup-comparison.mp4), [poster](Docs/Media/actual-comparison.png), and secondary [raw-sample chart](Docs/Media/comparison.gif) are retained with the repository.
+![Cold first use, Unity all-at-once, and scheduled warmup in actual Players](Docs/Media/actual-comparison.gif)
 
-## Measured result
+- **Workload P95: 35.706 → 4.210 ms (88.2% lower)** for scheduled warmup versus
+  cold first use in the same 384-object reveal workload.
+- **Warmup-window P95: 127.0 → 12.9 ms** versus Unity all-at-once, trading total
+  warmup time from 643.5 to 774.6 ms. The scheduled window includes a 178.9 ms outlier.
 
-The included showcase was measured on Unity 6000.5.2f1, D3D12, and an AMD Radeon AI PRO R9700. Each run contains 240 raw frame samples and the same 384-object reveal workload.
+Recorded on AMD Radeon AI PRO R9700, D3D12 and Unity 6000.5.2f1. These two
+metrics cover different intervals: the scene reveal and warmup itself.
+[Watch the Player comparison](Docs/Media/actual-comparison.mp4) ·
+[Watch the warmup comparison](Docs/Media/actual-warmup-comparison.mp4)
 
-| Metric | Cold first use | Unity all-at-once | Deadline scheduled | Scheduled vs cold |
-|---|---:|---:|---:|---:|
-| Mean | 8.861 ms | 4.169 ms | 4.201 ms | 52.6% lower |
-| P95 | 35.706 ms | 4.169 ms | 4.210 ms | 88.2% lower |
-| P99 | 40.674 ms | 4.203 ms | 4.279 ms | 89.5% lower |
-| Maximum | 46.387 ms | 4.436 ms | 9.799 ms | 78.9% lower |
-| Frames ≥ 8.33 ms | 48 | 0 | 1 | 47 eliminated |
-| Severe stalls ≥ 16.67 ms | 48 | 0 | 0 | 48 eliminated |
+## Engineering challenges
 
-The generated plan covered 388 shader variants and 389 graphics states. A two-repeat 24-candidate worker/batch search selected two async workers and an initial batch of 64 on this machine (577.8 ms median warmup, 30.6 ms median worst warmup frame). In the externally recorded acceptance run, all-at-once completed in 643.5 ms as one batch; scheduled completed in 774.6 ms across 20 batches. Scheduled reduced sustained warmup pressure—P95 fell from 127.0 ms to 12.9 ms—but retained one 178.9 ms capture-window outlier, so the full distribution is reported rather than reduced to a favorable maximum. The measured workload had one isolated 9.80 ms scheduled frame, but zero ≥16.67 ms severe stalls, zero `Shader.CreateGPUProgram` time, and a plan-scoped feedback trace of 389 expected / 389 observed states (zero misses). Results are hardware, driver, project, and cache-state dependent; use the included search and runner for each target profile.
+1. **Capture the states that actually matter.** A useful plan must include both
+   shader variants and render states, and remain tied to the correct build and API.
+2. **Fit work around deadlines.** Batch size and worker count affect completion
+   time and frame pressure; later phases also need reprioritization and feedback.
 
-## When to use scheduled warmup
+## My contribution
 
-Use this package when warmup must share a frame budget with loading UI or other
-work, or when later content has a known activation deadline. If a blocking load
-screen can absorb all warmup, Unity's all-at-once path remains a strong baseline.
+I implemented the trace-to-plan-to-runtime workflow: state collection and merging,
+phase scheduling, worker/batch tuning, build validation and missed-state feedback.
+I also built the controlled three-Player benchmark and synchronized capture tools.
+Unity and the driver provide shader compilation and graphics-pipeline creation.
 
-| Decision | Evidence from the retained showcase |
-| --- | --- |
-| Smooth the warmup period | Scheduled warmup reduced capture-window P95 from 127.0 ms to 12.9 ms, but still had a 178.9 ms outlier. It does not guarantee hitch-free warmup. |
-| Minimize total warmup time | All-at-once completed in 643.5 ms; scheduled took 774.6 ms across 20 batches. Scheduling traded completion time for lower sustained pressure. |
-| Minimize frame times after warmup | All-at-once had lower workload P95 (4.169 vs 4.210 ms) and maximum (4.436 vs 9.799 ms), with zero vs one frame at or above 8.33 ms. |
-| Prepare later phases | Trace, phase planning, deadline scheduling and feedback are the package's integration features; their value depends on the application's content schedule. |
+## Evidence and reproduction
 
-Warmup-window statistics and post-warmup workload statistics describe different
-intervals. The large gains versus cold first use demonstrate the value of
-prewarming; they do not establish that progressive scheduling beats Unity's
-all-at-once warmup on every metric. See the [measurement protocol](Docs/BENCHMARK_METHODOLOGY.md).
+[Benchmark methodology](Docs/BENCHMARK_METHODOLOGY.md) ·
+[Architecture](Docs/ARCHITECTURE.md) · [Integration guide](Docs/INTEGRATION.md) ·
+[Quick start](#quick-start). The full measurements and scheduling tradeoffs are
+retained in the expandable evaluation section below.
 
 ## What it adds beyond Unity
 
@@ -133,6 +133,42 @@ trace.EndPhase();
 
 Each trace phase becomes a schedulable unit. Tier 0 is the critical hot set; higher tiers are progressively colder. A finite deadline is measured from phase activation. The scheduler first protects work whose estimated remaining cost threatens its deadline, then considers hot-set tier, expected-use probability per remaining millisecond, stable priority, and phase name. Batch costs are updated from completed jobs during the run.
 
+<details>
+<summary>Evaluation details, tradeoffs and supported scope</summary>
+
+## Measured result
+
+The included showcase was measured on Unity 6000.5.2f1, D3D12, and an AMD Radeon AI PRO R9700. Each run contains 240 raw frame samples and the same 384-object reveal workload.
+
+| Metric | Cold first use | Unity all-at-once | Deadline scheduled | Scheduled vs cold |
+|---|---:|---:|---:|---:|
+| Mean | 8.861 ms | 4.169 ms | 4.201 ms | 52.6% lower |
+| P95 | 35.706 ms | 4.169 ms | 4.210 ms | 88.2% lower |
+| P99 | 40.674 ms | 4.203 ms | 4.279 ms | 89.5% lower |
+| Maximum | 46.387 ms | 4.436 ms | 9.799 ms | 78.9% lower |
+| Frames ≥ 8.33 ms | 48 | 0 | 1 | 47 eliminated |
+| Severe stalls ≥ 16.67 ms | 48 | 0 | 0 | 48 eliminated |
+
+The generated plan covered 388 shader variants and 389 graphics states. A two-repeat 24-candidate worker/batch search selected two async workers and an initial batch of 64 on this machine (577.8 ms median warmup, 30.6 ms median worst warmup frame). In the externally recorded acceptance run, all-at-once completed in 643.5 ms as one batch; scheduled completed in 774.6 ms across 20 batches. Scheduled reduced sustained warmup pressure—P95 fell from 127.0 ms to 12.9 ms—but retained one 178.9 ms capture-window outlier, so the full distribution is reported rather than reduced to a favorable maximum. The measured workload had one isolated 9.80 ms scheduled frame, but zero ≥16.67 ms severe stalls, zero `Shader.CreateGPUProgram` time, and a plan-scoped feedback trace of 389 expected / 389 observed states (zero misses). Results are hardware, driver, project, and cache-state dependent; use the included search and runner for each target profile.
+
+## When to use scheduled warmup
+
+Use this package when warmup must share a frame budget with loading UI or other
+work, or when later content has a known activation deadline. If a blocking load
+screen can absorb all warmup, Unity's all-at-once path remains a strong baseline.
+
+| Decision | Evidence from the retained showcase |
+| --- | --- |
+| Smooth the warmup period | Scheduled warmup reduced capture-window P95 from 127.0 ms to 12.9 ms, but still had a 178.9 ms outlier. It does not guarantee hitch-free warmup. |
+| Minimize total warmup time | All-at-once completed in 643.5 ms; scheduled took 774.6 ms across 20 batches. Scheduling traded completion time for lower sustained pressure. |
+| Minimize frame times after warmup | All-at-once had lower workload P95 (4.169 vs 4.210 ms) and maximum (4.436 vs 9.799 ms), with zero vs one frame at or above 8.33 ms. |
+| Prepare later phases | Trace, phase planning, deadline scheduling and feedback are the package's integration features; their value depends on the application's content schedule. |
+
+Warmup-window statistics and post-warmup workload statistics describe different
+intervals. The large gains versus cold first use demonstrate the value of
+prewarming; they do not establish that progressive scheduling beats Unity's
+all-at-once warmup on every metric. See the [measurement protocol](Docs/BENCHMARK_METHODOLOGY.md).
+
 ## Support and constraints
 
 - Unity 6.0 or newer.
@@ -142,6 +178,8 @@ Each trace phase becomes a schedulable unit. Tier 0 is the critical hot set; hig
 - Profiler marker availability varies by Unity build/platform; frame-time samples and warmup completion receipts are always retained.
 
 See [Architecture](Docs/ARCHITECTURE.md), [CLI reference](Docs/CLI.md), [integration guide](Docs/INTEGRATION.md), and [benchmark methodology](Docs/BENCHMARK_METHODOLOGY.md).
+
+</details>
 
 ## Ownership
 
