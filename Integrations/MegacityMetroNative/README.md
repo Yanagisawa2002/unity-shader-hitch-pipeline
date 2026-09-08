@@ -1,4 +1,4 @@
-# Original Megacity Metro scene adapter â€” Unmeasured
+# Original Megacity Metro scene adapter — Unmeasured
 
 This optional UPM package observes the official application's Entities SubScene
 loading lifecycle. It preserves the original workload: Menu then Main, original
@@ -78,7 +78,10 @@ Each actual async request owns `scene-<scene GUID>`. The pinned Level phase is
 `scene-ed1a49ee1f7b28b499c8cece71ee2353`. Multiple scenes/client worlds share phase
 demand. Dependencies-ready activates once; removing an unfinished load cancels
 it; unloading loaded content releases the last owner. Late callbacks cannot
-revive a cancelled generation. Missing plans/phases remain visible failures.
+revive a cancelled generation. A reload waits for an older unload fence to retire,
+then retries activation with a new generation. Missing plans/phases remain visible
+failures. A dependency-ready transition also attempts to arm full-plan feedback;
+an unresolved baseline stays explicitly unavailable.
 
 `Core/PsoContentPhaseLifecycle` supplies the same request/ready/cancel/unload
 hooks for hosts with their own asset loaders. The backend must retain shader and
@@ -98,7 +101,8 @@ Future tracing must use actual native scene routes, one declared capture phase
 per process/session. Unity tracing is process-wide: overlapping scene/background
 states remain included and named in the trace receipt. No material allowlist
 removes native content. Use the existing inbox merge and strict compatibility
-contract to install each `scene-<GUID>` collection, with deferred activation.
+contract to install each `scene-<GUID>` collection, with `prewarmAtStartup: false`
+for dependencies that become available during loading and deferred activation.
 Do not restart a global trace on every overlapping async event. The orchestrator's
 plan-seeded feedback records true observed-minus-baseline misses; do not count
 cancelled phases as completed or unknown coverage as zero misses.
@@ -115,7 +119,35 @@ evidence with 48 generated material instances and restricted rendering condition
 Its timing or zero-miss results cannot be copied to this original-scene cell.
 
 Runtime use requires the dependencies, route/cache protocol, trace, plan and
-current-build identity. Use the explicitly named build and Player commands
-separately from preparation; no chat permission or token is part of the API.
+current-build identity. The following are independent build and runtime examples;
+they were not executed during this repair. Apply the prepared UPM overlay and
+declare an explicit D3D12-only Windows target before building. Use a new output
+directory each time.
+
+```powershell
+& 'C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe' `
+  -batchmode -quit -projectPath C:/src/metro `
+  -executeMethod Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor.PsoNativeHostBuild.BuildWindowsPlayer `
+  -pso-training-build -pso-native-build-output C:/builds/metro-training/Megacity.exe
+
+& C:/builds/metro-training/Megacity.exe -force-d3d12 `
+  -pso-native-host -pso-disable-warmup -pso-trace `
+  -pso-trace-phase scene-ed1a49ee1f7b28b499c8cece71ee2353 `
+  -pso-output C:/captures/metro-level
+
+# After inbox merge/plan installation, build again with the same helper,
+# omit -pso-training-build, and choose a fresh final output directory.
+& C:/builds/metro-final/Megacity.exe -force-d3d12 `
+  -pso-native-host -pso-warmup-strategy observed-budget `
+  -pso-output C:/captures/metro-observed
+```
+
+The user/content route and normal application exit delimit that training capture;
+the example adds no generated route or automatic timeout. Include background and
+overlapping SubScene states and repeat for every declared phase. Cold disables
+the warmup orchestrator, so it produces no plan-seeded feedback receipt. Missing
+cold feedback remains unavailable; a separate declared native capture is needed
+to inspect its observed state set. Do not infer zero misses from its absent receipt.
+
 Reference-only compilation cannot verify asset import, Entities code generation,
 Player correctness, driver behavior or performance.

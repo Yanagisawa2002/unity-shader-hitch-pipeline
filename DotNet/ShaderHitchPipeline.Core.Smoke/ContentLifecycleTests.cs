@@ -8,8 +8,9 @@ static class ContentLifecycleTests
     {
         public readonly List<string> Activated = new();
         public readonly List<string> Cancelled = new();
-        public bool Ready, Accept = true, FailCancel;
-        public bool Activate(string phase) { Activated.Add(phase); return Accept; }
+        public bool Ready, FailCancel;
+        public PsoContentPhaseActivation Activation = PsoContentPhaseActivation.Accepted;
+        public PsoContentPhaseActivation Activate(string phase) { Activated.Add(phase); return Activation; }
         public void Cancel(string phase) { if (FailCancel) throw new InvalidOperationException("unproven fence"); Cancelled.Add(phase); }
         public void Unload(string phase) => Cancel(phase);
         public bool IsComplete(string phase) => Ready;
@@ -44,9 +45,25 @@ static class ContentLifecycleTests
         var replacement = lifecycle.Request("scene-a", "v2", "city");
         Check(old.Status == PsoContentPhaseStatus.Unloaded && replacement.Generation > old.Generation, "Revision retires old generation");
         Check(!lifecycle.DependenciesReady(old), "Old generation cannot resurrect");
-        sink.Accept = false;
+        sink.Activation = PsoContentPhaseActivation.Unavailable;
         Check(!lifecycle.DependenciesReady(replacement) && replacement.Status == PsoContentPhaseStatus.Failed,
             "Unknown phase remains a visible failure");
+        var retry = lifecycle.Request("reload", "v2", "city");
+        sink.Activation = PsoContentPhaseActivation.Deferred;
+        Check(!lifecycle.DependenciesReady(retry) && retry.Status == PsoContentPhaseStatus.WaitingForDependencies && retry.Failure == null,
+            "Pending resource retirement must leave a retryable request");
+        sink.Activation = PsoContentPhaseActivation.Accepted;
+        Check(lifecycle.DependenciesReady(retry) && retry.Status == PsoContentPhaseStatus.Active,
+            "Reload activates after the old fence retires");
+        lifecycle.Unload(retry);
+        var cancelledRetry = lifecycle.Request("cancel-reload", "v2", "city");
+        sink.Activation = PsoContentPhaseActivation.Deferred;
+        lifecycle.DependenciesReady(cancelledRetry);
+        lifecycle.Cancel(cancelledRetry);
+        sink.Activation = PsoContentPhaseActivation.Accepted;
+        int activationsBeforeLateRetry = sink.Activated.Count;
+        Check(!lifecycle.DependenciesReady(cancelledRetry) && sink.Activated.Count == activationsBeforeLateRetry,
+            "A cancelled deferred reload cannot resurrect");
         var pending = lifecycle.Request("pending", "1", "another");
         lifecycle.Cancel(pending);
         Check(!lifecycle.DependenciesReady(pending), "Cancelled load never submitted");

@@ -24,7 +24,10 @@ Capture representative material keywords, vertex layouts, render targets, MSAA m
 
 Run each coverage scenario more than once. The merge is idempotent: duplicate inputs are accepted but add zero states, and the receipt makes that visible.
 
-## CI stages
+## Optional runtime evidence pipeline
+
+These are separately invoked runtime stages from the existing evidence workflow.
+The PR compile/CPU workflow does not execute them.
 
 1. Build a development training player with `-pso-training-build`.
 2. Execute deterministic representative scenarios with `-pso-trace`.

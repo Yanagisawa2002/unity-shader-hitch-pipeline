@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 â€” Unreleased (2026-09-08 integration)
+## 0.3.0 — Unreleased (2026-09-08 integration)
 
 - Preserve existing vNext compatibility, streaming and source-bound historical results.
 - Add pinned original Megacity scene preparation and an optional asynchronous scene observer; no generated workload or asset redistribution.

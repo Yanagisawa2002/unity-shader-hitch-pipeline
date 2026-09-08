@@ -60,11 +60,12 @@ namespace Yanagisawa.ShaderHitchPipeline
             internal PsoAdaptiveBatchPolicy policy;
             internal PsoPhaseStatus current;
             internal bool unload, nativeBulk;
-            internal int generation;
         }
         private readonly IPsoClock clock;
         private readonly PsoSchedulingOptions options;
         private readonly Dictionary<string, Resident> residents = new Dictionary<string, Resident>(StringComparer.OrdinalIgnoreCase);
+        // Feedback identities survive release/re-registration of a resident within this loaded plan.
+        private readonly Dictionary<string, int> activationGenerations = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         private readonly List<PsoPhaseStatus> runs = new List<PsoPhaseStatus>();
         private readonly List<PsoPhaseStatus> runnable = new List<PsoPhaseStatus>();
         private readonly List<PsoPhaseStatus> pending = new List<PsoPhaseStatus>();
@@ -175,8 +176,11 @@ namespace Yanagisawa.ShaderHitchPipeline
                 throw new InvalidOperationException("Phase must be loaded and its previous unload fenced before activation: " + phase);
             if (resident.current != null && (!resident.current.IsTerminal || resident.current.IsComplete)) return resident.current;
             if (resident.current?.State == PsoPhaseState.Faulted) throw new InvalidOperationException("Unload and reload the failed phase before retrying.");
-            var run = new PsoPhaseStatus { resident = resident, Phase = phase, Activation = ++resident.generation,
+            activationGenerations.TryGetValue(phase, out int generation);
+            generation = checked(generation + 1);
+            var run = new PsoPhaseStatus { resident = resident, Phase = phase, Activation = generation,
                 State = PsoPhaseState.Pending, started = Now(), TotalGraphicsStates = resident.backend.TotalStateCount };
+            activationGenerations[phase] = generation;
             resident.current = run;
             runs.Add(run);
             runnable.Add(run);

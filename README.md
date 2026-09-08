@@ -15,8 +15,8 @@ require explicit selection.
 
 ## What the historical evidence establishes
 
-The original showcase reported warmup-window P95 of **127.0 â†’ 12.9 ms** against
-Unity all-at-once, with total warmup **643.5 â†’ 774.6 ms (about 20% longer)** and a
+The original showcase reported warmup-window P95 of **127.0 → 12.9 ms** against
+Unity all-at-once, with total warmup **643.5 → 774.6 ms (about 20% longer)** and a
 **178.9 ms outlier**. After warmup, workload P95 was **4.169 ms all-at-once versus
 4.210 ms scheduled**. The **88.2%** reduction versus cold first use demonstrates
 the benefit of prewarming; it does not isolate the scheduler's contribution.
@@ -75,7 +75,7 @@ The optional native scene and Addressables dependencies remain outside the base
 package. Generated traces, installed plans, build identity and local preparations
 remain separate from source assets.
 
-- [Trace â†’ plan â†’ build â†’ runtime â†’ feedback](Docs/INTEGRATION.md): separate capture sessions and compatible collection merging, declared actual build inputs, plan installation and missed-state feedback.
+- [Trace → plan → build → runtime → feedback](Docs/INTEGRATION.md): separate capture sessions and compatible collection merging, declared actual build inputs, plan installation and missed-state feedback.
 - [Compatibility](Docs/COMPATIBILITY.md): engine patch, shader/content/build identity, platform/API/quality, device and cost environment invalidation.
 - [Streaming ownership](Integrations/Addressables/README.md): retain material/shader assets until submitted jobs fence; cancel queued demand and reject stale revisions.
 - [Scheduling options](Docs/SCHEDULING_OPTIONS.md): fixed-progressive and observed-budget selection, independent priority/adaptation controls, cancellation, reactivation and status.
@@ -85,7 +85,7 @@ A finite deadline is relative to phase activation. Budget admission is a model
 of whether to submit work; it cannot bound an opaque non-preemptible driver job.
 Cancellation is distinct from completion. Native SubScene readiness can occur
 after its first draw, so observing a load-ready event does not prove first-frame
-PSO coverage. Future authorized runs must retain full frames, warmup windows,
+PSO coverage. Runtime evidence must retain full frames, warmup windows,
 deadline/infeasibility outcomes, cancelled/unused work and coverage separately.
 
 ## Repository
@@ -102,7 +102,7 @@ Docs/                                         Contracts and explicitly sourced h
 
 ## Ownership
 
-Copyright Â© 2026 Edwin Liu. See [LICENSE.md](LICENSE.md) and
+Copyright © 2026 Edwin Liu. See [LICENSE.md](LICENSE.md) and
 [PROVENANCE.md](PROVENANCE.md). No employer content is included. Megacity assets
 are not redistributed; the pinned upstream [license notice](https://github.com/Unity-Technologies/megacity-metro/blob/07652ee74a1f322c2c3e607020f07be720175680/LICENCE.md)
 identifies the Unity Companion License. The repository's limited benchmark

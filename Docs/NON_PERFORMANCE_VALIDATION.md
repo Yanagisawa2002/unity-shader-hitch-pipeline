@@ -14,6 +14,9 @@ The Python checks use synthetic receipt/CSV data to test parsers and rejection
 rules. The C# checks use deterministic inputs and mock fences; numeric costs are
 test inputs. Test-runner/build elapsed time is incidental tool output and is not
 used as a performance result. The same allowlist runs in PR CI on Windows/Linux.
+The scheduler executable also emits a synthetic lifecycle receipt from its real
+serialization code. The entry validates that receipt against the scheduling
+Schema, so the C# producer and Python/schema consumer are checked together.
 
 ## Optional Unity API compilation
 

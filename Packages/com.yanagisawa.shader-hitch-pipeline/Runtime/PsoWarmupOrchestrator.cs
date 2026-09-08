@@ -94,6 +94,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public bool IsPhaseComplete(string phaseName) => !failed && GetPhaseStatus(phaseName)?.IsComplete == true;
         public PsoPhaseStatus GetPhaseStatus(string phaseName) => scheduler?.GetPhaseStatus(phaseName);
+        public bool IsPhaseUnloading(string phaseName) => !string.IsNullOrWhiteSpace(phaseName) && scheduler?.IsUnloading(phaseName) == true;
 
         public bool CancelPhase(string phaseName)
         {

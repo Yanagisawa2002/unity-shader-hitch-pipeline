@@ -16,9 +16,24 @@ try {
     # Explicit allowlist: never discover future tests that may start an engine/benchmark.
     & $Python Tools/run_cpu_validation.py
     if ($LASTEXITCODE -ne 0) { throw 'Pure CPU Python validation failed.' }
-    foreach ($project in @('ShaderHitchPipeline.Core.Smoke', 'ShaderHitchPipeline.Streaming.Smoke')) {
-        & dotnet run --disable-build-servers --property:UseSharedCompilation=false --project "DotNet/$project/$project.csproj" --configuration Release
-        if ($LASTEXITCODE -ne 0) { throw "Pure CPU validation failed: $project" }
+    foreach ($project in @('ShaderHitchPipeline.Core.Smoke', 'ShaderHitchPipeline.Streaming.Smoke', 'ShaderHitchPipeline.Scheduler.Tests')) {
+        $testOutput = @(& dotnet run --disable-build-servers --property:UseSharedCompilation=false --project "DotNet/$project/$project.csproj" --configuration Release)
+        $testExitCode = $LASTEXITCODE
+        $testOutput | Write-Output
+        if ($testExitCode -ne 0) { throw "Pure CPU validation failed: $project" }
+        if ($project -eq 'ShaderHitchPipeline.Scheduler.Tests') {
+            $fixturePrefix = 'SCHEDULER_FEEDBACK_FIXTURE '
+            $fixtureLines = @($testOutput | Where-Object { $_.StartsWith($fixturePrefix) })
+            if ($fixtureLines.Count -ne 1) { throw 'Missing or ambiguous mock scheduling feedback fixture.' }
+            $fixturePath = Join-Path ([IO.Path]::GetTempPath()) ('pso-scheduler-' + [Guid]::NewGuid().ToString('N') + '.json')
+            try {
+                [IO.File]::WriteAllText($fixturePath, $fixtureLines[0].Substring($fixturePrefix.Length), [Text.UTF8Encoding]::new($false))
+                & $Python Tools/validate_pso_documents.py --scheduling $fixturePath
+                if ($LASTEXITCODE -ne 0) { throw 'Actual mock scheduler serialization differs from the feedback schema.' }
+            } finally {
+                if (Test-Path -LiteralPath $fixturePath) { Remove-Item -LiteralPath $fixturePath }
+            }
+        }
     }
     if ($UnityManagedPath) {
         $managed = [IO.Path]::GetFullPath($UnityManagedPath)

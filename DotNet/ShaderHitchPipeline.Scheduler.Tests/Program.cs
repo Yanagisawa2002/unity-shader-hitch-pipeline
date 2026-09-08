@@ -282,11 +282,12 @@ Test("feedback keeps activation identity and explicit policy switches", () =>
     var clock = new VirtualClock(); var options = PsoSchedulingOptions.ObservedBudget();
     using var q = new PsoWarmupScheduler(clock, options); var b = new MockBackend(1, clock);
     q.Register(Phase("x"), b, Policy(conservative: true)); q.Activate("x"); q.CancelPhase("x"); q.Activate("x");
-    var feedback = PsoSchedulingFeedback.Capture(q, options, "plan-hash");
+    var feedback = PsoSchedulingFeedback.Capture(q, options, new string('a', 64));
     string json = System.Text.Json.JsonSerializer.Serialize(feedback, new System.Text.Json.JsonSerializerOptions { IncludeFields = true });
     Check(feedback.activations.Length == 2 && feedback.activations[0].activation != feedback.activations[1].activation &&
         feedback.activations[0].state == "Cancelled" && json.Contains("observed-budget") && !feedback.completed,
         "Feedback erased cancellation or policy identity.");
+    Console.WriteLine("SCHEDULER_FEEDBACK_FIXTURE " + json);
 });
 Test("caller mutations cannot silently change selected policy", () =>
 {
@@ -312,7 +313,70 @@ Test("all cost-critical environment fields participate in invalidation", () =>
         Check(PsoSchedulingOptions.CostIdentity(environment, "plan") != original, "Identity missed " + field);
     }
 });
+Test("scene reload waits for actual scheduler retirement and ignores cancelled retries", () =>
+{
+    var clock = new VirtualClock(); using var q = new PsoWarmupScheduler(clock, PsoSchedulingOptions.FixedProgressive(1));
+    var backends = new List<MockBackend>();
+    using var lifecycle = new PsoContentPhaseLifecycle(new ContentSink(
+        phase =>
+        {
+            if (q.IsUnloading(phase)) return PsoContentPhaseActivation.Deferred;
+            if (!q.IsResident(phase))
+            {
+                var backend = new MockBackend(2, clock); backends.Add(backend);
+                q.Register(Phase(phase), backend, Policy());
+            }
+            q.Activate(phase);
+            return PsoContentPhaseActivation.Accepted;
+        }, phase => q.CancelPhase(phase), phase => q.UnloadPhase(phase),
+        phase => q.GetPhaseStatus(phase)?.IsComplete == true));
+    var old = lifecycle.Request("scene", "source", "city");
+    Check(lifecycle.DependenciesReady(old), "Initial scene activation failed."); q.Tick(1);
+    lifecycle.Unload(old);
+    var cancelled = lifecycle.Request("scene", "source", "city");
+    Check(!lifecycle.DependenciesReady(cancelled) && cancelled.Failure == null && backends[0].DisposeCalls == 0,
+        "Unproven unload fence was ignored or treated as a permanent load failure.");
+    lifecycle.Cancel(cancelled);
+    var next = lifecycle.Request("scene", "source", "city");
+    Check(!lifecycle.DependenciesReady(next) && backends.Count == 1, "Pending retirement created a second native owner.");
+    backends[0].Finish(); q.Pump();
+    Check(backends[0].DisposeCalls == 1 && !lifecycle.DependenciesReady(cancelled), "Old owner or cancelled request was revived.");
+    Check(lifecycle.DependenciesReady(next) && backends.Count == 2 && q.Activations.Count == 2 &&
+        q.Activations[1].Activation > q.Activations[0].Activation,
+        "Dependency-ready retry did not create a fresh activation after retirement.");
+    q.Tick(1); backends[1].Finish(); q.Tick(1); backends[1].Finish(); q.Tick(1); lifecycle.Refresh();
+    Check(next.Status == PsoContentPhaseStatus.Complete && q.Activations[0].State == PsoPhaseState.Unloaded,
+        "Reload failed or rewrote the old incomplete history.");
+});
+Test("unloading a cancelled resident keeps its fence and distinct reload identity", () =>
+{
+    var clock = new VirtualClock(); using var q = new PsoWarmupScheduler(clock);
+    var oldBackend = new MockBackend(2, clock); q.Register(Phase("city"), oldBackend, Policy());
+    var old = q.Activate("city"); q.Tick(1); q.CancelPhase("city"); q.UnloadPhase("city");
+    Check(q.IsUnloading("city") && old.State == PsoPhaseState.Cancelled && oldBackend.DisposeCalls == 0,
+        "Cancelled terminal state hid pending unload ownership.");
+    oldBackend.Finish(); q.Pump();
+    Check(!q.IsUnloading("city") && oldBackend.DisposeCalls == 1, "Successful fence did not finish retirement.");
+    var replacement = new MockBackend(2, clock); q.Register(Phase("CITY"), replacement, Policy());
+    var next = q.Activate("CITY");
+    Check(next.Activation > old.Activation && old.State == PsoPhaseState.Cancelled,
+        "Case-insensitive re-registration reused a prior activation identity.");
+});
 Console.WriteLine("SCHEDULER_FUNCTIONAL_OK tests=" + passed + " virtual-clock-only; performance=Unmeasured");
+
+sealed class ContentSink : IPsoContentPhaseSink
+{
+    private readonly Func<string, PsoContentPhaseActivation> activate;
+    private readonly Action<string> cancel, unload;
+    private readonly Func<string, bool> complete;
+    public ContentSink(Func<string, PsoContentPhaseActivation> activate, Action<string> cancel,
+        Action<string> unload, Func<string, bool> complete)
+    { this.activate = activate; this.cancel = cancel; this.unload = unload; this.complete = complete; }
+    public PsoContentPhaseActivation Activate(string phase) => activate(phase);
+    public void Cancel(string phase) => cancel(phase);
+    public void Unload(string phase) => unload(phase);
+    public bool IsComplete(string phase) => complete(phase);
+}
 
 sealed class VirtualClock : IPsoClock
 {

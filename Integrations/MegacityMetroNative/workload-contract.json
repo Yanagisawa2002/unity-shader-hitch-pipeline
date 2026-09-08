@@ -11,12 +11,12 @@
     "simulation": "Original gameplay and ECS groups remain active",
     "camera": "Original upstream camera and user/content path; no injected trajectory or far-plane change",
     "routeIdentity": null,
-    "cacheProtocol": "Unspecified: requires an authorized, recorded cache protocol; never delete driver caches",
+    "cacheProtocol": "Unspecified: requires a recorded cache protocol; no driver-cache deletion is part of preparation",
     "allowedOverlay": [
       "Two explicit local UPM dependencies; no upstream dependency version substitutions",
       "Explicit graphics API target cell (D3D12 for Windows); identical settings across arms, no silent override"
     ],
-    "training": "Separate authorized native captures per scene phase; retain overlapping background states without shader allowlists",
+    "training": "Separate native captures per scene phase; retain overlapping background states without shader allowlists",
     "buildScenes": [
       "Assets/Scenes/Menu.unity",
       "Assets/Scenes/Main.unity"

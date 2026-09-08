@@ -29,13 +29,16 @@ namespace Yanagisawa.ShaderHitchPipeline.NativeScenes
         private sealed class Sink : IPsoContentPhaseSink
         {
             private static PsoWarmupOrchestrator Pipeline => PsoWarmupOrchestrator.Instance;
-            public bool Activate(string phase)
+            public PsoContentPhaseActivation Activate(string phase)
             {
                 var pipeline = Pipeline;
-                if (pipeline == null || !pipeline.HasLoadedPlan || pipeline.HasFailed) return false;
-                if (pipeline.ActivatePhase(phase)) return true;
+                if (pipeline == null || !pipeline.HasLoadedPlan || pipeline.HasFailed) return PsoContentPhaseActivation.Unavailable;
+                if (pipeline.ActivatePhase(phase)) return PsoContentPhaseActivation.Accepted;
+                if (pipeline.IsPhaseUnloading(phase)) return PsoContentPhaseActivation.Deferred;
                 var status = pipeline.GetPhaseStatus(phase);
-                return status != null && (status.State == PsoPhaseState.Pending || status.State == PsoPhaseState.Running || status.IsComplete);
+                if (status != null && (status.State == PsoPhaseState.Pending || status.State == PsoPhaseState.Running || status.IsComplete))
+                    return PsoContentPhaseActivation.Accepted;
+                return PsoContentPhaseActivation.Unavailable;
             }
             public void Cancel(string phase)
             {
@@ -94,7 +97,12 @@ namespace Yanagisawa.ShaderHitchPipeline.NativeScenes
                     // This event may follow the first draw. No first-frame coverage guarantee is made.
                     if (request.Status == PsoContentPhaseStatus.WaitingForDependencies && SceneSystem.IsSceneLoaded(World.Unmanaged, entity))
                     {
-                        lifecycle.DependenciesReady(request, renderCold);
+                        if (lifecycle.DependenciesReady(request, renderCold) && !renderCold)
+                        {
+                            var pipeline = PsoWarmupOrchestrator.Instance;
+                            if (pipeline != null && pipeline.HasLoadedPlan && !pipeline.FeedbackTraceArmed)
+                                pipeline.TryArmFeedbackTrace();
+                        }
                         if (request.Status == PsoContentPhaseStatus.Failed)
                             Debug.LogWarning("[PSO Native Scenes] " + request.Phase + ": " + request.Failure);
                     }

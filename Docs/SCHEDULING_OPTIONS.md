@@ -30,6 +30,16 @@ orchestrator.ActivatePhase("city");
 orchestrator.UnloadPhase("city");
 ```
 
+An activation attempted while unload still retains a native fence returns false.
+`IsPhaseUnloading(name)` reports this pending ownership even when a cancelled
+activation keeps its original terminal state. Retry after retirement;
+`Core/PsoContentPhaseLifecycle` uses an explicit `Deferred`
+activation result to keep dependency-ready loads pending without converting that
+normal wait into permanent failure. Cancelling a deferred request prevents its
+later retry from resurrecting demand.
+Activation numbers remain unique for a phase across unload/re-registration within
+the same loaded plan; a new native collection does not restart its feedback identity.
+
 The host can explicitly declare an existing non-interactive loading window with
 `SetNonInteractiveWindow(true, budgetMilliseconds)` and must close it with
 `SetNonInteractiveWindow(false)`. This does not authorize deleting work or

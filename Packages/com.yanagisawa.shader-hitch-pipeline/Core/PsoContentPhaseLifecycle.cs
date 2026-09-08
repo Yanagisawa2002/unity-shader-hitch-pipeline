@@ -5,13 +5,14 @@ namespace Yanagisawa.ShaderHitchPipeline
 {
     public interface IPsoContentPhaseSink
     {
-        // True means accepted or already active. False is an unavailable phase, never completion.
-        bool Activate(string phase);
+        // Deferred retains the pending request so dependency-ready hosts can retry after retirement.
+        PsoContentPhaseActivation Activate(string phase);
         void Cancel(string phase);
         void Unload(string phase);
         bool IsComplete(string phase);
     }
 
+    public enum PsoContentPhaseActivation { Accepted, Deferred, Unavailable }
     public enum PsoContentPhaseStatus { WaitingForDependencies, Active, Complete, Cancelled, Unloaded, Failed, RenderingCold }
 
     public sealed class PsoContentPhaseRequest
@@ -62,8 +63,13 @@ namespace Yanagisawa.ShaderHitchPipeline
             demand.TryGetValue(request.Phase, out int count);
             try
             {
-                if (count == 0 && !sink.Activate(request.Phase))
-                    throw new InvalidOperationException("No available plan phase: " + request.Phase);
+                if (count == 0)
+                {
+                    var activation = sink.Activate(request.Phase);
+                    if (activation == PsoContentPhaseActivation.Deferred) return false;
+                    if (activation != PsoContentPhaseActivation.Accepted)
+                        throw new InvalidOperationException("No available plan phase: " + request.Phase);
+                }
                 demand[request.Phase] = count + 1;
                 request.demanded = true;
                 request.Status = PsoContentPhaseStatus.Active;

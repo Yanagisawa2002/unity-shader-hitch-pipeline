@@ -11,7 +11,7 @@ namespace Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor
 {
     public static class PsoNativeHostBuild
     {
-        // Invoked explicitly in a future authorized build. No InitializeOnLoad, scene mutation or AutoRunPlayer.
+        // Explicit build entry. No InitializeOnLoad, scene mutation or AutoRunPlayer.
         public static void BuildWindowsPlayer()
         {
             var command = PsoCommandLine.Current;
@@ -22,7 +22,8 @@ namespace Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor
             string[] scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
             if (!scenes.SequenceEqual(new[] { "Assets/Scenes/Menu.unity", "Assets/Scenes/Main.unity" }))
                 throw new BuildFailedException("Preserve the pinned upstream Menu/Main build scene order.");
-            if (!PlayerSettings.GetGraphicsAPIs(BuildTarget.StandaloneWindows64).Contains(GraphicsDeviceType.Direct3D12))
+            if (PlayerSettings.GetUseDefaultGraphicsAPIs(BuildTarget.StandaloneWindows64) ||
+                !PlayerSettings.GetGraphicsAPIs(BuildTarget.StandaloneWindows64).SequenceEqual(new[] { GraphicsDeviceType.Direct3D12 }))
                 throw new BuildFailedException("Declare a D3D12 target cell for every arm before building; no silent API override.");
             if (System.IO.File.Exists(output) || System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(output))))
                 throw new BuildFailedException("Use a fresh build output directory; existing Player evidence is retained.");
