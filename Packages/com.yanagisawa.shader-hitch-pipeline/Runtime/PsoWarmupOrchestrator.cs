@@ -22,20 +22,11 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         private sealed class PhaseExecution
         {
+            public PsoPhaseStatus status;
             public PsoWarmupPhasePlan plan;
             public IPsoWarmupBackend backend;
             public PsoAdaptiveBatchPolicy policy;
-            public IPsoWarmupBatch job;
-            public bool jobScheduled;
-            public int completedBeforeBatch;
-            public int scheduledBatchSize;
-            public int effectiveMinimumBatchSize;
-            public int effectiveMaximumBatchSize;
-            public int effectiveBootstrapBatchSize;
             public bool nativeAsyncBulkDeadline;
-            public double jobScheduledAt;
-            public double activatedAt;
-            public Stopwatch stopwatch;
             public PsoWarmupPhaseReceipt receipt;
             public readonly List<double> frameTimes = new List<double>(1024);
             public readonly List<int> batchSizes = new List<int>(512);
@@ -44,7 +35,6 @@ namespace Yanagisawa.ShaderHitchPipeline
             public readonly List<double> predictedBatchDurations = new List<double>(512);
             public readonly List<double> batchDurations = new List<double>(512);
             public readonly List<string> admissionReasons = new List<string>(512);
-            public bool schedulerAdmissionBudgetMet = true;
             public bool receiptFinalized;
         }
 
@@ -57,16 +47,18 @@ namespace Yanagisawa.ShaderHitchPipeline
             new List<PsoWarmupPhaseReceipt>();
         private readonly List<PhaseExecution> activatedExecutions =
             new List<PhaseExecution>();
-        private readonly Dictionary<string, PhaseExecution> preparedExecutions =
-            new Dictionary<string, PhaseExecution>(StringComparer.OrdinalIgnoreCase);
-        private PsoSchedulerCandidate[] schedulerCandidates =
-            Array.Empty<PsoSchedulerCandidate>();
-        private PsoSchedulerCandidate[][] schedulerCandidateBuffers =
-            Array.Empty<PsoSchedulerCandidate[]>();
 
         private PsoWarmupPlanDocument plan;
         public PsoCompatibilityResult Compatibility { get; private set; }
-        private PhaseExecution scheduled;
+        private PsoWarmupScheduler scheduler;
+        private PsoSchedulingOptions schedulingOptions = new PsoSchedulingOptions();
+        private PsoEnvironmentSnapshot schedulingEnvironment;
+        private double nonInteractiveBudget;
+        private static readonly List<PsoWarmupScheduler> retiredSchedulers = new List<PsoWarmupScheduler>();
+        private sealed class UnityClock : IPsoClock
+        {
+            public double NowMilliseconds => Time.realtimeSinceStartupAsDouble * 1000.0;
+        }
         private Stopwatch runStopwatch;
         private GraphicsStateCollection feedbackTraceCollection;
         private PsoCacheMissTraceReceipt feedbackTraceReceipt;
@@ -89,31 +81,76 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public static PsoWarmupOrchestrator Instance => instance;
         public bool HasLoadedPlan => plan != null;
-        public bool IsBusy => scheduled != null || workItems.Count > 0;
-        public bool IsComplete => HasLoadedPlan && !IsBusy && !failed;
+        public bool IsBusy => scheduler != null && scheduler.IsBusy;
+        public bool IsComplete => HasLoadedPlan && !failed && scheduler != null && scheduler.IsComplete;
         public bool HasFailed => failed;
         public string Failure => failure;
         public string PlanPath => planPath;
         public string PlanHash => planHash;
         public string Strategy => strategy;
-        public int PendingPhaseCount => workItems.Count;
+        public bool FeedbackTraceArmed => feedbackTraceReceipt != null && feedbackTraceReceipt.armed;
+        public string FeedbackTraceError => feedbackTraceReceipt == null ? "No loaded plan." : feedbackTraceReceipt.error;
+        public int PendingPhaseCount => scheduler == null ? 0 : scheduler.PendingCount;
 
-        public bool IsPhaseComplete(string phaseName)
+        public bool IsPhaseComplete(string phaseName) => !failed && GetPhaseStatus(phaseName)?.IsComplete == true;
+        public PsoPhaseStatus GetPhaseStatus(string phaseName) => scheduler?.GetPhaseStatus(phaseName);
+
+        public bool CancelPhase(string phaseName)
         {
-            if (failed || string.IsNullOrWhiteSpace(phaseName))
-                return false;
-            for (int index = 0; index < activatedExecutions.Count; index++)
+            bool changed = scheduler != null && scheduler.CancelPhase(phaseName);
+            SyncExecutions();
+            return changed;
+        }
+
+        public bool UnloadPhase(string phaseName)
+        {
+            bool changed = scheduler != null && scheduler.UnloadPhase(phaseName);
+            SyncExecutions();
+            return changed;
+        }
+
+        /// <summary>Opt-in policy configuration after LoadPlan and before the first activation.</summary>
+        public void ConfigureScheduling(PsoSchedulingOptions options)
+        {
+            EnsurePlan();
+            if (activatedExecutions.Count != 0) throw new InvalidOperationException("Configure scheduling before activation.");
+            if (options == null) throw new ArgumentNullException(nameof(options));
+            var validated = options.Copy();
+            scheduler.Dispose();
+            schedulingOptions = validated;
+            strategy = validated.PolicyId;
+            scheduler = new PsoWarmupScheduler(new UnityClock(), validated,
+                PsoSchedulingOptions.CostIdentity(schedulingEnvironment, planHash));
+            try { ValidateBackendAdapter(); }
+            catch { scheduler.Dispose(); throw; }
+        }
+
+        /// <summary>Explicit caller-owned loading window with a per-admission estimate cap, not a hard latency limit.</summary>
+        public void SetNonInteractiveWindow(bool active, double budgetMilliseconds = 0)
+        {
+            if (active && (double.IsNaN(budgetMilliseconds) || double.IsInfinity(budgetMilliseconds) || budgetMilliseconds <= 0))
+                throw new ArgumentOutOfRangeException(nameof(budgetMilliseconds));
+            nonInteractiveBudget = active ? budgetMilliseconds : 0;
+        }
+
+        /// <summary>Call after device, quality, content/build, driver or execution-context changes.
+        /// Compatibility failure retires work; a cost-only change invalidates observations, including in-flight samples.</summary>
+        public bool RefreshSchedulingEnvironment(PsoEnvironmentSnapshot current)
+        {
+            EnsurePlan();
+            if (current == null) throw new ArgumentNullException(nameof(current));
+            var result = PsoCompatibility.Evaluate(plan.compatibility, current);
+            if ((!result.legacy && !result.collectionCompatible) ||
+                current.qualityLevelName != schedulingEnvironment.qualityLevelName ||
+                current.graphicsDeviceType != schedulingEnvironment.graphicsDeviceType)
             {
-                PhaseExecution execution = activatedExecutions[index];
-                if (string.Equals(
-                        execution.plan.phase,
-                        phaseName,
-                        StringComparison.OrdinalIgnoreCase))
-                {
-                    return execution.receipt.completed;
-                }
+                Fail("Scheduling environment is incompatible with the loaded collection: " + string.Join("; ", result.collectionReasons));
+                return false;
             }
-            return false;
+            scheduler.InvalidateCostIdentity(PsoSchedulingOptions.CostIdentity(current, planHash));
+            schedulingEnvironment = current;
+            Compatibility = result;
+            return true;
         }
 
         public event Action WarmupCompleted;
@@ -177,8 +214,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (IsBusy)
                 throw new InvalidOperationException("Cannot replace a plan while warmup is active.");
 
-            DisposePreparedBackends();
-            DisposeActivatedBackends();
+            scheduler?.Dispose();
             StopFeedbackTrace();
 
             plan = null;
@@ -188,7 +224,8 @@ namespace Yanagisawa.ShaderHitchPipeline
                 validateEnvironment,
                 true);
             planHash = PsoFileUtility.ComputeSha256(planPath);
-            Compatibility = PsoCompatibility.Evaluate(plan.compatibility, PsoUnityEnvironment.Capture());
+            schedulingEnvironment = PsoUnityEnvironment.Capture();
+            Compatibility = PsoCompatibility.Evaluate(plan.compatibility, schedulingEnvironment);
             // Strict plans cannot bypass current-build identity through validateEnvironment=false.
             if (!Compatibility.legacy && !Compatibility.collectionCompatible)
             {
@@ -237,7 +274,10 @@ namespace Yanagisawa.ShaderHitchPipeline
             workItems.Clear();
             phaseReceipts.Clear();
             activatedExecutions.Clear();
-            scheduled = null;
+            schedulingOptions = ReadSchedulingOptions(strategy, commandLine);
+            scheduler = new PsoWarmupScheduler(new UnityClock(), schedulingOptions,
+                PsoSchedulingOptions.CostIdentity(schedulingEnvironment, planHash));
+            nonInteractiveBudget = 0;
             runStopwatch = new Stopwatch();
             int phaseCount = plan.phases.Length;
             workItems.Capacity = Math.Max(workItems.Capacity, phaseCount);
@@ -245,11 +285,6 @@ namespace Yanagisawa.ShaderHitchPipeline
             activatedExecutions.Capacity = Math.Max(
                 activatedExecutions.Capacity,
                 phaseCount);
-            schedulerCandidateBuffers = new PsoSchedulerCandidate[phaseCount + 1][];
-            schedulerCandidateBuffers[0] = Array.Empty<PsoSchedulerCandidate>();
-            for (int count = 1; count <= phaseCount; count++)
-                schedulerCandidateBuffers[count] = new PsoSchedulerCandidate[count];
-            schedulerCandidates = schedulerCandidateBuffers[0];
             // Populate and clear once so later phase activation reuses HashSet storage.
             for (int index = 0; index < phaseCount; index++)
                 activated.Add(plan.phases[index].phase);
@@ -257,12 +292,13 @@ namespace Yanagisawa.ShaderHitchPipeline
             try
             {
                 PrepareFeedbackTrace();
-                PrepareBackends();
+                ValidateBackendAdapter();
             }
             catch
             {
-                DisposePreparedBackends();
+                scheduler.Dispose();
                 StopFeedbackTrace();
+                plan = null;
                 throw;
             }
 
@@ -280,7 +316,8 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (!IsComplete) throw new InvalidOperationException("Cost export requires completed warmup.");
             var entries = new List<PsoCostCacheEntry>();
             foreach (PhaseExecution item in activatedExecutions)
-                if (item.policy != null && item.policy.HasMeasuredCostSlope && !item.nativeAsyncBulkDeadline && item.receipt.completed)
+                if (!schedulingOptions.ConservativeAdmission && schedulingOptions.EnableAdaptiveCost &&
+                    item.policy != null && item.policy.HasMeasuredCostSlope && !item.nativeAsyncBulkDeadline && item.receipt.completed)
                     entries.Add(new PsoCostCacheEntry
                     {
                         phase = item.plan.phase, collectionSha256 = item.plan.collectionSha256,
@@ -320,6 +357,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             startup.Sort(ComparePlans);
             for (int index = 0; index < startup.Count; index++)
                 Enqueue(startup[index]);
+            TryArmFeedbackTrace();
         }
 
         public bool ActivatePhase(string phase)
@@ -347,10 +385,10 @@ namespace Yanagisawa.ShaderHitchPipeline
                 return;
             }
 
-            if (feedbackTraceCollection == null)
+            if (feedbackTraceCollection == null || !feedbackTraceReceipt.armed)
             {
                 feedbackTraceReceipt.error =
-                    "Feedback trace was requested but no collection is available.";
+                    "Feedback is unavailable: a complete dependency-resolved plan baseline has not been armed. Zero counts are not coverage evidence.";
                 WriteReceipt();
                 return;
             }
@@ -385,9 +423,11 @@ namespace Yanagisawa.ShaderHitchPipeline
                 }
             }
 
-            if (!quitting && !feedbackTraceCollection.BeginTrace())
-                feedbackTraceReceipt.error =
-                    "Could not resume the plan-scoped feedback trace.";
+            if (!quitting)
+            {
+                feedbackTraceReceipt.armed = feedbackTraceCollection.BeginTrace();
+                if (!feedbackTraceReceipt.armed) feedbackTraceReceipt.error = "Could not resume the plan-scoped feedback trace.";
+            }
 
             WriteReceipt();
         }
@@ -402,11 +442,35 @@ namespace Yanagisawa.ShaderHitchPipeline
             {
                 requested = requested,
                 scope = "plan",
+                error = requested ? "Feedback unavailable until the full plan baseline resolves; call TryArmFeedbackTrace after dependencies are ready." : string.Empty,
             };
-            if (!requested)
-                return;
+        }
 
+        /// <summary>Arms only a complete, count-validated plan baseline. Failure leaves feedback explicitly
+        /// unavailable and never prevents dependency-ready phases from warming. Earlier draws are outside this trace window.</summary>
+        public bool TryArmFeedbackTrace()
+        {
+            EnsurePlan();
+            if (feedbackTraceReceipt == null || !feedbackTraceReceipt.requested) return false;
+            if (feedbackTraceReceipt.armed) return true;
+            try
+            {
+                LoadFeedbackBaseline();
+                feedbackTraceReceipt.error = string.Empty;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                StopFeedbackTrace();
+                feedbackTraceReceipt.error = "Feedback unavailable; no complete plan baseline: " + exception.Message;
+                return false;
+            }
+        }
+
+        private void LoadFeedbackBaseline()
+        {
             var combined = new GraphicsStateCollection();
+            feedbackTraceCollection = combined; // Cleanup owns it even if any source load/append fails.
             string directory = Path.GetDirectoryName(planPath);
             for (int index = 0; index < plan.phases.Length; index++)
             {
@@ -414,15 +478,18 @@ namespace Yanagisawa.ShaderHitchPipeline
                     directory,
                     plan.phases[index].collectionFile);
                 var source = new GraphicsStateCollection();
-                if (!source.LoadFromFile(collectionPath))
-                    throw new IOException(
-                        "Could not load feedback baseline collection '" +
-                        collectionPath + "'.");
-                if (!PsoGraphicsStateCollectionCompatibility.Append(combined, source))
-                    throw new InvalidDataException(
-                        "Could not append feedback baseline collection '" +
-                        collectionPath + "'.");
-                Destroy(source);
+                try
+                {
+                    if (!source.LoadFromFile(collectionPath))
+                        throw new IOException("Could not load feedback baseline collection '" + collectionPath + "'.");
+                    if (source.runtimePlatform != Application.platform || source.graphicsDeviceType != SystemInfo.graphicsDeviceType)
+                        throw new InvalidDataException("Feedback baseline platform/API does not match the running environment.");
+                    PsoCollectionReadiness.RequireFullCollection(plan.phases[index].phase,
+                        plan.phases[index].graphicsStateCount, source.totalGraphicsStateCount);
+                    if (!PsoGraphicsStateCollectionCompatibility.Append(combined, source))
+                        throw new InvalidDataException("Could not append feedback baseline collection '" + collectionPath + "'.");
+                }
+                finally { Destroy(source); }
             }
 
             feedbackTraceCollection = combined;
@@ -438,15 +505,21 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         private void StopFeedbackTrace()
         {
+            if (feedbackTraceReceipt != null) feedbackTraceReceipt.armed = false;
             if (feedbackTraceCollection == null)
                 return;
-            if (feedbackTraceCollection.isTracing)
-                feedbackTraceCollection.EndTrace();
-            Destroy(feedbackTraceCollection);
-            feedbackTraceCollection = null;
+            try
+            {
+                if (feedbackTraceCollection.isTracing) feedbackTraceCollection.EndTrace();
+            }
+            finally
+            {
+                Destroy(feedbackTraceCollection);
+                feedbackTraceCollection = null;
+            }
         }
 
-        private void PrepareBackends()
+        private void ValidateBackendAdapter()
         {
             if (!string.Equals(
                     plan.adapterId,
@@ -458,33 +531,15 @@ namespace Yanagisawa.ShaderHitchPipeline
                     plan.adapterId + "'.");
             }
 
-            string directory = Path.GetDirectoryName(planPath);
-            for (int index = 0; index < plan.phases.Length; index++)
-            {
-                PsoWarmupPhasePlan phase = plan.phases[index];
-                string collectionPath = PsoFileUtility.ResolveChildPath(
-                    directory,
-                    phase.collectionFile);
-                IPsoWarmupBackend backend =
-                    new PsoUnityGraphicsStateWarmupBackend(collectionPath);
-                try
-                {
-                    preparedExecutions.Add(
-                        phase.phase,
-                        CreatePreparedExecution(phase, backend));
-                }
-                catch
-                {
-                    backend.Dispose();
-                    throw;
-                }
-            }
+            // File hashes were validated by LoadPlan. Native collections must be resolved
+            // only when the host has loaded the phase's shader dependencies and activates it.
         }
 
-        private PhaseExecution CreatePreparedExecution(
+        private PhaseExecution CreateExecution(
             PsoWarmupPhasePlan phase,
-            IPsoWarmupBackend backend)
+            IPsoWarmupBackend backend, bool register = true)
         {
+            PsoCollectionReadiness.RequireFullCollection(phase.phase, phase.graphicsStateCount, backend.TotalStateCount);
             PsoCommandLine commandLine = PsoCommandLine.Current;
             int minimum = commandLine.GetInt(
                 PsoConstants.WarmupMinimumBatchArgument,
@@ -525,6 +580,8 @@ namespace Yanagisawa.ShaderHitchPipeline
                 strategy,
                 ThroughputStrategy,
                 StringComparison.Ordinal);
+            if (schedulingOptions.FixedBatchSize > 0 && backend.PreferNativeAsyncBulkForDeadline)
+                throw new NotSupportedException("fixed-progressive is unsupported by this backend mode; native bulk is not an equivalent policy.");
             bool nativeAsyncBulkDeadline =
                 !throughput &&
                 backend.PreferNativeAsyncBulkForDeadline &&
@@ -569,81 +626,55 @@ namespace Yanagisawa.ShaderHitchPipeline
                     bootstrap,
                     safetyMargin,
                     costSafetyMultiplier,
-                    cooldownFrames),
-                stopwatch = new Stopwatch(),
+                    cooldownFrames, schedulingOptions.ConservativeAdmission),
                 receipt = receipt,
-                effectiveMinimumBatchSize = minimum,
-                effectiveMaximumBatchSize = maximum,
-                effectiveBootstrapBatchSize = bootstrap,
                 nativeAsyncBulkDeadline = nativeAsyncBulkDeadline,
-                schedulerAdmissionBudgetMet = !throughput,
             };
             receipt.preinteractiveBootstrapEnabled =
                 ShouldRunPreinteractiveBootstrap(execution);
             receipt.hardBudgetGuaranteeScope = throughput
                 ? "none; throughput-control"
                 : nativeAsyncBulkDeadline
-                    ? "strict-dispatch-admission; native-async-bulk observed " +
-                      "frame enforcement; opaque-backend-admission-not-preemptible"
+                    ? "estimated-full-batch-admission; native-async-bulk-not-preemptible; no-hard-latency-bound"
                 : receipt.preinteractiveBootstrapEnabled
                     ? "interactive-frames-after-preinteractive-bootstrap; " +
                       "opaque-backend-admission-not-preemptible"
                     : "strict-admission; opaque-backend-observed-not-preemptible";
+            if (register) scheduler.Register(phase, backend, execution.policy, nativeAsyncBulkDeadline);
             return execution;
-        }
-
-        private void DisposePreparedBackends()
-        {
-            foreach (PhaseExecution execution in preparedExecutions.Values)
-            {
-                execution.backend?.Dispose();
-                execution.backend = null;
-            }
-            preparedExecutions.Clear();
-        }
-
-        private void DisposeActivatedBackends()
-        {
-            for (int index = 0; index < activatedExecutions.Count; index++)
-            {
-                PhaseExecution execution = activatedExecutions[index];
-                if (execution.job != null)
-                {
-                    if (!execution.job.IsCompleted)
-                        continue;
-                    execution.job.Complete();
-                    execution.job.Dispose();
-                    execution.job = null;
-                    execution.jobScheduled = false;
-                }
-                execution.backend?.Dispose();
-                execution.backend = null;
-            }
         }
 
         private bool Enqueue(PsoWarmupPhasePlan phase)
         {
-            if (activated.Contains(phase.phase))
+            if (failed) return false;
+            if (scheduler.IsUnloading(phase.phase)) return false;
+            var previousStatus = scheduler.GetPhaseStatus(phase.phase);
+            if (previousStatus != null && (!previousStatus.IsTerminal || previousStatus.IsComplete) && scheduler.IsResident(phase.phase))
                 return false;
-
-            if (!preparedExecutions.TryGetValue(
-                    phase.phase,
-                    out PhaseExecution execution))
+            PhaseExecution execution;
+            if (!scheduler.IsResident(phase.phase))
             {
-                throw new InvalidOperationException(
-                    "No prepared execution exists for phase '" + phase.phase + "'.");
+                string path = PsoFileUtility.ResolveChildPath(Path.GetDirectoryName(planPath), phase.collectionFile);
+                var backend = new PsoUnityGraphicsStateWarmupBackend(path);
+                try { execution = CreateExecution(phase, backend); }
+                catch { backend.Dispose(); throw; }
             }
+            else
+            {
+                // A new activation queues behind any cancelled activation's fence.
+                // Its predecessor keeps a distinct cancelled receipt and the resident cost model.
+                PhaseExecution previous = activatedExecutions.FindLast(item =>
+                    string.Equals(item.plan.phase, phase.phase, StringComparison.OrdinalIgnoreCase));
+                execution = CreateExecution(phase, previous.backend, false);
+                execution.policy = previous.policy;
+            }
+            execution.status = scheduler.Activate(phase.phase);
             activated.Add(phase.phase);
-            preparedExecutions.Remove(phase.phase);
-            double now = Time.realtimeSinceStartupAsDouble;
-            execution.activatedAt = now;
             PsoSystemMarkers.Emit("phase-start", phase.phase);
-            execution.stopwatch.Restart();
             phaseReceipts.Add(execution.receipt);
             activatedExecutions.Add(execution);
             workItems.Add(execution);
-            if (!runStopwatch.IsRunning)
-                runStopwatch.Start();
+            if (!runStopwatch.IsRunning) runStopwatch.Start();
             completionRaised = false;
             return true;
         }
@@ -651,476 +682,158 @@ namespace Yanagisawa.ShaderHitchPipeline
         /// <summary>
         /// Completes each required startup hot set before the first scene frame can
         /// be presented. Opaque driver work cannot be preempted or bounded per state,
-        /// so completing the set is the only hard first-present guarantee. This is
-        /// startup latency, not silently discarded frame time; the duration is
+        /// so this gate waits for completion. It cannot guarantee a latency bound. This is
+        /// startup latency; the duration is
         /// retained in the phase receipt.
         /// </summary>
         private void RunPreinteractiveBootstrap()
         {
             try
             {
-                var bootstrapItems = new List<PhaseExecution>();
-                for (int index = 0; index < workItems.Count; index++)
-                {
-                    PhaseExecution execution = workItems[index];
-                    if (ShouldRunPreinteractiveBootstrap(execution))
-                        bootstrapItems.Add(execution);
-                }
-
-                for (int index = 0; index < bootstrapItems.Count; index++)
-                {
-                    PhaseExecution execution = bootstrapItems[index];
-                    EnsureLoaded(execution);
-                    int remaining = Math.Max(
-                        0,
-                        execution.backend.TotalStateCount -
-                        execution.backend.CompletedStateCount);
-                    if (remaining == 0 || execution.backend.IsWarmedUp)
-                    {
-                        CompletePhase(execution);
-                        continue;
-                    }
-
-                    // A hard first-present gate must complete the entire required
-                    // hot set. Sampling one opaque driver call cannot prove that a
-                    // later state will not trigger another non-preemptible compile.
-                    int batchSize = remaining;
-                    int completedBefore = execution.backend.CompletedStateCount;
-                    double started = Time.realtimeSinceStartupAsDouble;
-                    IPsoWarmupBatch batch = execution.backend.Schedule(batchSize, true);
-                    try
-                    {
-                        batch.Complete();
-                    }
-                    finally
-                    {
-                        batch.Dispose();
-                    }
-
-                    double duration = Math.Max(
-                        0.0,
-                        (Time.realtimeSinceStartupAsDouble - started) * 1000.0);
-                    int completed = execution.backend.CompletedStateCount;
-                    int delta = Math.Max(0, completed - completedBefore);
-                    execution.policy.ObserveBatch(delta, duration);
-                    execution.receipt.completedGraphicsStates = completed;
-                    execution.receipt.batchCount++;
-                    execution.receipt.preinteractiveBootstrapBatchCount++;
-                    execution.receipt.preinteractiveBootstrapMilliseconds += duration;
-                    execution.batchSizes.Add(batchSize);
-                    execution.safeBatchSizes.Add(0);
-                    execution.deadlineBatchSizes.Add(0);
-                    execution.predictedBatchDurations.Add(0.0);
-                    execution.batchDurations.Add(duration);
-                    execution.admissionReasons.Add(
-                        "preinteractive-required-hot-set-gate");
-
-                    if (IsPhaseComplete(execution))
-                        CompletePhase(execution);
-                }
-
+                foreach (var execution in new List<PhaseExecution>(workItems))
+                    if (ShouldRunPreinteractiveBootstrap(execution)) scheduler.CompleteStartupGate(execution.plan.phase);
+                SyncExecutions();
+                if (scheduler.HasFailed) { Fail("Preinteractive warmup gate failed; inspect the phase status."); return; }
                 WriteReceipt();
             }
-            catch (Exception exception)
-            {
-                Fail(
-                    "Preinteractive warmup bootstrap failed: " + exception.Message,
-                    exception);
-            }
+            catch (Exception exception) { Fail("Preinteractive warmup bootstrap failed: " + exception.Message, exception); }
         }
 
         private bool ShouldRunPreinteractiveBootstrap(PhaseExecution execution)
         {
+            if (schedulingOptions.FixedBatchSize > 0) return false;
             if (startupHotset != null && Array.IndexOf(startupHotset.startupUnitIds, execution.plan.phase) >= 0)
                 return true; // Explicit policy promises a gate for selected and caller-required startup units.
             return execution.plan.preinteractiveBootstrap &&
                    string.Equals(
                        strategy,
-                       ScheduledStrategy,
-                       StringComparison.Ordinal) &&
+                       ThroughputStrategy,
+                       StringComparison.Ordinal) == false &&
                    !PsoCommandLine.Current.HasFlag(
                        PsoConstants.DisablePreinteractiveBootstrapArgument);
         }
 
         private void Update()
         {
-            if (quitting || failed || plan == null)
-                return;
-
+            DrainRetiredSchedulers();
+            if (quitting || plan == null || scheduler == null) return;
             try
             {
-                ObserveIdleFrames();
-                if (scheduled != null && scheduled.jobScheduled)
+                if (failed) { scheduler.Pump(); SyncExecutions(); return; }
+                if (PsoUnityEnvironment.CurrentQualityName() != schedulingEnvironment.qualityLevelName ||
+                    SystemInfo.graphicsDeviceType.ToString() != schedulingEnvironment.graphicsDeviceType)
                 {
-                    ObserveScheduledFrame(scheduled);
-                    if (!scheduled.job.IsCompleted)
-                        return;
-
-                    PhaseExecution completedBatch = scheduled;
-                    CompleteScheduledBatch(completedBatch);
-                    scheduled = null;
-                    if (IsPhaseComplete(completedBatch))
-                        CompletePhase(completedBatch);
-                }
-
-                if (workItems.Count == 0)
-                {
-                    RaiseCompletion();
+                    RefreshSchedulingEnvironment(PsoUnityEnvironment.Capture());
                     return;
                 }
-
-                PhaseExecution next = SelectNextWork();
-                EnsureLoaded(next);
-                ScheduleNextBatch(next);
-            }
-            catch (Exception exception)
-            {
-                Fail("Warmup failed: " + exception.Message, exception);
-            }
-        }
-
-        private void ObserveScheduledFrame(PhaseExecution execution)
-        {
-            double frameMilliseconds = Time.unscaledDeltaTime * 1000.0;
-            execution.frameTimes.Add(frameMilliseconds);
-            execution.receipt.maximumObservedFrameMilliseconds = Math.Max(
-                execution.receipt.maximumObservedFrameMilliseconds,
-                frameMilliseconds);
-            execution.policy.ObserveFrame(
-                frameMilliseconds,
-                true,
-                execution.scheduledBatchSize);
-        }
-
-        private void ObserveIdleFrames()
-        {
-            double frameMilliseconds = Time.unscaledDeltaTime * 1000.0;
-            for (int index = 0; index < workItems.Count; index++)
-            {
-                PhaseExecution execution = workItems[index];
-                if (execution.policy == null || execution == scheduled)
-                    continue;
-                execution.policy.ObserveFrame(frameMilliseconds, false, 0);
-            }
-        }
-
-        private PhaseExecution SelectNextWork()
-        {
-            if (workItems.Count <= 0 ||
-                workItems.Count >= schedulerCandidateBuffers.Length)
-            {
-                throw new InvalidOperationException(
-                    "No preallocated scheduler buffer exists for " +
-                    workItems.Count + " active phases.");
-            }
-            schedulerCandidates = schedulerCandidateBuffers[workItems.Count];
-            double now = Time.realtimeSinceStartupAsDouble;
-            double riskWindow = 0.0;
-            for (int index = 0; index < workItems.Count; index++)
-            {
-                PhaseExecution item = workItems[index];
-                int remaining = item.backend == null
-                    ? item.plan.graphicsStateCount
-                    : Math.Max(
-                        0,
-                        item.backend.TotalStateCount -
-                        item.backend.CompletedStateCount);
-                double cost = item.policy == null
-                    ? item.plan.estimatedMillisecondsPerState
-                    : item.policy.EstimatedMillisecondsPerState;
-                double elapsed = (now - item.activatedAt) * 1000.0;
-                schedulerCandidates[index] = new PsoSchedulerCandidate(
-                    item.plan.phase,
-                    remaining,
-                    item.plan.priority,
-                    item.plan.hotSetTier,
-                    item.plan.deadlineMilliseconds,
-                    elapsed,
-                    cost,
-                    item.plan.expectedUseProbability);
-                riskWindow = Math.Max(
-                    riskWindow,
-                    item.plan.targetFrameMilliseconds * 2.0);
-            }
-
-            PsoSchedulingDecision decision = PsoDeadlineCostScheduler.SelectNext(
-                schedulerCandidates,
-                riskWindow);
-            if (!decision.IsValid)
-                throw new InvalidOperationException("Scheduler found no warmup work.");
-
-            PhaseExecution selected = workItems[decision.CandidateIndex];
-            selected.receipt.schedulerSelectionCount++;
-            if (selected.plan.deadlineMilliseconds > 0.0)
-            {
-                selected.receipt.minimumSlackMilliseconds = Math.Min(
-                    selected.receipt.minimumSlackMilliseconds,
-                    decision.SlackMilliseconds);
-            }
-            return selected;
-        }
-
-        private void EnsureLoaded(PhaseExecution execution)
-        {
-            if (execution.backend == null || execution.policy == null)
-            {
-                throw new InvalidOperationException(
-                    "Phase '" + execution.plan.phase +
-                    "' was activated without a resident prepared backend.");
-            }
-        }
-
-        private void ScheduleNextBatch(PhaseExecution execution)
-        {
-            int remaining = Math.Max(
-                0,
-                execution.backend.TotalStateCount -
-                execution.backend.CompletedStateCount);
-            if (remaining == 0 || execution.backend.IsWarmedUp)
-            {
-                CompletePhase(execution);
-                return;
-            }
-
-            execution.completedBeforeBatch = execution.backend.CompletedStateCount;
-            int batchSize;
-            PsoBudgetAdmission admission;
-            if (string.Equals(strategy, ThroughputStrategy, StringComparison.Ordinal))
-            {
-                batchSize = remaining;
-                admission = new PsoBudgetAdmission(
-                    batchSize,
-                    batchSize,
-                    batchSize,
-                    0.0,
-                    0.0,
-                    true,
-                    false,
-                    "throughput-control");
-                execution.job = execution.backend.Schedule(batchSize, true);
-            }
-            else if (execution.nativeAsyncBulkDeadline)
-            {
-                double elapsed = (Time.realtimeSinceStartupAsDouble -
-                                  execution.activatedAt) * 1000.0;
-                double deadlineRemaining = execution.plan.deadlineMilliseconds <= 0.0
-                    ? double.PositiveInfinity
-                    : execution.plan.deadlineMilliseconds - elapsed;
-
-                // The policy gates the tiny main-thread dispatch against current
-                // frame headroom. The separately reported estimate models worker
-                // completion time; it must fit the content-use deadline before the
-                // opaque native job is admitted.
-                PsoBudgetAdmission dispatchGate = execution.policy.Evaluate(
-                    1,
-                    deadlineRemaining,
-                    false);
-                int requestedWorkers = PsoCommandLine.Current.GetInt(
-                    PsoConstants.AsyncPsoJobCountArgument,
-                    -1,
-                    -1,
-                    1024);
-                int workerCount = requestedWorkers > 0
-                    ? requestedWorkers
-                    : Math.Max(1, SystemInfo.processorCount);
-                double predictedBackground =
-                    remaining *
-                    execution.policy.EstimatedMillisecondsPerState *
-                    execution.policy.CostSafetyMultiplier /
-                    workerCount;
-                bool deadlineFeasible =
-                    double.IsPositiveInfinity(deadlineRemaining) ||
-                    predictedBackground <= Math.Max(0.0, deadlineRemaining);
-
-                if (!dispatchGate.IsAdmitted || !deadlineFeasible)
+                var activeStatus = scheduler.Active;
+                if (activeStatus != null)
                 {
-                    execution.receipt.deferredFrameCount++;
-                    if (!deadlineFeasible)
-                        execution.receipt.deadlineInfeasibleBatchCount++;
-                    return;
+                    PhaseExecution execution = activatedExecutions.Find(item => item.status == activeStatus);
+                    execution?.frameTimes.Add(Time.unscaledDeltaTime * 1000.0);
                 }
-
-                batchSize = remaining;
-                admission = new PsoBudgetAdmission(
-                    batchSize,
-                    dispatchGate.SafeBatchSize,
-                    remaining,
-                    dispatchGate.PredictedBatchMilliseconds,
-                    dispatchGate.AvailableBudgetMilliseconds,
-                    true,
-                    dispatchGate.Calibration,
-                    "native-async-bulk-deadline");
-                execution.receipt.predictedBackgroundCompletionMilliseconds =
-                    predictedBackground;
-                execution.job = execution.backend.Schedule(batchSize, true);
+                scheduler.Tick(Time.unscaledDeltaTime * 1000.0, nonInteractiveBudget,
+                    string.Equals(strategy, ThroughputStrategy, StringComparison.Ordinal));
+                SyncExecutions();
+                if (scheduler.HasFailed) { Fail("Warmup backend fault; inspect phase status/receipts."); return; }
+                if (IsComplete) RaiseCompletion();
             }
-            else
+            catch (Exception exception) { Fail("Warmup failed: " + exception.Message, exception); }
+        }
+
+        private void SyncExecutions()
+        {
+            if (scheduler == null) return;
+            for (int index = workItems.Count - 1; index >= 0; index--)
             {
-                double elapsed = (Time.realtimeSinceStartupAsDouble -
-                                  execution.activatedAt) * 1000.0;
-                double deadlineRemaining = execution.plan.deadlineMilliseconds <= 0.0
-                    ? double.PositiveInfinity
-                    : execution.plan.deadlineMilliseconds - elapsed;
-                admission = execution.policy.Evaluate(
-                    remaining,
-                    deadlineRemaining,
-                    execution.plan.hotSetTier == 0);
-                batchSize = admission.BatchSize;
-                if (!admission.IsAdmitted)
-                {
-                    execution.receipt.deferredFrameCount++;
-                    return;
-                }
-                execution.job = execution.backend.Schedule(batchSize, false);
-            }
-
-            execution.scheduledBatchSize = batchSize;
-            execution.jobScheduledAt = Time.realtimeSinceStartupAsDouble;
-            execution.jobScheduled = true;
-            execution.receipt.batchCount++;
-            execution.safeBatchSizes.Add(admission.SafeBatchSize);
-            execution.deadlineBatchSizes.Add(admission.DeadlineBatchSize);
-            execution.predictedBatchDurations.Add(
-                admission.PredictedBatchMilliseconds);
-            execution.admissionReasons.Add(admission.Reason);
-            if (!string.Equals(
-                    admission.Reason,
-                    "throughput-control",
-                    StringComparison.Ordinal) &&
-                admission.PredictedBatchMilliseconds >
-                admission.AvailableBudgetMilliseconds + 0.000001)
-                execution.schedulerAdmissionBudgetMet = false;
-            if (!admission.DeadlineFeasible)
-                execution.receipt.deadlineInfeasibleBatchCount++;
-            scheduled = execution;
-        }
-
-        private void CompleteScheduledBatch(PhaseExecution execution)
-        {
-            execution.job.Complete();
-            execution.job.Dispose();
-            execution.job = null;
-            execution.jobScheduled = false;
-            double duration = Math.Max(
-                0.0,
-                (Time.realtimeSinceStartupAsDouble - execution.jobScheduledAt) * 1000.0);
-            int completed = execution.backend.CompletedStateCount;
-            int delta = Math.Max(0, completed - execution.completedBeforeBatch);
-            execution.policy.ObserveBatch(delta, duration);
-            execution.receipt.completedGraphicsStates = completed;
-            execution.receipt.completedWarmupPermutations = completed;
-            execution.batchSizes.Add(execution.scheduledBatchSize);
-            execution.batchDurations.Add(duration);
-            if (execution.nativeAsyncBulkDeadline)
-                execution.receipt.observedBackgroundCompletionMilliseconds = duration;
-        }
-
-        private static bool IsPhaseComplete(PhaseExecution execution)
-        {
-            return execution.backend.IsWarmedUp ||
-                   execution.backend.CompletedStateCount >=
-                   execution.backend.TotalStateCount;
-        }
-
-        private void CompletePhase(PhaseExecution execution)
-        {
-            if (!workItems.Remove(execution))
-                return;
-
-            execution.stopwatch.Stop();
-            execution.receipt.completedGraphicsStates =
-                execution.backend.IsWarmedUp
-                    ? execution.backend.TotalStateCount
-                    : execution.backend.CompletedStateCount;
-            execution.receipt.completedWarmupPermutations =
-                execution.backend.CompletedStateCount;
-            execution.receipt.backendReportedWarmedUp =
-                execution.backend.IsWarmedUp;
-            execution.receipt.finalBatchSize = execution.policy.CurrentBatchSize;
-            execution.receipt.elapsedMilliseconds =
-                execution.stopwatch.Elapsed.TotalMilliseconds;
-            execution.receipt.observedMillisecondsPerState =
-                execution.policy.EstimatedMillisecondsPerState;
-            if (execution.receipt.minimumSlackMilliseconds == double.MaxValue)
-                execution.receipt.minimumSlackMilliseconds = 0.0;
-            execution.receipt.deadlineMissed =
-                execution.plan.deadlineMilliseconds > 0.0 &&
-                execution.receipt.elapsedMilliseconds >
-                execution.plan.deadlineMilliseconds;
-            execution.receipt.coldStartBatchMilliseconds =
-                execution.policy.ColdStartBatchMilliseconds;
-            execution.receipt.budgetViolationCount =
-                execution.policy.BudgetViolationCount;
-            execution.receipt.minimumBatchBudgetViolationCount =
-                execution.policy.MinimumBatchViolationCount;
-            execution.receipt.circuitBreakerTripCount =
-                execution.policy.CircuitBreakerTripCount;
-            execution.receipt.deferredFrameCount = Math.Max(
-                execution.receipt.deferredFrameCount,
-                execution.policy.DeferredRecommendationCount);
-            execution.receipt.hardFrameBudgetMet =
-                execution.policy.BudgetViolationCount == 0;
-            bool strictAdmission = string.Equals(
-                execution.receipt.budgetPolicy,
-                "strict-admission",
-                StringComparison.Ordinal);
-            execution.receipt.hardFrameBudgetFeasible =
-                strictAdmission && execution.policy.IsBudgetFeasible;
-            execution.receipt.schedulerAdmissionBudgetMet =
-                execution.schedulerAdmissionBudgetMet;
-            execution.receipt.maximumBudgetOverrunMilliseconds =
-                execution.policy.MaximumBudgetOverrunMilliseconds;
-            execution.receipt.hardFrameBudgetOutcome = !strictAdmission
-                ? "not-applicable-throughput"
-                : execution.policy.BudgetViolationCount == 0
-                    ? "met"
-                    : execution.policy.IsBudgetFeasible
-                        ? "violated-model-error"
-                        : "unachievable-at-minimum-batch";
-            execution.receipt.completed = true;
-            PsoSystemMarkers.Emit("phase-end", execution.plan.phase);
-
-            if (!ShouldDeferEvidenceWrite())
-            {
+                var execution = workItems[index];
+                var status = execution.status;
+                if (status == null || !status.IsTerminal) continue;
                 FinalizeExecutionReceipt(execution);
-                Debug.Log("[ShaderHitchPipeline] Warmed phase '" + execution.plan.phase +
-                          "': " + execution.receipt.completedGraphicsStates + "/" +
-                          execution.receipt.totalGraphicsStates + " states in " +
-                          execution.receipt.elapsedMilliseconds.ToString("F1") +
-                          " ms across " + execution.receipt.batchCount + " batches.");
-                WriteReceipt();
+                if (status.HasInFlightBatch) continue;
+                workItems.RemoveAt(index);
+                PsoSystemMarkers.Emit(status.IsComplete ? "phase-end" : "phase-retired", execution.plan.phase);
+            }
+        }
+
+        public static void DrainRetiredSchedulers(bool block = false)
+        {
+            for (int i = retiredSchedulers.Count - 1; i >= 0; i--)
+            {
+                var retired = retiredSchedulers[i];
+                bool done = block ? retired.Drain() : retired.Pump();
+                if (done && !retired.HasInFlightBatch && !retired.HasPendingRetirement) retiredSchedulers.RemoveAt(i);
             }
         }
 
         private static void FinalizeExecutionReceipt(PhaseExecution execution)
         {
-            if (execution.receiptFinalized)
-                return;
-
-            execution.receipt.warmupFrameTimes = PsoStatistics.Calculate(
-                execution.frameTimes,
-                execution.plan.targetFrameMilliseconds);
-            execution.receipt.maximumObservedFrameMilliseconds = Math.Max(
-                execution.receipt.maximumObservedFrameMilliseconds,
-                execution.receipt.warmupFrameTimes.maximumMilliseconds);
-            execution.receipt.batchSizes = execution.batchSizes.ToArray();
-            execution.receipt.safeBatchSizes = execution.safeBatchSizes.ToArray();
-            execution.receipt.deadlineBatchSizes =
-                execution.deadlineBatchSizes.ToArray();
-            execution.receipt.predictedBatchDurationsMilliseconds =
-                execution.predictedBatchDurations.ToArray();
-            execution.receipt.batchDurationsMilliseconds =
-                execution.batchDurations.ToArray();
-            execution.receipt.admissionReasons =
-                execution.admissionReasons.ToArray();
-            execution.receipt.warmupFrameTimeSamplesMilliseconds =
-                execution.frameTimes.ToArray();
-            if (execution.job == null)
+            if (execution.receiptFinalized) return;
+            var status = execution.status;
+            if (status == null) return;
+            var receipt = execution.receipt;
+            var policy = execution.policy;
+            receipt.completed = status.IsComplete;
+            receipt.error = status.Failure;
+            receipt.completedWarmupPermutations = status.CompletedPermutations;
+            // Unity reports warmed permutations, which cannot be converted into a partial graphics-state coverage count.
+            receipt.completedGraphicsStates = status.BackendReportedWarmedUp ? receipt.totalGraphicsStates : 0;
+            receipt.backendReportedWarmedUp = status.BackendReportedWarmedUp;
+            receipt.elapsedMilliseconds = status.ElapsedMilliseconds;
+            receipt.deadlineMissed = status.DeadlineMissed;
+            receipt.minimumSlackMilliseconds = double.IsInfinity(status.MinimumSlackMilliseconds) ? 0 : status.MinimumSlackMilliseconds;
+            receipt.schedulerSelectionCount = status.SelectionCount;
+            receipt.deferredFrameCount = status.DeferredFrames;
+            receipt.deadlineInfeasibleBatchCount = status.DeadlineInfeasibleFrames;
+            receipt.finalBatchSize = policy.CurrentBatchSize;
+            receipt.observedMillisecondsPerState = policy.EstimatedMillisecondsPerState;
+            receipt.coldStartBatchMilliseconds = policy.ColdStartBatchMilliseconds;
+            receipt.budgetViolationCount = policy.BudgetViolationCount;
+            receipt.minimumBatchBudgetViolationCount = policy.MinimumBatchViolationCount;
+            receipt.circuitBreakerTripCount = policy.CircuitBreakerTripCount;
+            receipt.maximumBudgetOverrunMilliseconds = policy.MaximumBudgetOverrunMilliseconds;
+            receipt.hardFrameBudgetMet = policy.BudgetViolationCount == 0 && status.IsComplete;
+            bool strict = receipt.budgetPolicy == "strict-admission";
+            receipt.hardFrameBudgetFeasible = strict && policy.IsBudgetFeasible;
+            receipt.hardFrameBudgetOutcome = !strict ? "not-applicable-throughput" : !status.IsComplete ? "incomplete" :
+                policy.BudgetViolationCount == 0 ? "met" : policy.IsBudgetFeasible ? "violated-model-error" : "unachievable-at-minimum-batch";
+            execution.batchSizes.Clear(); execution.safeBatchSizes.Clear(); execution.deadlineBatchSizes.Clear();
+            execution.predictedBatchDurations.Clear(); execution.batchDurations.Clear(); execution.admissionReasons.Clear();
+            receipt.preinteractiveBootstrapBatchCount = 0; receipt.preinteractiveBootstrapMilliseconds = 0;
+            receipt.schedulerAdmissionBudgetMet = strict;
+            foreach (var record in status.Batches)
             {
-                execution.backend?.Dispose();
-                execution.backend = null;
+                execution.batchSizes.Add(record.RequestedStates);
+                execution.safeBatchSizes.Add(record.Admission.SafeBatchSize);
+                execution.deadlineBatchSizes.Add(record.Admission.DeadlineBatchSize);
+                execution.predictedBatchDurations.Add(record.Admission.PredictedBatchMilliseconds);
+                execution.batchDurations.Add(record.ElapsedMilliseconds);
+                execution.admissionReasons.Add(record.Admission.Reason);
+                if (record.Admission.Reason == "preinteractive-required-hot-set-gate")
+                {
+                    receipt.preinteractiveBootstrapBatchCount++;
+                    receipt.preinteractiveBootstrapMilliseconds += record.ElapsedMilliseconds;
+                }
+                else if (record.Admission.PredictedBatchMilliseconds > record.Admission.AvailableBudgetMilliseconds)
+                    receipt.schedulerAdmissionBudgetMet = false;
+                if (record.NativeBulk)
+                {
+                    receipt.predictedBackgroundCompletionMilliseconds = record.Admission.PredictedBatchMilliseconds;
+                    receipt.observedBackgroundCompletionMilliseconds = record.ElapsedMilliseconds;
+                }
             }
-            execution.receiptFinalized = true;
+            receipt.batchCount = status.Batches.Count;
+            receipt.batchSizes = execution.batchSizes.ToArray(); receipt.safeBatchSizes = execution.safeBatchSizes.ToArray();
+            receipt.deadlineBatchSizes = execution.deadlineBatchSizes.ToArray();
+            receipt.predictedBatchDurationsMilliseconds = execution.predictedBatchDurations.ToArray();
+            receipt.batchDurationsMilliseconds = execution.batchDurations.ToArray();
+            receipt.admissionReasons = execution.admissionReasons.ToArray();
+            receipt.warmupFrameTimes = PsoStatistics.Calculate(execution.frameTimes, execution.plan.targetFrameMilliseconds);
+            receipt.maximumObservedFrameMilliseconds = receipt.warmupFrameTimes.maximumMilliseconds;
+            receipt.warmupFrameTimeSamplesMilliseconds = execution.frameTimes.ToArray();
+            // Resident collections remain owned by the scheduler until explicit unload/plan replacement.
+            // This preserves progress across cancellation and prevents destroying in-flight shader owners.
+            execution.receiptFinalized = status.IsTerminal && !status.HasInFlightBatch;
         }
 
         private void FinalizePhaseReceipts()
@@ -1128,14 +841,13 @@ namespace Yanagisawa.ShaderHitchPipeline
             for (int index = 0; index < activatedExecutions.Count; index++)
             {
                 PhaseExecution execution = activatedExecutions[index];
-                if (execution.receipt.completed)
-                    FinalizeExecutionReceipt(execution);
+                FinalizeExecutionReceipt(execution);
             }
         }
 
         private void RaiseCompletion()
         {
-            if (completionRaised || failed)
+            if (completionRaised || failed || !IsComplete)
                 return;
             completionRaised = true;
             if (runStopwatch != null && runStopwatch.IsRunning)
@@ -1155,38 +867,11 @@ namespace Yanagisawa.ShaderHitchPipeline
         {
             failed = true;
             failure = exception == null ? message : message + Environment.NewLine + exception;
-            if (scheduled != null)
-                scheduled.jobScheduled = false;
-            scheduled = null;
-            for (int index = 0; index < workItems.Count; index++)
-            {
-                PhaseExecution execution = workItems[index];
-                execution.stopwatch.Stop();
-                execution.receipt.elapsedMilliseconds =
-                    execution.stopwatch.Elapsed.TotalMilliseconds;
-                execution.receipt.error = failure;
-                try
-                {
-                    if (execution.job != null)
-                    {
-                        execution.job.Complete();
-                        execution.job.Dispose();
-                        execution.job = null;
-                    }
-                    execution.backend?.Dispose();
-                    execution.backend = null;
-                }
-                catch (Exception cleanupException)
-                {
-                    Debug.LogWarning(
-                        "[ShaderHitchPipeline] Failure cleanup also failed: " +
-                        cleanupException.Message);
-                }
-            }
-            workItems.Clear();
-            DisposePreparedBackends();
-            if (runStopwatch != null && runStopwatch.IsRunning)
-                runStopwatch.Stop();
+            // Dispose retires demand but does not block on or forget an unfenced operation.
+            try { scheduler?.Dispose(); }
+            catch (Exception cleanup) { Debug.LogWarning("[ShaderHitchPipeline] Cleanup retained an owner: " + cleanup.Message); }
+            SyncExecutions();
+            if (runStopwatch != null && runStopwatch.IsRunning) runStopwatch.Stop();
             Debug.LogError("[ShaderHitchPipeline] " + message);
             WriteReceipt();
         }
@@ -1215,13 +900,19 @@ namespace Yanagisawa.ShaderHitchPipeline
                 elapsedMilliseconds = runStopwatch == null
                     ? 0.0
                     : runStopwatch.Elapsed.TotalMilliseconds,
-                completed = !failed && scheduled == null && workItems.Count == 0,
+                completed = IsComplete,
                 error = failure,
                 environment = PsoUnityEnvironment.Capture(),
                 phases = phaseReceipts.ToArray(),
                 cacheMissTrace = feedbackTraceReceipt,
             };
             PsoFileUtility.WriteJsonAtomic(receiptPath, receipt);
+            if (scheduler != null)
+            {
+                var feedback = PsoSchedulingFeedback.Capture(scheduler, schedulingOptions, planHash);
+                feedback.policy = strategy;
+                PsoFileUtility.WriteJsonAtomic(receiptPath + ".scheduling.json", feedback);
+            }
         }
 
         private void EnsurePlan()
@@ -1235,12 +926,14 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (string.Equals(value, ThroughputStrategy, StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(value, "naive", StringComparison.OrdinalIgnoreCase))
                 return ThroughputStrategy;
+            if (string.Equals(value, "fixed-progressive", StringComparison.OrdinalIgnoreCase)) return "fixed-progressive";
+            if (string.Equals(value, "observed-budget", StringComparison.OrdinalIgnoreCase)) return "observed-budget";
             if (string.IsNullOrWhiteSpace(value) ||
                 string.Equals(value, ScheduledStrategy, StringComparison.OrdinalIgnoreCase))
                 return ScheduledStrategy;
             throw new ArgumentException(
                 "Unsupported warmup strategy '" + value +
-                "'. Expected scheduled or throughput.");
+                "'. Expected scheduled, throughput, fixed-progressive or observed-budget.");
         }
 
         private static int ComparePlans(PsoWarmupPhasePlan left, PsoWarmupPhasePlan right)
@@ -1262,34 +955,41 @@ namespace Yanagisawa.ShaderHitchPipeline
             DontDestroyOnLoad(gameObject);
         }
 
+        private static PsoSchedulingOptions ReadSchedulingOptions(string mode, PsoCommandLine commandLine)
+        {
+            var options = mode == "fixed-progressive" ? PsoSchedulingOptions.FixedProgressive(
+                commandLine.GetInt("-pso-fixed-batch-size", 4, 1, 1000000)) :
+                mode == "observed-budget" ? PsoSchedulingOptions.ObservedBudget() : new PsoSchedulingOptions();
+            if (commandLine.HasFlag("-pso-disable-deadlines")) options.EnableDeadlines = false;
+            if (commandLine.HasFlag("-pso-disable-adaptive-cost")) options.EnableAdaptiveCost = false;
+            if (commandLine.HasFlag("-pso-disable-hotset-priority")) options.EnableHotSetPriority = false;
+            if (commandLine.HasFlag("-pso-disable-cost-priority")) options.EnableCostPriority = false;
+            return options;
+        }
+
         private void OnApplicationQuit()
         {
             quitting = true;
-            DisposePreparedBackends();
-            if (scheduled != null && scheduled.jobScheduled && scheduled.job.IsCompleted)
-                CompleteScheduledBatch(scheduled);
-            for (int index = 0; index < workItems.Count; index++)
-            {
-                PhaseExecution execution = workItems[index];
-                execution.stopwatch.Stop();
-                execution.receipt.completedGraphicsStates = execution.backend == null
-                    ? 0
-                    : execution.backend.CompletedStateCount;
-                execution.receipt.elapsedMilliseconds =
-                    execution.stopwatch.Elapsed.TotalMilliseconds;
-                execution.receipt.error = "Application quit before phase completion.";
-            }
+            try { scheduler?.Dispose(); }
+            catch (Exception exception) { Debug.LogWarning("[ShaderHitchPipeline] Shutdown retained an owner: " + exception.Message); }
+            SyncExecutions();
             SaveCacheMissesNow();
             WriteReceipt();
         }
 
         private void OnDestroy()
         {
-            DisposePreparedBackends();
-            DisposeActivatedBackends();
+            if (scheduler != null)
+            {
+                try { scheduler.Dispose(); }
+                catch (Exception exception) { Debug.LogWarning("[ShaderHitchPipeline] Retained shutdown owner: " + exception.Message); }
+                if ((scheduler.HasInFlightBatch || scheduler.HasPendingRetirement) && !retiredSchedulers.Contains(scheduler))
+                    retiredSchedulers.Add(scheduler);
+                scheduler = null;
+            }
             StopFeedbackTrace();
-            if (instance == this)
-                instance = null;
+            if (instance == this) instance = null;
         }
+
     }
 }

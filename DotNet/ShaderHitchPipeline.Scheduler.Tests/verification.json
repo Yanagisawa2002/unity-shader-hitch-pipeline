@@ -1,0 +1,36 @@
+{
+  "kind": "non-performance-functional-and-reference-compile",
+  "date": "2026-09-08",
+  "mainBaseline": "f352210db6cbd844a90b8b9b054b5031985526e0",
+  "retainedLocalVNext": "b04ea55",
+  "checks": {
+    "schedulerVirtualClockMockCases": 37,
+    "schedulerResult": "passed",
+    "reviewedCoreSmoke": "passed",
+    "compatibilityAssertions": 71,
+    "hotsetAssertions": 36,
+    "integratedCoreAssertions": 15,
+    "unityReferenceCompiles": {
+      "6000.1.0f1": "passed (separate Core and Runtime assemblies)",
+      "6000.5.2f1": "passed (separate Core and Runtime assemblies)"
+    },
+    "referenceCompileWarnings": "7 existing CS0649 warnings in PsoLegacyPlanHashDocument per build; no Unity process started"
+  },
+  "performance": "Unmeasured",
+  "realWarmupExecuted": false,
+  "unityOrPlayerStarted": false,
+  "externalWorkloadExecuted": false,
+  "profilingOrCountersCollected": false,
+  "sourceFiles": {
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoAdaptiveBatchPolicy.cs": "cf7ad6fceddb96388a3005a448a32792ab16cec54ffde2f121587ca6f5a54ca5",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoAdaptiveBatchPolicy.Observed.cs": "c7afb095dd7de01dcb5ea79755ba95eb581f77ca1ff0ca2ff4bf181e3dfa895f",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoBackendContracts.cs": "b7d81a49d820cd68174cb818e68e06365e5a0644172ea34de0cd32fdf7806162",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoDeadlineCostScheduler.cs": "0dbf1dfab777caff70e1d49aef3411576d2aba3c7b055cc74ad65ae5ff6b07e3",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoSchedulingOptions.cs": "e2874e6002edf3f389e0a98413c86363763beaeaa2f298952a01a6784321e098",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoSchedulingFeedback.cs": "21d68ef4b4bbf4f00d7dd4c83713f7282da4fc7c7f6df46fdff3ddea63ab21bf",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Core/PsoWarmupScheduler.cs": "3b02e5dedda87468108c7f1f99de8c3074a6b9e71c5a9a424aad350777f75e36",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Runtime/PsoWarmupOrchestrator.cs": "acb61fde7c67cee851528943e21801c19e637bb21afb4f7426d0f59253f1c8a9",
+    "Packages/com.yanagisawa.shader-hitch-pipeline/Runtime/PsoUnityGraphicsStateWarmupBackend.cs": "00218474995efdca38e0ba9170d016027f924f19982af9f4798605cb59ed65e6",
+    "DotNet/ShaderHitchPipeline.Scheduler.Tests/Program.cs": "c25eb0e1bbcc7c2fcf4dd2259ce1c7337f27ae0b0e9fbd1a93e54443d30ef985"
+  }
+}

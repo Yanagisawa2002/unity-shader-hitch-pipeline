@@ -54,6 +54,9 @@ namespace Yanagisawa.ShaderHitchPipeline
         /// one deadline-gated native asynchronous warmup operation.
         /// </summary>
         bool PreferNativeAsyncBulkForDeadline { get; }
+        /// <summary>Return a non-null fence owning all submitted work, or throw BEFORE submission.
+        /// CompletedStateCount is backend progress (Unity reports permutations); it is not necessarily
+        /// comparable with TotalStateCount. Only IsWarmedUp attests successful collection completion.</summary>
         IPsoWarmupBatch Schedule(int maximumStates, bool throughput);
     }
 }

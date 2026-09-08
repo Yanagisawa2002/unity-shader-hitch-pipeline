@@ -1,0 +1,39 @@
+{
+  "kind": "official-api-reference-not-a-benchmark",
+  "upstream": "https://github.com/Unity-Technologies/UnityCsReference",
+  "commit": "6b50e5544f6efcca1f44dbace3d1778b465ac6d0",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "url": "https://raw.githubusercontent.com/Unity-Technologies/UnityCsReference/6b50e5544f6efcca1f44dbace3d1778b465ac6d0/LICENSE.md",
+      "sha256": "075413c1101c31d802ddd3386a16a4826c0232254da70f12db6154b242248bd1"
+    },
+    {
+      "path": "Runtime/Export/Graphics/GraphicsStateCollection.bindings.cs",
+      "url": "https://raw.githubusercontent.com/Unity-Technologies/UnityCsReference/6b50e5544f6efcca1f44dbace3d1778b465ac6d0/Runtime/Export/Graphics/GraphicsStateCollection.bindings.cs",
+      "sha256": "9eae4def43d782855974a25c7af8d4bf5cb2827b7d873ce97d92ad47ffd03098"
+    },
+    {
+      "path": "Runtime/Export/Graphics/GraphicsStateCollection.cs",
+      "url": "https://raw.githubusercontent.com/Unity-Technologies/UnityCsReference/6b50e5544f6efcca1f44dbace3d1778b465ac6d0/Runtime/Export/Graphics/GraphicsStateCollection.cs",
+      "sha256": "74548407b860737c0b47a3ba504ba6c26fc011f6854bd6d03527703412be940b"
+    }
+  ],
+  "license": "Unity Reference-Only License; reviewed for API semantics only; source not vendored or incorporated",
+  "documents": [
+    "https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Experimental.Rendering.GraphicsStateCollection.WarmUpProgressively.html",
+    "https://docs.unity3d.com/6000.5/Documentation/ScriptReference/Rendering.GraphicsStateCollection.WarmUpProgressively.html",
+    "https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Experimental.Rendering.GraphicsStateCollection-completedWarmupCount.html"
+  ],
+  "semanticNotes": [
+    "WarmUpProgressively limits permutations/count, not elapsed time.",
+    "A returned JobHandle is the native completion fence.",
+    "Use isWarmedUp as completion authority; completedWarmupCount is not a graphics-state coverage count.",
+    "Official documentation includes a native progressive warmup example; no example or workload was executed."
+  ],
+  "performance": "Unmeasured",
+  "retrievedUtcDate": "2026-09-08",
+  "tree": "0e4ba47e521653e7caf3c6d0dc607d92c4d02a6a",
+  "commitUrl": "https://github.com/Unity-Technologies/UnityCsReference/commit/6b50e5544f6efcca1f44dbace3d1778b465ac6d0",
+  "licenseUrl": "https://unity.com/legal/licenses/unity-reference-only-license"
+}

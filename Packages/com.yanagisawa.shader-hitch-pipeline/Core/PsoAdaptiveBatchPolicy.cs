@@ -45,7 +45,7 @@ namespace Yanagisawa.ShaderHitchPipeline
     /// ceiling. This bounds scheduler-created pressure; an engine or driver can
     /// still exceed the estimate inside an already admitted opaque job.
     /// </summary>
-    public sealed class PsoAdaptiveBatchPolicy
+    public sealed partial class PsoAdaptiveBatchPolicy
     {
         private readonly int minimum;
         private readonly int maximum;
@@ -54,7 +54,7 @@ namespace Yanagisawa.ShaderHitchPipeline
         private readonly double targetFrameMilliseconds;
         private readonly double safetyMarginMilliseconds;
         private readonly double costSafetyMultiplier;
-        private readonly double initialMillisecondsPerState;
+        private double priorMillisecondsPerState;
 
         private double frameEwma;
         private double millisecondsPerState;
@@ -89,28 +89,30 @@ namespace Yanagisawa.ShaderHitchPipeline
             int bootstrapBatchSize = 1,
             double safetyMarginMilliseconds = 2.0,
             double costSafetyMultiplier = 1.5,
-            int cooldownFrames = 8)
+            int cooldownFrames = 8,
+            bool conservativeAdmission = false)
         {
             if (minimum < 1)
                 throw new ArgumentOutOfRangeException(nameof(minimum));
             if (maximum < minimum)
                 throw new ArgumentOutOfRangeException(nameof(maximum));
-            if (targetFrameMilliseconds <= 0.0)
+            if (targetFrameMilliseconds <= 0.0 || !PsoSchedulingOptions.Finite(targetFrameMilliseconds))
                 throw new ArgumentOutOfRangeException(nameof(targetFrameMilliseconds));
             if (estimatedMillisecondsPerState <= 0.0 ||
-                double.IsNaN(estimatedMillisecondsPerState))
+                !PsoSchedulingOptions.Finite(estimatedMillisecondsPerState))
                 throw new ArgumentOutOfRangeException(nameof(estimatedMillisecondsPerState));
             if (bootstrapBatchSize < 1)
                 throw new ArgumentOutOfRangeException(nameof(bootstrapBatchSize));
             if (safetyMarginMilliseconds < 0.0 ||
-                safetyMarginMilliseconds >= targetFrameMilliseconds)
+                safetyMarginMilliseconds >= targetFrameMilliseconds || !PsoSchedulingOptions.Finite(safetyMarginMilliseconds))
                 throw new ArgumentOutOfRangeException(nameof(safetyMarginMilliseconds));
-            if (costSafetyMultiplier < 1.0 || double.IsNaN(costSafetyMultiplier))
+            if (costSafetyMultiplier < 1.0 || !PsoSchedulingOptions.Finite(costSafetyMultiplier))
                 throw new ArgumentOutOfRangeException(nameof(costSafetyMultiplier));
             if (cooldownFrames < 0)
                 throw new ArgumentOutOfRangeException(nameof(cooldownFrames));
 
             this.minimum = minimum;
+            ConservativeAdmission = conservativeAdmission;
             this.maximum = maximum;
             this.bootstrapBatchSize = Math.Max(
                 minimum,
@@ -119,7 +121,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             this.targetFrameMilliseconds = targetFrameMilliseconds;
             this.safetyMarginMilliseconds = safetyMarginMilliseconds;
             this.costSafetyMultiplier = costSafetyMultiplier;
-            initialMillisecondsPerState = estimatedMillisecondsPerState;
+            priorMillisecondsPerState = estimatedMillisecondsPerState;
             millisecondsPerState = estimatedMillisecondsPerState;
             dynamicMaximum = maximum;
             CurrentBatchSize = Math.Max(minimum, Math.Min(maximum, initial));
@@ -129,9 +131,9 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public int CurrentBatchSize { get; private set; }
         public double FrameEwmaMilliseconds => frameEwma;
-        public double EstimatedMillisecondsPerState => millisecondsPerState;
+        public double EstimatedMillisecondsPerState => ConservativeAdmission && recentCount > 0 ? recentSlope : millisecondsPerState;
         public bool HasMeasuredCostSlope { get; private set; }
-        public double EstimatedFixedBatchMilliseconds => fixedBatchMilliseconds;
+        public double EstimatedFixedBatchMilliseconds => ConservativeAdmission && recentCount > 0 ? recentFixed : fixedBatchMilliseconds;
         public double TargetFrameMilliseconds => targetFrameMilliseconds;
         public double SafetyMarginMilliseconds => safetyMarginMilliseconds;
         public double CostSafetyMultiplier => costSafetyMultiplier;
@@ -159,8 +161,10 @@ namespace Yanagisawa.ShaderHitchPipeline
             bool warmupActive,
             int activeBatchSize)
         {
-            if (frameMilliseconds <= 0.0 || double.IsNaN(frameMilliseconds))
+            if (frameMilliseconds <= 0.0 || !PsoSchedulingOptions.Finite(frameMilliseconds))
                 return CurrentBatchSize;
+
+            lastFrameMilliseconds = frameMilliseconds;
 
             frameEwma = hasFrameObservation
                 ? (frameEwma * 0.80) + (frameMilliseconds * 0.20)
@@ -182,7 +186,10 @@ namespace Yanagisawa.ShaderHitchPipeline
                     cooldownFrames);
                 int violatedBatch = Math.Max(minimum, activeBatchSize);
                 if (violatedBatch <= minimum)
+                {
                     minimumBatchViolationCount++;
+                    if (ConservativeAdmission) RequiresNonInteractiveWindow = true;
+                }
                 dynamicMaximum = Math.Max(
                     minimum,
                     Math.Min(dynamicMaximum, violatedBatch / 2));
@@ -222,8 +229,11 @@ namespace Yanagisawa.ShaderHitchPipeline
         public double ObserveBatch(int completedStates, double elapsedMilliseconds)
         {
             if (completedStates <= 0 || elapsedMilliseconds <= 0.0 ||
-                double.IsNaN(elapsedMilliseconds))
+                !PsoSchedulingOptions.Finite(elapsedMilliseconds))
                 return millisecondsPerState;
+
+            if (ConservativeAdmission) ObserveConservativeBatch(completedStates, elapsedMilliseconds);
+            lastCostObservationTime = contextTime;
 
             batchObservationCount++;
             if (batchObservationCount == 1)
@@ -241,11 +251,11 @@ namespace Yanagisawa.ShaderHitchPipeline
 
             if (steadyObservationCount == 1)
             {
-                millisecondsPerState = initialMillisecondsPerState;
+                millisecondsPerState = priorMillisecondsPerState;
                 fixedBatchMilliseconds = Math.Max(
                     0.0,
                     elapsedMilliseconds -
-                    (initialMillisecondsPerState * completedStates));
+                    (priorMillisecondsPerState * completedStates));
             }
             else
             {
@@ -277,6 +287,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             maximumResidualMilliseconds = Math.Max(
                 maximumResidualMilliseconds,
                 residual);
+            if (ConservativeAdmission) HasMeasuredCostSlope = recentHasSlope;
             return millisecondsPerState;
         }
 
@@ -292,17 +303,21 @@ namespace Yanagisawa.ShaderHitchPipeline
                 return LastAdmission;
             }
 
-            double baseline = hasFrameObservation ? frameEwma : 0.0;
+            if (double.IsNaN(deadlineRemainingMilliseconds))
+                throw new ArgumentOutOfRangeException(nameof(deadlineRemainingMilliseconds));
+            double baseline = hasFrameObservation
+                ? (ConservativeAdmission ? Math.Max(frameEwma, lastFrameMilliseconds) : frameEwma) : 0.0;
             double available = Math.Max(
                 0.0,
                 targetFrameMilliseconds - safetyMarginMilliseconds - baseline);
+            if (explicitWindowBudget > 0) available = explicitWindowBudget;
             int deadlineBatch = CalculateDeadlineBatch(
                 remainingStates,
                 deadlineRemainingMilliseconds);
 
-            if (cooldownFramesRemaining > 0 ||
+            if (explicitWindowBudget <= 0 && (RequiresNonInteractiveWindow || cooldownFramesRemaining > 0 ||
                 (hasFrameObservation &&
-                 frameEwma >= targetFrameMilliseconds - safetyMarginMilliseconds))
+                 baseline >= targetFrameMilliseconds - safetyMarginMilliseconds)))
             {
                 deferredRecommendationCount++;
                 LastAdmission = new PsoBudgetAdmission(
@@ -313,13 +328,13 @@ namespace Yanagisawa.ShaderHitchPipeline
                     available,
                     false,
                     false,
-                    cooldownFramesRemaining > 0
+                    RequiresNonInteractiveWindow ? "nonpreemptible-minimum-requires-explicit-window" : cooldownFramesRemaining > 0
                         ? "circuit-breaker-cooldown"
                         : "no-frame-headroom");
                 return LastAdmission;
             }
 
-            if (batchObservationCount < 2)
+            if (batchObservationCount < 2 && explicitWindowBudget <= 0)
             {
                 int calibrationBatch = Math.Min(
                     remainingStates,
@@ -356,7 +371,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             }
 
             int safeBatch = CalculateSafeBatch(available, remainingStates);
-            if (safeBatch < minimum)
+            if (safeBatch < Math.Min(minimum, remainingStates))
             {
                 deferredRecommendationCount++;
                 LastAdmission = new PsoBudgetAdmission(
@@ -379,9 +394,8 @@ namespace Yanagisawa.ShaderHitchPipeline
                 Math.Min(deadlineBatch, safeBatch));
             if (hotSet && recommendation < safeBatch)
                 recommendation++;
-            recommendation = Math.Max(
-                minimum,
-                Math.Min(remainingStates, Math.Min(safeBatch, recommendation)));
+            recommendation = Math.Min(remainingStates,
+                Math.Min(safeBatch, Math.Max(minimum, recommendation)));
 
             CurrentBatchSize = recommendation;
             LastAdmission = new PsoBudgetAdmission(
@@ -414,14 +428,17 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (batchSize <= 0)
                 return 0.0;
 
+            if (ConservativeAdmission)
+                return PredictConservativeBatch(batchSize);
             double residual = Math.Max(
                 maximumResidualMilliseconds,
                 residualEwmaMilliseconds * 2.0);
-            return Math.Max(
+            double prediction = Math.Max(
                 0.0,
                 (fixedBatchMilliseconds +
                  (millisecondsPerState * batchSize) +
                  residual) * costSafetyMultiplier);
+            return PsoSchedulingOptions.Finite(prediction) ? prediction : double.MaxValue;
         }
 
         private int CalculateSafeBatch(double available, int remainingStates)
@@ -448,18 +465,18 @@ namespace Yanagisawa.ShaderHitchPipeline
             int remainingStates,
             double deadlineRemainingMilliseconds)
         {
-            if (double.IsInfinity(deadlineRemainingMilliseconds))
-                return minimum;
+            if (double.IsPositiveInfinity(deadlineRemainingMilliseconds))
+                return Math.Min(minimum, remainingStates);
 
             int remainingFrames = deadlineRemainingMilliseconds <= 0.0
                 ? 1
                 : Math.Max(
                     1,
-                    (int)Math.Floor(
-                        deadlineRemainingMilliseconds / targetFrameMilliseconds));
-            return Math.Max(
+                        (int)Math.Min(int.MaxValue, Math.Floor(
+                            deadlineRemainingMilliseconds / targetFrameMilliseconds)));
+            return Math.Min(remainingStates, Math.Max(
                 minimum,
-                (int)Math.Ceiling(remainingStates / (double)remainingFrames));
+                (int)Math.Ceiling(remainingStates / (double)remainingFrames)));
         }
     }
 }

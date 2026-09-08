@@ -109,6 +109,9 @@ namespace Yanagisawa.ShaderHitchPipeline
             if (maximumStates < 1)
                 throw new ArgumentOutOfRangeException(nameof(maximumStates));
 
+            // Allocate the owning wrapper before submitting native work. A managed allocation
+            // failure after WarmUp must not discard the only handle protecting the collection.
+            var batch = new UnityWarmupBatch();
             JobHandle job;
 #if UNITY_6000_5_OR_NEWER
             job = throughput
@@ -124,7 +127,8 @@ namespace Yanagisawa.ShaderHitchPipeline
                     maximumStates,
                     default(JobHandle));
 #endif
-            return new UnityWarmupBatch(job);
+            batch.SetJob(job);
+            return batch;
         }
 
         public void Dispose()
@@ -140,7 +144,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             private JobHandle job;
             private bool completed;
 
-            public UnityWarmupBatch(JobHandle job)
+            public void SetJob(JobHandle job)
             {
                 this.job = job;
             }

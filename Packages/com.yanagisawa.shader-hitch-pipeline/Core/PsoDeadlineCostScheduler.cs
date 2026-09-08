@@ -13,8 +13,15 @@ namespace Yanagisawa.ShaderHitchPipeline
             double deadlineMilliseconds,
             double elapsedMilliseconds,
             double estimatedMillisecondsPerState,
-            double expectedUseProbability)
+            double expectedUseProbability,
+            bool admissible = true,
+            int waitingFrames = 0,
+            double predictedRemainingMilliseconds = -1)
         {
+            if (!PsoSchedulingOptions.Finite(deadlineMilliseconds) || !PsoSchedulingOptions.Finite(elapsedMilliseconds) ||
+                !PsoSchedulingOptions.Finite(estimatedMillisecondsPerState) || !PsoSchedulingOptions.Finite(expectedUseProbability) ||
+                !PsoSchedulingOptions.Finite(predictedRemainingMilliseconds))
+                throw new ArgumentOutOfRangeException(nameof(estimatedMillisecondsPerState));
             Phase = phase ?? string.Empty;
             RemainingStates = Math.Max(0, remainingStates);
             Priority = priority;
@@ -27,6 +34,10 @@ namespace Yanagisawa.ShaderHitchPipeline
             ExpectedUseProbability = Math.Max(
                 0.0,
                 Math.Min(1.0, expectedUseProbability));
+            Admissible = admissible;
+            WaitingFrames = Math.Max(0, waitingFrames);
+            PredictedRemainingMilliseconds = predictedRemainingMilliseconds < 0
+                ? RemainingStates * EstimatedMillisecondsPerState : predictedRemainingMilliseconds;
         }
 
         public string Phase { get; }
@@ -37,9 +48,12 @@ namespace Yanagisawa.ShaderHitchPipeline
         public double ElapsedMilliseconds { get; }
         public double EstimatedMillisecondsPerState { get; }
         public double ExpectedUseProbability { get; }
+        public bool Admissible { get; }
+        public int WaitingFrames { get; }
+        public double PredictedRemainingMilliseconds { get; }
 
         public double EstimatedRemainingMilliseconds =>
-            RemainingStates * EstimatedMillisecondsPerState;
+            PredictedRemainingMilliseconds;
 
         public double SlackMilliseconds => DeadlineMilliseconds <= 0.0
             ? double.PositiveInfinity
@@ -78,7 +92,8 @@ namespace Yanagisawa.ShaderHitchPipeline
     {
         public static PsoSchedulingDecision SelectNext(
             IReadOnlyList<PsoSchedulerCandidate> candidates,
-            double deadlineRiskWindowMilliseconds)
+            double deadlineRiskWindowMilliseconds,
+            PsoSchedulingOptions options = null)
         {
             if (candidates == null)
                 throw new ArgumentNullException(nameof(candidates));
@@ -86,12 +101,12 @@ namespace Yanagisawa.ShaderHitchPipeline
             int selected = -1;
             for (int index = 0; index < candidates.Count; index++)
             {
-                if (candidates[index].RemainingStates <= 0)
+                if (candidates[index].RemainingStates <= 0 || !candidates[index].Admissible)
                     continue;
                 if (selected < 0 || IsPreferred(
                         candidates[index],
                         candidates[selected],
-                        deadlineRiskWindowMilliseconds))
+                        deadlineRiskWindowMilliseconds, options))
                     selected = index;
             }
 
@@ -104,17 +119,43 @@ namespace Yanagisawa.ShaderHitchPipeline
                 selected,
                 candidate.Phase,
                 double.IsInfinity(slack) ? 0.0 : slack,
-                IsDeadlineCritical(candidate, deadlineRiskWindowMilliseconds),
+                (options == null || options.EnableDeadlines) && IsDeadlineCritical(candidate, deadlineRiskWindowMilliseconds),
                 candidate.ValueDensity);
         }
 
         private static bool IsPreferred(
             PsoSchedulerCandidate candidate,
             PsoSchedulerCandidate incumbent,
-            double riskWindow)
+            double riskWindow,
+            PsoSchedulingOptions options)
         {
-            bool candidateCritical = IsDeadlineCritical(candidate, riskWindow);
-            bool incumbentCritical = IsDeadlineCritical(incumbent, riskWindow);
+            if (options != null && options.FixedBatchSize > 0 && !options.EnableDeadlines &&
+                !options.EnableHotSetPriority && !options.EnableCostPriority) return false;
+            if (options != null && options.ConservativeAdmission)
+            {
+                bool aged = candidate.WaitingFrames >= options.MaximumStarvationFrames;
+                bool incumbentAged = incumbent.WaitingFrames >= options.MaximumStarvationFrames;
+                if (aged != incumbentAged) return aged;
+                if (aged && candidate.WaitingFrames != incumbent.WaitingFrames)
+                    return candidate.WaitingFrames > incumbent.WaitingFrames;
+            }
+            bool deadlines = options == null || options.EnableDeadlines;
+            bool candidateCritical = deadlines && IsDeadlineCritical(candidate, riskWindow);
+            bool incumbentCritical = deadlines && IsDeadlineCritical(incumbent, riskWindow);
+            // Once a deadline has already been missed, preserve the work but do not let
+            // its ever more negative slack monopolize every remaining viable deadline.
+            if (options != null && options.ConservativeAdmission && deadlines)
+            {
+                bool missed = candidate.DeadlineMilliseconds > 0 && candidate.ElapsedMilliseconds > candidate.DeadlineMilliseconds;
+                bool incumbentMissed = incumbent.DeadlineMilliseconds > 0 && incumbent.ElapsedMilliseconds > incumbent.DeadlineMilliseconds;
+                if (missed != incumbentMissed)
+                {
+                    if (!missed && candidateCritical) return true;
+                    if (!incumbentMissed && incumbentCritical) return false;
+                }
+                candidateCritical &= !missed;
+                incumbentCritical &= !incumbentMissed;
+            }
             if (candidateCritical != incumbentCritical)
                 return candidateCritical;
 
@@ -127,11 +168,11 @@ namespace Yanagisawa.ShaderHitchPipeline
             }
 
             int hotSet = candidate.HotSetTier.CompareTo(incumbent.HotSetTier);
-            if (hotSet != 0)
+            if ((options == null || options.EnableHotSetPriority) && hotSet != 0)
                 return hotSet < 0;
 
             int density = candidate.ValueDensity.CompareTo(incumbent.ValueDensity);
-            if (density != 0)
+            if ((options == null || options.EnableCostPriority) && density != 0)
                 return density > 0;
 
             int priority = candidate.Priority.CompareTo(incumbent.Priority);
@@ -140,8 +181,10 @@ namespace Yanagisawa.ShaderHitchPipeline
 
             int deadline = EffectiveDeadline(candidate).CompareTo(
                 EffectiveDeadline(incumbent));
-            if (deadline != 0)
+            if (deadlines && deadline != 0)
                 return deadline < 0;
+
+            if (options != null && options.FixedBatchSize > 0) return false; // Stable activation order.
 
             return string.Compare(
                        candidate.Phase,
