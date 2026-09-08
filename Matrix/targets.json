@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "matrixId": "public-windows-d3d12-v0.3",
+  "description": "Cross-vendor PSO warmup frame-budget reproduction matrix.",
+  "minimumRepetitionsPerCell": 5,
+  "hardwareTargets": [
+    {
+      "id": "nvidia-d3d12",
+      "vendor": "NVIDIA",
+      "pciVendorId": "10DE",
+      "graphicsApi": "Direct3D12"
+    },
+    {
+      "id": "amd-d3d12",
+      "vendor": "AMD",
+      "pciVendorId": "1002",
+      "graphicsApi": "Direct3D12"
+    },
+    {
+      "id": "intel-d3d12",
+      "vendor": "Intel",
+      "pciVendorId": "8086",
+      "graphicsApi": "Direct3D12"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "showcase-controlled",
+      "name": "Shader Hitch Pipeline controlled showcase",
+      "kind": "controlled",
+      "source": "repository",
+      "revision": "same-as-pipeline-run",
+      "workload": "389 traced graphics states followed by identical first-visible-use tiles"
+    },
+    {
+      "id": "deadline-run-hero",
+      "name": "Shader Hitch Pipeline Deadline Run",
+      "kind": "controlled-cinematic",
+      "source": "repository",
+      "revision": "same-as-pipeline-run",
+      "workload": "12-second fixed flight with 320 preallocated upcoming shader/render-state combinations and a 2.5-second reveal deadline",
+      "visualAcceptance": "cold reveal >= 80 ms; scheduled frames >= 16.67 ms = 0"
+    },
+    {
+      "id": "unity-megacity-metro",
+      "name": "Unity Megacity Metro",
+      "kind": "public-large-scene",
+      "source": "https://github.com/Unity-Technologies/megacity-metro",
+      "revision": "07652ee74a1f322c2c3e607020f07be720175680",
+      "unityVersion": "6000.1.0f1",
+      "scene": "Assets/Scenes/Main.unity",
+      "license": "Unity Companion License",
+      "workload": "single-player main scene, fixed camera route and quality preset"
+    }
+  ],
+  "requiredEvidence": {
+    "perRun": [
+      "benchmark receipt",
+      "warmup receipt",
+      "PresentMon v2 raw CSV",
+      "tool and artifact SHA-256 manifest"
+    ],
+    "perCell": [
+      "at least one WPR GPU ETL",
+      "five process-cold repetitions",
+      "exact GPU, driver, OS, engine and pipeline revisions"
+    ]
+  },
+  "cacheProtocol": {
+    "processCold": "Restart the player for every repetition.",
+    "driverCold": "Use a restored clean machine image; do not delete undocumented vendor cache files.",
+    "requiredLabel": "Every run must declare process-cold, driver-warm, or clean-image."
+  }
+}

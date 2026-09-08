@@ -1,0 +1,2211 @@
+{
+  "schemaVersion": 2,
+  "generatedUtc": "2026-09-07T04:53:56.8488825Z",
+  "sessionId": "ShaderHitchPipeline-1ee8010a0e4042c8b85b3c90197ac42a",
+  "completed": false,
+  "probeOnly": true,
+  "errors": [
+    "WPR start failed (exit -984068079): \r\n\tFailed to enable the policy to profile system performance.\r\r\n\r\n\tProfile Id: GPU.Verbose.File\r\n\t\r\n\tError code: 0xc5585011\r\n\t\r\n\tFailed to enable the policy to profile system performance.\r\r\n\t\r\n\t\r\n",
+    "PresentMon start failed (exit 6):  warning: PresentMon requires elevated privilege in order to query processes that are\r\n         short-running or started on another account.  Without it, those processes will\r\n         be listed as '<unknown>' and they can't be targeted by --process_name nor trigger\r\n         --terminate_on_proc_exit.\r\nerror: failed to start trace session: access denied.\r\n       PresentMon requires either administrative privileges or to be run by a user in the\r\n       \"Performance Log Users\" user group.  View the readme for more details.\r\n",
+    "Required GPU ETL unavailable"
+  ],
+  "cache": {
+    "driver": "unknown-preserved",
+    "globalCachesModified": false,
+    "process": "process-cold"
+  },
+  "privilege": {
+    "isAdministrator": false
+  },
+  "target": {
+    "buildFiles": null,
+    "exitCode": null,
+    "player": "C:\\Users\\EdwinLiu\\Downloads\\ShaderHitchPipeline\\UnityProject\\Builds\\Windows\\ShaderHitchShowcase.exe",
+    "playerSha256": "34a412b81651ed571b97f4d1ba71a9ca79457ff5779d56969b8f0c4772ad2cee",
+    "arguments": [],
+    "processId": null,
+    "endedUtc": "",
+    "startedUtc": ""
+  },
+  "tools": {
+    "analyzer": {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\Tools\\pso_windows_evidence.py",
+      "exists": true,
+      "bytes": 15863,
+      "sha256": "fdf44eed3fcab49526ce4022916bcb61436da790df1564a1f4878819c0da180d"
+    },
+    "presentMonArguments": [
+      "--process_name",
+      "ShaderHitchShowcase.exe",
+      "--output_file",
+      "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\presentmon.csv",
+      "--date_time",
+      "--timed",
+      "3",
+      "--terminate_after_timed",
+      "--terminate_on_proc_exit",
+      "--no_console_stats",
+      "--session_name",
+      "ShaderHitchPipeline-1ee8010a0e4042c8b85b3c90197ac42a",
+      "--v2_metrics"
+    ],
+    "presentMon": {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\PresentMon-2.5.1-x64.exe",
+      "exists": true,
+      "bytes": 956768,
+      "sha256": "9bec3083069f58f911e6a512f4806db51a27bd096103087bc1d05ef54c80a191"
+    },
+    "analyzerExitCode": null,
+    "wrapper": {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\Tools\\Invoke-PsoWindowsEvidence.ps1",
+      "exists": true,
+      "bytes": 10761,
+      "sha256": "d1424f1217d453a2ce4bf6c36e58001adaa5918f1059c8d035f86d232044deb6"
+    },
+    "presentMonExitCode": 6,
+    "wpr": {
+      "path": "C:\\Windows\\system32\\wpr.exe",
+      "exists": true,
+      "bytes": 389120,
+      "sha256": "64f6d9f83a8b9f8c720870109a6374f650e3786f0ea3f6e3a6c02463257bbfc2"
+    },
+    "etwProfile": "GPU (built-in, file mode)",
+    "wprCommands": [
+      {
+        "arguments": [
+          "-status"
+        ],
+        "tool": "wpr",
+        "exitCode": 0,
+        "output": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR is not recording\r\n"
+      },
+      {
+        "arguments": [
+          "-start",
+          "GPU",
+          "-filemode"
+        ],
+        "tool": "wpr",
+        "exitCode": -984068079,
+        "output": "\r\n\tFailed to enable the policy to profile system performance.\r\r\n\r\n\tProfile Id: GPU.Verbose.File\r\n\t\r\n\tError code: 0xc5585011\r\n\t\r\n\tFailed to enable the policy to profile system performance.\r\r\n\t\r\n\t\r\n"
+      }
+    ]
+  },
+  "environment": {
+    "processor": "AMD Ryzen 9 9950X 16-Core Processor            ",
+    "processSnapshotBefore": [
+      {
+        "ProcessName": "AggregatorHost",
+        "Id": 7096
+      },
+      {
+        "ProcessName": "amdfendrsr",
+        "Id": 2860
+      },
+      {
+        "ProcessName": "amdow",
+        "Id": 15720
+      },
+      {
+        "ProcessName": "AmdPpkgSvc",
+        "Id": 4400
+      },
+      {
+        "ProcessName": "AMDRSServ",
+        "Id": 9168
+      },
+      {
+        "ProcessName": "AMDRSSrcExt",
+        "Id": 10208
+      },
+      {
+        "ProcessName": "AppActions",
+        "Id": 15868
+      },
+      {
+        "ProcessName": "atieclxx",
+        "Id": 2408
+      },
+      {
+        "ProcessName": "atiesrxx",
+        "Id": 2852
+      },
+      {
+        "ProcessName": "audiodg",
+        "Id": 3692
+      },
+      {
+        "ProcessName": "backgroundTaskHost",
+        "Id": 7788
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 1360
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 1364
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 2796
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 2888
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 9060
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 16016
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 18104
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 19160
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 19172
+      },
+      {
+        "ProcessName": "ChatGPT",
+        "Id": 20556
+      },
+      {
+        "ProcessName": "ChsIME",
+        "Id": 12688
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 2924
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 4072
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 4880
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 5188
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 7916
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 11276
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 11492
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 11592
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 13136
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 14644
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 15576
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 18136
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 19132
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 20416
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 21972
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 23664
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 23712
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 23976
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 24124
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 26192
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 26216
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 26620
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 26832
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 27860
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 28440
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 28828
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 28868
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 29280
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 29800
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 29964
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 30704
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 31232
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 32036
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 32200
+      },
+      {
+        "ProcessName": "cmd",
+        "Id": 34252
+      },
+      {
+        "ProcessName": "cncmd",
+        "Id": 8608
+      },
+      {
+        "ProcessName": "codex",
+        "Id": 19348
+      },
+      {
+        "ProcessName": "codex-code-mode-host",
+        "Id": 12436
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 7584
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 10212
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 10228
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 10604
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 19356
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 23348
+      },
+      {
+        "ProcessName": "conhost",
+        "Id": 33288
+      },
+      {
+        "ProcessName": "cowork-svc",
+        "Id": 7008
+      },
+      {
+        "ProcessName": "CPUMetricsServer",
+        "Id": 16188
+      },
+      {
+        "ProcessName": "CrossDeviceResume",
+        "Id": 8804
+      },
+      {
+        "ProcessName": "csrss",
+        "Id": 1060
+      },
+      {
+        "ProcessName": "csrss",
+        "Id": 1336
+      },
+      {
+        "ProcessName": "ctfmon",
+        "Id": 12292
+      },
+      {
+        "ProcessName": "dasHost",
+        "Id": 2956
+      },
+      {
+        "ProcessName": "dwm",
+        "Id": 1884
+      },
+      {
+        "ProcessName": "EasyTuneEngineService",
+        "Id": 3848
+      },
+      {
+        "ProcessName": "explorer",
+        "Id": 8528
+      },
+      {
+        "ProcessName": "FileCoAuth",
+        "Id": 26968
+      },
+      {
+        "ProcessName": "fontdrvhost",
+        "Id": 1672
+      },
+      {
+        "ProcessName": "fontdrvhost",
+        "Id": 1680
+      },
+      {
+        "ProcessName": "Idle",
+        "Id": 0
+      },
+      {
+        "ProcessName": "LsaIso",
+        "Id": 1492
+      },
+      {
+        "ProcessName": "lsass",
+        "Id": 1500
+      },
+      {
+        "ProcessName": "M365Copilot",
+        "Id": 15160
+      },
+      {
+        "ProcessName": "Memory Compression",
+        "Id": 3200
+      },
+      {
+        "ProcessName": "MicrosoftEdgeUpdate",
+        "Id": 7844
+      },
+      {
+        "ProcessName": "MpDefenderCoreService",
+        "Id": 4536
+      },
+      {
+        "ProcessName": "ms-teams",
+        "Id": 14012
+      },
+      {
+        "ProcessName": "ms-teams",
+        "Id": 14956
+      },
+      {
+        "ProcessName": "ms-teams",
+        "Id": 15340
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 2124
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 3280
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 3968
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 7272
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 8328
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 9200
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 9208
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 10748
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 11056
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 12112
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 12172
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 12188
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 12200
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 12528
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 12800
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 13640
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 13704
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 13884
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 15048
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 17380
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 19128
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 19892
+      },
+      {
+        "ProcessName": "msedge",
+        "Id": 20856
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 804
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 4964
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 8348
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 10680
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 10916
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 11392
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 11408
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 11556
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 11724
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 13572
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 14400
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 14424
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 14604
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 14616
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 14708
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 15172
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 15336
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 15968
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 16292
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 17036
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 17592
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 17600
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 17660
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 17760
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 19712
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 20036
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 21416
+      },
+      {
+        "ProcessName": "msedgewebview2",
+        "Id": 21444
+      },
+      {
+        "ProcessName": "MsMpEng",
+        "Id": 4488
+      },
+      {
+        "ProcessName": "NgcIso",
+        "Id": 6340
+      },
+      {
+        "ProcessName": "NisSrv",
+        "Id": 7068
+      },
+      {
+        "ProcessName": "node",
+        "Id": 1984
+      },
+      {
+        "ProcessName": "node",
+        "Id": 1988
+      },
+      {
+        "ProcessName": "node",
+        "Id": 2440
+      },
+      {
+        "ProcessName": "node",
+        "Id": 3164
+      },
+      {
+        "ProcessName": "node",
+        "Id": 3444
+      },
+      {
+        "ProcessName": "node",
+        "Id": 3768
+      },
+      {
+        "ProcessName": "node",
+        "Id": 4060
+      },
+      {
+        "ProcessName": "node",
+        "Id": 4204
+      },
+      {
+        "ProcessName": "node",
+        "Id": 4264
+      },
+      {
+        "ProcessName": "node",
+        "Id": 4268
+      },
+      {
+        "ProcessName": "node",
+        "Id": 5592
+      },
+      {
+        "ProcessName": "node",
+        "Id": 6308
+      },
+      {
+        "ProcessName": "node",
+        "Id": 6644
+      },
+      {
+        "ProcessName": "node",
+        "Id": 6656
+      },
+      {
+        "ProcessName": "node",
+        "Id": 6884
+      },
+      {
+        "ProcessName": "node",
+        "Id": 6968
+      },
+      {
+        "ProcessName": "node",
+        "Id": 7120
+      },
+      {
+        "ProcessName": "node",
+        "Id": 7404
+      },
+      {
+        "ProcessName": "node",
+        "Id": 7428
+      },
+      {
+        "ProcessName": "node",
+        "Id": 7480
+      },
+      {
+        "ProcessName": "node",
+        "Id": 8112
+      },
+      {
+        "ProcessName": "node",
+        "Id": 8228
+      },
+      {
+        "ProcessName": "node",
+        "Id": 8900
+      },
+      {
+        "ProcessName": "node",
+        "Id": 8972
+      },
+      {
+        "ProcessName": "node",
+        "Id": 9508
+      },
+      {
+        "ProcessName": "node",
+        "Id": 9740
+      },
+      {
+        "ProcessName": "node",
+        "Id": 9956
+      },
+      {
+        "ProcessName": "node",
+        "Id": 10356
+      },
+      {
+        "ProcessName": "node",
+        "Id": 11076
+      },
+      {
+        "ProcessName": "node",
+        "Id": 12068
+      },
+      {
+        "ProcessName": "node",
+        "Id": 12148
+      },
+      {
+        "ProcessName": "node",
+        "Id": 12392
+      },
+      {
+        "ProcessName": "node",
+        "Id": 12560
+      },
+      {
+        "ProcessName": "node",
+        "Id": 13020
+      },
+      {
+        "ProcessName": "node",
+        "Id": 16476
+      },
+      {
+        "ProcessName": "node",
+        "Id": 17384
+      },
+      {
+        "ProcessName": "node",
+        "Id": 18292
+      },
+      {
+        "ProcessName": "node",
+        "Id": 18756
+      },
+      {
+        "ProcessName": "node",
+        "Id": 19060
+      },
+      {
+        "ProcessName": "node",
+        "Id": 19332
+      },
+      {
+        "ProcessName": "node",
+        "Id": 19704
+      },
+      {
+        "ProcessName": "node",
+        "Id": 19872
+      },
+      {
+        "ProcessName": "node",
+        "Id": 20196
+      },
+      {
+        "ProcessName": "node",
+        "Id": 20380
+      },
+      {
+        "ProcessName": "node",
+        "Id": 20708
+      },
+      {
+        "ProcessName": "node",
+        "Id": 20776
+      },
+      {
+        "ProcessName": "node",
+        "Id": 21640
+      },
+      {
+        "ProcessName": "node",
+        "Id": 21880
+      },
+      {
+        "ProcessName": "node",
+        "Id": 21948
+      },
+      {
+        "ProcessName": "node",
+        "Id": 22060
+      },
+      {
+        "ProcessName": "node",
+        "Id": 22496
+      },
+      {
+        "ProcessName": "node",
+        "Id": 22500
+      },
+      {
+        "ProcessName": "node",
+        "Id": 22520
+      },
+      {
+        "ProcessName": "node",
+        "Id": 22708
+      },
+      {
+        "ProcessName": "node",
+        "Id": 22720
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23072
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23096
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23648
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23716
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23784
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23792
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23820
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23872
+      },
+      {
+        "ProcessName": "node",
+        "Id": 23908
+      },
+      {
+        "ProcessName": "node",
+        "Id": 24020
+      },
+      {
+        "ProcessName": "node",
+        "Id": 24428
+      },
+      {
+        "ProcessName": "node",
+        "Id": 24564
+      },
+      {
+        "ProcessName": "node",
+        "Id": 24784
+      },
+      {
+        "ProcessName": "node",
+        "Id": 24852
+      },
+      {
+        "ProcessName": "node",
+        "Id": 24900
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25008
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25148
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25488
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25512
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25608
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25676
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25916
+      },
+      {
+        "ProcessName": "node",
+        "Id": 25988
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26056
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26136
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26468
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26500
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26536
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26868
+      },
+      {
+        "ProcessName": "node",
+        "Id": 26928
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27068
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27112
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27224
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27440
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27556
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27800
+      },
+      {
+        "ProcessName": "node",
+        "Id": 27896
+      },
+      {
+        "ProcessName": "node",
+        "Id": 28268
+      },
+      {
+        "ProcessName": "node",
+        "Id": 28632
+      },
+      {
+        "ProcessName": "node",
+        "Id": 28772
+      },
+      {
+        "ProcessName": "node",
+        "Id": 28856
+      },
+      {
+        "ProcessName": "node",
+        "Id": 28956
+      },
+      {
+        "ProcessName": "node",
+        "Id": 28996
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29128
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29356
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29368
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29488
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29552
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29608
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29728
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29760
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29784
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29884
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29892
+      },
+      {
+        "ProcessName": "node",
+        "Id": 29972
+      },
+      {
+        "ProcessName": "node",
+        "Id": 30132
+      },
+      {
+        "ProcessName": "node",
+        "Id": 30440
+      },
+      {
+        "ProcessName": "node",
+        "Id": 30680
+      },
+      {
+        "ProcessName": "node",
+        "Id": 30756
+      },
+      {
+        "ProcessName": "node",
+        "Id": 31208
+      },
+      {
+        "ProcessName": "node",
+        "Id": 31216
+      },
+      {
+        "ProcessName": "node",
+        "Id": 31320
+      },
+      {
+        "ProcessName": "node",
+        "Id": 31456
+      },
+      {
+        "ProcessName": "node",
+        "Id": 31564
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32032
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32072
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32136
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32156
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32164
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32172
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32216
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32348
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32500
+      },
+      {
+        "ProcessName": "node",
+        "Id": 32720
+      },
+      {
+        "ProcessName": "node",
+        "Id": 33888
+      },
+      {
+        "ProcessName": "node",
+        "Id": 34156
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 180
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 1844
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 2876
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 4352
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 4708
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 7488
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 7728
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 8408
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 8544
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 8660
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 8684
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 8800
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 9008
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 9112
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 9744
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 12092
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 14280
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 17176
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 19104
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 19336
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 19564
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 19976
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 20276
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 20388
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 21692
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 21996
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 22240
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 22276
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 22992
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23184
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23212
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23244
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23316
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23848
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23860
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 23928
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 25576
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 25664
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 25868
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 25888
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 26252
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 26428
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 26436
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 26848
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 27200
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 27232
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 27324
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 27552
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 27572
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 27780
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 28072
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 28276
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 28540
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 28624
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 28688
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29100
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29132
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29136
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29324
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29440
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29712
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29740
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29820
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 29932
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 30240
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 30488
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 30536
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 30888
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 30948
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 31056
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 31280
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 31580
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 31888
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 31984
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 32064
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 32188
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 32412
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 32476
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 32764
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 33764
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 33804
+      },
+      {
+        "ProcessName": "node_repl",
+        "Id": 34124
+      },
+      {
+        "ProcessName": "OfficeClickToRun",
+        "Id": 4552
+      },
+      {
+        "ProcessName": "OneDrive",
+        "Id": 12508
+      },
+      {
+        "ProcessName": "OneDrive.Sync.Service",
+        "Id": 18776
+      },
+      {
+        "ProcessName": "pwahelper",
+        "Id": 13800
+      },
+      {
+        "ProcessName": "pwsh",
+        "Id": 2764
+      },
+      {
+        "ProcessName": "pwsh",
+        "Id": 29904
+      },
+      {
+        "ProcessName": "pwsh",
+        "Id": 33248
+      },
+      {
+        "ProcessName": "pwsh",
+        "Id": 35764
+      },
+      {
+        "ProcessName": "RadeonSoftware",
+        "Id": 18040
+      },
+      {
+        "ProcessName": "Registry",
+        "Id": 184
+      },
+      {
+        "ProcessName": "remoting_host",
+        "Id": 4368
+      },
+      {
+        "ProcessName": "remoting_host",
+        "Id": 5748
+      },
+      {
+        "ProcessName": "remoting_native_messaging_host",
+        "Id": 14064
+      },
+      {
+        "ProcessName": "RtkAudUService64",
+        "Id": 4472
+      },
+      {
+        "ProcessName": "RtkAudUService64",
+        "Id": 13068
+      },
+      {
+        "ProcessName": "RtkBtManServ",
+        "Id": 4416
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 6676
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 9708
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 11464
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 16524
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 17376
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 20372
+      },
+      {
+        "ProcessName": "RuntimeBroker",
+        "Id": 20520
+      },
+      {
+        "ProcessName": "rustdesk",
+        "Id": 4408
+      },
+      {
+        "ProcessName": "rustdesk",
+        "Id": 5536
+      },
+      {
+        "ProcessName": "rustdesk",
+        "Id": 18172
+      },
+      {
+        "ProcessName": "SearchFilterHost",
+        "Id": 2564
+      },
+      {
+        "ProcessName": "SearchFilterHost",
+        "Id": 3180
+      },
+      {
+        "ProcessName": "SearchFilterHost",
+        "Id": 4528
+      },
+      {
+        "ProcessName": "SearchFilterHost",
+        "Id": 27268
+      },
+      {
+        "ProcessName": "SearchFilterHost",
+        "Id": 28804
+      },
+      {
+        "ProcessName": "SearchHost",
+        "Id": 9404
+      },
+      {
+        "ProcessName": "SearchIndexer",
+        "Id": 10500
+      },
+      {
+        "ProcessName": "SearchProtocolHost",
+        "Id": 5916
+      },
+      {
+        "ProcessName": "Secure System",
+        "Id": 140
+      },
+      {
+        "ProcessName": "SecurityHealthService",
+        "Id": 12964
+      },
+      {
+        "ProcessName": "SecurityHealthSystray",
+        "Id": 12924
+      },
+      {
+        "ProcessName": "services",
+        "Id": 1448
+      },
+      {
+        "ProcessName": "ShellExperienceHost",
+        "Id": 3032
+      },
+      {
+        "ProcessName": "ShellHost",
+        "Id": 8616
+      },
+      {
+        "ProcessName": "sihost",
+        "Id": 8184
+      },
+      {
+        "ProcessName": "smss",
+        "Id": 660
+      },
+      {
+        "ProcessName": "spoolsv",
+        "Id": 4036
+      },
+      {
+        "ProcessName": "sppsvc",
+        "Id": 9620
+      },
+      {
+        "ProcessName": "sqlwriter",
+        "Id": 4500
+      },
+      {
+        "ProcessName": "StartMenuExperienceHost",
+        "Id": 9412
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 636
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 800
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 1056
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 1628
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 1756
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 1804
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 1968
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2060
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2096
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2104
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2112
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2228
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2236
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2256
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2332
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2456
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2504
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2752
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2788
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 2844
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3092
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3100
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3108
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3236
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3288
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3296
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3376
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3400
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3404
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3484
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3504
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3564
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3656
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3740
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3876
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3912
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 3960
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4160
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4188
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4376
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4384
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4392
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4424
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4436
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4444
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4452
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 4744
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 5032
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 5392
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6040
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6184
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6264
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6580
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6588
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6800
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 6948
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7024
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7112
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7192
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7196
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7304
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7416
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7544
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7564
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7684
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 7848
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 8360
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 8536
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 8712
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 9724
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 9936
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 10336
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 12872
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 13436
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 15120
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 18132
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 18240
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 18800
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 18944
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 19480
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 21316
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 23032
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 25404
+      },
+      {
+        "ProcessName": "svchost",
+        "Id": 27512
+      },
+      {
+        "ProcessName": "System",
+        "Id": 4
+      },
+      {
+        "ProcessName": "taskhostw",
+        "Id": 7752
+      },
+      {
+        "ProcessName": "taskhostw",
+        "Id": 23992
+      },
+      {
+        "ProcessName": "TextInputHost",
+        "Id": 13200
+      },
+      {
+        "ProcessName": "Unity Hub",
+        "Id": 4808
+      },
+      {
+        "ProcessName": "Unity Hub",
+        "Id": 14180
+      },
+      {
+        "ProcessName": "Unity Hub",
+        "Id": 15724
+      },
+      {
+        "ProcessName": "Unity Hub",
+        "Id": 19624
+      },
+      {
+        "ProcessName": "Unity.Licensing.Client",
+        "Id": 19788
+      },
+      {
+        "ProcessName": "UserOOBEBroker",
+        "Id": 12532
+      },
+      {
+        "ProcessName": "VBCSCompiler",
+        "Id": 9372
+      },
+      {
+        "ProcessName": "Widgets",
+        "Id": 9692
+      },
+      {
+        "ProcessName": "WidgetService",
+        "Id": 10048
+      },
+      {
+        "ProcessName": "wininit",
+        "Id": 1328
+      },
+      {
+        "ProcessName": "winlogon",
+        "Id": 1428
+      },
+      {
+        "ProcessName": "WmiPrvSE",
+        "Id": 32952
+      }
+    ],
+    "gpuDevices": [
+      {
+        "Name": "AMD Radeon AI PRO R9700",
+        "DriverVersion": "32.0.31041.1004",
+        "PNPDeviceID": "PCI\\VEN_1002&DEV_7551&SUBSYS_54131849&REV_C0\\6&31E3CDBB&0&00000009"
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "PNPDeviceID": "PCI\\VEN_1002&DEV_13C0&SUBSYS_D0001458&REV_C1\\4&16012499&0&0041"
+      }
+    ],
+    "interference": "Uncontrolled external applications; process snapshot retained; clocks and vendor cache state not controlled",
+    "operatingSystem": {
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26200",
+      "BuildNumber": "26200"
+    }
+  },
+  "artifacts": {
+    "presentMonCsv": {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\presentmon.csv",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    },
+    "presentMonSummary": {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\presentmon-summary.json",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    },
+    "etl": {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\gpu.etl",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    },
+    "warmupReceipt": {
+      "path": "",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    },
+    "benchmarkReceipt": {
+      "path": "",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    },
+    "markers": {
+      "path": "",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    },
+    "buildManifest": {
+      "path": "",
+      "exists": false,
+      "bytes": 0,
+      "sha256": ""
+    }
+  },
+  "logs": [
+    {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\presentmon.stderr.log",
+      "exists": true,
+      "bytes": 529,
+      "sha256": "ef4b9f644a8676507e96e393e7fe9b3e6a37da30b64479234622abe77579e9d3"
+    },
+    {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\presentmon.stdout.log",
+      "exists": true,
+      "bytes": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\wpr-start.stderr.log",
+      "exists": true,
+      "bytes": 198,
+      "sha256": "aac63177218835b1c53de0c9c4628f0c10be3fef99e071c39db23800a5051763"
+    },
+    {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\wpr-start.stdout.log",
+      "exists": true,
+      "bytes": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\wpr-status.stderr.log",
+      "exists": true,
+      "bytes": 2,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "path": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-system\\work\\privilege-probe\\wpr-status.stdout.log",
+      "exists": true,
+      "bytes": 164,
+      "sha256": "0d80d9fd9fa677068a703ef2ae8cf627984367979175c8d7f89f4a8d3441152d"
+    }
+  ]
+}

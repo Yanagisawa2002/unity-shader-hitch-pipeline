@@ -7,6 +7,33 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
 {
     public sealed class PsoCoreTests
     {
+        private sealed class FakeTraceBackend : IPsoTraceBackend
+        {
+            public bool disposed;
+            public string AdapterId => "test.adapter";
+            public string ArtifactType => "test-artifact";
+            public bool IsTracing => !disposed;
+
+            public PsoTraceArtifactResult Finish(string outputPath, bool sendToEditor)
+            {
+                File.WriteAllText(outputPath, "trace-artifact");
+                return new PsoTraceArtifactResult
+                {
+                    adapterId = AdapterId,
+                    artifactType = ArtifactType,
+                    stateCount = 7,
+                    variantCount = 5,
+                    saved = true,
+                    sentToEditor = sendToEditor,
+                };
+            }
+
+            public void Dispose()
+            {
+                disposed = true;
+            }
+        }
+
         private string temporaryRoot;
 
         [SetUp]
@@ -76,17 +103,94 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
         }
 
         [Test]
-        public void AdaptiveBatchPolicy_UsesObservedCostAndDeadlineToRaiseBatch()
+        public void AdaptiveBatchPolicy_ColdStartProbeOverridesUnsafeInitialBatch()
         {
-            var policy = new PsoAdaptiveBatchPolicy(2, 1, 64, 10.0, 0.5);
-            Assert.That(policy.ObserveBatch(4, 8.0), Is.EqualTo(2.0).Within(0.0001));
+            var policy = new PsoAdaptiveBatchPolicy(64, 1, 64, 16.67, 0.25);
 
-            int batch = policy.RecommendBatchSize(
-                remainingStates: 40,
-                deadlineRemainingMilliseconds: 20.0,
+            PsoBudgetAdmission admission = policy.Evaluate(
+                remainingStates: 389,
+                deadlineRemainingMilliseconds: 1000.0,
                 hotSet: true);
 
-            Assert.That(batch, Is.EqualTo(20));
+            Assert.That(admission.BatchSize, Is.EqualTo(1));
+            Assert.That(admission.Calibration, Is.True);
+            Assert.That(admission.Reason, Is.EqualTo("cold-start-probe"));
+        }
+
+        [Test]
+        public void AdaptiveBatchPolicy_DeadlineNeverOverridesHardBudget()
+        {
+            var policy = new PsoAdaptiveBatchPolicy(
+                64,
+                1,
+                64,
+                16.67,
+                1.0,
+                bootstrapBatchSize: 1,
+                safetyMarginMilliseconds: 2.0,
+                costSafetyMultiplier: 1.5,
+                cooldownFrames: 2);
+
+            Assert.That(policy.Evaluate(100, 1000.0, true).BatchSize, Is.EqualTo(1));
+            policy.ObserveFrame(8.0, true, 1);
+            policy.ObserveBatch(1, 8.0);
+            Assert.That(policy.Evaluate(99, 1000.0, true).BatchSize, Is.EqualTo(1));
+            policy.ObserveFrame(8.0, true, 1);
+            policy.ObserveBatch(1, 4.0);
+
+            for (int index = 0; index < 8; index++)
+                policy.ObserveFrame(4.0, false, 0);
+
+            PsoBudgetAdmission admission = policy.Evaluate(
+                remainingStates: 98,
+                deadlineRemainingMilliseconds: 1.0,
+                hotSet: true);
+
+            Assert.That(admission.IsAdmitted, Is.True);
+            Assert.That(admission.BatchSize, Is.LessThan(admission.DeadlineBatchSize));
+            Assert.That(admission.BatchSize, Is.LessThanOrEqualTo(admission.SafeBatchSize));
+            Assert.That(admission.PredictedBatchMilliseconds,
+                Is.LessThanOrEqualTo(admission.AvailableBudgetMilliseconds));
+            Assert.That(admission.DeadlineFeasible, Is.False);
+        }
+
+        [Test]
+        public void AdaptiveBatchPolicy_ViolationTripsCooldownAndRecovers()
+        {
+            var policy = new PsoAdaptiveBatchPolicy(
+                64, 1, 64, 16.67, 0.25, 1, 2.0, 1.5, 3);
+            Assert.That(policy.Evaluate(389, 1000.0, true).BatchSize, Is.EqualTo(1));
+
+            policy.ObserveFrame(178.9, true, 1);
+            policy.ObserveBatch(1, 165.4);
+            Assert.That(policy.BudgetViolationCount, Is.EqualTo(1));
+            Assert.That(policy.MinimumBatchViolationCount, Is.EqualTo(1));
+            Assert.That(policy.IsBudgetFeasible, Is.False);
+            Assert.That(policy.CircuitBreakerTripCount, Is.EqualTo(1));
+            Assert.That(policy.ColdStartBatchMilliseconds, Is.EqualTo(165.4).Within(0.001));
+            Assert.That(policy.Evaluate(388, 800.0, true).IsAdmitted, Is.False);
+
+            for (int index = 0; index < 20; index++)
+                policy.ObserveFrame(4.17, false, 0);
+
+            PsoBudgetAdmission recovered = policy.Evaluate(388, 500.0, true);
+            Assert.That(recovered.BatchSize, Is.EqualTo(1));
+            Assert.That(recovered.Reason, Is.EqualTo("steady-state-probe"));
+        }
+
+        [Test]
+        public void AdaptiveBatchPolicy_NeverRunsAProbePredictedOverBudget()
+        {
+            var policy = new PsoAdaptiveBatchPolicy(
+                1, 1, 64, 16.67, 20.0, 1, 2.0, 1.5, 0);
+
+            PsoBudgetAdmission admission = policy.Evaluate(100, 1000.0, true);
+
+            Assert.That(admission.IsAdmitted, Is.False);
+            Assert.That(admission.Calibration, Is.True);
+            Assert.That(admission.Reason, Is.EqualTo("minimum-probe-exceeds-headroom"));
+            Assert.That(admission.PredictedBatchMilliseconds,
+                Is.GreaterThan(admission.AvailableBudgetMilliseconds));
         }
 
         [Test]
@@ -142,6 +246,60 @@ namespace Yanagisawa.ShaderHitchPipeline.Tests
             Assert.That(
                 PsoDeadlineCostScheduler.SelectNext(candidates, 40.0).Phase,
                 Is.EqualTo("cheap"));
+        }
+
+        [Test]
+        public void PlanRules_RunWithoutAnEngineAndRejectUnsafeBudgetSettings()
+        {
+            var plan = new PsoWarmupPlanDocument
+            {
+                profileId = "portable",
+                adapterId = "example.native",
+                adapterVersion = "1",
+                phases = new[]
+                {
+                    new PsoWarmupPhasePlan
+                    {
+                        phase = "startup",
+                        collectionFile = "startup.bin",
+                        budgetSafetyMarginMilliseconds = 16.67,
+                        targetFrameMilliseconds = 16.67,
+                    },
+                },
+            };
+
+            List<string> issues = PsoPlanRules.Validate(plan);
+
+            Assert.That(issues, Has.Some.Contains("budgetSafetyMarginMilliseconds"));
+        }
+
+        [Test]
+        public void TraceCoordinator_ProducesPortableManifestAndDisposesAdapter()
+        {
+            string artifact = Path.Combine(temporaryRoot, "trace.bin");
+            var backend = new FakeTraceBackend();
+            var coordinator = new PsoTraceCoordinator(
+                "session",
+                "startup",
+                new[] { "rain" },
+                "2026-09-02T00:00:00Z",
+                new PsoEnvironmentSnapshot { engineName = "test-engine" },
+                backend);
+
+            PsoSessionManifest manifest = coordinator.Finish(
+                artifact,
+                true,
+                PsoFileUtility.ComputeSha256,
+                "2026-09-02T00:00:01Z");
+
+            Assert.That(manifest.error, Is.Empty);
+            Assert.That(manifest.adapterId, Is.EqualTo("test.adapter"));
+            Assert.That(manifest.collectionFile, Is.EqualTo("trace.bin"));
+            Assert.That(manifest.collectionSha256, Has.Length.EqualTo(64));
+            Assert.That(manifest.environment.engineName, Is.EqualTo("test-engine"));
+            Assert.That(manifest.sentToEditor, Is.True);
+            Assert.That(backend.disposed, Is.True);
+            Assert.That(coordinator.IsTracing, Is.False);
         }
 
         [Test]

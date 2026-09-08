@@ -1,0 +1,24 @@
+{
+  "status": "reproduced_unified_serializer_fix_required",
+  "unityVersion": "6000.5.2f1",
+  "originalFailure": "local-smoke-v3 startup LoadAndValidate rejected genuine writer-produced plan",
+  "changedFields": [
+    {
+      "field": "phases[1].estimatedMillisecondsPerState",
+      "original": 0.10332000000000001,
+      "afterRead": 0.10332
+    }
+  ],
+  "hashes": {
+    "unityVersion": "6000.5.2f1",
+    "originalStoredHash": "d94631a84acf4710226913fc9bffbf5f7c24d44a1b53a1a8cd139b1ec2d81b7b",
+    "firstReadContentHash": "61f51bdcae65b4512a0268e8f9b965241d4074838ce4eb6196d3e8a438f608ec",
+    "secondReadContentHash": "61f51bdcae65b4512a0268e8f9b965241d4074838ce4eb6196d3e8a438f608ec",
+    "originalHashSurvivedRead": false
+  },
+  "diagnosticCommand": "Unity.exe -batchmode -nographics -quit -projectPath <worktree>/UnityProject -executeMethod Yanagisawa.ShaderHitchPipeline.HotsetFixture.PsoHotsetJsonRoundtripProbe.Run -hotset-json-input <worktree>/Docs/Evidence/hotset-json-roundtrip/original.json -hotset-json-output <new-output-directory>",
+  "execution": "Run with explicit owned-process wait under Invoke-SerializedValidation.ps1; validated native exit0",
+  "rawLog": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-hotset\\UnityProject\\PsoArtifacts\\Hotset\\json-roundtrip-validated\\editor.log",
+  "rawLogSha256": "5fd989c5e5b3b7dbf06407cca77abaf667872e42a695ea3d101e99f361343f57",
+  "conclusion": "The only baseline schema3 JSON change is a measured double from 0.10332000000000001 to 0.10332. Original stored hash matches original text with planSha256 blank. Read then serialize changes its hash; a second read is stable. Do not weaken verification: fix the shared write/hash/read numerical contract and retain this regression case. Fixture currently normalizes before hashing and validates its file immediately; this is not a shared serializer fix."
+}

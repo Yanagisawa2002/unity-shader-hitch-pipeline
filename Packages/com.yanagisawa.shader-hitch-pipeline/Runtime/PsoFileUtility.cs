@@ -80,7 +80,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public static void WriteJsonAtomic(string path, object document, bool pretty = true)
         {
-            WriteTextAtomic(path, JsonUtility.ToJson(document, pretty));
+            WriteTextAtomic(path, PsoDocumentJson.Serialize(document, pretty));
         }
 
         public static void WriteTextAtomic(string path, string contents)
@@ -91,18 +91,32 @@ namespace Yanagisawa.ShaderHitchPipeline
                 throw new InvalidOperationException("Could not resolve output directory for " + path);
 
             Directory.CreateDirectory(directory);
-            string temporary = fullPath + ".tmp-" + Guid.NewGuid().ToString("N");
-            File.WriteAllText(temporary, contents, new UTF8Encoding(false));
-            if (File.Exists(fullPath))
-                File.Delete(fullPath);
-            File.Move(temporary, fullPath);
+            // Keep the atomic sibling name independent of the destination file
+            // name. Appending a full GUID to an already descriptive artifact
+            // name can cross the legacy Windows MAX_PATH boundary even when the
+            // final receipt path itself is valid.
+            string temporary = Path.Combine(
+                directory,
+                ".pso-" + Guid.NewGuid().ToString("N").Substring(0, 12) + ".tmp");
+            try
+            {
+                File.WriteAllText(temporary, contents, new UTF8Encoding(false));
+                if (File.Exists(fullPath))
+                    File.Delete(fullPath);
+                File.Move(temporary, fullPath);
+            }
+            finally
+            {
+                if (File.Exists(temporary))
+                    File.Delete(temporary);
+            }
         }
 
         public static T ReadJson<T>(string path) where T : class
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException("JSON file was not found.", path);
-            T result = JsonUtility.FromJson<T>(File.ReadAllText(path));
+            T result = PsoDocumentJson.Parse<T>(File.ReadAllText(path));
             if (result == null)
                 throw new InvalidDataException("Could not parse JSON document: " + path);
             return result;

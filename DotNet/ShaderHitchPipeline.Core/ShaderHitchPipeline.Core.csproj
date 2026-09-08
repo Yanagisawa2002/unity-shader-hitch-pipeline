@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <Deterministic>true</Deterministic>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AssemblyName>ShaderHitchPipeline.Core</AssemblyName>
+    <RootNamespace>Yanagisawa.ShaderHitchPipeline</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Packages/com.yanagisawa.shader-hitch-pipeline/Core/*.cs"
+             Link="Core/%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

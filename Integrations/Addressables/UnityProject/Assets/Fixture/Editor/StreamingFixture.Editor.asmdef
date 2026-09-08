@@ -1,0 +1,1 @@
+{"name":"StreamingFixture.Editor","references":["StreamingFixture","Unity.Addressables","Unity.Addressables.Editor","Unity.ResourceManager","Yanagisawa.ShaderHitchPipeline.Runtime","Yanagisawa.ShaderHitchPipeline.Editor"],"includePlatforms":["Editor"]}

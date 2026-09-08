@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "sourceRun": "20260903-054644",
+  "scenario": "megacity-metro",
+  "acceptancePassed": true,
+  "source": {
+    "heroContainerSha256": "b51e0d6be6dc3b5d260f62178a593c70d2df58017549eb4249caaad4da451426",
+    "heroVideoStreamSha256": "724832f653c57c93f854da05dac0ec5923d11c4c5735b179b46747ecbb0160b3",
+    "posterSha256": "d0f368edf615453ab7e610cb4a72b5acbad20b8c6045c78bafc87d596277b3a4",
+    "comparisonSha256": "245a1adc2a66453f96ea8c1215fa6f3fa2e6f8df8c352df01e8de1d293feb2e1",
+    "summarySha256": "4201d4a0f7182a34eb686dd00c6a020bcb795af080db0fb9d8cce88d24855531",
+    "acceptanceSha256": "401aa90587177fd700491dfb2d36fa19eec06722c332ae2bf9215065a742fe7e"
+  },
+  "published": {
+    "hero": "megacity-metro-actual-comparison.mp4",
+    "heroContainerSha256": "1822282a2e0e86ddd8de53c9f9983a9a08654aad6c43ae26c175d0de24a95899",
+    "heroVideoStreamSha256": "724832f653c57c93f854da05dac0ec5923d11c4c5735b179b46747ecbb0160b3",
+    "gif": "megacity-metro-actual-comparison.gif",
+    "gifSha256": "1a7bed8f7fbc73ca42aa42c055d65910ddc9f1edfd421622eff2b2e5b5d3346a",
+    "poster": "megacity-metro-actual-comparison.png",
+    "posterSha256": "d0f368edf615453ab7e610cb4a72b5acbad20b8c6045c78bafc87d596277b3a4",
+    "comparison": "megacity-metro-comparison.json",
+    "comparisonSha256": "debc78e86b846c9aadc965ef633332fee060126d9ebb410eb9c2b576abb791c3",
+    "summary": "megacity-metro-comparison.md",
+    "summarySha256": "1285a09c747ff3137b2cb63f0122ab1a0ca234dd92bd222b7d640b2e612fb503"
+  },
+  "transformations": [
+    "MP4 container remuxed with an unchanged H.264 elementary stream",
+    "GIF downsampled to 800x276 at 10 FPS for repository delivery",
+    "JSON and Markdown line endings normalized to LF",
+    "PNG retained bit-for-bit"
+  ]
+}

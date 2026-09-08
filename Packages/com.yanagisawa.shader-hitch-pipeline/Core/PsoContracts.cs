@@ -1,12 +1,20 @@
 using System;
-using UnityEngine;
 
 namespace Yanagisawa.ShaderHitchPipeline
 {
     [Serializable]
+    public sealed class PsoDriverModuleIdentity
+    {
+        public string file;
+        public string sha256;
+    }
+
+    [Serializable]
     public sealed class PsoEnvironmentSnapshot
     {
         public string unityVersion;
+        public string engineName;
+        public string engineVersion;
         public string productName;
         public string applicationVersion;
         public string buildGuid;
@@ -17,30 +25,21 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string graphicsDeviceVersion;
         public int graphicsMemorySizeMb;
         public string qualityLevelName;
+        public string operatingSystem;
+        public int graphicsDeviceId;
+        public int graphicsDeviceVendorId;
+        public string processorType;
+        public int processorCount;
+        public string renderingThreadingMode;
+        public string costExecutionContext;
+        public string driverIdentity;
+        public string driverIdentitySource;
+        public string driverVersion;
+        public string driverIdentityError;
+        public string driverRegistryIdentity;
+        public PsoDriverModuleIdentity[] driverModules = Array.Empty<PsoDriverModuleIdentity>();
+        public PsoContentIdentity identity;
 
-        public static PsoEnvironmentSnapshot Capture()
-        {
-            string quality = "Unknown";
-            int qualityIndex = QualitySettings.GetQualityLevel();
-            string[] qualityNames = QualitySettings.names;
-            if (qualityIndex >= 0 && qualityIndex < qualityNames.Length)
-                quality = qualityNames[qualityIndex];
-
-            return new PsoEnvironmentSnapshot
-            {
-                unityVersion = Application.unityVersion,
-                productName = Application.productName,
-                applicationVersion = Application.version,
-                buildGuid = Application.buildGUID,
-                runtimePlatform = Application.platform.ToString(),
-                graphicsDeviceType = SystemInfo.graphicsDeviceType.ToString(),
-                graphicsDeviceName = SystemInfo.graphicsDeviceName,
-                graphicsDeviceVendor = SystemInfo.graphicsDeviceVendor,
-                graphicsDeviceVersion = SystemInfo.graphicsDeviceVersion,
-                graphicsMemorySizeMb = SystemInfo.graphicsMemorySize,
-                qualityLevelName = quality,
-            };
-        }
     }
 
     [Serializable]
@@ -54,6 +53,8 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string endedUtc;
         public string collectionFile;
         public string collectionSha256;
+        public string adapterId = "unity.graphics-state-collection";
+        public string artifactType = "graphics-state-collection";
         public int variantCount;
         public int graphicsStateCount;
         public bool saved;
@@ -83,6 +84,11 @@ namespace Yanagisawa.ShaderHitchPipeline
         public double estimatedMillisecondsPerState = 0.25;
         public double expectedUseProbability = 1.0;
         public int hotSetTier = 1;
+        public int bootstrapBatchSize = 1;
+        public double budgetSafetyMarginMilliseconds = 2.0;
+        public double budgetCostSafetyMultiplier = 1.5;
+        public int budgetCooldownFrames = 8;
+        public bool preinteractiveBootstrap = true;
     }
 
     [Serializable]
@@ -95,10 +101,13 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string runtimePlatform;
         public string graphicsDeviceType;
         public string qualityLevelName;
+        public string adapterId = "unity.graphics-state-collection";
+        public string adapterVersion = "1";
         public int sourceSessionCount;
         public string[] sourceSessionHashes = Array.Empty<string>();
         public PsoWarmupPhasePlan[] phases = Array.Empty<PsoWarmupPhasePlan>();
         public string planSha256;
+        public PsoCompatibilityContract compatibility;
     }
 
     [Serializable]
@@ -112,6 +121,14 @@ namespace Yanagisawa.ShaderHitchPipeline
         public int statesBefore;
         public int statesAfter;
         public int statesAdded;
+        public bool shaderFilterApplied;
+        public string[] shaderAllowlist = Array.Empty<string>();
+        public int sourceVariantCount;
+        public int sourceGraphicsStateCount;
+        public int filteredVariantCount;
+        public int filteredGraphicsStateCount;
+        public int excludedVariantCount;
+        public int excludedGraphicsStateCount;
         public bool accepted;
         public string reason;
     }
@@ -169,6 +186,9 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string planSha256;
         public int discardFrames;
         public int requestedSampleFrames;
+        public int actualSampleFrames;
+        public bool scenarioMeasurementGated;
+        public double measurementDurationSeconds;
         public bool completed;
         public string error;
         public PsoEnvironmentSnapshot environment;
@@ -200,11 +220,14 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string phase;
         public string collectionFile;
         public string strategy;
+        public string backendSchedulingMode = "progressive-batches";
         public int hotSetTier;
         public double deadlineMilliseconds;
         public double expectedUseProbability;
         public int totalGraphicsStates;
         public int completedGraphicsStates;
+        public int completedWarmupPermutations;
+        public bool backendReportedWarmedUp;
         public int initialBatchSize;
         public int finalBatchSize;
         public int batchCount;
@@ -215,9 +238,37 @@ namespace Yanagisawa.ShaderHitchPipeline
         public double observedMillisecondsPerState;
         public double minimumSlackMilliseconds;
         public bool deadlineMissed;
+        public string budgetPolicy = "strict-admission";
+        public double hardFrameBudgetMilliseconds;
+        public double budgetSafetyMarginMilliseconds;
+        public double budgetCostSafetyMultiplier;
+        public int bootstrapBatchSize;
+        public bool preinteractiveBootstrapEnabled;
+        public int preinteractiveBootstrapBatchCount;
+        public double preinteractiveBootstrapMilliseconds;
+        public double coldStartBatchMilliseconds;
+        public int budgetViolationCount;
+        public int minimumBatchBudgetViolationCount;
+        public int circuitBreakerTripCount;
+        public int deferredFrameCount;
+        public int deadlineInfeasibleBatchCount;
+        public bool hardFrameBudgetMet;
+        public bool hardFrameBudgetFeasible;
+        public bool schedulerAdmissionBudgetMet;
+        public double maximumBudgetOverrunMilliseconds;
+        public string hardFrameBudgetOutcome;
+        public string hardBudgetGuaranteeScope =
+            "interactive-frames-after-preinteractive-bootstrap; opaque-backend-admission-not-preemptible";
         public PsoFrameStatistics warmupFrameTimes;
+        public double[] warmupFrameTimeSamplesMilliseconds = Array.Empty<double>();
         public int[] batchSizes = Array.Empty<int>();
+        public int[] safeBatchSizes = Array.Empty<int>();
+        public int[] deadlineBatchSizes = Array.Empty<int>();
+        public double[] predictedBatchDurationsMilliseconds = Array.Empty<double>();
         public double[] batchDurationsMilliseconds = Array.Empty<double>();
+        public double predictedBackgroundCompletionMilliseconds;
+        public double observedBackgroundCompletionMilliseconds;
+        public string[] admissionReasons = Array.Empty<string>();
         public bool completed;
         public string error;
     }

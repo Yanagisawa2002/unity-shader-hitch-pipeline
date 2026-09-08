@@ -1,0 +1,1 @@
+{"name":"StreamingFixture","references":["Yanagisawa.ShaderHitchPipeline.Core","Yanagisawa.ShaderHitchPipeline.Runtime","Yanagisawa.ShaderHitchPipeline.Addressables","Unity.Addressables","Unity.ResourceManager"]}
