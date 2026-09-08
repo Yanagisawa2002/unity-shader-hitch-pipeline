@@ -5,7 +5,8 @@ param(
     [string]$OutputRoot = '',
     [ValidateRange(1,3)][int]$Repetitions = 1,
     [switch]$SkipBuild,
-    [switch]$BuildOnly
+    [switch]$BuildOnly,
+    [switch]$NextHeldOut
 )
 $ErrorActionPreference = 'Stop'
 # Caller must hold Invoke-SerializedValidation.ps1's shared mutex for the whole call.
@@ -16,7 +17,8 @@ if (!$BuildOnly -and (Test-Path (Join-Path $runRoot 'frozen-policy.json'))) { th
 New-Item -ItemType Directory -Force $runRoot | Out-Null
 $player = Join-Path $project 'Builds/Hotset/Hotset.exe'
 function Invoke-OwnedProcess([string]$Executable, [string[]]$Arguments, [int]$TimeoutSeconds) {
-    $taskProcess = Start-Process -FilePath $Executable -ArgumentList $Arguments -PassThru -WindowStyle Hidden
+    $style = if ($Executable -eq $player) { 'Normal' } else { 'Hidden' }
+    $taskProcess = Start-Process -FilePath $Executable -ArgumentList $Arguments -PassThru -WindowStyle $style
     try {
         if (!$taskProcess.WaitForExit($TimeoutSeconds * 1000)) {
             Stop-Process -Id $taskProcess.Id -Force
@@ -42,7 +44,7 @@ function Run-Player([string]$Mode, [string]$Route, [string]$Id) {
     $observedAdapter = Get-FixtureAdapter
     $observedAdapter | ConvertTo-Json | Set-Content -Encoding utf8 (Join-Path $runRoot ($Id+'.adapter.json'))
     Invoke-OwnedProcess $player @('-force-d3d12','-screen-fullscreen','0','-screen-width','640','-screen-height','360',
-        '-pso-disable-warmup','-hotset-observed-driver',$observedAdapter.driverVersion,'-hotset-mode',$Mode,'-hotset-route',$Route,'-hotset-run-id',$Id,
+        '-pso-disable-warmup','-max-async-pso-job-count','4','-hotset-observed-driver',$observedAdapter.driverVersion,'-hotset-mode',$Mode,'-hotset-route',$Route,'-hotset-run-id',$Id,
         '-hotset-root',('"'+$runRoot+'"'),'-logFile',('"'+(Join-Path $runRoot ($Id+'.log'))+'"')) 60
 }
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
@@ -51,6 +53,7 @@ $sourceFiles = @('Packages/com.yanagisawa.shader-hitch-pipeline/Core','Packages/
     Sort-Object FullName | ForEach-Object { @{path=$_.FullName.Substring($repoRoot.Length+1);sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash} }
 $binaryFiles = Get-ChildItem -LiteralPath (Split-Path $player) -File -Recurse | Sort-Object FullName |
     ForEach-Object { @{path=$_.FullName.Substring((Split-Path $player).Length+1);sha256=(Get-FileHash $_.FullName -Algorithm SHA256).Hash} }
+$heldOutRoutes = if ($NextHeldOut) { @{ 'next-held-a'=@(0,3,1,2,3); 'next-held-b'=@(0,2,3,1,2) } } else { @{ 'held-a'=@(0,2,1,3,1); 'held-b'=@(0,3,2,3,2) } }
 $declaration = [ordered]@{
     schemaVersion=1; workload='four collections of four actual keyword variants; OnWillRenderObject usage events'
     sourceCommit=(& git -C (Join-Path $PSScriptRoot '..') rev-parse HEAD)
@@ -58,7 +61,7 @@ $declaration = [ordered]@{
     workingTreeDirty=([bool](& git -C $repoRoot status --porcelain)); sourceFiles=@($sourceFiles); binaryFiles=@($binaryFiles)
     playerSha256=(Get-FileHash $player -Algorithm SHA256).Hash
     requiredUnits=@('u0'); trainingRoutes=@{ 'train-a'=@(0,1,1,2,1); 'train-b'=@(0,1,2,1,1) }
-    heldOutRoutes=@{ 'held-a'=@(0,2,1,3,1); 'held-b'=@(0,3,2,3,2) }
+    heldOutRoutes=$heldOutRoutes
     renderPath='explicit-camera-render-backbuffer; real OnWillRenderObject visits required'
     framesPerStage=24; frameTargetHz=120; seed='none: literal immutable route arrays'
     budgetRule='required measured work + 0.5 * sum(optional measured work), frozen before held-out'
@@ -66,6 +69,8 @@ $declaration = [ordered]@{
     controls=@('required-only','hotset','all-at-once'); driverCache='uncontrolled; never cleared'
     costScope='process-cold calibration after discovery; warm driver cache possible'
     firstPresent='unavailable without OS capture; engine rendered-frame proxy retained'
+    workerCount=4; displayedCadence='unavailable: no OS capture in this bounded fixture'
+    window='all 119 inter-frame samples across all five stages; no discard; startup engine proxy reported separately'
 }
 $declaration | ConvertTo-Json -Depth 12 | Set-Content -Encoding utf8 (Join-Path $runRoot 'declaration.json')
 Run-Player 'discover' 'train-a' 'discovery'
@@ -82,7 +87,7 @@ $training = @('train-a','train-b') | ForEach-Object { Get-Content -Raw (Join-Pat
     ConvertTo-Json -Depth 30 | Set-Content -Encoding utf8 (Join-Path $runRoot 'frozen-policy.json')
 Run-Player 'orchestrator-smoke' 'held-a' 'orchestrator-smoke'
 $arms = @('required-only','hotset','all-at-once')
-$routes = @('held-a','held-b')
+$routes = if ($NextHeldOut) { @('next-held-a','next-held-b') } else { @('held-a','held-b') }
 $receipts = @()
 for ($routeIndex=0; $routeIndex -lt 2; $routeIndex++) {
     for ($rep=0; $rep -lt $Repetitions; $rep++) {

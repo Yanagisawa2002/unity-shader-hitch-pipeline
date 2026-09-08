@@ -392,6 +392,8 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
                 case "train-b": return new[] { 0, 1, 2, 1, 1 };
                 case "held-a": return new[] { 0, 2, 1, 3, 1 };
                 case "held-b": return new[] { 0, 3, 2, 3, 2 };
+                case "next-held-a": return new[] { 0, 3, 1, 2, 3 };
+                case "next-held-b": return new[] { 0, 2, 3, 1, 2 };
                 default: throw new ArgumentException("Unknown fixed route " + id);
             }
         }
@@ -426,7 +428,8 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
             return "hotset-fixture-v1|" + Application.buildGUID + "|" + shaderSha256 + "|" + Application.unityVersion +
                 "|" + SystemInfo.graphicsDeviceName + "|apiVersion=" + SystemInfo.graphicsDeviceVersion + "|observedDriver=" + ObservedDriver() +
                 "|" + SystemInfo.graphicsDeviceType + "|" + PsoUnityEnvironment.CurrentQualityName() +
-                "|explicit-camera-render|bulk-startup,progressive-one-deferred|jobWorkers=" + Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerCount +
+                "|explicit-camera-render|bulk-startup,progressive-one-deferred|maxAsyncPsoJobs=" + PsoCommandLine.Current.GetString("-max-async-pso-job-count", "engine-default") +
+                "|jobWorkers=" + Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerCount +
                 "|cpuThreads=" + SystemInfo.processorCount + "|asyncPsoWorkers=engine-default-unavailable|640x360|120Hz|vsync0";
         }
         private static string ObservedDriver()
@@ -440,12 +443,15 @@ namespace Yanagisawa.ShaderHitchPipeline.HotsetFixture
             var args = Environment.GetCommandLineArgs();
             var flags = new HashSet<string>(StringComparer.Ordinal) { "-force-d3d12", "-pso-disable-warmup" };
             var valued = new HashSet<string>(StringComparer.Ordinal) { "-screen-fullscreen", "-screen-width", "-screen-height",
-                "-hotset-mode", "-hotset-route", "-hotset-run-id", "-hotset-root", "-hotset-observed-driver", "-logFile" };
+                "-hotset-mode", "-hotset-route", "-hotset-run-id", "-hotset-root", "-hotset-observed-driver", "-logFile", "-max-async-pso-job-count" };
             for (int i = 1; i < args.Length; i++)
             {
                 if (flags.Contains(args[i])) continue;
                 if (!valued.Contains(args[i]) || ++i >= args.Length) throw new ArgumentException("Unknown fixture cost-context argument");
             }
+            string psoWorkers = PsoCommandLine.Current.GetString("-max-async-pso-job-count", "engine-default");
+            if (psoWorkers != "engine-default" && psoWorkers != "4")
+                throw new ArgumentException("Fixture permits only the predeclared four async PSO workers");
             if (PsoCommandLine.Current.GetString("-screen-width", "640") != "640" ||
                 PsoCommandLine.Current.GetString("-screen-height", "360") != "360" ||
                 PsoCommandLine.Current.GetString("-screen-fullscreen", "0") != "0") throw new ArgumentException("Fixture screen context changed");
