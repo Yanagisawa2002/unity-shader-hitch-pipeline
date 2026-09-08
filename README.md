@@ -20,6 +20,12 @@ metrics cover different intervals: the scene reveal and warmup itself.
 [Watch the Player comparison](Docs/Media/actual-comparison.mp4) ·
 [Watch the warmup comparison](Docs/Media/actual-warmup-comparison.mp4)
 
+## Visual walkthrough
+
+[![Engineering overview and evidence](Docs/portfolio/overview.svg)](Docs/portfolio/overview.png)
+
+The two panels separate scene-reveal frame times from the warmup interval; the flow above is schematic. [Sources and reproduction](Docs/portfolio/README.md).
+
 ## Engineering challenges
 
 1. **Capture the states that actually matter.** A useful plan must include both

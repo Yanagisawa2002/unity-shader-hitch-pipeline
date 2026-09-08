@@ -1,0 +1,59 @@
+{
+  "title": "Warmup scheduling: two different frame windows",
+  "subtitle": "AMD R9700 \u00b7 D3D12 \u00b7 Unity 6000.5.2f1 \u00b7 identical 384-object reveal workload",
+  "flow": [
+    "Trace actual\ngraphics states",
+    "Plan phases\nand deadlines",
+    "Warm up\nin batches",
+    "Reveal\nscene content"
+  ],
+  "kind": "bars",
+  "panels": [
+    {
+      "title": "Scene-reveal P95",
+      "unit": "Milliseconds \u00b7 lower is better",
+      "max": 45,
+      "labels": [
+        "Cold",
+        "All-at-once",
+        "Scheduled"
+      ],
+      "values": [
+        35.706,
+        4.169,
+        4.21
+      ],
+      "format": "{:.2f}"
+    },
+    {
+      "title": "Warmup-window P95",
+      "unit": "Milliseconds \u00b7 lower is better",
+      "max": 165,
+      "labels": [
+        "All-at-once",
+        "Scheduled"
+      ],
+      "values": [
+        127.0,
+        12.9
+      ],
+      "format": "{:.1f}"
+    }
+  ],
+  "note": "Scheduling trades total warmup time: 643.5 \u2192 774.6 ms. Scheduled warmup includes a 178.9 ms outlier.\nThe two panels measure separate intervals; they are summary statistics, not frame traces.",
+  "source_label": "README measurement tables and Docs/BENCHMARK_METHODOLOGY.md",
+  "sources": [
+    {
+      "path": "Docs/BENCHMARK_METHODOLOGY.md",
+      "sha256": "c0888b27ccef416dd51d07852dee03b52243529403fb8bf3d146eec7a5d48c62",
+      "hash_normalization": "CRLF to LF"
+    }
+  ],
+  "chart_contract": {
+    "surface": "GitHub README; static SVG and PNG",
+    "palette": "single blue root plus neutrals; explicit labels and hatching",
+    "footprint": "1200 x 860 logical pixels",
+    "question": "Warmup scheduling: two different frame windows",
+    "data_grain": "As labeled per panel; schematic flow has no timing or dimensional scale."
+  }
+}
