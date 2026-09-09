@@ -4,6 +4,11 @@ The default entry is `Tools/Invoke-PsoValidation.ps1`. It uses a named Python
 test allowlist and engine-neutral C# functional programs. It does not discover
 arbitrary tests, invoke Editor/Player, create graphics state, acquire native
 performance counters, run a benchmark or render performance figures.
+The allowlist includes the .NET 8
+[policy adoption example](../DotNet/ShaderHitchPipeline.PolicyExample/README.md).
+It prints real Core policy settings and exercises request handling through an
+explicitly simulated owner/fence; it does not run the scheduling policies or
+establish native coverage.
 
 ```powershell
 python -m pip install -r Tools/requirements-validation.txt

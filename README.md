@@ -2,6 +2,12 @@
 
 **Schedule graphics-state warmup around content loading, with explicit coverage and lifecycle contracts.**
 
+The engineering goal is to control loading-time pressure while retaining total
+completion cost, tail latency and useful state coverage. Start with the
+[policy adoption guide](Docs/POLICY_ADOPTION.md) and its
+[compilable Core example](DotNet/ShaderHitchPipeline.PolicyExample/README.md).
+The example uses a simulated sink; it establishes no native warmup or performance result.
+
 This Unity 6 package captures native `GraphicsStateCollection` states, validates
 trace/plan/build identity, and coordinates phase warmup. Unity and the graphics
 driver perform shader compilation and pipeline creation.

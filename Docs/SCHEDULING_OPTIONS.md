@@ -1,5 +1,9 @@
 # Scheduling and content lifecycle — Unmeasured
 
+For the application decision and a compilable CPU-only example, start with
+[policy adoption](POLICY_ADOPTION.md). Configuration choices are distinct from
+native backend capability and from measured policy improvements.
+
 `PsoWarmupOrchestrator` delegates execution and ownership to
 `Core/PsoWarmupScheduler`. The same scheduler is exercised by deterministic
 mock-backend/virtual-clock tests. New strategy options remain opt-in and carry
@@ -36,7 +40,10 @@ activation keeps its original terminal state. Retry after retirement;
 `Core/PsoContentPhaseLifecycle` uses an explicit `Deferred`
 activation result to keep dependency-ready loads pending without converting that
 normal wait into permanent failure. Cancelling a deferred request prevents its
-later retry from resurrecting demand.
+later retry from resurrecting demand. `ActivatePhase` can also return false for
+an already active/completed resident or for an unavailable phase; inspect status
+before deciding to retry. A request's `Generation` is separate from the scheduler's
+phase activation number.
 Activation numbers remain unique for a phase across unload/re-registration within
 the same loaded plan; a new native collection does not restart its feedback identity.
 
@@ -55,12 +62,19 @@ sample from the previous context. Configured estimates remain priors.
 `GetPhaseStatus` exposes Pending/Running/Completed/Cancelled/Unloaded/Faulted,
 activation generation, real backend progress, deadline feasibility/miss, latest
 admission reason and retained fences. Cancellation is not completion; unloading
-is not proof of shader coverage. Resources remain retained until a successful
-completion fence. Backend failure and no-progress outcomes stay visible.
+is not proof of shader coverage. The scheduler retains its backend owner through
+a successful completion fence; the host must independently retain external
+shader/material leases. `PsoContentPhaseLifecycle` accounts for demand and does
+not own those assets or drain fences. A cancelled request handle is already
+retired, so a later `Unload(handle)` does not request phase eviction; use the
+owning sink/orchestrator for that separate action. Backend failure and no-progress
+outcomes stay visible.
 
 The native progress counter counts **permutations**, not necessarily graphics
-states. Only `IsWarmedUp` proves complete phase coverage; incomplete phases must
-not advertise their permutation count as warmed graphics states.
+states. Only `IsWarmedUp` attests complete warmup of the loaded collection;
+incomplete phases must not advertise their permutation count as warmed graphics
+states. This says nothing about application states absent from that collection
+or content that has not yet drawn.
 
 Each warmup receipt has a `.scheduling.json` sidecar containing policy flags,
 separate activation histories, cancellation/fault/fence state and an explicit

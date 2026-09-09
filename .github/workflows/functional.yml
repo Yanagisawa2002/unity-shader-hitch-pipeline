@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r Tools/requirements-validation.txt
-      - name: Explicit CPU-only checks
+      - name: Explicit CPU-only checks and Core adoption example
         shell: pwsh
         run: ./Tools/Invoke-PsoValidation.ps1
       - name: Verify PowerShell syntax without invoking scripts

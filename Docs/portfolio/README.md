@@ -2,6 +2,11 @@
 
 This figure is retained historical evidence from report snapshot `f352210`; it was not regenerated during the 2026-09-08 repair. The two panels separate scene-reveal frame times from the warmup interval; the flow above is schematic.
 
+Read the [policy adoption guide](../POLICY_ADOPTION.md) for the scheduler's own
+tradeoff: warmup-window pressure versus total completion and tail latency.
+Cold-start improvement alone does not isolate that contribution, and the
+historical 178.9 ms outlier remains unresolved by measured current-source evidence.
+
 ## Reproduce
 
 From the repository root:
