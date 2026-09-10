@@ -1,0 +1,799 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-application-execution",
+  "status": "partial",
+  "recordedUtc": "2026-09-10T19:37:41.291076+00:00",
+  "startedUtc": "2026-09-10T18:43:55.3582361Z",
+  "integrationStartCommit": "b367aa0f98facb044f8f2df4f5a1cc7ca526dd36",
+  "sourceCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "sourceTree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "sourceCommitScope": "Official application pin; overlay and integration commits are separate identities.",
+  "upstream": "https://github.com/Unity-Technologies/megacity-metro.git",
+  "editor": {
+    "version": "6000.1.0f1_9ea152932a88",
+    "sha256": "d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b"
+  },
+  "backend": {
+    "graphicsApi": "Direct3D12",
+    "scriptingBackend": "IL2CPP",
+    "standaloneSubtarget": "Player",
+    "netcodeTarget": "Client",
+    "warmupBackend": "native-async-bulk",
+    "progressiveExperimentalSelected": false
+  },
+  "preparedHostPath": "work/actual-20260910/megacity-native",
+  "overlay": {
+    "path": "work/actual-20260910/overlay-final-e5c75ad67d9d",
+    "sourceCommit": "e5c75ad67d9de791ea5058b4e2a610f91b14273e",
+    "applied": true,
+    "originalReceiptSha256": "1a112fe6c6b1fac4e657394b056113573dd68264802985e927436c8c41c776de",
+    "originalPackageFilesVerified": 149,
+    "finalPackageFiles": {
+      "path": "work/actual-20260911/training-02/adapter-package-files.json",
+      "bytes": 28729,
+      "sha256": "44c918976500b3ea790858a2cba1fb0736bd9642ffbe1cc466c79ea89615fafc"
+    },
+    "changedPackageFiles": 2,
+    "exactRevisionSnapshots": {
+      "path": "work/actual-20260911/adapter-source-revisions/index.json",
+      "bytes": 4771,
+      "sha256": "306dd25120721018beeb79a6e9584798c8436c6ded0f2d47c2fe7c0d7cfda92c"
+    }
+  },
+  "checkoutVerified": true,
+  "lfsPayloadsVerified": true,
+  "checkoutVerificationScope": "Strict actual working-byte and LFS validation at the pristine source before overlay application. Current host is intentionally dirty.",
+  "trackedFilesVerified": 3820,
+  "lfsTrackedFilesVerified": 434,
+  "uniqueLfsPayloadsVerified": 432,
+  "currentHostPristine": false,
+  "originalAssetsUnchanged": true,
+  "originalManifestEntriesPreserved": 70,
+  "originalLockEntriesPreserved": 91,
+  "resolvedPackageEntries": 93,
+  "hostAudit": {
+    "path": "work/actual-20260911/resource-release-01/host-audit.json",
+    "bytes": 2252,
+    "sha256": "e51ed3f2ce5156dfc6a398ce21a1d7dfe78bd5aeba6f7286cd5029ae339da876"
+  },
+  "importResult": {
+    "status": "Passed",
+    "acceptedAttempt": "configure-03",
+    "originalVfxAssetsReimported": 34,
+    "exactEditorCompilation": true,
+    "originalAssetsPreserved": true,
+    "playerCorrectnessEstablished": false
+  },
+  "buildResult": {
+    "status": "Failed",
+    "firstAttempt": "training-01",
+    "earlyFailureValidation": "training-02",
+    "playerProduced": false,
+    "nativeCppCompilationOrLinkReached": false,
+    "reason": "Currently selected scripting backend (IL2CPP) is not installed.",
+    "trainingBuildFlag": true,
+    "finalComparisonPlayerBuilt": false
+  },
+  "moduleGap": {
+    "evidence": {
+      "path": "work/actual-20260911/module-diagnosis/module-gap.json",
+      "bytes": 2988,
+      "sha256": "13f3fb4be909d252daa5d2aed512c7252eb193fffd62bf5737ac6c9eba4dbf6b"
+    },
+    "installedIl2cppPlayerVariations": false,
+    "genericIl2cppToolExists": true,
+    "exactComponent": "Windows Build Support (IL2CPP)",
+    "officialUrl": "https://download.unity3d.com/download_unity/9ea152932a88/TargetSupportInstaller/UnitySetup-Windows-IL2CPP-Support-for-Editor-6000.1.0f1.exe",
+    "publishedDownloadBytes": 187532288,
+    "headContentLengthBytes": 187532368,
+    "publishedInstalledBytes": 715260928,
+    "publishedMd5": "6eeace05af659d927c223ae4cafccf2b",
+    "payloadDownloaded": false,
+    "payloadHashVerified": false,
+    "installerExecuted": false,
+    "scope": "Official metadata/HEAD values, not measured installation; no system installation was attempted.",
+    "estimatedStagingAndInstallGiB": 2,
+    "toolchainInventory": {
+      "path": "work/actual-20260911/module-diagnosis/toolchain-installed-files.json",
+      "bytes": 597,
+      "sha256": "61ce80957b73adcd92948c5ae02e46b7f24faf324918d6d90876602ae4df82e0"
+    }
+  },
+  "correctness": {
+    "status": "NotRun",
+    "reason": "No native training Player was produced."
+  },
+  "trace": {
+    "status": "NotRun",
+    "processWide": true,
+    "isolatedByPhaseLabel": false
+  },
+  "dependencyReadiness": {
+    "status": "NotRun",
+    "readinessMayFollowRendering": true,
+    "nativeLoadingScreenIsWarmupFence": false
+  },
+  "plan": {
+    "status": "NotRun",
+    "nativeTraceAvailable": false,
+    "merged": false,
+    "installed": false,
+    "validated": false
+  },
+  "timingProtocolFrozen": false,
+  "completedComparisons": [],
+  "unexecutedComparisons": [
+    {
+      "arm": "cold",
+      "reason": "No training Player, verified native route, trace, plan or common final comparison Player."
+    },
+    {
+      "arm": "all-at-once",
+      "reason": "No training Player, verified native route, trace, plan or common final comparison Player."
+    },
+    {
+      "arm": "scheduled",
+      "reason": "No training Player, verified native route, trace, plan or common final comparison Player."
+    },
+    {
+      "arm": "observed-budget",
+      "reason": "No training Player, verified native route, trace, plan or common final comparison Player."
+    },
+    {
+      "arm": "fixed-progressive",
+      "reason": "Unsupported by the selected 6000.1 native-async-bulk backend; experimental progressive was not validated or selected."
+    }
+  ],
+  "defaultPolicyChanged": false,
+  "performanceOrCoverageImprovementClaimed": false,
+  "functionalChecks": {
+    "externalHostRegressionsPassed": 14,
+    "executionPolicyRegressionsPassed": 2,
+    "powerShellScriptsParsed": 15,
+    "normalOwnedProcessExitPassed": true,
+    "ownedProcessTimeoutPassed": true,
+    "ownedChildTreeTimeoutPassed": true,
+    "remoteCiRun": false,
+    "cpuAllowlistChanged": false
+  },
+  "capacity": {
+    "initialLargeStageMeasuredFreeGiB": 112.31063461303711,
+    "initialEstimatedAdditionalPeakGiB": 80,
+    "minimumFreeGiBReserve": 20,
+    "monitorEarlyStopGiB": 25,
+    "minimumSampledFreeGiB": 103.96143341064453,
+    "measuredFreeGiBAtHostAudit": 104.07878112792969,
+    "measuredHostDirectoryFileBytes": {
+      "Library": 5785093508,
+      "Temp": 1341,
+      "Logs": 244771
+    },
+    "estimatedAdditionalPeakGiB": 74,
+    "estimatedRemainingBuildGiB": 72,
+    "estimatedModuleRecoveryGiB": 2,
+    "recommendedFreeGiBAtStart": 94,
+    "additionalFreeGiBRecommended": 0,
+    "estimateBasis": "Initial 80 GiB allowance reduced after about 8 GiB observed volume consumption and actual completed UPM/import; host Library file bytes measured separately. Volume changes can include unrelated activity. Add 2 GiB for the missing module recovery.",
+    "fullNativePeakMeasured": false,
+    "capacityTerminatedRealStage": false,
+    "additionalCacheCleanupPerformed": false
+  },
+  "failuresPreserved": [
+    "configure-01 C# missing Unity.Mathematics reference",
+    "configure-02 VFX path errors despite Editor exit 0 and exited-handle workload rejection",
+    "path-alias-preflight rejection with resident build servers",
+    "training-01 generic Scriptable Build Pipeline configuration failure",
+    "training-02 explicit early missing-IL2CPP-backend failure"
+  ],
+  "stages": [
+    {
+      "name": "start-verification",
+      "status": "completed",
+      "startedUtc": "2026-09-10T18:43:55.3582361Z",
+      "finishedUtc": "2026-09-10T18:44:24.3523376Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 80.0,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 112.31356811523438,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 112.31282424926758,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": null,
+      "exitCode": null,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/start-verification/stage.json",
+          "bytes": 1944,
+          "sha256": "64144e5e330bb3148df8d6ef1e0dd424148f2bd75b25a3d28951b7bb940520e3"
+        }
+      ]
+    },
+    {
+      "name": "configure-01",
+      "status": "failed",
+      "startedUtc": "2026-09-10T18:45:59.1432665Z",
+      "finishedUtc": "2026-09-10T18:47:53.4195241Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 80.0,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 112.31063461303711,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 106.79527282714844,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": 7156,
+      "exitCode": 1,
+      "error": "Owned native process exited 1.",
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/configure-01/stage.json",
+          "bytes": 4444,
+          "sha256": "6ba212aaa98cd0979a81d964de550952911f94fbd8dc58d33695252ea1366034"
+        },
+        {
+          "path": "work/actual-20260911/configure-01/command.json",
+          "bytes": 971,
+          "sha256": "b1a82061ae6104f7433bcb6c4a04cf97ed4af29c8a609cf3b3a1b9d910ccd67c"
+        },
+        {
+          "path": "work/actual-20260911/configure-01/editor.log",
+          "bytes": 471905,
+          "sha256": "cdea0fc6d5b29d1d383a6e8d207916e8083be012f0cd66884205fc1e9598c961"
+        },
+        {
+          "path": "work/actual-20260911/configure-01/process.json",
+          "bytes": 373,
+          "sha256": "546445984c91b16e23761b7aa59dc2f623f4ea18a461cd6ff467772e26525c80"
+        },
+        {
+          "path": "work/actual-20260911/configure-01/capacity.jsonl",
+          "bytes": 2659,
+          "sha256": "f76c383b04caf756fcecfe21b06b6d99fc7c2d7b026abf4d6d3d295712887820"
+        },
+        {
+          "path": "work/actual-20260911/configure-01/host.diff",
+          "bytes": 1716,
+          "sha256": "94183883ebb90bcca47450710f1d8fb1b90246c80b4f0952c849ba8e5ccd8f05"
+        },
+        {
+          "path": "work/actual-20260911/configure-01/host-audit.json",
+          "bytes": 1305,
+          "sha256": "042c2cbac377d937e29e92311b732abce1a447d1369657fee43a936b8ed1d1f6"
+        }
+      ]
+    },
+    {
+      "name": "configure-02",
+      "status": "failed",
+      "startedUtc": "2026-09-10T18:57:40.6607768Z",
+      "finishedUtc": "2026-09-10T19:01:46.5848431Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 75.0,
+      "measuredVolumesBefore": [
+        {
+          "volume": "C:\\",
+          "freeGiB": 106.48770141601562
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "volume": "C:\\",
+          "freeGiB": 104.35006332397461
+        }
+      ],
+      "processId": 18672,
+      "exitCode": 0,
+      "error": "A workload is still present. Do not start another stage; inspect the retained process snapshot.",
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/configure-02/stage.json",
+          "bytes": 4669,
+          "sha256": "d0bad3463f1362a94badaa022b827c7ca0d71108840561d01038e6fc7d37c298"
+        },
+        {
+          "path": "work/actual-20260911/configure-02/command.json",
+          "bytes": 1126,
+          "sha256": "f2a19e62027f25e1f0444cd9ae3be08fd5b67352e1d47969d3a56984333e52e8"
+        },
+        {
+          "path": "work/actual-20260911/configure-02/editor.log",
+          "bytes": 2713681,
+          "sha256": "8c6cf641e7a9094ce4ead672c34d188af717d6f718b7f2d0cfb1cd42d4d93816"
+        },
+        {
+          "path": "work/actual-20260911/configure-02/process.json",
+          "bytes": 10620,
+          "sha256": "6d3b752e866e4d7d4dd4f72da1b8f55a2365f733d0b745f6fcfd7670275d1dbe"
+        },
+        {
+          "path": "work/actual-20260911/configure-02/capacity.jsonl",
+          "bytes": 5603,
+          "sha256": "5d723adf958b6029f5e3417d1576855cdf6debb1d2cc1829839e422509649612"
+        },
+        {
+          "path": "work/actual-20260911/configure-02/host.diff",
+          "bytes": 2220,
+          "sha256": "4686e0cd53a7d51abc08fb6fba844ca6fbee0eb54055586c2cd27d0ff288d316"
+        },
+        {
+          "path": "work/actual-20260911/configure-02/host-audit.json",
+          "bytes": 2087,
+          "sha256": "0a75cdb0e19bf13da6ebfd60137c920a286baaca19bde50fb071c8f92adc09ed"
+        }
+      ]
+    },
+    {
+      "name": "path-alias-preflight",
+      "status": "rejected",
+      "startedUtc": "2026-09-10T19:05:48.1393087Z",
+      "finishedUtc": "2026-09-10T19:05:48.2893208Z",
+      "actionStarted": false,
+      "estimatedAdditionalPeakGiB": 0.1,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.35004425048828,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.35004425048828,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": null,
+      "exitCode": null,
+      "error": "A build/workload process is already running. Leave it untouched.",
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/path-alias-preflight/stage.json",
+          "bytes": 3609,
+          "sha256": "dd7b2fa8d4618bb8742a392a0ad7baafbc0824df3f4f14af044a96f6a6a3f513"
+        }
+      ]
+    },
+    {
+      "name": "path-alias-preflight-02",
+      "status": "completed",
+      "startedUtc": "2026-09-10T19:08:46.4326597Z",
+      "finishedUtc": "2026-09-10T19:08:58.1605879Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 0.1,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.34980392456055,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.35363388061523,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": null,
+      "exitCode": null,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/path-alias-preflight-02/stage.json",
+          "bytes": 5201,
+          "sha256": "c1fd2a0f479794bed16144b6bc58b3ec739ba120b30974f46ca6cf301aae2826"
+        }
+      ]
+    },
+    {
+      "name": "configure-03",
+      "status": "completed",
+      "startedUtc": "2026-09-10T19:08:59.9364308Z",
+      "finishedUtc": "2026-09-10T19:09:50.9302242Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 72.0,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.35355377197266,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.30197525024414,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": 20960,
+      "exitCode": 0,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/configure-03/stage.json",
+          "bytes": 6663,
+          "sha256": "66d5f4c6341b2ef7c382cf455f61d16b7a03e377c47fa4281fc7d1144ef3a7f1"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/command.json",
+          "bytes": 1156,
+          "sha256": "209a4b1a35a1e6052141d55abaf927a03add6efb69024cb8955fc117d0bfa1c5"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/editor.log",
+          "bytes": 234387,
+          "sha256": "6355a204221f785132500bde728d3ce58d4717edfaa366be7724d8e3f68f0e73"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/process.json",
+          "bytes": 12597,
+          "sha256": "632adee1c7e31a2d3c1fc4461d56c64185d135916342c2339033c8222513ca7c"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/capacity.jsonl",
+          "bytes": 1051,
+          "sha256": "e7c3d64689913b63a99471919e88059b2424b03dee81ee6ea8315983ecdc3b0b"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/host.diff",
+          "bytes": 2220,
+          "sha256": "4686e0cd53a7d51abc08fb6fba844ca6fbee0eb54055586c2cd27d0ff288d316"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/host-audit.json",
+          "bytes": 2250,
+          "sha256": "bafeeeea00d70919ed4eca60ff689b6952160695a250b1960b2705c75467cc83"
+        },
+        {
+          "path": "work/actual-20260911/configure-03/acceptance.json",
+          "bytes": 405,
+          "sha256": "34c492c80ee955d3c806a77aa26e5c86b96464e346d14df208f4a9efbdee18d2"
+        }
+      ]
+    },
+    {
+      "name": "training-01",
+      "status": "failed",
+      "startedUtc": "2026-09-10T19:11:22.1489184Z",
+      "finishedUtc": "2026-09-10T19:12:05.5531107Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 72.0,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.1986312866211,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.17271041870117,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": 23368,
+      "exitCode": 1,
+      "error": "Owned native process exited 1.",
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/training-01/stage.json",
+          "bytes": 6688,
+          "sha256": "d8726e0ecf2b7a26f42833689c6fa6580751b8221929f998f1ee18d798778709"
+        },
+        {
+          "path": "work/actual-20260911/training-01/command.json",
+          "bytes": 1248,
+          "sha256": "88bbbcea8d2ab0a375f5cfe5486335f78b0ea387ca6a67f418d1ccc375d41b8b"
+        },
+        {
+          "path": "work/actual-20260911/training-01/editor.log",
+          "bytes": 52137,
+          "sha256": "e4a60382d411e43506dd5d6f8638c44b6919f4fd80240a0c80f89532fab5f500"
+        },
+        {
+          "path": "work/actual-20260911/training-01/process.json",
+          "bytes": 4920,
+          "sha256": "9dab9be8ee82d0c6c4cfebabcaf46581ced20bc4d81dd77291243a9fce1462b8"
+        },
+        {
+          "path": "work/actual-20260911/training-01/capacity.jsonl",
+          "bytes": 936,
+          "sha256": "aff9d991acb7ed713acf34eb99c9e8502c91c62d122d77e7aed68f9632f847ba"
+        },
+        {
+          "path": "work/actual-20260911/training-01/host.diff",
+          "bytes": 2220,
+          "sha256": "4686e0cd53a7d51abc08fb6fba844ca6fbee0eb54055586c2cd27d0ff288d316"
+        }
+      ]
+    },
+    {
+      "name": "windows-build-diagnostic-01",
+      "status": "completed",
+      "startedUtc": "2026-09-10T19:15:11.7017058Z",
+      "finishedUtc": "2026-09-10T19:15:32.4925902Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 2.0,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.170166015625,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.1702995300293,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": 11388,
+      "exitCode": 0,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/windows-build-diagnostic-01/stage.json",
+          "bytes": 6460,
+          "sha256": "813ba3958ee31431520184b157f8f29f8b6f25d8648f49c97f38c30f8c9fd860"
+        },
+        {
+          "path": "work/actual-20260911/windows-build-diagnostic-01/command.json",
+          "bytes": 1136,
+          "sha256": "8bed991cc5bca27e05de7c1261976ff74c0e6d9c304b0a702446b70a08242607"
+        },
+        {
+          "path": "work/actual-20260911/windows-build-diagnostic-01/editor.log",
+          "bytes": 40283,
+          "sha256": "33cebeac3d3eaa342cca3f125ec4aa6ffe991920a3e5965c72a7985c99cf104f"
+        },
+        {
+          "path": "work/actual-20260911/windows-build-diagnostic-01/process.json",
+          "bytes": 2175,
+          "sha256": "454f30b5b3a196e3941a60b2f5e37ace2c30cd8466cbe8c21490dc4d338270cd"
+        },
+        {
+          "path": "work/actual-20260911/windows-build-diagnostic-01/capacity.jsonl",
+          "bytes": 351,
+          "sha256": "d1356f0e4f0c29a60c8777ee8a06d4d04d1557e9ea191364da193e22b3fd9753"
+        },
+        {
+          "path": "work/actual-20260911/windows-build-diagnostic-01/host.diff",
+          "bytes": 2220,
+          "sha256": "4686e0cd53a7d51abc08fb6fba844ca6fbee0eb54055586c2cd27d0ff288d316"
+        }
+      ]
+    },
+    {
+      "name": "training-02",
+      "status": "failed",
+      "startedUtc": "2026-09-10T19:23:35.1538925Z",
+      "finishedUtc": "2026-09-10T19:23:52.1469958Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 3.0,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.1498908996582,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.14918518066406,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": 24192,
+      "exitCode": 1,
+      "error": "Owned native process exited 1.",
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/training-02/stage.json",
+          "bytes": 6832,
+          "sha256": "e47f74cd151758eaa2bb568c1b21407486e220dec6016389ea39bcb85fdb9f22"
+        },
+        {
+          "path": "work/actual-20260911/training-02/command.json",
+          "bytes": 1248,
+          "sha256": "8e9c1862aa2adcbbf7d45270bf2769e1167578629eb0c846fd5b3e11227fdfcc"
+        },
+        {
+          "path": "work/actual-20260911/training-02/editor.log",
+          "bytes": 39060,
+          "sha256": "4573ce1ea7caecd079924536d34408eb7caed885d07ffc0b55469266ecc3778e"
+        },
+        {
+          "path": "work/actual-20260911/training-02/process.json",
+          "bytes": 2173,
+          "sha256": "2c29dbf40529ea0b17768afabfd5567e0b52a37c747e2c421af2cc2b3a482970"
+        },
+        {
+          "path": "work/actual-20260911/training-02/capacity.jsonl",
+          "bytes": 351,
+          "sha256": "e4d13d60544e53b3407ecb9b45bd047b6bda06e4bd8b017c820b7d4d7174ec45"
+        },
+        {
+          "path": "work/actual-20260911/training-02/host.diff",
+          "bytes": 2220,
+          "sha256": "4686e0cd53a7d51abc08fb6fba844ca6fbee0eb54055586c2cd27d0ff288d316"
+        },
+        {
+          "path": "work/actual-20260911/training-02/host-audit.json",
+          "bytes": 2252,
+          "sha256": "26538bc7abd21b92e41c815be37f95125f03df7bcc945cb0f4618ee6bf3feb71"
+        }
+      ]
+    },
+    {
+      "name": "functional-01",
+      "status": "completed",
+      "startedUtc": "2026-09-10T19:24:59.1595357Z",
+      "finishedUtc": "2026-09-10T19:25:08.7667441Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 1.0,
+      "measuredVolumesBefore": [
+        {
+          "volume": "C:\\",
+          "freeGiB": 104.14869689941406
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "volume": "C:\\",
+          "freeGiB": 104.14875411987305
+        }
+      ],
+      "processId": null,
+      "exitCode": null,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/functional-01/stage.json",
+          "bytes": 4284,
+          "sha256": "670781d3fd08504b7dd8cfc7d95fb45a52ba9bb2cf681e291706044acf41eb48"
+        }
+      ]
+    },
+    {
+      "name": "monitor-tree-timeout-test",
+      "status": "completed",
+      "startedUtc": "2026-09-10T19:28:47.2622359Z",
+      "finishedUtc": "2026-09-10T19:29:11.9575524Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 0.1,
+      "measuredVolumesBefore": [
+        {
+          "volume": "C:\\",
+          "freeGiB": 104.16046905517578
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "volume": "C:\\",
+          "freeGiB": 104.16046142578125
+        }
+      ],
+      "processId": 21548,
+      "exitCode": -1,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/monitor-tree-timeout-test/stage.json",
+          "bytes": 4180,
+          "sha256": "0da588f6a5881c26cc14b4a9105d639cf7a667ef9515e6a3bd81e0a2e407de54"
+        },
+        {
+          "path": "work/actual-20260911/monitor-tree-timeout-test/process.json",
+          "bytes": 1176,
+          "sha256": "641256d7bd70485c7ddb6d537d7c4a8dced603cd012ab1cc8e4fde7ed0871044"
+        },
+        {
+          "path": "work/actual-20260911/monitor-tree-timeout-test/capacity.jsonl",
+          "bytes": 234,
+          "sha256": "f79fe7b9777e10cdde5f2d9528636f9c953828785e4ca3f8de7a29547cbfc9e8"
+        },
+        {
+          "path": "work/actual-20260911/monitor-tree-timeout-test/acceptance.json",
+          "bytes": 192,
+          "sha256": "64ce6c929d07c277662198dbdfdbd3c5dee830c7f0a0aeebc1060575d2b00ba1"
+        }
+      ]
+    },
+    {
+      "name": "resource-release-01",
+      "status": "completed",
+      "startedUtc": "2026-09-10T19:34:47.5976602Z",
+      "finishedUtc": "2026-09-10T19:34:48.1539211Z",
+      "actionStarted": true,
+      "estimatedAdditionalPeakGiB": 0.1,
+      "measuredVolumesBefore": [
+        {
+          "freeGiB": 104.15499877929688,
+          "volume": "C:\\"
+        }
+      ],
+      "measuredVolumesAfter": [
+        {
+          "freeGiB": 104.15496826171875,
+          "volume": "C:\\"
+        }
+      ],
+      "processId": null,
+      "exitCode": null,
+      "error": null,
+      "mutexReleased": true,
+      "evidence": [
+        {
+          "path": "work/actual-20260911/resource-release-01/stage.json",
+          "bytes": 4104,
+          "sha256": "7daff096b6ad1e03724bb335231a2584ca023e24438735c5ebbc689bb0f2e60b"
+        },
+        {
+          "path": "work/actual-20260911/resource-release-01/host-audit.json",
+          "bytes": 2252,
+          "sha256": "e51ed3f2ce5156dfc6a398ce21a1d7dfe78bd5aeba6f7286cd5029ae339da876"
+        }
+      ]
+    }
+  ],
+  "evidenceManifest": {
+    "path": "work/actual-20260911/evidence-manifest.json",
+    "bytes": 157275,
+    "sha256": "79393eec729da8198caf8005900cbcdb8ca906fc7b58dea89dc1686c6e1afd00"
+  },
+  "sourceVerificationEvidence": {
+    "path": "work/actual-20260911/source-and-overlay-verification.json",
+    "bytes": 1416,
+    "sha256": "b6d9991fe78fae5bea9a9169b66c076953f595940f343fb521ab49d61d7e46a8"
+  },
+  "resourcesReleased": true,
+  "resourceReleaseEvidence": [
+    {
+      "path": "work/actual-20260911/resource-release-01/stage.json",
+      "bytes": 4104,
+      "sha256": "7daff096b6ad1e03724bb335231a2584ca023e24438735c5ebbc689bb0f2e60b"
+    },
+    {
+      "path": "work/actual-20260911/resource-release-01/process-release.json",
+      "bytes": 31614,
+      "sha256": "3f4f7b9b5ad76b93cf17a17cd0148a379575e56f5961764df4eb0c7e3b8fb1bd"
+    },
+    {
+      "path": "work/actual-20260911/resource-release-01/alias-release.json",
+      "bytes": 475,
+      "sha256": "523be9f5d89ad1885397ee1b66c75fe25c728cb48701f29a340c26bd55d04627"
+    }
+  ],
+  "remainingUserActions": [
+    {
+      "action": "Restore exact Windows IL2CPP Player support in the installed 6000.1.0f1 Editor.",
+      "condition": "Required before the next actual training build; modifies the Editor installation, recorded per the system/toolchain-gap instruction."
+    },
+    {
+      "action": "Original services notice and Menu -> Single Player route may require operator interaction.",
+      "condition": "Only after a training Player exists. No equivalent original single-player CLI was found; no UI automation or runtime batchmode was used."
+    }
+  ],
+  "blockers": [
+    "The selected Windows IL2CPP Player module is not installed; no native C++ compilation/linking or Player validation can proceed.",
+    "Native correctness, process-wide trace, dependency readiness, plan and final Player are prerequisites for timing and remain unexecuted."
+  ]
+}

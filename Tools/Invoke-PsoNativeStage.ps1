@@ -1,3 +1,4 @@
+#requires -Version 7.0
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$Output,
@@ -14,9 +15,45 @@ if (Test-Path -LiteralPath $outputRoot) { throw "Retain existing evidence; choos
 New-Item -ItemType Directory -Path $outputRoot | Out-Null
 
 function Get-Workloads {
-    @(Get-CimInstance Win32_Process | Where-Object {
-        $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|MSBuild|dotnet|VBCSCompiler|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
-    } | Select-Object ProcessId, ParentProcessId, Name, ExecutablePath)
+    param([ref]$IdleServers)
+    $candidates = @(Get-CimInstance Win32_Process | Where-Object {
+        $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|MSBuild|dotnet|VBCSCompiler|csc|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
+    })
+    # Resident Roslyn/MSBuild servers can outlive the build that created them.
+    # Only exempt recognized services with zero CPU growth during observation.
+    # Active clients and all other build/workload processes still block the stage.
+    $servers = @{}
+    foreach ($candidate in $candidates) {
+        if ($candidate.Name -match '^(dotnet|VBCSCompiler)(\.exe)?$' -and
+            $candidate.CommandLine -match '(VBCSCompiler\.(dll|exe)|MSBuild\.dll.* /nodemode:1\b)') {
+            try {
+                $instance = [Diagnostics.Process]::GetProcessById($candidate.ProcessId)
+                $servers[$candidate.ProcessId] = @{ instance = $instance; cpu = $instance.TotalProcessorTime.Ticks }
+            } catch { } # An uninspectable live process remains a blocker.
+        }
+    }
+    if ($servers.Count) { Start-Sleep -Seconds 3 }
+    $idle = @()
+    $blocking = @()
+    foreach ($candidate in $candidates) {
+        if ($servers.ContainsKey($candidate.ProcessId)) {
+            $service = $servers[$candidate.ProcessId]
+            try {
+                $service.instance.Refresh()
+                if ($service.instance.HasExited) { continue }
+                $cpuAfter = $service.instance.TotalProcessorTime.Ticks
+                if ($cpuAfter -eq $service.cpu) {
+                    $idle += @{ processId = $candidate.ProcessId; name = $candidate.Name;
+                        executablePath = $candidate.ExecutablePath; created = $candidate.CreationDate;
+                        observationSeconds = 3; cpuTicksBefore = $service.cpu; cpuTicksAfter = $cpuAfter }
+                    continue
+                }
+            } catch { } finally { $service.instance.Dispose() }
+        }
+        $blocking += $candidate | Select-Object ProcessId, ParentProcessId, Name, ExecutablePath
+    }
+    $IdleServers.Value = $idle
+    $blocking
 }
 
 function Get-Volumes {
@@ -53,7 +90,9 @@ try {
         $record.mutexAbandoned = $true
     }
     if (-not $record.mutexAcquired) { throw 'The shared build/workload mutex is occupied.' }
-    $record.processesBefore = @(Get-Workloads)
+    $idleBefore = @()
+    $record.processesBefore = @(Get-Workloads -IdleServers ([ref]$idleBefore))
+    $record.idleBuildServersBefore = $idleBefore
     $record.volumesBefore = @(Get-Volumes)
     if ($record.processesBefore.Count) { throw 'A build/workload process is already running. Leave it untouched.' }
     foreach ($volume in $record.volumesBefore) {
@@ -65,7 +104,9 @@ try {
     $LASTEXITCODE = 0
     & $Action
     if ($LASTEXITCODE -ne 0) { throw "Stage command failed with exit code $LASTEXITCODE." }
-    $record.processesAfter = @(Get-Workloads)
+    $idleAfter = @()
+    $record.processesAfter = @(Get-Workloads -IdleServers ([ref]$idleAfter))
+    $record.idleBuildServersAfter = $idleAfter
     if ($record.processesAfter.Count) { throw 'A workload is still present. Do not start another stage; inspect the retained process snapshot.' }
     $record.status = 'completed'
 } catch {
@@ -73,7 +114,12 @@ try {
     $record.error = $_.Exception.Message
     throw
 } finally {
-    try { $record.volumesAfter = @(Get-Volumes) }
+    try {
+        $idleAfter = @()
+        $record.processesAfter = @(Get-Workloads -IdleServers ([ref]$idleAfter))
+        $record.idleBuildServersAfter = $idleAfter
+        $record.volumesAfter = @(Get-Volumes)
+    }
     finally {
         if ($record.mutexAcquired) {
             $mutex.ReleaseMutex()

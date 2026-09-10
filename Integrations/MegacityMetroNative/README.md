@@ -6,8 +6,11 @@ SubScenes, materials, simulation, camera, render distances and input path. No
 procedural district, shader allowlist, generated materials or simulation freeze
 is installed. No native runtime experiment has been executed. The
 [2026-09-10 preparation record](../../Docs/ACTUAL_NATIVE_PREPARATION_2026-09-10.md)
-now verifies a complete independent Git/LFS checkout and provides guarded commands;
-the earlier objects-only receipt remains historical.
+verifies a complete independent Git/LFS checkout. The
+[2026-09-11 execution record](../../Docs/ACTUAL_NATIVE_EXECUTION_2026-09-11.md)
+records a successful real import and D3D12 configuration, followed by a training
+build failure: the installed Editor lacks the Windows IL2CPP Player module.
+No Player was produced. Earlier source-only and objects-only receipts remain historical.
 
 ## Source and classification
 
@@ -70,6 +73,10 @@ No package or Editor upgrade is silently accepted.
 to D3D12 and disables automatic API selection. Invoking this Editor method starts
 an import: it is a later capacity-gated stage, not part of source-only preparation.
 It preserves the pinned IL2CPP backend and Menu/Main scene order.
+The optional `-pso-native-reimport-vfx` flag synchronously reimports every original
+VFX asset after a host path-access repair. It does not change or select asset content.
+On this machine, a temporary short drive alias resolved actual long-path import
+failures without copying the checkout or changing Windows path policy.
 
 `PsoNativeHostBuild.BuildWindowsPlayer` is an explicit build helper that declares
 the actual Menu/Main build options to the existing identity capture. It requires
@@ -78,7 +85,12 @@ configured D3D12 Windows cell. It rejects changed scene order, a substituted Mon
 backend and existing output directories, and explicitly selects the Player
 subtarget. It does not alter target settings or auto-run the Player. Training
 uses the existing `-pso-training-build` plan-gate exception; final builds validate
-the traced identity. This helper was compiled, not invoked, during this repair.
+the traced identity. `DiagnoseWindowsBuild` reads the pinned Editor's active
+target, subtarget and backend-support reason. The build helper reports that reason
+before expensive content baking when available; it never bypasses Unity's build
+gate. Target support and a generic `il2cpp.exe` alone do not prove that the Windows
+IL2CPP Player module is installed. Actual invocations and failures are retained in
+the execution record.
 
 The observer is disabled unless `-pso-native-host` is present. It observes
 `SceneReference`, `RequestSceneLoaded` and
@@ -132,7 +144,7 @@ Its timing or zero-miss results cannot be copied to this original-scene cell.
 
 Runtime use requires the dependencies, route/cache protocol, trace, plan and
 current-build identity. The following are independent build and runtime examples;
-they were not executed during this repair. Apply the prepared UPM overlay and
+they do not establish a successful Player build or native run. Apply the prepared UPM overlay and
 declare an explicit D3D12-only Windows target before building. Use a new output
 directory each time.
 
@@ -173,9 +185,15 @@ to inspect its observed state set. Do not infer zero misses from its absent rece
 Reference-only compilation cannot verify asset import, Entities code generation,
 Player correctness, driver behavior or performance.
 
-For this machine, use the new runbook's `Invoke-PsoNativeStage.ps1` wrapper for
+For this machine, use the execution record's `Invoke-PsoNativeStage.ps1` wrapper for
 each import/build/Player stage. It checks the shared mutex, running workloads,
 host/output/temp-volume capacity and the 20 GiB reserve before invoking a
 synchronous action. Its default 80 GiB additional-peak estimate requires 100 GiB
 free at stage start. It does not authorize unattended queues, clean caches or
-establish an actual native peak.
+establish an actual native peak. Recognized idle compiler servers are recorded
+separately only after observing zero CPU growth; active clients still block the
+stage. `Wait-PsoOwnedProcess.ps1` monitors the stage's own process and capacity,
+records observed descendants, and closes that owned process on timeout or below
+a 25 GiB early-stop threshold. It never searches for an unrelated process to kill.
+Later-stage estimates must account for the cache already generated, as recorded
+in the execution evidence.
