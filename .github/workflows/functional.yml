@@ -2,7 +2,7 @@ name: Compile and deterministic CPU checks
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, codex/repair-20260908-pso-integration]
 permissions:
   contents: read
 jobs:
