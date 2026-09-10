@@ -4,7 +4,10 @@ This optional UPM package observes the official application's Entities SubScene
 loading lifecycle. It preserves the original workload: Menu then Main, original
 SubScenes, materials, simulation, camera, render distances and input path. No
 procedural district, shader allowlist, generated materials or simulation freeze
-is installed. No runtime experiment was executed in this repair.
+is installed. No native runtime experiment has been executed. The
+[2026-09-10 preparation record](../../Docs/ACTUAL_NATIVE_PREPARATION_2026-09-10.md)
+now verifies a complete independent Git/LFS checkout and provides guarded commands;
+the earlier objects-only receipt remains historical.
 
 ## Source and classification
 
@@ -63,11 +66,17 @@ the base package and `Package/`; registry package versions remain unchanged.
 Re-resolve and retain the resulting UPM lock alongside the original pinned lock.
 No package or Editor upgrade is silently accepted.
 
+`PsoNativeHostBuild.ConfigureWindowsD3D12` explicitly sets the Windows API list
+to D3D12 and disables automatic API selection. Invoking this Editor method starts
+an import: it is a later capacity-gated stage, not part of source-only preparation.
+It preserves the pinned IL2CPP backend and Menu/Main scene order.
+
 `PsoNativeHostBuild.BuildWindowsPlayer` is an explicit build helper that declares
 the actual Menu/Main build options to the existing identity capture. It requires
 `-pso-native-build-output`, the pinned Editor, and an explicitly
-configured D3D12 Windows cell. It rejects changed scene order and existing output
-directories. It does not alter target settings or auto-run the Player. Training
+configured D3D12 Windows cell. It rejects changed scene order, a substituted Mono
+backend and existing output directories, and explicitly selects the Player
+subtarget. It does not alter target settings or auto-run the Player. Training
 uses the existing `-pso-training-build` plan-gate exception; final builds validate
 the traced identity. This helper was compiled, not invoked, during this repair.
 
@@ -112,6 +121,9 @@ shared player/shader/plan/route/cache identities. Missing evidence is null; this
 file is preparation, not a self-attested benchmark result. `fixed-progressive`
 cannot silently use the pinned Editor's bulk backend. Testing true progressive
 warmup on a newer Editor requires a separately locked cell for **all arms**.
+The existing `-pso-deadline-backend-mode progressive` is an explicit experimental
+opt-in on 6000.1 too; it has not been validated for this native scene or selected
+for this cell. The default bulk cell cannot execute the fixed-progressive arm.
 The existing `scheduled` default is not promoted to `observed-budget`.
 
 The old [controlled Megacity reveal](../MegacityMetro/README.md) remains historical
@@ -142,6 +154,15 @@ directory each time.
   -pso-output C:/captures/metro-observed
 ```
 
+The Player commands open the original **Menu**, not an automatic flythrough.
+The pinned project has no cloud project ID: dismiss the original services notice,
+then select **Single Player**. That original callback sets the game mode and
+loads **Main** asynchronously. Its loading screen hides only after the original
+sections, player and camera are ready; the adapter does not hold that screen for
+warmup. There is no single-player autostart CLI in this source. Do not add
+`-batchmode` to the Player: upstream uses it to request automatic matchmaking.
+Multiplayer sessions, including local multiplayer, require separate UGS setup.
+
 The user/content route and normal application exit delimit that training capture;
 the example adds no generated route or automatic timeout. Include background and
 overlapping SubScene states and repeat for every declared phase. Cold disables
@@ -151,3 +172,10 @@ to inspect its observed state set. Do not infer zero misses from its absent rece
 
 Reference-only compilation cannot verify asset import, Entities code generation,
 Player correctness, driver behavior or performance.
+
+For this machine, use the new runbook's `Invoke-PsoNativeStage.ps1` wrapper for
+each import/build/Player stage. It checks the shared mutex, running workloads,
+host/output/temp-volume capacity and the 20 GiB reserve before invoking a
+synchronous action. Its default 80 GiB additional-peak estimate requires 100 GiB
+free at stage start. It does not authorize unattended queues, clean caches or
+establish an actual native peak.
