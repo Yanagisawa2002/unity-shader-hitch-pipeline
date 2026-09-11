@@ -17,7 +17,7 @@ New-Item -ItemType Directory -Path $outputRoot | Out-Null
 function Get-Workloads {
     param([ref]$IdleServers)
     $candidates = @(Get-CimInstance Win32_Process | Where-Object {
-        $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|MSBuild|dotnet|VBCSCompiler|csc|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
+        $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|MSBuild|dotnet|VBCSCompiler|csc|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
     })
     # Resident Roslyn/MSBuild servers can outlive the build that created them.
     # Only exempt recognized services with zero CPU growth during observation.
@@ -101,13 +101,18 @@ try {
         }
     }
     $record.actionStarted = $true
-    $LASTEXITCODE = 0
+    # Native commands update the global automatic variable. A local value would
+    # shadow failures inside the caller's action as well as this final check.
+    $global:LASTEXITCODE = 0
     & $Action
-    if ($LASTEXITCODE -ne 0) { throw "Stage command failed with exit code $LASTEXITCODE." }
+    $record.actionNativeExitCode = $global:LASTEXITCODE
+    if ($record.actionNativeExitCode -ne 0) { throw "Stage command failed with exit code $($record.actionNativeExitCode)." }
     $idleAfter = @()
-    $record.processesAfter = @(Get-Workloads -IdleServers ([ref]$idleAfter))
-    $record.idleBuildServersAfter = $idleAfter
-    if ($record.processesAfter.Count) { throw 'A workload is still present. Do not start another stage; inspect the retained process snapshot.' }
+    # Keep the snapshot that decided acceptance even if a short-lived conflicting
+    # process exits before the separate finally/release snapshot.
+    $record.processesAtActionCompletion = @(Get-Workloads -IdleServers ([ref]$idleAfter))
+    $record.idleBuildServersAtActionCompletion = $idleAfter
+    if ($record.processesAtActionCompletion.Count) { throw 'A workload is still present. Do not start another stage; inspect the retained process snapshot.' }
     $record.status = 'completed'
 } catch {
     $record.status = if ($record.actionStarted) { 'failed' } else { 'rejected' }

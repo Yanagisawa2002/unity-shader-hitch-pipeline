@@ -29,6 +29,7 @@ $record = [ordered]@{
     closeRequested = $false
     killedOwnedTree = $false
     exitCode = $null
+    conflictingWorkloads = @()
 }
 $roots = @(@($BudgetPath, $EvidenceDirectory, [IO.Path]::GetTempPath()) | ForEach-Object {
     [IO.Path]::GetPathRoot([IO.Path]::GetFullPath($_))
@@ -62,8 +63,19 @@ try {
         } while ($added)
         @{ utc = $now.ToString('o'); descendants = @($descendants.Values) } |
             ConvertTo-Json -Depth 5 -Compress | Add-Content -LiteralPath $processSamplesPath -Encoding utf8
+        # A non-cooperating external native workload can start after the stage's
+        # mutex/process preflight. Stop our own process, never the external one.
+        $conflicts = @($processes | Where-Object {
+            $nativeWorkload = $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
+            $managedClient = $_.Name -match '^(dotnet|MSBuild|VBCSCompiler|csc)(\.exe)?$' -and
+                $_.CommandLine -notmatch '(VBCSCompiler\.(dll|exe)|MSBuild\.dll.* /nodemode:1\b)'
+            ($nativeWorkload -or $managedClient) -and -not $ownerIds.Contains([int]$_.ProcessId)
+        } | Select-Object ProcessId, ParentProcessId, Name, ExecutablePath, CreationDate)
         if (@($volumes | Where-Object { $_.freeGiB -lt 25 }).Count) {
             $record.stopReason = 'Capacity approached the 20 GiB reserve (25 GiB early-stop threshold).'
+        } elseif ($conflicts.Count) {
+            $record.conflictingWorkloads = $conflicts
+            $record.stopReason = 'An external native workload started during this stage; stop only the owned process.'
         } elseif (($now - $started).TotalSeconds -ge $MaximumSeconds) {
             $record.stopReason = 'Declared stage timeout.'
         }

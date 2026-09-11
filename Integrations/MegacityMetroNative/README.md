@@ -8,9 +8,12 @@ is installed. No native runtime experiment has been executed. The
 [2026-09-10 preparation record](../../Docs/ACTUAL_NATIVE_PREPARATION_2026-09-10.md)
 verifies a complete independent Git/LFS checkout. The
 [2026-09-11 execution record](../../Docs/ACTUAL_NATIVE_EXECUTION_2026-09-11.md)
-records a successful real import and D3D12 configuration, followed by a training
-build failure: the installed Editor lacks the Windows IL2CPP Player module.
-No Player was produced. Earlier source-only and objects-only receipts remain historical.
+records the successful real import/D3D12 configuration and historical missing-module
+failure. The [post-installation continuation](../../Docs/ACTUAL_NATIVE_AFTER_IL2CPP_2026-09-11.md)
+verifies actual IL2CPP backend support and reaches native C++ linking. Repeated
+external Unity work interrupted the training builds; there is no complete runnable
+Player, native trace or comparison result. Earlier source-only and objects-only
+receipts remain historical.
 
 ## Source and classification
 
