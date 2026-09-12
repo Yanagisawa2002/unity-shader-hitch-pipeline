@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -74,14 +73,12 @@ namespace Yanagisawa.ShaderHitchPipeline
                 if (matches != 1 || string.IsNullOrWhiteSpace(version))
                     throw new IOException("Selected display-driver registry identity is missing or ambiguous (matches=" + matches + ").");
                 var modules = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                using (Process process = Process.GetCurrentProcess())
-                    foreach (ProcessModule module in process.Modules)
-                    {
-                        string path = module.FileName;
-                        if (path.IndexOf(@"\DriverStore\FileRepository\", StringComparison.OrdinalIgnoreCase) < 0 ||
-                            !string.Equals(Path.GetExtension(path), ".dll", StringComparison.OrdinalIgnoreCase)) continue;
-                        modules[path] = PsoFileUtility.ComputeSha256(path);
-                    }
+                foreach (string path in PsoWindowsProcessModules.CaptureFileNames())
+                {
+                    if (path.IndexOf(@"\DriverStore\FileRepository\", StringComparison.OrdinalIgnoreCase) < 0 ||
+                        !string.Equals(Path.GetExtension(path), ".dll", StringComparison.OrdinalIgnoreCase)) continue;
+                    modules[path] = PsoFileUtility.ComputeSha256(path);
+                }
                 if (modules.Count == 0) throw new IOException("No loaded DriverStore DLLs; actual user-mode driver identity unavailable.");
                 var canonical = new StringBuilder(registryIdentity);
                 var evidence = new List<PsoDriverModuleIdentity>();

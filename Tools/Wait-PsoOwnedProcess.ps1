@@ -11,6 +11,7 @@ param(
 # Called only for the Process returned by this stage's Start-Process, while the
 # caller holds Local\CodexR9700VNextUnityGpu. Never search for a process to kill.
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PsoProcessOwnership.ps1')
 $samplesPath = Join-Path $EvidenceDirectory 'capacity.jsonl'
 $processSamplesPath = Join-Path $EvidenceDirectory 'descendants.jsonl'
 $resultPath = Join-Path $EvidenceDirectory 'process.json'
@@ -45,22 +46,9 @@ try {
         $sample = @{ utc = $now.ToString('o'); processId = $Process.Id; volumes = $volumes }
         $sample | ConvertTo-Json -Depth 4 -Compress | Add-Content -LiteralPath $samplesPath -Encoding utf8
         $processes = @(Get-CimInstance Win32_Process)
-        $ownerIds = [Collections.Generic.HashSet[int]]::new()
-        [void]$ownerIds.Add($Process.Id)
-        foreach ($candidate in $processes) {
-            $key = "$($candidate.ProcessId):$($candidate.CreationDate.ToUniversalTime().Ticks)"
-            if ($descendants.ContainsKey($key)) { [void]$ownerIds.Add($candidate.ProcessId) }
-        }
-        do {
-            $added = $false
-            foreach ($candidate in $processes) {
-                if ($ownerIds.Contains($candidate.ParentProcessId) -and $ownerIds.Add($candidate.ProcessId)) {
-                    $key = "$($candidate.ProcessId):$($candidate.CreationDate.ToUniversalTime().Ticks)"
-                    $descendants[$key] = $candidate | Select-Object ProcessId, ParentProcessId, Name, ExecutablePath, CreationDate
-                    $added = $true
-                }
-            }
-        } while ($added)
+        $ownership = Get-PsoOwnedProcessSnapshot -RootProcessId $Process.Id -RootStartedUtc $record.processStartedUtc `
+            -Processes $processes -ObservedDescendants $descendants
+        $ownerIds = $ownership.ProcessIds
         @{ utc = $now.ToString('o'); descendants = @($descendants.Values) } |
             ConvertTo-Json -Depth 5 -Compress | Add-Content -LiteralPath $processSamplesPath -Encoding utf8
         # A non-cooperating external native workload can start after the stage's

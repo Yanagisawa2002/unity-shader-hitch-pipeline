@@ -14,9 +14,10 @@ Get-Command $Python -ErrorAction Stop | Out-Null
 Push-Location $repo
 try {
     # Explicit allowlist: never discover future tests that may start an engine/benchmark.
+    & (Join-Path $PSScriptRoot 'tests/Test-PsoProcessOwnership.ps1')
     & $Python Tools/run_cpu_validation.py
     if ($LASTEXITCODE -ne 0) { throw 'Pure CPU Python validation failed.' }
-    foreach ($project in @('ShaderHitchPipeline.Core.Smoke', 'ShaderHitchPipeline.Streaming.Smoke', 'ShaderHitchPipeline.Scheduler.Tests', 'ShaderHitchPipeline.PolicyExample')) {
+    foreach ($project in @('ShaderHitchPipeline.Core.Smoke', 'ShaderHitchPipeline.Streaming.Smoke', 'ShaderHitchPipeline.Scheduler.Tests', 'ShaderHitchPipeline.PolicyExample', 'ShaderHitchPipeline.WindowsModules.Smoke')) {
         $testOutput = @(& dotnet run --disable-build-servers --property:UseSharedCompilation=false --project "DotNet/$project/$project.csproj" --configuration Release)
         $testExitCode = $LASTEXITCODE
         $testOutput | Write-Output

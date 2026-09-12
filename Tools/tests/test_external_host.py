@@ -124,7 +124,7 @@ class ExternalHostTests(unittest.TestCase):
         contract = json.loads((host.ROOT / "Integrations/MegacityMetroNative/workload-contract.json").read_text())
         self.assertEqual(contract["kind"], "external-application-scene")
         self.assertTrue(contract["preparationOnly"])
-        self.assertEqual([x["name"] for x in contract["arms"]], ["cold", "all-at-once", "fixed-progressive", "observed-budget"])
+        self.assertEqual([x["name"] for x in contract["arms"]], ["cold", "all-at-once", "scheduled", "fixed-progressive", "observed-budget"])
         for key in ("playerBuildGuid", "shaderBuildIdentity", "planSha256", "collectionSha256"):
             self.assertIsNone(contract["sharedInputs"][key])
         self.assertTrue(all(x["status"] == "Unmeasured" for x in contract["arms"]))

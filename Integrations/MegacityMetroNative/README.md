@@ -4,16 +4,18 @@ This optional UPM package observes the official application's Entities SubScene
 loading lifecycle. It preserves the original workload: Menu then Main, original
 SubScenes, materials, simulation, camera, render distances and input path. No
 procedural district, shader allowlist, generated materials or simulation freeze
-is installed. No native runtime experiment has been executed. The
+is installed. The
 [2026-09-10 preparation record](../../Docs/ACTUAL_NATIVE_PREPARATION_2026-09-10.md)
 verifies a complete independent Git/LFS checkout. The
 [2026-09-11 execution record](../../Docs/ACTUAL_NATIVE_EXECUTION_2026-09-11.md)
 records the successful real import/D3D12 configuration and historical missing-module
 failure. The [post-installation continuation](../../Docs/ACTUAL_NATIVE_AFTER_IL2CPP_2026-09-11.md)
-verifies actual IL2CPP backend support and reaches native C++ linking. Repeated
-external Unity work interrupted the training builds; there is no complete runnable
-Player, native trace or comparison result. Earlier source-only and objects-only
-receipts remain historical.
+verifies actual IL2CPP backend support and records interrupted native linking.
+The [after-upload continuation](../../Docs/ACTUAL_NATIVE_AFTER_UPLOAD_2026-09-12.md)
+produced a complete training Player and verified D3D12 startup, a Menu-only
+process trace and normal exit. That run exposed an IL2CPP driver-identity failure;
+the runtime fix requires a new Player check. Main, all six SubScenes and formal
+comparisons remain unverified. Earlier receipts remain historical.
 
 ## Source and classification
 
@@ -107,6 +109,13 @@ then retries activation with a new generation. Missing plans/phases remain visib
 failures. A dependency-ready transition also attempts to arm full-plan feedback;
 an unresolved baseline stays explicitly unavailable.
 
+With that flag, `[PSO Native Event]` JSON log rows record the real SceneManager
+load/unload callbacks, world identity, content request/generation, the observed
+`SceneSystem.IsSceneLoaded` transition, activation result and retirement. The
+process startup and application-quitting callbacks are also recorded. These
+events do not load a scene, drive input or hold a reveal/resource fence. A
+dependencies-ready row can follow rendering; it is not first-draw coverage.
+
 `Core/PsoContentPhaseLifecycle` supplies the same request/ready/cancel/unload
 hooks for hosts with their own asset loaders. The backend must retain shader and
 material dependencies through its cancellation fence. This observer does not
@@ -131,10 +140,12 @@ Do not restart a global trace on every overlapping async event. The orchestrator
 plan-seeded feedback records true observed-minus-baseline misses; do not count
 cancelled phases as completed or unknown coverage as zero misses.
 
-[workload-contract.json](workload-contract.json) declares four policy arms with
-shared player/shader/plan/route/cache identities. Missing evidence is null; this
-file is preparation, not a self-attested benchmark result. `fixed-progressive`
-cannot silently use the pinned Editor's bulk backend. Testing true progressive
+[workload-contract.json](workload-contract.json) declares cold, all-at-once,
+scheduled and observed-budget with shared player/shader/plan/route/cache
+identities. A separate fixed-progressive arm records its additional backend
+requirement. Missing evidence is null; this file is preparation, not a
+self-attested benchmark result. `fixed-progressive` cannot silently use the
+pinned Editor's bulk backend. Testing true progressive
 warmup on a newer Editor requires a separately locked cell for **all arms**.
 The existing `-pso-deadline-backend-mode progressive` is an explicit experimental
 opt-in on 6000.1 too; it has not been validated for this native scene or selected

@@ -51,6 +51,15 @@
       "status": "Unmeasured"
     },
     {
+      "name": "scheduled",
+      "arguments": [
+        "-pso-native-host",
+        "-pso-warmup-strategy",
+        "scheduled"
+      ],
+      "status": "Unmeasured"
+    },
+    {
       "name": "fixed-progressive",
       "arguments": [
         "-pso-native-host",
