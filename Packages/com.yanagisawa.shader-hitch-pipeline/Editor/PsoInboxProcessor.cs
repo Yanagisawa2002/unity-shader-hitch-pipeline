@@ -4,6 +4,11 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
+#if UNITY_6000_5_OR_NEWER
+using GraphicsStateCollection = UnityEngine.Rendering.GraphicsStateCollection;
+#else
+using GraphicsStateCollection = UnityEngine.Experimental.Rendering.GraphicsStateCollection;
+#endif
 
 namespace Yanagisawa.ShaderHitchPipeline.Editor
 {
@@ -68,6 +73,25 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 candidate.receipt.reason = "Valid session belongs to a different environment profile.";
             }
 
+            var excludedPhases = new HashSet<string>(
+                configuration.excludedPhases ?? Array.Empty<string>(),
+                StringComparer.OrdinalIgnoreCase);
+            var planCandidates = new List<Candidate>();
+            for (int index = 0; index < selected.Count; index++)
+            {
+                Candidate candidate = selected[index];
+                if (excludedPhases.Contains(candidate.manifest.phase))
+                {
+                    candidate.receipt.reason =
+                        "Excluded by the configured plan phase scope.";
+                    continue;
+                }
+                planCandidates.Add(candidate);
+            }
+            if (planCandidates.Count == 0)
+                throw new InvalidOperationException(
+                    "Every valid trace session was excluded by the configured plan phase scope.");
+
             string profileDirectory = Path.Combine(
                 outputRoot,
                 PsoFileUtility.SanitizeFileName(configuration.profileId));
@@ -75,8 +99,8 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             Directory.CreateDirectory(collectionsDirectory);
 
             var phases = new List<PsoWarmupPhasePlan>();
-            Candidate first = selected[0];
-            IEnumerable<IGrouping<string, Candidate>> phaseGroups = selected
+            Candidate first = planCandidates[0];
+            IEnumerable<IGrouping<string, Candidate>> phaseGroups = planCandidates
                 .GroupBy(candidate => candidate.manifest.phase, StringComparer.OrdinalIgnoreCase)
                 .OrderBy(group => PhasePriority(group.Key))
                 .ThenBy(group => group.Key, StringComparer.OrdinalIgnoreCase);
@@ -101,8 +125,14 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     if (!source.LoadFromFile(candidate.collectionPath))
                         throw new IOException("Could not load " + candidate.collectionPath);
 
+                    source = ApplyPhaseShaderFilter(
+                        configuration,
+                        phaseName,
+                        source,
+                        candidate.receipt);
+
                     int before = merged.totalGraphicsStateCount;
-                    if (!merged.Append(source))
+                    if (!PsoGraphicsStateCollectionCompatibility.Append(merged, source))
                         throw new InvalidDataException(
                             "Unity rejected compatible collection " + candidate.collectionPath);
                     int after = merged.totalGraphicsStateCount;
@@ -141,6 +171,14 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                         : configuration.deferredDeadlineMilliseconds,
                     estimatedMillisecondsPerState =
                         configuration.estimatedMillisecondsPerState,
+                    bootstrapBatchSize = configuration.bootstrapBatchSize,
+                    budgetSafetyMarginMilliseconds =
+                        configuration.budgetSafetyMarginMilliseconds,
+                    budgetCostSafetyMultiplier =
+                        configuration.budgetCostSafetyMultiplier,
+                    budgetCooldownFrames = configuration.budgetCooldownFrames,
+                    preinteractiveBootstrap =
+                        startupPhase && configuration.preinteractiveBootstrap,
                     expectedUseProbability = startupPhase
                         ? configuration.startupExpectedUseProbability
                         : configuration.deferredExpectedUseProbability,
@@ -152,13 +190,21 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
 
             var plan = new PsoWarmupPlanDocument
             {
+                compatibility = first.manifest.environment.identity == null ? null : new PsoCompatibilityContract
+                {
+                    version = PsoCompatibility.Version,
+                    collectionEnvironment = first.manifest.environment,
+                    costModelVersion = PsoCompatibility.CostModelVersion
+                },
                 profileId = configuration.profileId,
                 generatedUtc = PsoFileUtility.UtcNowText(),
                 runtimePlatform = first.platform.ToString(),
                 graphicsDeviceType = first.graphicsApi.ToString(),
                 qualityLevelName = first.quality,
-                sourceSessionCount = selected.Count,
-                sourceSessionHashes = selected
+                adapterId = first.manifest.adapterId,
+                adapterVersion = "1",
+                sourceSessionCount = planCandidates.Count,
+                sourceSessionHashes = planCandidates
                     .Select(candidate => candidate.manifest.collectionSha256)
                     .Distinct(StringComparer.OrdinalIgnoreCase)
                     .OrderBy(value => value, StringComparer.OrdinalIgnoreCase)
@@ -222,6 +268,13 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     throw new InvalidDataException("Trace session has no environment snapshot.");
                 if (string.IsNullOrWhiteSpace(manifest.phase))
                     throw new InvalidDataException("Trace phase is empty.");
+                if (!string.Equals(
+                        manifest.adapterId,
+                        PsoUnityGraphicsStateTraceBackend.UnityAdapterId,
+                        StringComparison.Ordinal))
+                    throw new InvalidDataException(
+                        "This Unity inbox processor cannot consume adapter '" +
+                        manifest.adapterId + "'.");
 
                 string directory = Path.GetDirectoryName(manifestPath);
                 string collectionPath = PsoFileUtility.ResolveChildPath(
@@ -262,7 +315,12 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     collection.totalGraphicsStateCount != manifest.graphicsStateCount)
                     throw new InvalidDataException(
                         "Collection counts differ from the session manifest.");
-                string key = platform + "|" + graphicsApi + "|" + quality;
+                string key = manifest.adapterId + "|" + platform + "|" +
+                             graphicsApi + "|" + quality;
+                if (manifest.environment.identity != null)
+                    key += "|identity-v1|" + PsoCompatibility.CollectionKey(manifest.environment);
+                else
+                    key += "|legacy-unattested";
                 candidates.Add(new Candidate
                 {
                     manifestPath = manifestPath,
@@ -313,6 +371,105 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 ? new List<Candidate>()
                 : selected.OrderBy(item => item.manifestPath, StringComparer.OrdinalIgnoreCase)
                     .ToList();
+        }
+
+        private static GraphicsStateCollection ApplyPhaseShaderFilter(
+            PsoProjectConfiguration configuration,
+            string phase,
+            GraphicsStateCollection source,
+            PsoMergeInputReceipt receipt)
+        {
+            receipt.sourceVariantCount = source.variantCount;
+            receipt.sourceGraphicsStateCount = source.totalGraphicsStateCount;
+            receipt.filteredVariantCount = source.variantCount;
+            receipt.filteredGraphicsStateCount = source.totalGraphicsStateCount;
+
+            PsoPhaseShaderFilter filter =
+                (configuration.phaseShaderFilters ??
+                 Array.Empty<PsoPhaseShaderFilter>())
+                .FirstOrDefault(item => item != null && string.Equals(
+                    item.phase,
+                    phase,
+                    StringComparison.OrdinalIgnoreCase));
+            if (filter == null)
+                return source;
+
+            var allowlist = new HashSet<string>(
+                filter.shaderNames ?? Array.Empty<string>(),
+                StringComparer.Ordinal);
+            var variants = new List<GraphicsStateCollection.ShaderVariant>();
+            source.GetVariants(variants);
+            string[] observedShaderNames = variants
+                .Select(variant => variant.shader == null
+                    ? "<unresolved>"
+                    : variant.shader.name)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(value => value, StringComparer.Ordinal)
+                .ToArray();
+            var filtered = new GraphicsStateCollection
+            {
+                runtimePlatform = source.runtimePlatform,
+                graphicsDeviceType = source.graphicsDeviceType,
+                qualityLevelName = source.qualityLevelName,
+            };
+            var states = new List<GraphicsStateCollection.GraphicsState>();
+            for (int index = 0; index < variants.Count; index++)
+            {
+                GraphicsStateCollection.ShaderVariant variant = variants[index];
+                if (variant.shader == null || !allowlist.Contains(variant.shader.name))
+                    continue;
+                states.Clear();
+                source.GetGraphicsStatesForVariant(variant, states);
+                // A variant can be observed before its graphics-state payload is
+                // committed. Do not copy an empty shell into the warmup plan.
+                if (states.Count == 0)
+                    continue;
+                if (!filtered.AddVariant(
+                        variant.shader,
+                        variant.passId,
+                        variant.keywords))
+                {
+                    throw new InvalidDataException(
+                        "Unity refused to copy an allowed shader variant from phase '" +
+                        phase + "'.");
+                }
+                for (int stateIndex = 0; stateIndex < states.Count; stateIndex++)
+                {
+                    if (!filtered.AddGraphicsStateForVariant(
+                            variant.shader,
+                            variant.passId,
+                            variant.keywords,
+                            states[stateIndex]))
+                    {
+                        throw new InvalidDataException(
+                            "Unity refused to copy an allowed graphics state from phase '" +
+                            phase + "'.");
+                    }
+                }
+            }
+
+            receipt.shaderFilterApplied = true;
+            receipt.shaderAllowlist = allowlist.OrderBy(
+                value => value,
+                StringComparer.Ordinal).ToArray();
+            receipt.filteredVariantCount = filtered.variantCount;
+            receipt.filteredGraphicsStateCount = filtered.totalGraphicsStateCount;
+            receipt.excludedVariantCount = Math.Max(
+                0,
+                receipt.sourceVariantCount - receipt.filteredVariantCount);
+            receipt.excludedGraphicsStateCount = Math.Max(
+                0,
+                receipt.sourceGraphicsStateCount -
+                receipt.filteredGraphicsStateCount);
+            if (filtered.variantCount <= 0 || filtered.totalGraphicsStateCount <= 0)
+            {
+                throw new InvalidDataException(
+                    "The shader allowlist removed every warmable state from phase '" +
+                    phase + "'. Observed shaders: " +
+                    string.Join(", ", observedShaderNames) + ".");
+            }
+            UnityEngine.Object.DestroyImmediate(source);
+            return filtered;
         }
 
         private static int PhasePriority(string phase)

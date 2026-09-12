@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-application-preparation",
+  "recordedUtc": "2026-09-10T07:36:17.729708+00:00",
+  "status": "partial",
+  "sourceCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "sourceTree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "integrationBaseCommit": "9150ab6a1606e0010829b4abace57a270899ebf7",
+  "checkoutVerified": true,
+  "lfsPayloadsVerified": true,
+  "verificationScope": "Full actual tracked working bytes at pinned pristine source, before applying UPM/settings overlay",
+  "trackedFiles": 3820,
+  "lfsTrackedFiles": 434,
+  "lfsUniqueObjects": 432,
+  "trackedWorkingBytes": 516833318,
+  "networkBytesDownloaded": 0,
+  "independentGitAndLfsCopies": true,
+  "oldWorkingTreeOrCacheCopied": false,
+  "preparedHostPath": "work/actual-20260910/megacity-native",
+  "manifestOverlayApplied": false,
+  "finalOverlayLocator": "work/actual-20260910/resume-outcome.json:preparedOverlayPath",
+  "dependencyMetadata": {
+    "lockedEntries": 91,
+    "exactVersionsFound": 91,
+    "missingExactMetadata": [],
+    "fullPayloadsVerified": false,
+    "graphResolved": false
+  },
+  "buildTarget": {
+    "unity": "6000.1.0f1_9ea152932a88",
+    "graphicsApi": "Direct3D12",
+    "automaticGraphicsApi": false,
+    "scriptingBackend": "IL2CPP",
+    "standaloneSubtarget": "Player",
+    "netcodeClientTarget": "Client",
+    "settingsApplied": false
+  },
+  "machinePreflight": {
+    "recordedUtc": "2026-09-10T07:29:51.1719106Z",
+    "freeGiB": 47.772029876708984,
+    "editorPath": "C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe",
+    "editorProductVersion": "6000.1.0f1_9ea152932a88",
+    "editorSha256": "d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b",
+    "windowsStandaloneSupportPresent": true,
+    "windowsPlayerBuildProgramPresent": true,
+    "windowsSourceSolutionPresent": true,
+    "windowsEditorExtensionPresent": true,
+    "windowsIl2cppBeeBuildLogicPresent": true,
+    "il2cppExecutablePresent": true,
+    "windowsPlayerVariations": [
+      "mono",
+      "win_arm64_player_development_mono",
+      "win_arm64_player_nondevelopment_mono",
+      "win32_player_development_mono",
+      "win32_player_nondevelopment_mono",
+      "win64_player_development_mono",
+      "win64_player_nondevelopment_mono"
+    ],
+    "cppToolchains": [
+      "C:\\Program Files\\Microsoft Visual Studio\\18\\Community"
+    ],
+    "windowsSdkIncludes": [
+      "10.0.26100.0"
+    ],
+    "upstreamScriptingBackend": "Standalone IL2CPP (1); not changed",
+    "upstreamNetcodeClientTarget": "Client (0); not changed",
+    "scope": "Installed files and metadata only. No native toolchain link or Unity module load has been executed.",
+    "unityInvoked": false
+  },
+  "compile": {
+    "status": "Passed",
+    "scope": "Single-project reference-only incremental compile; cached project references",
+    "target": "DotNet/ShaderHitchPipeline.Unity.Compile/ShaderHitchPipeline.Unity.Compile.csproj",
+    "warnings": 0,
+    "errors": 0,
+    "noRestore": true,
+    "unityInvoked": false
+  },
+  "functionalChecks": {
+    "externalHostTestsPassed": 14,
+    "capacityRejectedBeforeAction": true,
+    "actionExceptionMutexReleased": true,
+    "runbookCommandsSyntaxPassed": true,
+    "preparedCommandsExecuted": false
+  },
+  "sourceChanges": [
+    {
+      "path": "Integrations/MegacityMetroNative/Package/Editor/PsoNativeHostBuild.cs",
+      "sha256": "de9fe9f0f90652f9ede9c73e5047aa72f25318076377453dabf19abeef37f9dc"
+    },
+    {
+      "path": "Tools/Invoke-PsoNativeStage.ps1",
+      "sha256": "a4e47d2912cfa730d7e982cd32ba2fc8d5907cc654b202935495d3d05c3b664c"
+    }
+  ],
+  "completedComparisons": [],
+  "unexecutedComparisons": [
+    "cold",
+    "all-at-once",
+    "scheduled",
+    "observed-budget",
+    "fixed-progressive"
+  ],
+  "fixedProgressiveStatus": "Unsupported in default pinned bulk cell; explicit experimental progressive opt-in not selected or validated",
+  "nativeImportStatus": "NotRun",
+  "nativeBuildStatus": "NotRun",
+  "runtimeStatus": "NotRun",
+  "measurementStatus": "Unmeasured",
+  "protocolFrozen": false,
+  "measured": {
+    "freeGiB": 47.77357864379883,
+    "preparationLogicalBytes": 994584453,
+    "preparationLogicalGiB": 0.9262789534404874
+  },
+  "estimates": {
+    "additionalImportBuildGiBRange": [
+      45,
+      65
+    ],
+    "additionalTemporaryGiBRange": [
+      10,
+      15
+    ],
+    "additionalPeakGiBRange": [
+      55,
+      80
+    ],
+    "additionalPeakGiB": 80,
+    "minimumFreeGiBReserve": 20,
+    "recommendedFreeGiBAtStart": 100,
+    "additionalFreeGiBRecommended": 52.22642135620117,
+    "additionalFreeGiBRange": [
+      27.226421356201172,
+      52.22642135620117
+    ],
+    "basis": "Prior reported 42 GiB host / 34 GiB rebuildable Library plus new native import/build and temporary allowances; not measured native peak"
+  },
+  "blockers": [
+    "Insufficient free space for conservative native import/build peak plus 20 GiB reserve",
+    "UPM resolution and original native import/build/IL2CPP link not executed",
+    "Native UI/scene/camera/simulation correctness and dependency/fence lifecycle not executed",
+    "Representative current trace and compatible plan absent",
+    "Current final build, route, cache protocol and comparison identities not frozen",
+    "Default 6000.1 bulk cell cannot execute fixed-progressive"
+  ],
+  "evidence": [
+    {
+      "path": "checkout-verification.json",
+      "sha256": "2eb761722244723e3fb6ab65f71b3866c8fab987a8947169ddb50f076773de2f"
+    },
+    {
+      "path": "source-inventory.json",
+      "sha256": "0749ab48f8f778512f81ba75c8bbc94f469d5070ea41f56b6cfeb4a901357e87"
+    },
+    {
+      "path": "dependency-inventory.json",
+      "sha256": "9fa164d12eab84fb27226a9aabec242a1302475289e4241d3581be399b0f9e8e"
+    },
+    {
+      "path": "native-scene-inventory.json",
+      "sha256": "830c76510b99a0576480b94001ac62777e85102fecb0adec5ca5eb1a6c2fc68f"
+    },
+    {
+      "path": "machine-preflight.json",
+      "sha256": "1dae799b832ac0a9f42ab4b469e512c384a101846fd6a651c71c1591d9d6edb3"
+    },
+    {
+      "path": "source-preparation.log",
+      "sha256": "b62e6519512e831b773133b4fe33c3a69b1c38a275d6245b5621d10ee03ede4c"
+    },
+    {
+      "path": "materialize-failure.json",
+      "sha256": "2acd997e1a535f0431cd65a25fe41c0d7cb85c1e14ed9bfd3bb662412ff71354"
+    },
+    {
+      "path": "index-refresh.log",
+      "sha256": "66c0da64090c0a3365e1fee1fc710979ffd09c89c0bf7f790f0a63c53c045fbd"
+    },
+    {
+      "path": "lfs-status-diagnostic.json",
+      "sha256": "3398e55e7e899f0ed9bc4b0ccd360d94da75cde7f2b5fa124e87587cb3161964"
+    },
+    {
+      "path": "lfs-index-reconcile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "strict-verification-stage.json",
+      "sha256": "2cf16fd392eec4448f88a8eea21215893b52c2241af90467a932755565baeaa4"
+    },
+    {
+      "path": "native-editor-compile/compile.log",
+      "sha256": "81906a586da57af15dbcb95d44b7152e29a7ccc6943ee38be0134849dcb52bf3"
+    },
+    {
+      "path": "native-editor-compile/stage.json",
+      "sha256": "d7ff465afbf2674e3841ccd1389d4e0f25ebaa8e8b3339013f54f9ebe0c535a8"
+    },
+    {
+      "path": "external-host-regression/tests.log",
+      "sha256": "d29f9afdcde82a756c38eeb67b2490481931651ac7741f74f50014120248c836"
+    },
+    {
+      "path": "external-host-regression/stage.json",
+      "sha256": "0a13bbb5d161706d833c3b79f0c53550f977c8362dbbe8283f4b1a51865f6f04"
+    },
+    {
+      "path": "capacity-gate-check/stage.json",
+      "sha256": "ebde9e069510d87b2f74a436903472fb6ab06a9933345cc28aede49bea33ca2a"
+    },
+    {
+      "path": "exception-release-check/stage.json",
+      "sha256": "9a6c085da772b5c822c32d414c5d2070a5f09e65718c742ca126e54943a1bd41"
+    },
+    {
+      "path": "runbook-command-parse.json",
+      "sha256": "0161a8790fa0ee5bd2986419103b24eef90caee736bdc963b037aea2de8711f8"
+    }
+  ]
+}

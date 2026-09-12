@@ -52,3 +52,29 @@ UnityProject/Builds/
 # Unity test runner output
 /UnityProject/TestResults/
 /UnityProject/Assets/ShaderHitchShowcaseGenerated/
+/UnityProject/Assets/DeadlineRunGenerated/
+/UnityProject/Assets/DeadlineRunGenerated.meta
+/TestResults/
+/.tmp-*.mp4
+
+# Engine-neutral .NET portability projects (Unity-generated .csproj files stay ignored)
+!DotNet/**/*.csproj
+DotNet/**/bin/
+DotNet/**/obj/
+
+# Generated current-build identity and local compatibility validation artifacts
+UnityProject/Assets/Resources/PsoBuildIdentity.json*
+work/
+/UnityProject/Assets/HotsetFixtureGenerated/
+/UnityProject/Assets/HotsetFixtureGenerated.meta
+# Reproducibly generated optional Addressables fixture assets and build settings
+Integrations/Addressables/UnityProject/Assets/FixtureGenerated/
+Integrations/Addressables/UnityProject/Assets/FixtureGenerated.meta
+Integrations/Addressables/UnityProject/Assets/AddressableAssetsData/
+Integrations/Addressables/UnityProject/Assets/AddressableAssetsData.meta
+Integrations/Addressables/UnityProject/Assets/StreamingAssets/
+Integrations/Addressables/UnityProject/Assets/StreamingAssets.meta
+/work/
+Integrations/Addressables/UnityProject/ProjectSettings/*.asset
+Integrations/Addressables/UnityProject/ProjectSettings/SceneTemplateSettings.json
+Integrations/Addressables/UnityProject/Assets/Resources/PsoBuildIdentity.json*

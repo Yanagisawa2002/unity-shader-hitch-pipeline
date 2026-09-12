@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <LangVersion>12.0</LangVersion>
+    <UseAppHost>false</UseAppHost>
+    <Deterministic>true</Deterministic>
+    <UseSharedCompilation>false</UseSharedCompilation>
+    <DefineConstants>$(DefineConstants);UNITY_STANDALONE_WIN</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Packages/com.yanagisawa.shader-hitch-pipeline/Runtime/PsoWindowsProcessModules.cs" Link="PsoWindowsProcessModules.cs" />
+  </ItemGroup>
+</Project>

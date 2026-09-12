@@ -60,6 +60,21 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 "Deferred deadline (ms)", configuration.deferredDeadlineMilliseconds);
             configuration.estimatedMillisecondsPerState = EditorGUILayout.DoubleField(
                 "Estimated ms / state", configuration.estimatedMillisecondsPerState);
+            configuration.bootstrapBatchSize = EditorGUILayout.IntField(
+                "Cold bootstrap batch", configuration.bootstrapBatchSize);
+            configuration.preinteractiveBootstrap = EditorGUILayout.Toggle(
+                "Gate startup hot set before first frame",
+                configuration.preinteractiveBootstrap);
+            configuration.budgetSafetyMarginMilliseconds =
+                EditorGUILayout.DoubleField(
+                    "Budget safety margin (ms)",
+                    configuration.budgetSafetyMarginMilliseconds);
+            configuration.budgetCostSafetyMultiplier =
+                EditorGUILayout.DoubleField(
+                    "Cost safety multiplier",
+                    configuration.budgetCostSafetyMultiplier);
+            configuration.budgetCooldownFrames = EditorGUILayout.IntField(
+                "Violation cooldown frames", configuration.budgetCooldownFrames);
             configuration.startupExpectedUseProbability = EditorGUILayout.Slider(
                 "Startup use probability",
                 (float)configuration.startupExpectedUseProbability,

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "external-application-scene",
+  "measurementStatus": "Unmeasured",
+  "sourceCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "unityVersion": "6000.1.0f1",
+  "workload": {
+    "entryScene": "Assets/Scenes/Menu.unity",
+    "subScenes": "All original Main SubScenes and their original auto-load settings",
+    "materials": "Unmodified upstream materials, shaders, meshes and renderers",
+    "simulation": "Original gameplay and ECS groups remain active",
+    "camera": "Original upstream camera and user/content path; no injected trajectory or far-plane change",
+    "routeIdentity": null,
+    "cacheProtocol": "Unspecified: requires a recorded cache protocol; no driver-cache deletion is part of preparation",
+    "allowedOverlay": [
+      "Two explicit local UPM dependencies; no upstream dependency version substitutions",
+      "Explicit graphics API target cell (D3D12 for Windows); identical settings across arms, no silent override"
+    ],
+    "training": "Separate native captures per scene phase; retain overlapping background states without shader allowlists",
+    "buildScenes": [
+      "Assets/Scenes/Menu.unity",
+      "Assets/Scenes/Main.unity"
+    ]
+  },
+  "sharedInputs": {
+    "playerBuildGuid": null,
+    "playerDirectorySha256": null,
+    "shaderBuildIdentity": null,
+    "planSha256": null,
+    "collectionSha256": null,
+    "deviceDriverIdentity": null,
+    "qualityApiResolution": null,
+    "rule": "All arms require identical built player, shader/content identity, phase coverage, activation/dependency events and cache protocol; null is missing evidence, never an equal-work attestation"
+  },
+  "arms": [
+    {
+      "name": "cold",
+      "arguments": [
+        "-pso-native-host",
+        "-pso-disable-warmup"
+      ],
+      "status": "Unmeasured"
+    },
+    {
+      "name": "all-at-once",
+      "arguments": [
+        "-pso-native-host",
+        "-pso-warmup-strategy",
+        "throughput"
+      ],
+      "status": "Unmeasured"
+    },
+    {
+      "name": "scheduled",
+      "arguments": [
+        "-pso-native-host",
+        "-pso-warmup-strategy",
+        "scheduled"
+      ],
+      "status": "Unmeasured"
+    },
+    {
+      "name": "fixed-progressive",
+      "arguments": [
+        "-pso-native-host",
+        "-pso-warmup-strategy",
+        "fixed-progressive",
+        "-pso-fixed-batch-size",
+        "8"
+      ],
+      "status": "Unmeasured",
+      "requires": "A native progressive backend; unsupported on the pinned 6000.1 bulk adapter. An editor change is a separate locked cell for every arm."
+    },
+    {
+      "name": "observed-budget",
+      "arguments": [
+        "-pso-native-host",
+        "-pso-warmup-strategy",
+        "observed-budget"
+      ],
+      "status": "Unmeasured",
+      "default": false
+    }
+  ],
+  "evidenceScopes": {
+    "warmupWindow": null,
+    "wholeApplicationFrame": null,
+    "deadlineMissesAndInfeasibleWork": null,
+    "cancelledAndUnusedWork": null,
+    "coverageAndUnseenStates": null,
+    "policyAblations": [
+      "-pso-disable-deadlines",
+      "-pso-disable-adaptive-cost",
+      "-pso-disable-hotset-priority",
+      "-pso-disable-cost-priority"
+    ]
+  },
+  "executionBlockers": [
+    "Pristine hydrated source checkout",
+    "Pinned resolved dependency graph after UPM addition",
+    "Declared current build inputs",
+    "Native route and cache protocol",
+    "Representative trace and compatible installed plan",
+    "Native Editor import and build validation"
+  ],
+  "preparationOnly": true
+}

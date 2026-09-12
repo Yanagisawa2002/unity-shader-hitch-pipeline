@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../UnityReferences.props" />
+  <PropertyGroup><AssemblyName>Yanagisawa.ShaderHitchPipeline.Editor</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ShaderHitchPipeline.Unity.Runtime.Compile/ShaderHitchPipeline.Unity.Runtime.Compile.csproj" />
+    <Compile Include="../../Packages/com.yanagisawa.shader-hitch-pipeline/Editor/*.cs" />
+    <Reference Include="$(UnityManagedPath)/UnityEditor*.dll" Private="false" />
+    <Reference Include="$(UnityManagedPath)/UnityEngine/UnityEditor*.dll" Private="false" />
+  </ItemGroup>
+</Project>

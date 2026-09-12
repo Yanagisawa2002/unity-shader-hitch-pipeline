@@ -1,0 +1,17 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.DeadlineRun",
+  "rootNamespace": "Yanagisawa.ShaderHitchPipeline.DeadlineRun",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
+    "Yanagisawa.ShaderHitchPipeline.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

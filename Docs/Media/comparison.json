@@ -1,94 +1,98 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "verdict": "PASS",
   "naiveParity": true,
-  "naiveParityExact": false,
+  "naiveParityExact": true,
   "parityPolicy": {
     "presentationHitchThresholdMilliseconds": 8.33,
     "severeHitchThresholdMilliseconds": 16.67,
-    "presentationJitterAllowanceFrames": 1,
+    "presentationJitterAllowanceFrames": 5,
     "presentationJitterAllowancePercent": 0.5,
     "rationale": "Report every missed presentation budget; permit at most 0.5% isolated non-severe capture/OS jitter while requiring zero regression in severe stalls."
   },
   "warmupEvidenceValid": true,
+  "deferredEvidenceValid": true,
   "environmentCompatible": true,
   "environmentMismatches": [],
   "environment": {
     "unityVersion": "6000.5.2f1",
+    "engineName": "Unity",
+    "engineVersion": "6000.5.2f1",
     "productName": "Shader Hitch Pipeline Showcase",
     "applicationVersion": "1.0",
-    "buildGuid": "c5a79b97b58d42fb99cedadeb29ae0ff",
+    "buildGuid": "da64cb275fce4a02a87cf7da38ad47fb",
     "runtimePlatform": "WindowsPlayer",
     "graphicsDeviceType": "Direct3D12",
     "graphicsDeviceName": "AMD Radeon AI PRO R9700",
     "graphicsDeviceVendor": "ATI",
     "graphicsDeviceVersion": "Direct3D 12 [level 12.2]",
     "graphicsMemorySizeMb": 32476,
-    "qualityLevelName": "Ultra"
+    "qualityLevelName": "Ultra",
+    "operatingSystem": "Windows 11  (10.0.26200)"
   },
-  "baselineBuildGuid": "c5a79b97b58d42fb99cedadeb29ae0ff",
-  "naiveBuildGuid": "38779ce65fb44082bba90e08abdfea4a",
-  "optimizedBuildGuid": "38779ce65fb44082bba90e08abdfea4a",
+  "baselineBuildGuid": "da64cb275fce4a02a87cf7da38ad47fb",
+  "naiveBuildGuid": "4f51815ebdc54ec0b52c5285a21d658d",
+  "optimizedBuildGuid": "4f51815ebdc54ec0b52c5285a21d658d",
   "sampleFrames": {
-    "baseline": 240,
-    "naive": 240,
-    "optimized": 240
+    "baseline": 1080,
+    "naive": 1080,
+    "optimized": 1080
   },
   "hitchThresholdMilliseconds": 8.33,
   "hitches": {
-    "baseline": 48,
-    "naive": 0,
-    "optimized": 1,
-    "eliminated": 47
+    "baseline": 57,
+    "naive": 5,
+    "optimized": 0,
+    "eliminated": 57
   },
   "severeHitches": {
     "thresholdMilliseconds": 16.67,
-    "baseline": 48,
-    "naive": 0,
+    "baseline": 1,
+    "naive": 2,
     "optimized": 0,
-    "eliminated": 48
+    "eliminated": 1
   },
   "metrics": {
     "mean": {
-      "baselineMilliseconds": 8.861186693926962,
-      "naiveMilliseconds": 4.168910441997771,
-      "optimizedMilliseconds": 4.200581265225385,
-      "improvementPercent": 52.59572549008289
+      "baselineMilliseconds": 4.743421482918267,
+      "naiveMilliseconds": 4.219644903787412,
+      "optimizedMilliseconds": 4.173278712928381,
+      "improvementPercent": 12.019652313062432
     },
     "p95": {
-      "baselineMilliseconds": 35.70567294955253,
-      "naiveMilliseconds": 4.168903757818043,
-      "optimizedMilliseconds": 4.210144537501037,
-      "improvementPercent": 88.20875174807817
+      "baselineMilliseconds": 8.371951384469867,
+      "naiveMilliseconds": 4.169395077042282,
+      "optimizedMilliseconds": 4.169394727796316,
+      "improvementPercent": 50.19805375923916
     },
     "p99": {
-      "baselineMilliseconds": 40.674375854432576,
-      "naiveMilliseconds": 4.202513019554316,
-      "optimizedMilliseconds": 4.279243522323668,
-      "improvementPercent": 89.47926444492121
+      "baselineMilliseconds": 10.030357381328942,
+      "naiveMilliseconds": 4.267734694294633,
+      "optimizedMilliseconds": 4.362902450375261,
+      "improvementPercent": 56.50302093426295
     },
     "maximum": {
-      "baselineMilliseconds": 46.386998146772385,
-      "naiveMilliseconds": 4.43589873611927,
-      "optimizedMilliseconds": 9.799000807106495,
-      "improvementPercent": 78.8755444443686
+      "baselineMilliseconds": 32.51899778842926,
+      "naiveMilliseconds": 23.55220355093479,
+      "optimizedMilliseconds": 7.866900414228439,
+      "improvementPercent": 75.8082937690423
     }
   },
   "plan": {
-    "profileId": "showcase-d3d12-20260902-025624",
-    "planSha256": "3a7cbd3c2a695cd507c0dab566bff46d7c178131db81addc478859569c06d345",
-    "variantCount": 388,
-    "graphicsStateCount": 389
+    "profileId": "showcase-d3d12-20260902-064931",
+    "planSha256": "7e79d3014eef5e9d8701007ae3216082a1acf9bd602fdf74d8290f78c6c722da",
+    "variantCount": 400,
+    "graphicsStateCount": 401
   },
   "warmupEvidence": {
     "naive": {
       "available": true,
       "valid": true,
       "strategy": "throughput",
-      "workerCount": 2,
-      "elapsedMilliseconds": 647.1426,
-      "completedGraphicsStates": 389,
-      "totalGraphicsStates": 389,
+      "workerCount": -1,
+      "elapsedMilliseconds": 679.9009,
+      "completedGraphicsStates": 401,
+      "totalGraphicsStates": 401,
       "phasesComplete": true,
       "planMatchesBenchmark": true,
       "feedbackTraceRequested": true,
@@ -98,16 +102,65 @@
       "feedbackObservedGraphicsStates": 389,
       "cacheMissGraphicsStates": 0,
       "feedbackCollectionContainsBaseline": false,
-      "feedbackError": ""
+      "feedbackError": "",
+      "hardFrameBudgetMet": false,
+      "hardFrameBudgetApplicable": false,
+      "hardFrameBudgetGateMet": true,
+      "hardFrameBudgetFeasible": false,
+      "schedulerAdmissionBudgetMet": false,
+      "budgetViolationCount": 1,
+      "minimumBatchBudgetViolationCount": 0,
+      "hardFrameBudgetOutcomes": [
+        "not-applicable-throughput"
+      ],
+      "hardBudgetGuaranteeScopes": [
+        "none; throughput-control"
+      ],
+      "preinteractiveBootstrapMilliseconds": 0.0,
+      "preinteractiveBootstrapBatchCount": 0,
+      "phases": [
+        {
+          "phase": "startup",
+          "elapsedMilliseconds": 635.8961,
+          "batchCount": 1,
+          "maximumObservedFrameMilliseconds": 114.40879851579666,
+          "deadlineMilliseconds": 1000.0,
+          "deadlineMissed": false,
+          "budgetViolationCount": 1,
+          "hardFrameBudgetMet": false,
+          "preinteractiveBootstrapEnabled": false,
+          "batchSizes": [
+            13
+          ],
+          "presentationHitchThresholdMilliseconds": 8.33,
+          "presentationHitchCount": 1
+        },
+        {
+          "phase": "combat",
+          "elapsedMilliseconds": 40.175000000000004,
+          "batchCount": 1,
+          "maximumObservedFrameMilliseconds": 15.902005136013031,
+          "deadlineMilliseconds": 1500.0,
+          "deadlineMissed": false,
+          "budgetViolationCount": 0,
+          "hardFrameBudgetMet": true,
+          "preinteractiveBootstrapEnabled": false,
+          "batchSizes": [
+            388
+          ],
+          "presentationHitchThresholdMilliseconds": 8.33,
+          "presentationHitchCount": 1
+        }
+      ]
     },
     "optimized": {
       "available": true,
       "valid": true,
       "strategy": "scheduled",
-      "workerCount": 2,
-      "elapsedMilliseconds": 778.2758,
-      "completedGraphicsStates": 389,
-      "totalGraphicsStates": 389,
+      "workerCount": -1,
+      "elapsedMilliseconds": 683.4958,
+      "completedGraphicsStates": 401,
+      "totalGraphicsStates": 401,
       "phasesComplete": true,
       "planMatchesBenchmark": true,
       "feedbackTraceRequested": true,
@@ -117,7 +170,90 @@
       "feedbackObservedGraphicsStates": 389,
       "cacheMissGraphicsStates": 0,
       "feedbackCollectionContainsBaseline": false,
-      "feedbackError": ""
+      "feedbackError": "",
+      "hardFrameBudgetMet": true,
+      "hardFrameBudgetApplicable": true,
+      "hardFrameBudgetGateMet": true,
+      "hardFrameBudgetFeasible": true,
+      "schedulerAdmissionBudgetMet": true,
+      "budgetViolationCount": 0,
+      "minimumBatchBudgetViolationCount": 0,
+      "hardFrameBudgetOutcomes": [
+        "met"
+      ],
+      "hardBudgetGuaranteeScopes": [
+        "interactive-frames-after-preinteractive-bootstrap; opaque-backend-admission-not-preemptible",
+        "strict-admission; opaque-backend-observed-not-preemptible"
+      ],
+      "preinteractiveBootstrapMilliseconds": 1.5365000000002738,
+      "preinteractiveBootstrapBatchCount": 1,
+      "phases": [
+        {
+          "phase": "startup",
+          "elapsedMilliseconds": 5.5304,
+          "batchCount": 1,
+          "maximumObservedFrameMilliseconds": 0.0,
+          "deadlineMilliseconds": 1000.0,
+          "deadlineMissed": false,
+          "budgetViolationCount": 0,
+          "hardFrameBudgetMet": true,
+          "preinteractiveBootstrapEnabled": true,
+          "batchSizes": [
+            13
+          ],
+          "presentationHitchThresholdMilliseconds": 8.33,
+          "presentationHitchCount": 0
+        },
+        {
+          "phase": "combat",
+          "elapsedMilliseconds": 152.34550000000002,
+          "batchCount": 34,
+          "maximumObservedFrameMilliseconds": 7.866900414228439,
+          "deadlineMilliseconds": 1500.0,
+          "deadlineMissed": false,
+          "budgetViolationCount": 0,
+          "hardFrameBudgetMet": true,
+          "preinteractiveBootstrapEnabled": false,
+          "batchSizes": [
+            1,
+            1,
+            5,
+            6,
+            7,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            6,
+            6,
+            6,
+            7,
+            8,
+            10,
+            12,
+            15,
+            18,
+            22,
+            27,
+            33,
+            41,
+            51,
+            46
+          ],
+          "presentationHitchThresholdMilliseconds": 8.33,
+          "presentationHitchCount": 0
+        }
+      ]
     }
   }
 }
