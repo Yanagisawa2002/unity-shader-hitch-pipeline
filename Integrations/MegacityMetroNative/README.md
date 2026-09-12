@@ -12,10 +12,13 @@ records the successful real import/D3D12 configuration and historical missing-mo
 failure. The [post-installation continuation](../../Docs/ACTUAL_NATIVE_AFTER_IL2CPP_2026-09-11.md)
 verifies actual IL2CPP backend support and records interrupted native linking.
 The [after-upload continuation](../../Docs/ACTUAL_NATIVE_AFTER_UPLOAD_2026-09-12.md)
-produced a complete training Player and verified D3D12 startup, a Menu-only
-process trace and normal exit. That run exposed an IL2CPP driver-identity failure;
-the runtime fix requires a new Player check. Main, all six SubScenes and formal
-comparisons remain unverified. Earlier receipts remain historical.
+produced the complete repaired IL2CPP training Player and verified actual D3D12
+Menu startup, driver registry/DLL identity, process-wide startup traces and normal
+exit. One shutdown Persistent-allocation warning remains unexplained after two
+declared follow-ups did not reproduce it; no leak-free claim is made. Main, all
+six SubScenes, representative training, plan installation and formal comparisons
+remain unverified. The execution record includes the prepared original-menu
+operator command. Earlier receipts remain historical.
 
 ## Source and classification
 
@@ -115,6 +118,8 @@ load/unload callbacks, world identity, content request/generation, the observed
 process startup and application-quitting callbacks are also recorded. These
 events do not load a scene, drive input or hold a reveal/resource fence. A
 dependencies-ready row can follow rendering; it is not first-draw coverage.
+Process and SceneManager rows leave request/world/warmup fields at their defaults;
+interpret the event kind and use observer/request rows for lifecycle values.
 
 `Core/PsoContentPhaseLifecycle` supplies the same request/ready/cancel/unload
 hooks for hosts with their own asset loaders. The backend must retain shader and

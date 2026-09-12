@@ -50,8 +50,9 @@ cross-engine standard PSO benchmark.
 
 The source verifier pins license/dependency/scene bytes, detects changed working
 files and missing LFS assets, and prepares a manifest overlay without starting
-Unity. A shared four-arm contract records cold, all-at-once, fixed progressive,
-and observed-budget inputs. Missing build/plan/route/cache evidence stays null.
+Unity. A shared contract records cold, all-at-once, scheduled and observed-budget
+inputs, plus a separate fixed-progressive backend requirement.
+Missing build/plan/route/cache evidence stays null.
 The pinned 6000.1 bulk backend cannot stand in for a fixed-progressive baseline.
 
 The [older Megacity experiment](Integrations/MegacityMetro/README.md) retains its

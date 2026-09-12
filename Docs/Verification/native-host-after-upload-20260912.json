@@ -1,0 +1,700 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-application-after-upload-continuation",
+  "status": "partial",
+  "startedUtc": "2026-09-12T15:25:31.6269333Z",
+  "recordedUtc": "2026-09-12T23:29:23.983622+00:00",
+  "integrationStartCommit": "2b006e0e9240a0812b23380678746f596f87c3f4",
+  "integrationSourceCommit": "2e1e28b3a1ccd7854de5136fe1596ff5a436eae0",
+  "sourceCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "sourceTree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "sourceCommitScope": "Official application pin; integration source and result-document commit are separate identities.",
+  "upstream": "https://github.com/Unity-Technologies/megacity-metro.git",
+  "editor": {
+    "version": "6000.1.0f1_9ea152932a88",
+    "sha256": "d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b"
+  },
+  "backend": {
+    "platform": "Windows x64",
+    "scripting": "IL2CPP",
+    "graphics": "Direct3D12",
+    "subtarget": "Player",
+    "netcode": "Client",
+    "developmentBuild": true,
+    "warmup": "native-async-bulk",
+    "experimentalProgressiveSelected": false,
+    "actualMsvc": "VS 18 Community 14.51.36231",
+    "windowsSdk": "10.0.26100.0"
+  },
+  "preparedHostPath": "work/actual-20260910/megacity-native",
+  "currentHostPristine": false,
+  "overlay": {
+    "path": "work/actual-20260910/overlay-final-e5c75ad67d9d",
+    "sourceCommit": "e5c75ad67d9de791ea5058b4e2a610f91b14273e",
+    "applied": true,
+    "originalReceiptSha256": "1a112fe6c6b1fac4e657394b056113573dd68264802985e927436c8c41c776de",
+    "activePackageSourceCommit": "2e1e28b3a1ccd7854de5136fe1596ff5a436eae0",
+    "activePackageFileCount": 151
+  },
+  "checkoutVerified": true,
+  "lfsPayloadsVerified": true,
+  "checkoutVerificationScope": "Fresh original working-byte/LFS audit after training-10, accounting separately for applied overlay/settings/generated metadata; not a pristine checkout.",
+  "sourceAudit": {
+    "path": "work/actual-20260912-after-upload/post-training-10-audit-01/receipt.json",
+    "bytes": 7817,
+    "sha256": "8218e52bc0b015340461e220acff7f924071aa0a32916b182a176f5943872318"
+  },
+  "originalWorkingFilesCompared": 3820,
+  "originalAssetsVerified": 3735,
+  "originalAssetsByteIdentical": true,
+  "lfsPathsVerified": 434,
+  "uniqueLfsPayloadsVerified": 432,
+  "originalManifestEntriesPreserved": 70,
+  "originalLockEntriesPreserved": 91,
+  "resolvedLockEntries": 93,
+  "importResult": {
+    "status": "PreviouslyPassed",
+    "attempt": "work/actual-20260911/configure-03",
+    "fullReimportThisContinuation": false,
+    "reusedImportedHostAndBee": true
+  },
+  "buildResult": {
+    "status": "Passed",
+    "attempt": "training-10",
+    "normalBuildPipelineExit": 0,
+    "playerPath": "work/actual-20260912-after-upload/players/training-10/Megacity.exe",
+    "playerFileCount": 1422,
+    "playerFileBytes": 3980298529,
+    "playerFileIndexSha256": "897950da79f85c0d2e75caba07ef856c3b06ed1ad4d4012c50b641c3ac73b6fe",
+    "acceptance": {
+      "path": "work/actual-20260912-after-upload/training-10-artifacts/acceptance.json",
+      "bytes": 2300,
+      "sha256": "d39a16c8ac72699c4b4756ff87270e7da86d7b383f5eeba0f503a15610610645"
+    },
+    "artifacts": {
+      "path": "work/actual-20260912-after-upload/training-10-artifacts/receipt.json",
+      "bytes": 85995,
+      "sha256": "df9c0f0a08a6696c76a04226683d3b4e41756bbbfea28dd3d12aab348fcff947"
+    },
+    "nativeBinaries": [
+      {
+        "path": "Megacity.exe",
+        "machineHex": "0x8664",
+        "bytes": 667648,
+        "sha256": "25baf5e4b71b26004f1e5c7d6e4c7c844158fe79af3c0358707574ad00b4d0ed"
+      },
+      {
+        "path": "GameAssembly.dll",
+        "machineHex": "0x8664",
+        "bytes": 115420672,
+        "sha256": "85cad41f47f51944c07b3777c96f329bb63d60406bfbc240ed34196b16e708a6"
+      },
+      {
+        "path": "UnityPlayer.dll",
+        "machineHex": "0x8664",
+        "bytes": 54537400,
+        "sha256": "ae6437638e071a00e0ed7211b100c57717915c92920e5476b0a55d2dc15e999d"
+      }
+    ],
+    "il2cppMetadata": {
+      "magicHex": "0xfab11baf",
+      "version": 31,
+      "sha256": "8e0d62a03c74e5c899c3fec85c53ede0cda3174e0388b8eb867601fb9ebb435b"
+    },
+    "buildGuid": "09787dbb57014c449c02c170bea659a0"
+  },
+  "correctness": {
+    "startup": "Passed",
+    "driverIdentity": "PassedInActualIl2cppPlayer",
+    "normalMenuExit": "Passed",
+    "mainRoute": "NotExecuted",
+    "allSixSubScenes": "NotExecuted",
+    "nativeReadiness": "NotExecuted",
+    "mainExit": "NotExecuted",
+    "leakFreeCorrectness": "NotEstablished",
+    "startupAssessment": {
+      "path": "work/actual-20260912-after-upload/native-startup-02/assessment.json",
+      "bytes": 7820,
+      "sha256": "8920259e680c1052e2c1307e0fff2f03737f63b7c359e172eb3e743391175d7a"
+    },
+    "diagnosticReview": {
+      "path": "work/actual-20260912-after-upload/native-diagnostics-review-01/receipt.json",
+      "bytes": 5796,
+      "sha256": "bae128de1b49428784d0965befd53a8e25df107c538b08cdae94c1e3392d1738"
+    }
+  },
+  "nativeEnvironment": {
+    "unityVersion": "6000.1.0f1",
+    "engineName": "Unity",
+    "engineVersion": "6000.1.0f1",
+    "productName": "Megacity Metro",
+    "applicationVersion": "1.5.0",
+    "buildGuid": "09787dbb57014c449c02c170bea659a0",
+    "runtimePlatform": "WindowsPlayer",
+    "graphicsDeviceType": "Direct3D12",
+    "graphicsDeviceName": "AMD Radeon AI PRO R9700",
+    "graphicsDeviceVendor": "ATI",
+    "graphicsDeviceVersion": "Direct3D 12 [level 12.1]",
+    "graphicsMemorySizeMb": 32476,
+    "qualityLevelName": "High",
+    "operatingSystem": "Windows 11  (10.0.26200) 64bit",
+    "graphicsDeviceId": 30033,
+    "graphicsDeviceVendorId": 4098,
+    "processorType": "AMD Ryzen 9 9950X 16-Core Processor ",
+    "processorCount": 8,
+    "renderingThreadingMode": "NativeGraphicsJobsSplitThreading",
+    "costExecutionContext": "5c64e0eb6f331d9bde9a89799ce0728728c178041cedd4b15d22cb2232b58715",
+    "driverIdentity": "e97d5c545ccdc38bcfd39c4a0f53f6116f6a3fe55832479256d79e16bbc6985c",
+    "driverIdentitySource": "windows-display-registry-loaded-driverstore-sha256-v1",
+    "driverVersion": "32.0.31041.1004",
+    "driverIdentityError": "",
+    "driverRegistryIdentity": "PCI\\VEN_1002&DEV_7551&SUBSYS_54131849&REV_C0|32.0.31041.1004|8-17-2026|oem103.inf",
+    "driverModules": [
+      {
+        "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0203304.inf_amd64_a6e5a337568ce3f0\\B026373\\amdenc64.dll",
+        "sha256": "8994ef8cf6dfdda3aa4636bcb40e561b214e56aac6d8afca752d9dd185bd7d81"
+      },
+      {
+        "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0203304.inf_amd64_a6e5a337568ce3f0\\B026373\\amdihk64.dll",
+        "sha256": "ca223044a8dec9ea5679d51cb99ebdf03615ac54dafb6b85ae88ab2dfaf18ed3"
+      },
+      {
+        "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0203304.inf_amd64_a6e5a337568ce3f0\\B026373\\amdxc64.dll",
+        "sha256": "f8e6c9e4df6907a08b6aab802e5e3794e25d4eab59c16439dfc1608501454e69"
+      },
+      {
+        "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\u0203304.inf_amd64_a6e5a337568ce3f0\\B026373\\amdxx64.dll",
+        "sha256": "39ff3bc73893906c7a26567ab5240109fb2ade7f890c123ce2b26a578f03a5c4"
+      }
+    ],
+    "identity": {
+      "version": 1,
+      "source": "unity-build-inputs-v1",
+      "buildInputSha256": "7c43c65e87278219e09408f406ff705c94e605cae5629daae1f5064cb18aa6a0",
+      "shaderSha256": "e1b22466c9e082fdfe48f6d6cac7eb1bd137495c085fc3fda33c99501517fe22",
+      "contentSha256": "8de5bcec246785e7802469fe7b4bb68c0162cc04e39a4f25432c435030ee0d62",
+      "contentId": "player-content",
+      "contentRevision": "8de5bcec246785e7802469fe7b4bb68c0162cc04e39a4f25432c435030ee0d62"
+    }
+  },
+  "trace": {
+    "status": "ActualMenuCapturesOnly",
+    "representativeTrainingAccepted": false,
+    "session": {
+      "path": "work/actual-20260912-after-upload/native-startup-02/trace/Inbox/native-startup-02/native-startup-smoke-20260912-231605-433.session.json",
+      "bytes": 3413,
+      "sha256": "7e551b340098f8d47c03eb381ea614bb11893d82252d03bb3bb0e362e4c60b92"
+    },
+    "collectionSha256": "3780f0a2cb559ad020968c9888490885e5c91e886e80d9cad5d20917b039187f",
+    "variantCount": 18,
+    "graphicsStateCount": 18,
+    "processWide": true,
+    "mainCoverageEstablished": false,
+    "firstDrawCoverageEstablished": false
+  },
+  "nativeRuns": [
+    {
+      "stage": "native-startup-01",
+      "playerFileIndexSha256": "084d333f309c8fa0618f8c728000878057f6df3b7313fd9d4dbf3a02bb129be5",
+      "logSha256": "a804684569d4b8325cffaf851c02a5c861df261d1d661f590fd27dc691c33826",
+      "sessionSha256": "2a68e84d9f4e79747d442aac7c4b354eb624c49195968ad06134a7041fce5734",
+      "quality": "Low",
+      "driverIdentity": "",
+      "driverIdentityError": "ArgumentNullException: Collection cannot be null.\r\nParameter name: c",
+      "leakDetectionStackTraceRequested": false,
+      "persistentLeakCounts": [],
+      "nativeAllocationStackCaptured": false,
+      "memoryLeaksTelemetryRetained": true,
+      "warnings": [
+        "The referenced script on this Behaviour (Game Object 'ServerEditorWarning') is missing!",
+        "To use Unity's dashboard services, you need to link your Unity project to a project ID. To do this, go to Project Settings to select your organization, select your project and then link a project ID. You also need to make sure your organization has access to the required products. Visit https://dashboard.unity3d.com to sign up."
+      ],
+      "normalExit": true
+    },
+    {
+      "stage": "native-startup-02",
+      "playerFileIndexSha256": "897950da79f85c0d2e75caba07ef856c3b06ed1ad4d4012c50b641c3ac73b6fe",
+      "logSha256": "a2fa1d9e11d4a887dd83f16b084149e475ac94960b7ea8f548d5fab13579f59d",
+      "sessionSha256": "7e551b340098f8d47c03eb381ea614bb11893d82252d03bb3bb0e362e4c60b92",
+      "quality": "High",
+      "driverIdentity": "e97d5c545ccdc38bcfd39c4a0f53f6116f6a3fe55832479256d79e16bbc6985c",
+      "driverIdentityError": "",
+      "leakDetectionStackTraceRequested": false,
+      "persistentLeakCounts": [
+        36
+      ],
+      "nativeAllocationStackCaptured": false,
+      "memoryLeaksTelemetryRetained": true,
+      "warnings": [
+        "The referenced script on this Behaviour (Game Object 'ServerEditorWarning') is missing!",
+        "To use Unity's dashboard services, you need to link your Unity project to a project ID. To do this, go to Project Settings to select your organization, select your project and then link a project ID. You also need to make sure your organization has access to the required products. Visit https://dashboard.unity3d.com to sign up.",
+        "Leak Detected : Persistent allocates 36 individual allocations. To find out more, run with the command line argument '-native-leak-detection EnabledWithStackTrace' and reproduce the leak again."
+      ],
+      "normalExit": true
+    },
+    {
+      "stage": "native-startup-leak-diagnostic-01",
+      "playerFileIndexSha256": "897950da79f85c0d2e75caba07ef856c3b06ed1ad4d4012c50b641c3ac73b6fe",
+      "logSha256": "ae3ec055ccc47dc61a5263789fca3a92b3b16a76d3af18894187b9357a4936bd",
+      "sessionSha256": "b21bc5c73a81de4bdcca8d697cc23154a7761fad56e1a27107b65b2c7ada2b53",
+      "quality": "High",
+      "driverIdentity": "e97d5c545ccdc38bcfd39c4a0f53f6116f6a3fe55832479256d79e16bbc6985c",
+      "driverIdentityError": "",
+      "leakDetectionStackTraceRequested": true,
+      "persistentLeakCounts": [],
+      "nativeAllocationStackCaptured": false,
+      "memoryLeaksTelemetryRetained": true,
+      "warnings": [
+        "The referenced script on this Behaviour (Game Object 'ServerEditorWarning') is missing!",
+        "To use Unity's dashboard services, you need to link your Unity project to a project ID. To do this, go to Project Settings to select your organization, select your project and then link a project ID. You also need to make sure your organization has access to the required products. Visit https://dashboard.unity3d.com to sign up."
+      ],
+      "normalExit": true
+    },
+    {
+      "stage": "native-startup-03",
+      "playerFileIndexSha256": "897950da79f85c0d2e75caba07ef856c3b06ed1ad4d4012c50b641c3ac73b6fe",
+      "logSha256": "6228ddc597d42327b6c591177b9ec66515eb27a2c7fc93d29bed506d0e6a2c30",
+      "sessionSha256": "870083544a8d35032972734a9a5fa315dcb57e44f9fe5ba5c19d8f90bafd43bb",
+      "quality": "High",
+      "driverIdentity": "e97d5c545ccdc38bcfd39c4a0f53f6116f6a3fe55832479256d79e16bbc6985c",
+      "driverIdentityError": "",
+      "leakDetectionStackTraceRequested": false,
+      "persistentLeakCounts": [],
+      "nativeAllocationStackCaptured": false,
+      "memoryLeaksTelemetryRetained": true,
+      "warnings": [
+        "The referenced script on this Behaviour (Game Object 'ServerEditorWarning') is missing!",
+        "To use Unity's dashboard services, you need to link your Unity project to a project ID. To do this, go to Project Settings to select your organization, select your project and then link a project ID. You also need to make sure your organization has access to the required products. Visit https://dashboard.unity3d.com to sign up."
+      ],
+      "normalExit": true
+    }
+  ],
+  "plan": {
+    "merge": "NotExecuted",
+    "install": "NotExecuted",
+    "validation": "NotExecuted",
+    "reason": "No accepted representative native route/readiness capture; Menu collections and historical controlled-reveal data cannot provide it."
+  },
+  "finalComparisonPlayer": "NotBuilt",
+  "formalProtocol": "NotFrozen",
+  "completedComparisons": [],
+  "unexecutedComparisons": [
+    {
+      "name": "cold",
+      "reason": "Original Single Player/Main route, readiness/content/exit, representative trace, plan, common final Player and frozen settings/cache/round protocol remain required."
+    },
+    {
+      "name": "all-at-once",
+      "reason": "Original Single Player/Main route, readiness/content/exit, representative trace, plan, common final Player and frozen settings/cache/round protocol remain required."
+    },
+    {
+      "name": "scheduled",
+      "reason": "Original Single Player/Main route, readiness/content/exit, representative trace, plan, common final Player and frozen settings/cache/round protocol remain required."
+    },
+    {
+      "name": "observed-budget",
+      "reason": "Original Single Player/Main route, readiness/content/exit, representative trace, plan, common final Player and frozen settings/cache/round protocol remain required."
+    },
+    {
+      "name": "fixed-progressive",
+      "reason": "Unsupported by the pinned default native-async-bulk cell; experimental progressive has not been validated or selected."
+    }
+  ],
+  "checks": {
+    "functionalEntry": {
+      "status": "Passed",
+      "evidence": {
+        "path": "work/actual-20260912-after-upload/functional-ci-wiring-validation-01/stage.json",
+        "bytes": 1194,
+        "sha256": "9f32a812ab1de4523701d0125503b14a73a2c8ba4d7c59981e5ecdb8b6f92520"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/functional-ci-wiring-validation-01/validation.log",
+        "bytes": 16788,
+        "sha256": "d4e6ed6ac0f44f0cf76c8bc76843d762ab5d88101ee1e05586d0484790551c25"
+      },
+      "pythonTests": 60,
+      "streamingChecks": 127,
+      "schedulerVirtualClockTests": 39,
+      "policyExample": "Simulated sink only",
+      "windowsModuleProvider": "Two actual Windows captures; .NET 8 target",
+      "remoteCiExecutedByThisWorker": false
+    },
+    "nativeReferenceCompile": {
+      "path": "work/actual-20260912-after-upload/runtime-repair-validation-02/unity-reference-compile.log",
+      "bytes": 845,
+      "sha256": "6a254723b148727ef0bbb2b6cf8e1626048f4dd95b02d73b6fc3d70710015c9a"
+    },
+    "processOwnershipRegression": {
+      "path": "work/actual-20260912-after-upload/process-ownership-validation-01/result.json",
+      "bytes": 362,
+      "sha256": "20fb72605e94607ab82c8ce00554b3706e3fa1846ac8cb33928407433b6ba13a"
+    },
+    "postRunPlayerFilesRehashed": 1422,
+    "postRunPlayerFilesUnchanged": true
+  },
+  "stages": [
+    {
+      "name": "training-08",
+      "status": "completed",
+      "startedUtc": "2026-09-12T15:26:23.5053185Z",
+      "finishedUtc": "2026-09-12T18:28:46.6322488Z",
+      "processId": 18800,
+      "exitCode": 0,
+      "stopReason": null,
+      "killedOwnedTree": false,
+      "mutexReleased": true,
+      "freeGiBBefore": 123.20771026611328,
+      "freeGiBAfter": 117.44041442871094,
+      "minimumSampledVolumeFreeGiB": 113.15792846679688,
+      "estimatedAdditionalPeakGiB": 32.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/training-08/stage.json",
+        "bytes": 4915,
+        "sha256": "a0004f46b87f6103dee7789c5896dade0018bce584c850b54979fc55df8616d2"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/training-08/process.json",
+        "bytes": 29171,
+        "sha256": "0c0ff1921c9cb25d326db976ac6dd5ed3e3591a97dd436d58536a5e851169f75"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/training-08/editor.log",
+        "bytes": 905550,
+        "sha256": "dc146caf21a5ea2388ebc03d7b244ecec7dee12d6770bd823a5b081b036736e7"
+      }
+    },
+    {
+      "name": "training-09",
+      "status": "failed",
+      "startedUtc": "2026-09-12T18:55:49.0268134Z",
+      "finishedUtc": "2026-09-12T20:05:07.6614717Z",
+      "processId": 24784,
+      "exitCode": -1,
+      "stopReason": "An external native workload started during this stage; stop only the owned process.",
+      "killedOwnedTree": true,
+      "mutexReleased": true,
+      "freeGiBBefore": 116.57487487792969,
+      "freeGiBAfter": 114.29602432250977,
+      "minimumSampledVolumeFreeGiB": 114.29538345336914,
+      "estimatedAdditionalPeakGiB": 72.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/training-09/stage.json",
+        "bytes": 5355,
+        "sha256": "c8cb3703ecc5ad9df33bfbd2cc475fb92b64da6bb2354a69dc6479c5c316a179"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/training-09/process.json",
+        "bytes": 11206,
+        "sha256": "57488404261eb0794617b1ab29c499cb5c706e614056c18f14dadc870fa0a9a7"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/training-09/editor.log",
+        "bytes": 519960,
+        "sha256": "cf48500fa4521f16497a864345171aac48dcaeee10d8b7df986049230b2c4e22"
+      }
+    },
+    {
+      "name": "training-10",
+      "status": "completed",
+      "startedUtc": "2026-09-12T20:16:09.1549177Z",
+      "finishedUtc": "2026-09-12T23:15:04.8814784Z",
+      "processId": 28932,
+      "exitCode": 0,
+      "stopReason": null,
+      "killedOwnedTree": false,
+      "mutexReleased": true,
+      "freeGiBBefore": 114.00593185424805,
+      "freeGiBAfter": 110.103759765625,
+      "minimumSampledVolumeFreeGiB": 109.62858963012695,
+      "estimatedAdditionalPeakGiB": 32.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/training-10/stage.json",
+        "bytes": 6123,
+        "sha256": "a4d998f85fa60bae421c95862875a2274c1a2d22749bff5808776a3c0f6bde19"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/training-10/process.json",
+        "bytes": 9979,
+        "sha256": "7c9bd32ee89b31d39e93eeb9da212dec3d3c3397ff84c019e201e5771d51a457"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/training-10/editor.log",
+        "bytes": 906774,
+        "sha256": "2314becb1eb83baafd31827130953ed51e6b803ce42f11054e120f0b6e116ce8"
+      }
+    },
+    {
+      "name": "native-startup-01",
+      "status": "completed",
+      "startedUtc": "2026-09-12T18:34:58.3669535Z",
+      "finishedUtc": "2026-09-12T18:36:00.2426515Z",
+      "processId": 23032,
+      "exitCode": 0,
+      "stopReason": null,
+      "killedOwnedTree": false,
+      "mutexReleased": true,
+      "freeGiBBefore": 117.28246307373047,
+      "freeGiBAfter": 116.34761810302734,
+      "minimumSampledVolumeFreeGiB": 115.54940414428711,
+      "estimatedAdditionalPeakGiB": 2.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-01/stage.json",
+        "bytes": 5174,
+        "sha256": "c40d155c876f4491921364db920328dc351cfc7e190821004fff2484101de1cd"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-01/process.json",
+        "bytes": 823,
+        "sha256": "dc99bda23ad76999102b3f57c9f8e7fdca710f06809a65e040adaec87dda7820"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/native-startup-01/player.log",
+        "bytes": 6271,
+        "sha256": "a804684569d4b8325cffaf851c02a5c861df261d1d661f590fd27dc691c33826"
+      }
+    },
+    {
+      "name": "native-startup-02",
+      "status": "completed",
+      "startedUtc": "2026-09-12T23:15:31.6351048Z",
+      "finishedUtc": "2026-09-12T23:16:33.3004305Z",
+      "processId": 18276,
+      "exitCode": 0,
+      "stopReason": null,
+      "killedOwnedTree": false,
+      "mutexReleased": true,
+      "freeGiBBefore": 109.93132781982422,
+      "freeGiBAfter": 109.93033218383789,
+      "minimumSampledVolumeFreeGiB": 109.9300765991211,
+      "estimatedAdditionalPeakGiB": 2.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-02/stage.json",
+        "bytes": 5174,
+        "sha256": "58f29f3a6b8e41281b4310fe5a8741f4540bc68dcf8e29a8d1d718b1c312d9db"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-02/process.json",
+        "bytes": 823,
+        "sha256": "1e7ccb454f8676378a05df474fa57929aab568cc8000e42caa9e2e0f9a97074f"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/native-startup-02/player.log",
+        "bytes": 10849,
+        "sha256": "a2fa1d9e11d4a887dd83f16b084149e475ac94960b7ea8f548d5fab13579f59d"
+      }
+    },
+    {
+      "name": "native-startup-leak-diagnostic-01",
+      "status": "completed",
+      "startedUtc": "2026-09-12T23:19:01.6173047Z",
+      "finishedUtc": "2026-09-12T23:20:03.6588171Z",
+      "processId": 19716,
+      "exitCode": 0,
+      "stopReason": null,
+      "killedOwnedTree": false,
+      "mutexReleased": true,
+      "freeGiBBefore": 109.92908096313477,
+      "freeGiBAfter": 109.92813110351562,
+      "minimumSampledVolumeFreeGiB": 109.89592742919922,
+      "estimatedAdditionalPeakGiB": 2.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-leak-diagnostic-01/stage.json",
+        "bytes": 5306,
+        "sha256": "49f21eb3f9bd3c72d3ee1497eef0fc8f336bd7d209aa115f3adee12e1ad3b484"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-leak-diagnostic-01/process.json",
+        "bytes": 823,
+        "sha256": "27c9c6d5c36543bf6be9b3fe8ce0f95e17bf54c5f756b55d646813f9dc5adf41"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/native-startup-leak-diagnostic-01/player.log",
+        "bytes": 10708,
+        "sha256": "ae3ec055ccc47dc61a5263789fca3a92b3b16a76d3af18894187b9357a4936bd"
+      }
+    },
+    {
+      "name": "native-startup-03",
+      "status": "completed",
+      "startedUtc": "2026-09-12T23:20:55.0906430Z",
+      "finishedUtc": "2026-09-12T23:21:57.1093613Z",
+      "processId": 18968,
+      "exitCode": 0,
+      "stopReason": null,
+      "killedOwnedTree": false,
+      "mutexReleased": true,
+      "freeGiBBefore": 109.92810821533203,
+      "freeGiBAfter": 109.9278678894043,
+      "minimumSampledVolumeFreeGiB": 109.92786407470703,
+      "estimatedAdditionalPeakGiB": 2.0,
+      "stageReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-03/stage.json",
+        "bytes": 5173,
+        "sha256": "1e8f41d4130780a253b92715f3c96c87f62eb0225b370e97cf8a9d4eb966eb74"
+      },
+      "processReceipt": {
+        "path": "work/actual-20260912-after-upload/native-startup-03/process.json",
+        "bytes": 823,
+        "sha256": "6dfd5db3fd4561f062f4b90bd9178d9fb541789e9c8b7e1e94257cdd5dfcf451"
+      },
+      "log": {
+        "path": "work/actual-20260912-after-upload/native-startup-03/player.log",
+        "bytes": 10660,
+        "sha256": "6228ddc597d42327b6c591177b9ec66515eb27a2c7fc93d29bed506d0e6a2c30"
+      }
+    }
+  ],
+  "failureHandling": [
+    {
+      "issue": "Historical PID reuse misclassified an unrelated older descendant during training-08.",
+      "action": "Temporal ownership helper, four fixtures and actual-history replay passed; unrelated process was not terminated."
+    },
+    {
+      "issue": "Two settings files changed CRLF to LF during training-08.",
+      "action": "Strict failure and raw bytes preserved; exact normalized bytes reviewed; training-09/10 settings subsequently match stage-start bytes."
+    },
+    {
+      "issue": "IL2CPP Process.GetModules_icall is unsupported; startup-01 driver identity failed.",
+      "action": "Real Win32 module provider replaced that call; actual IL2CPP startup-02/03 and diagnostic validate driver registry and loaded DLL hashes."
+    },
+    {
+      "issue": "Initial native observer reference compile had a Time-name ambiguity.",
+      "action": "Qualified UnityEngine.Time; failed and passing compile logs retained."
+    },
+    {
+      "issue": "New external dotnet client trees interrupted training-09.",
+      "action": "Stopped only owned tree; retained partial output and failed acceptance. External command/repository unavailable from that snapshot; no attribution. Fresh source/input/activity clearance preceded training-10."
+    },
+    {
+      "issue": "native-startup-02 reported 36 Persistent allocations at shutdown.",
+      "action": "One same-Player stack-requested diagnostic and one exact-argument repeat did not reproduce it; origin remains unresolved and no leak-free claim is made."
+    },
+    {
+      "issue": "Auxiliary checkpoint-08 elapsedMinutes parsed a DateTime through a culture-dependent string.",
+      "action": "Original retained with ISO-derived correction; subsequent checkpoint script uses typed DateTime. Native timeout/capacity monitor was separate and unaffected."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "work/actual-20260912-after-upload/training-10/command.json",
+      "bytes": 994,
+      "sha256": "b892e03cd9bffb980cd76ce6797e93e66ace0db1e69507b6ba5bf18499cdc57d"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/training-10/host.diff",
+      "bytes": 2220,
+      "sha256": "4686e0cd53a7d51abc08fb6fba844ca6fbee0eb54055586c2cd27d0ff288d316"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/preflight-training-10/retained-input-verification.json",
+      "bytes": 1061,
+      "sha256": "299817c4289a495d2d7c5eff9fd1ebc9be9bc7c75cce7d33e75e8717a658c519"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/training-09-artifacts/acceptance.json",
+      "bytes": 1195,
+      "sha256": "955f1be1dbacabe09fdac3a8f663751e552364ccf38b2f3620462c53a2ad7e26"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/post-training-09-audit-01/receipt.json",
+      "bytes": 8695,
+      "sha256": "097492901055499f4a4083927858eb7c824d7f5382315c4bd3321e077b44ceee"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/native-route-source-review-01/receipt.json",
+      "bytes": 3324,
+      "sha256": "57b6be77d2afaf32165c33fa8c0fe77adc5b8dd08df17ccddfe5f2ab950c4406"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/native-pilot-execution-provenance-02.json",
+      "bytes": 931,
+      "sha256": "630739b3ae814f86116d258c206667d10e79dbbf1855136ed2e2b295aec2a6a4"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/native-leak-diagnostic-provenance-01.json",
+      "bytes": 663,
+      "sha256": "679c2a74793bc232558480e8a6bccce67d8fea9263b2c1105291f308cb82eb12"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/training-10-interop-source-review-01/receipt.json",
+      "bytes": 1219,
+      "sha256": "1e2560c2a869819abdf72fb96cab417056a149ff362381797291bb91656c48b3"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/active-stage-checkpoint-08-correction.json",
+      "bytes": 645,
+      "sha256": "973c41b502395fd57e5f7d327a7d0f1ec8fbc7930578511ecad34d5bfe825944"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/resource-release-01.json",
+      "bytes": 4191,
+      "sha256": "a7777658109bc8d8aad880d62985fb69a65a9817a971f8d977c3266c4d059cb9"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/run-native-pilot.ps1",
+      "bytes": 5971,
+      "sha256": "5d6d249fe73edfd36340c2b3bdbdcaf6e0845a6a66318550c9d4999d2bc24631"
+    },
+    {
+      "path": "work/actual-20260912-after-upload/monitor-native-pilot.ps1",
+      "bytes": 6753,
+      "sha256": "f6f990671bee3cdd89f3d70a199dd9f9ceee7c0514a7af1bc4dff24280508f16"
+    }
+  ],
+  "freeGiB": 109.9300537109375,
+  "estimatedAdditionalPeakGiB": 32,
+  "minimumFreeGiBReserve": 20,
+  "recommendedFreeGiBAtStart": 52,
+  "additionalFreeGiBRecommended": 0,
+  "stopThresholdGiB": 25,
+  "capacityScope": "Free space and directory bytes are measured; stage minima are sampled volume observations, not exact peaks or solely task-attributed growth. 32 GiB additional/52 GiB start is a provisional same-source cached-build estimate; reconsider after accepted native trace/plan. Next bounded content pilot uses a separate 2 GiB output allowance plus 20 GiB reserve.",
+  "measuredHostDirectoryBytes": {
+    "Library": 15910856828,
+    "Temp": 0,
+    "Logs": 244625
+  },
+  "resourcesReleased": true,
+  "resourceRelease": {
+    "path": "work/actual-20260912-after-upload/resource-release-01.json",
+    "bytes": 4191,
+    "sha256": "a7777658109bc8d8aad880d62985fb69a65a9817a971f8d977c3266c4d059cb9"
+  },
+  "blockers": [
+    "An operator must enter Single Player through the original Menu; no equivalent upstream CLI and no Computer Use/input simulation authorized."
+  ],
+  "unresolvedDiagnostics": [
+    "Shutdown Persistent-allocation warning origin remains unresolved; not reproduced in the two declared follow-up runs."
+  ],
+  "stillRequiredUserActions": [
+    {
+      "action": "Dismiss the original services notice if shown, then click Single Player in the original Player.",
+      "repositoryWorkingDirectory": "C:\\Users\\EdwinLiu\\Documents\\Codex\\2026-09-08\\ni-sh\\work\\wt\\pso-integration",
+      "command": "pwsh -NoProfile -File work/actual-20260912-after-upload/run-native-pilot.ps1 -StageName native-content-01 -PlayerStageName training-10 -OperatorSinglePlayer -CloseAfterSeconds 600 -TraceAutoStopSeconds 0",
+      "commandExecuted": false,
+      "safeExit": "After 600 seconds request normal main-window close; wait 10 seconds. If it fails, stop only owned tree and retain a failed run. Close mechanism verified in Menu; Main exit unverified.",
+      "captureScope": "Content/readiness pilot with a process-wide label; not automatically representative training, a SubScene-isolated capture, an installed plan or formal comparison."
+    }
+  ],
+  "policyDefaultPromoted": false,
+  "performanceOrCoverageImprovementClaimed": false,
+  "cacheCleanupPerformed": false,
+  "computerUsePerformed": false,
+  "priorOutcomesUnchanged": true,
+  "priorOutcomes": [
+    {
+      "path": "work/actual-20260911/resume-outcome.json",
+      "sha256": "652aa0d842f8d0f5d8e50f568a196d4b679590868605d68787858dc7dc5d60a2"
+    },
+    {
+      "path": "work/actual-20260911-after-il2cpp/resume-outcome.json",
+      "sha256": "26d239d2dad83bb134659fe60af88bf8817ef19a38a08367d79a9ff9ea02b6a5"
+    }
+  ],
+  "startedUtcScope": "First audited local preflight stage; the parent CLI was already running.",
+  "preflightEvidence": {
+    "path": "work/actual-20260912-after-upload/preflight-01/stage.json",
+    "bytes": 4616,
+    "sha256": "d83ee87476a6907d3387f544f945dc54ec98d235aa9c11ffcd795eb7e89b5ead"
+  }
+}
