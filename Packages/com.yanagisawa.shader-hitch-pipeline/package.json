@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "displayName": "Shader Hitch Pipeline",
   "description": "Trace, plan, hard-budget schedule, and regression-test real graphics pipeline states with an engine-neutral core and Unity adapter.",
-  "unity": "6000.0",
+  "unity": "6000.1",
   "author": {
     "name": "Edwin Liu"
   },

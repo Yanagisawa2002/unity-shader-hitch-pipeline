@@ -25,6 +25,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             validatedPlanHash = string.Empty;
             validatedApis = null;
             bool trainingBuild =
+                PsoTrainingBuildScope.IsActive ||
                 PsoCommandLine.Current.HasFlag(PsoConstants.TrainingBuildArgument);
             bool baselineBuild =
                 PsoCommandLine.Current.HasFlag(PsoConstants.BaselineBuildArgument);

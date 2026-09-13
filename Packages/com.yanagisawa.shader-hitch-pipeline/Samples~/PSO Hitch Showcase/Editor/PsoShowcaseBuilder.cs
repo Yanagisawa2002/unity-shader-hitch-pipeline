@@ -25,6 +25,13 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
         private const string CacheBusterDefine =
             "#define PSO_SHOWCASE_CACHE_BUSTER 0u";
 
+        [MenuItem("Tools/Shader Hitch Pipeline/Build PSO Showcase Training Player (First Run)")]
+        public static void BuildTrainingPlayer()
+        {
+            using (new PipelineEditor.PsoTrainingBuildScope())
+                BuildWindowsPlayer();
+        }
+
         [MenuItem("Tools/Shader Hitch Pipeline/Build PSO Showcase")]
         public static void BuildWindowsPlayer()
         {
