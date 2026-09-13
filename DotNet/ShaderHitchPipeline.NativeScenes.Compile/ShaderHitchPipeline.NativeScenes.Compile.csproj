@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../UnityReferences.props" />
+  <PropertyGroup><AssemblyName>Yanagisawa.ShaderHitchPipeline.NativeScenes</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ShaderHitchPipeline.Unity.Runtime.Compile/ShaderHitchPipeline.Unity.Runtime.Compile.csproj" />
+    <Compile Include="../../Integrations/MegacityMetroNative/Package/Runtime/*.cs" />
+    <Reference Include="$(EntitiesAssembliesPath)/Unity.Entities.dll" Private="false" />
+    <Reference Include="$(EntitiesAssembliesPath)/Unity.Scenes.dll" Private="false" />
+    <Reference Include="$(EntitiesAssembliesPath)/Unity.Collections.dll" Private="false" />
+    <Reference Include="$(EntitiesAssembliesPath)/Unity.Mathematics.dll" Private="false" />
+  </ItemGroup>
+  <Target Name="RequireEntitiesAssemblies" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(EntitiesAssembliesPath)/Unity.Entities.dll')" Text="EntitiesAssembliesPath must contain the pinned host's Entities reference assemblies." />
+  </Target>
+</Project>

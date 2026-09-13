@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "packageVersion": "0.3.0",
+  "runId": "warmup-20260902-050521-9c4d0750",
+  "startedUtc": "2026-09-02T05:05:21.3455937Z",
+  "endedUtc": "2026-09-02T05:05:22.8704116Z",
+  "planFile": "${PLAYER_DATA}/StreamingAssets/ShaderHitchPipeline/plan.json",
+  "planSha256": "f91f07c0a670f0201c4bdf556f7d03f77960bbbb70ce4b8d2d24f9c4ee1b8f0a",
+  "strategy": "scheduled",
+  "asyncPsoJobCount": -1,
+  "processorCount": 8,
+  "elapsedMilliseconds": 565.5061000000001,
+  "completed": true,
+  "error": "",
+  "environment": {
+    "unityVersion": "6000.5.2f1",
+    "engineName": "Unity",
+    "engineVersion": "6000.5.2f1",
+    "productName": "Shader Hitch Pipeline Showcase",
+    "applicationVersion": "1.0",
+    "buildGuid": "e60d1dbb2000471d86c5532a16d9a0d8",
+    "runtimePlatform": "WindowsPlayer",
+    "graphicsDeviceType": "Direct3D12",
+    "graphicsDeviceName": "AMD Radeon AI PRO R9700",
+    "graphicsDeviceVendor": "ATI",
+    "graphicsDeviceVersion": "Direct3D 12 [level 12.2]",
+    "graphicsMemorySizeMb": 32476,
+    "qualityLevelName": "Ultra",
+    "operatingSystem": "Windows 11  (10.0.26200)"
+  },
+  "phases": [
+    {
+      "phase": "startup",
+      "collectionFile": "collections/startup.graphicsstate",
+      "strategy": "scheduled",
+      "hotSetTier": 0,
+      "deadlineMilliseconds": 1000.0,
+      "expectedUseProbability": 1.0,
+      "totalGraphicsStates": 389,
+      "completedGraphicsStates": 389,
+      "initialBatchSize": 8,
+      "finalBatchSize": 8,
+      "batchCount": 1,
+      "schedulerSelectionCount": 0,
+      "elapsedMilliseconds": 37.5997,
+      "maximumObservedFrameMilliseconds": 0.0,
+      "initialEstimatedMillisecondsPerState": 0.25,
+      "observedMillisecondsPerState": 0.25,
+      "minimumSlackMilliseconds": 0.0,
+      "deadlineMissed": false,
+      "budgetPolicy": "strict-admission",
+      "hardFrameBudgetMilliseconds": 16.67,
+      "budgetSafetyMarginMilliseconds": 2.0,
+      "budgetCostSafetyMultiplier": 1.5,
+      "bootstrapBatchSize": 1,
+      "preinteractiveBootstrapEnabled": true,
+      "preinteractiveBootstrapBatchCount": 1,
+      "preinteractiveBootstrapMilliseconds": 29.891500000000182,
+      "coldStartBatchMilliseconds": 29.891500000000182,
+      "budgetViolationCount": 0,
+      "minimumBatchBudgetViolationCount": 0,
+      "circuitBreakerTripCount": 0,
+      "deferredFrameCount": 0,
+      "deadlineInfeasibleBatchCount": 0,
+      "hardFrameBudgetMet": true,
+      "hardFrameBudgetFeasible": true,
+      "schedulerAdmissionBudgetMet": true,
+      "maximumBudgetOverrunMilliseconds": 0.0,
+      "hardFrameBudgetOutcome": "met",
+      "hardBudgetGuaranteeScope": "interactive-frames-after-preinteractive-bootstrap; opaque-backend-admission-not-preemptible",
+      "warmupFrameTimes": {
+        "sampleCount": 0,
+        "minimumMilliseconds": 0.0,
+        "meanMilliseconds": 0.0,
+        "p50Milliseconds": 0.0,
+        "p95Milliseconds": 0.0,
+        "p99Milliseconds": 0.0,
+        "maximumMilliseconds": 0.0,
+        "standardDeviationMilliseconds": 0.0,
+        "hitchThresholdMilliseconds": 16.67,
+        "hitchFrameCount": 0,
+        "hitchFramePercent": 0.0
+      },
+      "warmupFrameTimeSamplesMilliseconds": [],
+      "batchSizes": [
+        389
+      ],
+      "safeBatchSizes": [
+        0
+      ],
+      "deadlineBatchSizes": [
+        0
+      ],
+      "predictedBatchDurationsMilliseconds": [
+        0.0
+      ],
+      "batchDurationsMilliseconds": [
+        29.891500000000182
+      ],
+      "admissionReasons": [
+        "preinteractive-required-hot-set-gate"
+      ],
+      "completed": true,
+      "error": ""
+    }
+  ],
+  "cacheMissTrace": {
+    "requested": true,
+    "armed": true,
+    "scope": "plan",
+    "baselineGraphicsStates": 389,
+    "observedGraphicsStates": 389,
+    "cacheMissGraphicsStates": 0,
+    "collectionContainsBaseline": false,
+    "collectionFile": "",
+    "collectionSha256": "",
+    "error": ""
+  },
+  "publicationNormalization": {
+    "generatedUtc": "2026-09-02T05:05:22.8704116Z",
+    "originalSha256": "1052ec2f53157cf92bc14b2f36f00df70f4f0c89eca777625dfe2942e7599170",
+    "changedFields": [
+      "planFile"
+    ],
+    "reason": "Local absolute paths removed; measurements and plan hash unchanged."
+  }
+}

@@ -16,3 +16,6 @@
 *.png binary
 *.mp4 binary
 *.graphicsstate binary
+
+# Captured evidence must retain the bytes whose SHA-256 was recorded.
+/Matrix/evidence/amd-r9700-system-probe-20260907/** -text -whitespace

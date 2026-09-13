@@ -2,6 +2,7 @@
   "name": "Yanagisawa.ShaderHitchPipeline.Showcase",
   "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Showcase",
   "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
     "Yanagisawa.ShaderHitchPipeline.Runtime"
   ],
   "includePlatforms": [],

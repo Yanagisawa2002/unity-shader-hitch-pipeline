@@ -2,6 +2,7 @@
   "name": "Yanagisawa.ShaderHitchPipeline.Showcase.Editor",
   "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Showcase.Editor",
   "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
     "Yanagisawa.ShaderHitchPipeline.Runtime",
     "Yanagisawa.ShaderHitchPipeline.Editor",
     "Yanagisawa.ShaderHitchPipeline.Showcase"

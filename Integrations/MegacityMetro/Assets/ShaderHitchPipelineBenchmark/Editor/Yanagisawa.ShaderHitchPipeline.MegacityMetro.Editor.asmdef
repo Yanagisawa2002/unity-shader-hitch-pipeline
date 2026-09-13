@@ -1,0 +1,21 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.MegacityMetro.Editor",
+  "rootNamespace": "Yanagisawa.ShaderHitchPipeline.MegacityMetro.Editor",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
+    "Yanagisawa.ShaderHitchPipeline.Editor",
+    "Yanagisawa.ShaderHitchPipeline.Runtime",
+    "Yanagisawa.ShaderHitchPipeline.MegacityMetro"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -48,21 +48,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public static string ResolveChildPath(string root, string relativePath)
         {
-            if (string.IsNullOrWhiteSpace(root))
-                throw new ArgumentException("A root directory is required.", nameof(root));
-            if (string.IsNullOrWhiteSpace(relativePath))
-                throw new ArgumentException("A relative path is required.", nameof(relativePath));
-            if (Path.IsPathRooted(relativePath))
-                throw new InvalidOperationException("Expected a relative path: " + relativePath);
-
-            string fullRoot = Path.GetFullPath(root)
-                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            string candidate = Path.GetFullPath(Path.Combine(fullRoot, relativePath));
-            string requiredPrefix = fullRoot + Path.DirectorySeparatorChar;
-            if (!candidate.StartsWith(requiredPrefix, StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException("Path escapes its declared root: " + relativePath);
-
-            return candidate;
+            return PsoRelativePath.Resolve(root, relativePath);
         }
 
         public static string ComputeSha256(string filePath)
@@ -80,29 +66,19 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public static void WriteJsonAtomic(string path, object document, bool pretty = true)
         {
-            WriteTextAtomic(path, JsonUtility.ToJson(document, pretty));
+            WriteTextAtomic(path, PsoDocumentJson.Serialize(document, pretty));
         }
 
         public static void WriteTextAtomic(string path, string contents)
         {
-            string fullPath = Path.GetFullPath(path);
-            string directory = Path.GetDirectoryName(fullPath);
-            if (string.IsNullOrEmpty(directory))
-                throw new InvalidOperationException("Could not resolve output directory for " + path);
-
-            Directory.CreateDirectory(directory);
-            string temporary = fullPath + ".tmp-" + Guid.NewGuid().ToString("N");
-            File.WriteAllText(temporary, contents, new UTF8Encoding(false));
-            if (File.Exists(fullPath))
-                File.Delete(fullPath);
-            File.Move(temporary, fullPath);
+            PsoAtomicFile.WriteText(path, contents);
         }
 
         public static T ReadJson<T>(string path) where T : class
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException("JSON file was not found.", path);
-            T result = JsonUtility.FromJson<T>(File.ReadAllText(path));
+            T result = PsoDocumentJson.Parse<T>(File.ReadAllText(path));
             if (result == null)
                 throw new InvalidDataException("Could not parse JSON document: " + path);
             return result;

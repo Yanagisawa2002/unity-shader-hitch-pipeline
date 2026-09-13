@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Yanagisawa2002/unity-shader-hitch-pipeline/blob/main/Schemas/trace-session.schema.json",
+  "title": "Shader Hitch Pipeline trace session",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "sessionId",
+    "phase",
+    "adapterId",
+    "artifactType",
+    "collectionFile",
+    "collectionSha256",
+    "graphicsStateCount",
+    "environment"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 3
+    },
+    "packageVersion": {
+      "type": "string"
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "startedUtc": {
+      "type": "string"
+    },
+    "endedUtc": {
+      "type": "string"
+    },
+    "adapterId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifactType": {
+      "type": "string",
+      "minLength": 1
+    },
+    "collectionFile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "collectionSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "variantCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "graphicsStateCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "saved": {
+      "type": "boolean"
+    },
+    "sentToEditor": {
+      "type": "boolean"
+    },
+    "error": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    }
+  },
+  "$defs": {
+    "environment": {
+      "type": "object",
+      "required": [
+        "engineName",
+        "engineVersion",
+        "runtimePlatform",
+        "graphicsDeviceType"
+      ],
+      "properties": {
+        "engineName": {
+          "type": "string"
+        },
+        "engineVersion": {
+          "type": "string"
+        },
+        "unityVersion": {
+          "type": "string"
+        },
+        "runtimePlatform": {
+          "type": "string"
+        },
+        "graphicsDeviceType": {
+          "type": "string"
+        },
+        "graphicsDeviceName": {
+          "type": "string"
+        },
+        "graphicsDeviceVendor": {
+          "type": "string"
+        },
+        "graphicsDeviceVersion": {
+          "type": "string"
+        },
+        "graphicsMemorySizeMb": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualityLevelName": {
+          "type": "string"
+        },
+        "operatingSystem": {
+          "type": "string"
+        },
+        "graphicsDeviceId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "graphicsDeviceVendorId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "processorCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "processorType": {
+          "type": "string"
+        },
+        "renderingThreadingMode": {
+          "type": "string"
+        },
+        "costExecutionContext": {
+          "type": "string"
+        },
+        "buildGuid": {
+          "type": "string"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "applicationVersion": {
+          "type": "string"
+        },
+        "identity": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "version",
+                "source",
+                "buildInputSha256",
+                "shaderSha256",
+                "contentSha256",
+                "contentId",
+                "contentRevision"
+              ],
+              "properties": {
+                "version": {
+                  "const": 1
+                },
+                "source": {
+                  "const": "unity-build-inputs-v1"
+                },
+                "buildInputSha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{64}$",
+                  "not": {
+                    "const": "0000000000000000000000000000000000000000000000000000000000000000"
+                  }
+                },
+                "shaderSha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{64}$",
+                  "not": {
+                    "const": "0000000000000000000000000000000000000000000000000000000000000000"
+                  }
+                },
+                "contentSha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{64}$",
+                  "not": {
+                    "const": "0000000000000000000000000000000000000000000000000000000000000000"
+                  }
+                },
+                "contentId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "contentRevision": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "driverIdentity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "driverIdentitySource": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "driverVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "driverIdentityError": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "driverRegistryIdentity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "driverModules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "file",
+              "sha256"
+            ],
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{64}$"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

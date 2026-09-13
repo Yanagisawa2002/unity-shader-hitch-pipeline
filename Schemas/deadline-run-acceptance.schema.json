@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Yanagisawa2002/unity-shader-hitch-pipeline/schemas/deadline-run-acceptance.schema.json",
+  "title": "Deadline Run visual acceptance",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "scenario",
+    "generatedUtc",
+    "passed",
+    "requirements",
+    "metrics",
+    "scheduledPhase",
+    "failures",
+    "inputs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "scenario": { "enum": ["deadline-run", "megacity-metro"] },
+    "generatedUtc": { "type": "string", "format": "date-time" },
+    "passed": { "type": "boolean" },
+    "requirements": { "type": "object" },
+    "metrics": { "type": "object" },
+    "scheduledPhase": { "type": "object" },
+    "failures": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "inputs": { "type": "object" }
+  },
+  "additionalProperties": false
+}

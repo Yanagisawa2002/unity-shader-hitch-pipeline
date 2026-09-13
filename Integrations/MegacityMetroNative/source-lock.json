@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "external-application-scene",
+  "repository": "https://github.com/Unity-Technologies/megacity-metro.git",
+  "commit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "tree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "unityVersion": "6000.1.0f1",
+  "license": {
+    "name": "Unity Companion License",
+    "noticePath": "LICENCE.md",
+    "noticeUrl": "https://github.com/Unity-Technologies/megacity-metro/blob/07652ee74a1f322c2c3e607020f07be720175680/LICENCE.md",
+    "termsUrl": "https://unity.com/legal/licenses/unity-companion-license"
+  },
+  "files": [
+    {
+      "path": "LICENCE.md",
+      "sha256": "2499d43cab119c48ab2ae670a43a20260d6eb6df695a091c1ec72f77d00bd33d",
+      "bytes": 475
+    },
+    {
+      "path": "README.md",
+      "sha256": "eed195e1cf96ac9f307c016aed0ff86102c5c29d332169cb5e74fa8572ad1bcf",
+      "bytes": 4448
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "1a47686c7a9ac92eae6b23cf3358d1329fbbe8237051ed631faf6e15a945402a",
+      "bytes": 83
+    },
+    {
+      "path": "ProjectSettings/EditorBuildSettings.asset",
+      "sha256": "e58677f3779ff2300f7083053004e5e02f56883f451e2f95881a446d5fd76a5b",
+      "bytes": 444
+    },
+    {
+      "path": "ProjectSettings/QualitySettings.asset",
+      "sha256": "3672614dd3c2534de68bc17b69c3d58050666cecea682832b632b9ab291c2f6d",
+      "bytes": 6578
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "sha256": "180dc78ca06c21a7238db0dfec6de8c22916e7f9be16b300b1584e47b0d53ce9",
+      "bytes": 4608
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "db14e2ef12e7884fc94e965b8bc0d14cafbf46428e9b84b4a764f7873d98a920",
+      "bytes": 3122
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "sha256": "48fb4ebaed57a775454ffd70acaff44683d95b87513ce98811b2d5a770ba029d",
+      "bytes": 23169
+    },
+    {
+      "path": "Assets/Scenes/Main.unity",
+      "sha256": "67630bfa3035a238126a22f702ecbc1c15cb4818f9884a49ca6a1ed76b82f600",
+      "bytes": 131
+    },
+    {
+      "path": "Assets/Scenes/Main.unity.meta",
+      "sha256": "d0d03afd78932e9f0acde0a4031029c61039af01bc55c1522f23101e74c5633c",
+      "bytes": 155
+    },
+    {
+      "path": "Assets/Scenes/Main/Level.unity",
+      "sha256": "bca8814f1b7e0756e55186d3208d6f565c1a449d3c6efb540ecfbc05759a309c",
+      "bytes": 132
+    },
+    {
+      "path": "Assets/Scenes/Main/Level.unity.meta",
+      "sha256": "7a342b360446091cf401f5179dfef2b6e6a6fd28f22cc02d8416e00a4fa24250",
+      "bytes": 155
+    },
+    {
+      "path": "Assets/Scenes/Menu.unity",
+      "sha256": "09112000ed381671b30457633dee563e180e97610a73de309b0b690ef2cd02a4",
+      "bytes": 130
+    },
+    {
+      "path": "Assets/Scenes/Menu.unity.meta",
+      "sha256": "7dcdf673f7960412b80cec79572c741fd71f17e2bba7eee20fd2aa4ecfa94824",
+      "bytes": 155
+    }
+  ]
+}

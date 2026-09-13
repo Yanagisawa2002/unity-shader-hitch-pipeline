@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 3,
+  "verdict": "PASS",
+  "verdictScope": "supporting sample integrity; final performance verdict requires the 12-second scenario acceptance receipt",
+  "samplePerformanceGateApplicable": false,
+  "samplePerformanceGateMet": true,
+  "noRegression": true,
+  "materialImprovement": true,
+  "naiveParity": true,
+  "naiveParityExact": true,
+  "parityPolicy": {
+    "presentationHitchThresholdMilliseconds": 16.67,
+    "severeHitchThresholdMilliseconds": 33.34,
+    "presentationJitterAllowanceFrames": 7,
+    "presentationJitterAllowancePercent": 0.5,
+    "rationale": "Report every missed presentation budget; permit at most 0.5% isolated non-severe capture/OS jitter while requiring zero regression in severe stalls."
+  },
+  "warmupEvidenceValid": true,
+  "deferredEvidenceValid": true,
+  "environmentCompatible": true,
+  "environmentMismatches": [],
+  "environment": {
+    "unityVersion": "6000.1.0f1",
+    "engineName": "Unity",
+    "engineVersion": "6000.1.0f1",
+    "productName": "Megacity Metro - Shader Hitch Pipeline",
+    "applicationVersion": "1.5.0",
+    "buildGuid": "1bcb91ebaf6749c295ac7c63811eec4c",
+    "runtimePlatform": "WindowsPlayer",
+    "graphicsDeviceType": "Direct3D12",
+    "graphicsDeviceName": "AMD Radeon AI PRO R9700",
+    "graphicsDeviceVendor": "ATI",
+    "graphicsDeviceVersion": "Direct3D 12 [level 12.1]",
+    "graphicsMemorySizeMb": 32476,
+    "qualityLevelName": "Medium",
+    "operatingSystem": "Windows 11  (10.0.26200) 64bit"
+  },
+  "baselineBuildGuid": "1bcb91ebaf6749c295ac7c63811eec4c",
+  "naiveBuildGuid": "e25f820942944bd1bb2bcbd2305565ef",
+  "optimizedBuildGuid": "e25f820942944bd1bb2bcbd2305565ef",
+  "sampleFrames": {
+    "baseline": 1415,
+    "naive": 1440,
+    "optimized": 1440
+  },
+  "hitchThresholdMilliseconds": 16.67,
+  "hitches": {
+    "baseline": 1,
+    "naive": 0,
+    "optimized": 0,
+    "eliminated": 1
+  },
+  "severeHitches": {
+    "thresholdMilliseconds": 33.34,
+    "baseline": 1,
+    "naive": 0,
+    "optimized": 0,
+    "eliminated": 1
+  },
+  "metrics": {
+    "mean": {
+      "baselineMilliseconds": 8.485181333641966,
+      "naiveMilliseconds": 8.33391220593411,
+      "optimizedMilliseconds": 8.33409354931468,
+      "improvementPercent": 1.7806076073855344
+    },
+    "p95": {
+      "baselineMilliseconds": 8.335303515195847,
+      "naiveMilliseconds": 8.335203863680363,
+      "optimizedMilliseconds": 8.335203863680363,
+      "improvementPercent": 0.0011955355351150015
+    },
+    "p99": {
+      "baselineMilliseconds": 8.337643202394247,
+      "naiveMilliseconds": 8.336157221347094,
+      "optimizedMilliseconds": 8.336222553625703,
+      "improvementPercent": 0.017038972933457287
+    },
+    "maximum": {
+      "baselineMilliseconds": 227.65760123729706,
+      "naiveMilliseconds": 8.568700402975082,
+      "optimizedMilliseconds": 8.580994792282581,
+      "improvementPercent": 96.23074531856362
+    }
+  },
+  "plan": {
+    "profileId": "megacity-metro-d3d12-20260903-054644",
+    "planSha256": "feeaf7e3e6164bb1d53800fa4640f132be1c30660c87e4be089e74d540fee4a5",
+    "variantCount": 48,
+    "graphicsStateCount": 48
+  },
+  "warmupEvidence": {
+    "naive": {
+      "available": true,
+      "valid": true,
+      "strategy": "throughput",
+      "workerCount": 1,
+      "elapsedMilliseconds": 16.5375,
+      "completedGraphicsStates": 48,
+      "totalGraphicsStates": 48,
+      "completedWarmupPermutations": 48,
+      "backendReportedWarmedUp": true,
+      "backendSchedulingModes": [
+        "native-async-throughput"
+      ],
+      "phasesComplete": true,
+      "planMatchesBenchmark": true,
+      "feedbackTraceRequested": true,
+      "feedbackTraceArmed": true,
+      "feedbackTraceScope": "plan",
+      "feedbackBaselineGraphicsStates": 48,
+      "feedbackObservedGraphicsStates": 48,
+      "cacheMissGraphicsStates": 0,
+      "feedbackCollectionContainsBaseline": false,
+      "feedbackError": "",
+      "hardFrameBudgetMet": true,
+      "hardFrameBudgetApplicable": false,
+      "hardFrameBudgetGateMet": true,
+      "hardFrameBudgetFeasible": false,
+      "schedulerAdmissionBudgetMet": false,
+      "budgetViolationCount": 0,
+      "minimumBatchBudgetViolationCount": 0,
+      "hardFrameBudgetOutcomes": [
+        "not-applicable-throughput"
+      ],
+      "hardBudgetGuaranteeScopes": [
+        "none; throughput-control"
+      ],
+      "preinteractiveBootstrapMilliseconds": 0.0,
+      "preinteractiveBootstrapBatchCount": 0,
+      "phases": [
+        {
+          "phase": "megacity-metro-reveal",
+          "elapsedMilliseconds": 16.617,
+          "batchCount": 1,
+          "backendSchedulingMode": "native-async-throughput",
+          "completedWarmupPermutations": 48,
+          "backendReportedWarmedUp": true,
+          "maximumObservedFrameMilliseconds": 8.33200104534626,
+          "deadlineMilliseconds": 2500.0,
+          "deadlineMissed": false,
+          "budgetViolationCount": 0,
+          "hardFrameBudgetMet": true,
+          "preinteractiveBootstrapEnabled": false,
+          "batchSizes": [
+            48
+          ],
+          "presentationHitchThresholdMilliseconds": 16.67,
+          "presentationHitchCount": 0
+        }
+      ]
+    },
+    "optimized": {
+      "available": true,
+      "valid": true,
+      "strategy": "scheduled",
+      "workerCount": 1,
+      "elapsedMilliseconds": 16.7173,
+      "completedGraphicsStates": 48,
+      "totalGraphicsStates": 48,
+      "completedWarmupPermutations": 48,
+      "backendReportedWarmedUp": true,
+      "backendSchedulingModes": [
+        "deadline-gated-native-async-bulk"
+      ],
+      "phasesComplete": true,
+      "planMatchesBenchmark": true,
+      "feedbackTraceRequested": true,
+      "feedbackTraceArmed": true,
+      "feedbackTraceScope": "plan",
+      "feedbackBaselineGraphicsStates": 48,
+      "feedbackObservedGraphicsStates": 48,
+      "cacheMissGraphicsStates": 0,
+      "feedbackCollectionContainsBaseline": false,
+      "feedbackError": "",
+      "hardFrameBudgetMet": true,
+      "hardFrameBudgetApplicable": true,
+      "hardFrameBudgetGateMet": true,
+      "hardFrameBudgetFeasible": true,
+      "schedulerAdmissionBudgetMet": true,
+      "budgetViolationCount": 0,
+      "minimumBatchBudgetViolationCount": 0,
+      "hardFrameBudgetOutcomes": [
+        "met"
+      ],
+      "hardBudgetGuaranteeScopes": [
+        "strict-dispatch-admission; native-async-bulk observed frame enforcement; opaque-backend-admission-not-preemptible"
+      ],
+      "preinteractiveBootstrapMilliseconds": 0.0,
+      "preinteractiveBootstrapBatchCount": 0,
+      "phases": [
+        {
+          "phase": "megacity-metro-reveal",
+          "elapsedMilliseconds": 16.793100000000003,
+          "batchCount": 1,
+          "backendSchedulingMode": "deadline-gated-native-async-bulk",
+          "completedWarmupPermutations": 48,
+          "backendReportedWarmedUp": true,
+          "maximumObservedFrameMilliseconds": 8.332702331244946,
+          "deadlineMilliseconds": 2500.0,
+          "deadlineMissed": false,
+          "budgetViolationCount": 0,
+          "hardFrameBudgetMet": true,
+          "preinteractiveBootstrapEnabled": false,
+          "batchSizes": [
+            48
+          ],
+          "presentationHitchThresholdMilliseconds": 16.67,
+          "presentationHitchCount": 0
+        }
+      ]
+    }
+  }
+}

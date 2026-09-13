@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../UnityReferences.props" />
+  <PropertyGroup><AssemblyName>Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ShaderHitchPipeline.Unity.Editor.Compile/ShaderHitchPipeline.Unity.Editor.Compile.csproj" />
+    <ProjectReference Include="../ShaderHitchPipeline.NativeScenes.Compile/ShaderHitchPipeline.NativeScenes.Compile.csproj" Condition="'$(EntitiesAssembliesPath)' != ''" />
+    <Compile Include="../../Integrations/MegacityMetroNative/Package/Editor/*.cs" />
+    <Reference Include="$(UnityManagedPath)/UnityEditor*.dll" Private="false" />
+    <Reference Include="$(UnityManagedPath)/UnityEngine/UnityEditor*.dll" Private="false" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "com.yanagisawa.shader-hitch-pipeline": "file:../../../../Packages/com.yanagisawa.shader-hitch-pipeline",
+    "com.yanagisawa.shader-hitch-pipeline.addressables": "file:../../Packages/com.yanagisawa.shader-hitch-pipeline.addressables",
+    "com.unity.addressables": "2.10.3",
+    "com.unity.modules.jsonserialize": "1.0.0",
+    "com.unity.modules.physics": "1.0.0"
+  }
+}

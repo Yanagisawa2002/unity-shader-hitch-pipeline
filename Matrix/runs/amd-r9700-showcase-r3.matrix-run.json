@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "runId": "amd-r9700-showcase-r3-20260902",
+  "recordedUtc": "2026-09-02T05:20:15.654023Z",
+  "matrixId": "public-windows-d3d12-v0.3",
+  "hardwareTarget": "amd-d3d12",
+  "sceneTarget": "showcase-controlled",
+  "cacheState": "process-cold",
+  "pipelineRevision": "codex/v0.3-hard-budget+working-tree",
+  "sceneRevision": "same-as-pipeline-run",
+  "environment": {
+    "unityVersion": "6000.5.2f1",
+    "engineName": "Unity",
+    "engineVersion": "6000.5.2f1",
+    "productName": "Shader Hitch Pipeline Showcase",
+    "applicationVersion": "1.0",
+    "buildGuid": "e60d1dbb2000471d86c5532a16d9a0d8",
+    "runtimePlatform": "WindowsPlayer",
+    "graphicsDeviceType": "Direct3D12",
+    "graphicsDeviceName": "AMD Radeon AI PRO R9700",
+    "graphicsDeviceVendor": "ATI",
+    "graphicsDeviceVersion": "Direct3D 12 [level 12.2]",
+    "graphicsMemorySizeMb": 32476,
+    "qualityLevelName": "Ultra",
+    "operatingSystem": "Windows 11  (10.0.26200)"
+  },
+  "hardwareEnvironment": {},
+  "benchmark": {
+    "completed": true,
+    "mode": "scheduled",
+    "sampleCount": 180,
+    "p99Milliseconds": 4.167219032533467,
+    "maximumMilliseconds": 4.237698391079903,
+    "hitchFrameCount": 0
+  },
+  "warmup": {
+    "completed": true,
+    "strategy": "scheduled",
+    "elapsedMilliseconds": 560.1799,
+    "maximumObservedFrameMilliseconds": 0.0,
+    "interactiveWarmupFrameSampleCount": 0,
+    "coldStartBatchMilliseconds": 26.347099999999735,
+    "preinteractiveBootstrapMilliseconds": 26.347099999999735,
+    "budgetViolationCount": 0,
+    "hardFrameBudgetMet": true,
+    "hardFrameBudgetScope": [
+      "unspecified"
+    ]
+  },
+  "presentMon": {
+    "available": false,
+    "p99PresentedMilliseconds": 0.0,
+    "maximumPresentedMilliseconds": 0.0,
+    "presentBudgetMet": false
+  },
+  "evidence": {
+    "windowsManifestComplete": false,
+    "hasPresentMon": false,
+    "hasEtw": false,
+    "sources": {
+      "benchmark": {
+        "path": "Matrix/evidence/amd-r9700-showcase-r3/scheduled.benchmark.json",
+        "sha256": "3c1707fa9a1755eb7dde153eee5916cbd2275f666806639ac7ee0f04eb8b26b1",
+        "bytes": 6665
+      },
+      "warmup": {
+        "path": "Matrix/evidence/amd-r9700-showcase-r3/scheduled.warmup.json",
+        "sha256": "b275e480229bbf04943df002741f39fe19ae63c18aa84a5b849aed844856d2ae",
+        "bytes": 4337
+      },
+      "presentMon": {
+        "path": "",
+        "sha256": "",
+        "bytes": 0
+      },
+      "windowsManifest": {
+        "path": "",
+        "sha256": "",
+        "bytes": 0
+      }
+    }
+  },
+  "completed": true
+}

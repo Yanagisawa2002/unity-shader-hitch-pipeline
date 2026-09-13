@@ -12,6 +12,8 @@ from typing import Any
 
 ENVIRONMENT_KEYS = (
     "unityVersion",
+    "engineName",
+    "engineVersion",
     "productName",
     "applicationVersion",
     "runtimePlatform",
@@ -20,12 +22,13 @@ ENVIRONMENT_KEYS = (
     "graphicsDeviceVendor",
     "graphicsDeviceVersion",
     "qualityLevelName",
+    "operatingSystem",
 )
 
 
 def load_receipt(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("schemaVersion") not in (1, 2):
+    if data.get("schemaVersion") not in (1, 2, 3):
         raise ValueError(f"Unsupported receipt schema in {path}")
     if not data.get("completed"):
         raise ValueError(f"Benchmark did not complete: {path}: {data.get('error', '')}")
@@ -37,11 +40,22 @@ def load_receipt(path: Path) -> dict[str, Any]:
 
 def load_warmup_receipt(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("schemaVersion") != 2:
+    if data.get("schemaVersion") not in (2, 3):
         raise ValueError(f"Unsupported warmup receipt schema in {path}")
     if not data.get("completed"):
         raise ValueError(f"Warmup did not complete: {path}: {data.get('error', '')}")
     return data
+
+
+def phase_warmup_complete(phase: dict[str, Any]) -> bool:
+    """Use Unity's completion signal when available, with legacy fallback."""
+    if not phase.get("completed"):
+        return False
+    if "backendReportedWarmedUp" in phase:
+        return bool(phase.get("backendReportedWarmedUp"))
+    return int(phase.get("completedGraphicsStates", 0)) == int(
+        phase.get("totalGraphicsStates", 0)
+    )
 
 
 def summarize_warmup(
@@ -49,31 +63,106 @@ def summarize_warmup(
     benchmark: dict[str, Any],
 ) -> dict[str, Any]:
     if receipt is None:
-        return {"available": False, "valid": True}
+        return {"available": False, "valid": False, "feedbackStatus": "Unavailable"}
 
     phases = receipt.get("phases") or []
     completed_states = sum(int(phase.get("completedGraphicsStates", 0)) for phase in phases)
     total_states = sum(int(phase.get("totalGraphicsStates", 0)) for phase in phases)
-    phases_complete = bool(phases) and all(
-        phase.get("completed")
-        and int(phase.get("completedGraphicsStates", 0))
-        == int(phase.get("totalGraphicsStates", 0))
-        for phase in phases
+    completed_permutations = sum(
+        int(phase.get("completedWarmupPermutations", 0)) for phase in phases
     )
+    phases_complete = bool(phases) and all(phase_warmup_complete(phase) for phase in phases)
     feedback = receipt.get("cacheMissTrace") or {}
     feedback_requested = bool(feedback.get("requested"))
     feedback_armed = bool(feedback.get("armed"))
-    feedback_ready = not feedback_requested or feedback_armed
     feedback_error = str(feedback.get("error") or "")
-    cache_misses = int(feedback.get("cacheMissGraphicsStates", 0))
-    plan_matches = receipt.get("planSha256") == benchmark.get("planSha256")
+    feedback_counts = [feedback.get(key) for key in ("baselineGraphicsStates", "observedGraphicsStates", "cacheMissGraphicsStates")]
+    counts_valid = all(type(value) is int and value >= 0 for value in feedback_counts)
+    if counts_valid:
+        counts_valid = feedback_counts[0] > 0 and feedback_counts[1] >= feedback_counts[0] and feedback_counts[2] == feedback_counts[1] - feedback_counts[0]
+    feedback_ready = (feedback_requested and feedback_armed and not feedback_error and counts_valid
+                      and feedback.get("scope") == "plan" and feedback.get("collectionContainsBaseline") is True)
+    cache_misses = feedback_counts[2] if feedback_ready else None
+    plan_hash = receipt.get("planSha256")
+    plan_matches = isinstance(plan_hash, str) and len(plan_hash) == 64 and plan_hash == benchmark.get("planSha256")
+    strict_admission = (
+        receipt.get("strategy") in ("scheduled", "observed-budget", "fixed-progressive")
+        and int(receipt.get("schemaVersion", 0)) >= 3
+    )
+    hard_budget_met = (
+        bool(phases)
+        and all(phase.get("hardFrameBudgetMet") is True for phase in phases)
+    )
+    scheduler_admission_met = (
+        bool(phases)
+        and all(
+            phase.get("schedulerAdmissionBudgetMet") is True for phase in phases
+        )
+    )
+    hard_budget_feasible = (
+        bool(phases)
+        and all(phase.get("hardFrameBudgetFeasible") is True for phase in phases)
+    )
+    hard_budget_gate_met = not strict_admission or (
+        hard_budget_met and scheduler_admission_met and hard_budget_feasible
+    )
+    budget_violations = sum(
+        int(phase.get("budgetViolationCount", 0)) for phase in phases
+    )
+    minimum_batch_violations = sum(
+        int(phase.get("minimumBatchBudgetViolationCount", 0)) for phase in phases
+    )
+    hard_budget_outcomes = sorted(
+        {str(phase.get("hardFrameBudgetOutcome", "unspecified")) for phase in phases}
+    )
     valid = (
-        phases_complete
+        receipt.get("completed") is True
+        and not receipt.get("error")
+        and phases_complete
         and plan_matches
         and feedback_ready
         and not feedback_error
         and cache_misses == 0
+        and hard_budget_gate_met
     )
+    presentation_threshold = float(
+        benchmark.get("frameTimes", {}).get("hitchThresholdMilliseconds", 8.33)
+    )
+    phase_evidence = [
+        {
+            "phase": str(phase.get("phase", "")),
+            "elapsedMilliseconds": float(phase.get("elapsedMilliseconds", 0.0)),
+            "batchCount": int(phase.get("batchCount", 0)),
+            "backendSchedulingMode": str(phase.get("backendSchedulingMode", "")),
+            "completedWarmupPermutations": int(
+                phase.get("completedWarmupPermutations", 0)
+            ),
+            "backendReportedWarmedUp": bool(
+                phase.get(
+                    "backendReportedWarmedUp",
+                    int(phase.get("completedGraphicsStates", 0))
+                    == int(phase.get("totalGraphicsStates", 0)),
+                )
+            ),
+            "maximumObservedFrameMilliseconds": float(
+                phase.get("maximumObservedFrameMilliseconds", 0.0)
+            ),
+            "deadlineMilliseconds": float(phase.get("deadlineMilliseconds", 0.0)),
+            "deadlineMissed": bool(phase.get("deadlineMissed")),
+            "budgetViolationCount": int(phase.get("budgetViolationCount", 0)),
+            "hardFrameBudgetMet": bool(phase.get("hardFrameBudgetMet")),
+            "preinteractiveBootstrapEnabled": bool(
+                phase.get("preinteractiveBootstrapEnabled")
+            ),
+            "batchSizes": [int(value) for value in phase.get("batchSizes", [])],
+            "presentationHitchThresholdMilliseconds": presentation_threshold,
+            "presentationHitchCount": sum(
+                float(value) >= presentation_threshold
+                for value in phase.get("warmupFrameTimeSamplesMilliseconds", [])
+            ),
+        }
+        for phase in phases
+    ]
     return {
         "available": True,
         "valid": valid,
@@ -82,22 +171,44 @@ def summarize_warmup(
         "elapsedMilliseconds": float(receipt.get("elapsedMilliseconds", 0.0)),
         "completedGraphicsStates": completed_states,
         "totalGraphicsStates": total_states,
+        "completedWarmupPermutations": completed_permutations,
+        "backendReportedWarmedUp": phases_complete,
+        "backendSchedulingModes": sorted(
+            {str(phase.get("backendSchedulingMode", "")) for phase in phases}
+        ),
         "phasesComplete": phases_complete,
         "planMatchesBenchmark": plan_matches,
         "feedbackTraceRequested": feedback_requested,
         "feedbackTraceArmed": feedback_armed,
+        "feedbackStatus": "Available" if feedback_ready else "Unavailable",
         "feedbackTraceScope": feedback.get("scope", ""),
-        "feedbackBaselineGraphicsStates": int(
-            feedback.get("baselineGraphicsStates", 0)
-        ),
-        "feedbackObservedGraphicsStates": int(
-            feedback.get("observedGraphicsStates", 0)
-        ),
+        "feedbackBaselineGraphicsStates": feedback_counts[0] if feedback_ready else None,
+        "feedbackObservedGraphicsStates": feedback_counts[1] if feedback_ready else None,
         "cacheMissGraphicsStates": cache_misses,
         "feedbackCollectionContainsBaseline": bool(
             feedback.get("collectionContainsBaseline")
         ),
         "feedbackError": feedback_error,
+        "hardFrameBudgetMet": hard_budget_met,
+        "hardFrameBudgetApplicable": strict_admission,
+        "hardFrameBudgetGateMet": hard_budget_gate_met,
+        "hardFrameBudgetFeasible": hard_budget_feasible,
+        "schedulerAdmissionBudgetMet": scheduler_admission_met,
+        "budgetViolationCount": budget_violations,
+        "minimumBatchBudgetViolationCount": minimum_batch_violations,
+        "hardFrameBudgetOutcomes": hard_budget_outcomes,
+        "hardBudgetGuaranteeScopes": sorted(
+            {str(phase.get("hardBudgetGuaranteeScope", "")) for phase in phases}
+        ),
+        "preinteractiveBootstrapMilliseconds": sum(
+            float(phase.get("preinteractiveBootstrapMilliseconds", 0.0))
+            for phase in phases
+        ),
+        "preinteractiveBootstrapBatchCount": sum(
+            int(phase.get("preinteractiveBootstrapBatchCount", 0))
+            for phase in phases
+        ),
+        "phases": phase_evidence,
     }
 
 
@@ -112,6 +223,7 @@ def build_report(
     naive: dict[str, Any] | None = None,
     naive_warmup: dict[str, Any] | None = None,
     optimized_warmup: dict[str, Any] | None = None,
+    scenario_sidecar_authoritative: bool = False,
 ) -> dict[str, Any]:
     baseline_environment = baseline["environment"]
     optimized_environment = optimized["environment"]
@@ -201,6 +313,9 @@ def build_report(
         or metrics["maximum"]["improvementPercent"] >= 5.0
         or warm_hitches < cold_hitches
     )
+    sample_performance_gate_met = (
+        no_regression and naive_parity and material_improvement
+    )
 
     phases = [] if plan is None else plan.get("phases", [])
     state_count = sum(int(phase.get("graphicsStateCount", 0)) for phase in phases)
@@ -213,20 +328,45 @@ def build_report(
         ),
         "optimized": summarize_warmup(optimized_warmup, optimized),
     }
-    warmup_evidence_valid = all(
-        item["valid"] for item in warmup_evidence.values()
+    warmup_evidence_valid = warmup_evidence["optimized"]["valid"] and (
+        naive is None or warmup_evidence["naive"]["valid"])
+
+    def has_real_deferred_phase(summary: dict[str, Any]) -> bool:
+        return any(
+            phase.get("phase", "").lower() not in {"startup", "bootstrap"}
+            and not phase.get("preinteractiveBootstrapEnabled")
+            and int(phase.get("batchCount", 0)) > 0
+            for phase in summary.get("phases", [])
+        )
+
+    deferred_evidence_valid = has_real_deferred_phase(
+        warmup_evidence["optimized"]
+    ) and (
+        naive is None or has_real_deferred_phase(warmup_evidence["naive"])
     )
     return {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "verdict": (
             "PASS"
             if not mismatches
-            and no_regression
-            and naive_parity
-            and material_improvement
+            and (
+                scenario_sidecar_authoritative
+                or sample_performance_gate_met
+            )
             and warmup_evidence_valid
+            and deferred_evidence_valid
             else "FAIL"
         ),
+        "verdictScope": (
+            "supporting sample integrity; final performance verdict requires "
+            "the 12-second scenario acceptance receipt"
+            if scenario_sidecar_authoritative
+            else "sample performance and evidence integrity"
+        ),
+        "samplePerformanceGateApplicable": not scenario_sidecar_authoritative,
+        "samplePerformanceGateMet": sample_performance_gate_met,
+        "noRegression": no_regression,
+        "materialImprovement": material_improvement,
         "naiveParity": naive_parity,
         "naiveParityExact": naive_parity_exact,
         "parityPolicy": {
@@ -241,6 +381,7 @@ def build_report(
             ),
         },
         "warmupEvidenceValid": warmup_evidence_valid,
+        "deferredEvidenceValid": deferred_evidence_valid,
         "environmentCompatible": not mismatches,
         "environmentMismatches": mismatches,
         "environment": baseline_environment,
@@ -299,12 +440,19 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         if not warmup["available"]
         else (
             f"{warmup['completedGraphicsStates']}/{warmup['totalGraphicsStates']} states, "
-            f"plan-scoped feedback trace miss count {warmup['cacheMissGraphicsStates']}"
+            f"plan-scoped feedback trace miss count {warmup['cacheMissGraphicsStates'] if warmup['cacheMissGraphicsStates'] is not None else 'unavailable'}, "
+            f"hard budget met {warmup['hardFrameBudgetMet']} "
+            f"({warmup['budgetViolationCount']} violations; "
+            f"outcome {','.join(warmup['hardFrameBudgetOutcomes'])}); "
+            f"preinteractive bootstrap "
+            f"{warmup['preinteractiveBootstrapMilliseconds']:.3f} ms"
         )
     )
     text = f"""# Shader Hitch Pipeline A/B/C
 
 Verdict: **{report['verdict']}**
+
+Verdict scope: {report['verdictScope']}.
 
 | Metric | Cold baseline | Unity all-at-once | Deadline scheduled | Scheduled vs cold |
 |---|---:|---:|---:|---:|
@@ -468,6 +616,160 @@ def render_gif(
     )
 
 
+def render_actual_scorecard(path: Path, report: dict[str, Any]) -> None:
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError as exception:
+        raise RuntimeError(
+            "Scorecard rendering requires Pillow. Run: "
+            "python -m pip install -r Tools/requirements.txt"
+        ) from exception
+
+    width, height = 1920, 600
+    image = Image.new("RGB", (width, height), "#050b14")
+    draw = ImageDraw.Draw(image)
+    regular_path = Path("C:/Windows/Fonts/segoeui.ttf")
+    bold_path = Path("C:/Windows/Fonts/segoeuib.ttf")
+
+    def font(size: int, bold: bool = False):
+        selected = bold_path if bold and bold_path.exists() else regular_path
+        if selected.exists():
+            return ImageFont.truetype(str(selected), size)
+        return ImageFont.load_default()
+
+    def centered_text(box: tuple[int, int, int, int], text: str, text_font, fill: str):
+        bounds = draw.textbbox((0, 0), text, font=text_font)
+        text_width = bounds[2] - bounds[0]
+        text_height = bounds[3] - bounds[1]
+        x = box[0] + (box[2] - box[0] - text_width) / 2
+        y = box[1] + (box[3] - box[1] - text_height) / 2 - bounds[1]
+        draw.text((x, y), text, font=text_font, fill=fill)
+
+    title_font = font(36, True)
+    subtitle_font = font(20)
+    label_font = font(22, True)
+    number_font = font(48, True)
+    detail_font = font(18)
+    centered_text(
+        (0, 18, width, 66),
+        "REAL DEFERRED CONTENT  /  SAME 1.50 s DEADLINE",
+        title_font,
+        "#edf8ff",
+    )
+    centered_text(
+        (0, 67, width, 105),
+        "Actual D3D12 Players - no injected stalls - missed frame >= "
+        f"{float(report['hitchThresholdMilliseconds']):.2f} ms",
+        subtitle_font,
+        "#7da6c4",
+    )
+
+    warmups = report["warmupEvidence"]
+
+    def deferred_phase(name: str) -> dict[str, Any]:
+        phases = warmups[name].get("phases", [])
+        for phase in phases:
+            if phase.get("phase", "").lower() not in {"startup", "bootstrap"}:
+                return phase
+        return {}
+
+    naive_phase = deferred_phase("naive")
+    optimized_phase = deferred_phase("optimized")
+    cards = [
+        {
+            "title": "COLD / FIRST USE",
+            "color": "#ff5a52",
+            "hitches": int(report["hitches"]["baseline"]),
+            "worst": float(report["metrics"]["maximum"]["baselineMilliseconds"]),
+            "line1": "No deferred warmup",
+            "line2": "States compile during reveal",
+        },
+        {
+            "title": "UNITY / ALL-AT-ONCE",
+            "color": "#ffb73d",
+            "hitches": int(naive_phase.get("presentationHitchCount", 0)),
+            "worst": float(
+                naive_phase.get(
+                    "maximumObservedFrameMilliseconds",
+                    report["metrics"]["maximum"]["naiveMilliseconds"],
+                )
+            ),
+            "line1": f"{int(naive_phase.get('batchCount', 0))} all-state batch",
+            "line2": f"{float(naive_phase.get('elapsedMilliseconds', 0.0)):.1f} ms phase elapsed",
+        },
+        {
+            "title": "OURS / DEADLINE SCHEDULED",
+            "color": "#52e3aa",
+            "hitches": int(optimized_phase.get("presentationHitchCount", 0)),
+            "worst": float(
+                optimized_phase.get(
+                    "maximumObservedFrameMilliseconds",
+                    report["metrics"]["maximum"]["optimizedMilliseconds"],
+                )
+            ),
+            "line1": f"{int(optimized_phase.get('batchCount', 0))} admitted batches",
+            "line2": (
+                f"{int(optimized_phase.get('budgetViolationCount', 0))} budget violations; "
+                f"deadline {'MISSED' if optimized_phase.get('deadlineMissed') else 'MET'}"
+            ),
+        },
+    ]
+
+    margin = 54
+    gap = 24
+    card_width = (width - margin * 2 - gap * 2) // 3
+    card_top, card_bottom = 125, 520
+    for index, card in enumerate(cards):
+        left = margin + index * (card_width + gap)
+        right = left + card_width
+        draw.rounded_rectangle(
+            (left, card_top, right, card_bottom),
+            radius=20,
+            fill="#0c1a2b",
+            outline=card["color"],
+            width=3,
+        )
+        centered_text(
+            (left + 12, card_top + 18, right - 12, card_top + 56),
+            card["title"],
+            label_font,
+            card["color"],
+        )
+        centered_text(
+            (left + 12, card_top + 78, right - 12, card_top + 142),
+            f"{card['hitches']} MISSED FRAMES",
+            number_font,
+            "#f4fbff" if card["hitches"] == 0 else card["color"],
+        )
+        centered_text(
+            (left + 12, card_top + 154, right - 12, card_top + 208),
+            f"{card['worst']:.2f} ms WORST",
+            font(30, True),
+            "#d7edfa",
+        )
+        centered_text(
+            (left + 12, card_top + 238, right - 12, card_top + 274),
+            card["line1"],
+            detail_font,
+            "#91b3ca",
+        )
+        centered_text(
+            (left + 12, card_top + 278, right - 12, card_top + 322),
+            card["line2"],
+            detail_font,
+            card["color"],
+        )
+
+    centered_text(
+        (0, 542, width, 580),
+        "Ours trades a longer background phase for zero presentation misses and a met content deadline.",
+        subtitle_font,
+        "#a9c7d9",
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(path)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseline", required=True, type=Path)
@@ -478,6 +780,15 @@ def main() -> int:
     parser.add_argument("--plan", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--no-gif", action="store_true")
+    parser.add_argument("--actual-scorecard", type=Path)
+    parser.add_argument(
+        "--scenario-sidecar-authoritative",
+        action="store_true",
+        help=(
+            "Treat benchmark-frame statistics as supporting diagnostics; a separate "
+            "12-second scenario receipt owns the performance verdict."
+        ),
+    )
     args = parser.parse_args()
 
     baseline = load_receipt(args.baseline)
@@ -499,6 +810,7 @@ def main() -> int:
         naive,
         naive_warmup,
         optimized_warmup,
+        args.scenario_sidecar_authoritative,
     )
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "comparison.json").write_text(
@@ -515,6 +827,8 @@ def main() -> int:
             report,
             naive,
         )
+    if args.actual_scorecard is not None:
+        render_actual_scorecard(args.actual_scorecard, report)
     print(json.dumps(report, indent=2, ensure_ascii=False))
     return 0 if report["verdict"] == "PASS" else 2
 

@@ -2,6 +2,7 @@
   "name": "Yanagisawa.ShaderHitchPipeline.Editor",
   "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Editor",
   "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
     "Yanagisawa.ShaderHitchPipeline.Runtime"
   ],
   "includePlatforms": [

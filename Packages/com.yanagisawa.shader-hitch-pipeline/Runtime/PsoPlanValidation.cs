@@ -16,7 +16,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             try
             {
                 plan.planSha256 = string.Empty;
-                return PsoFileUtility.ComputeTextSha256(JsonUtility.ToJson(plan, true));
+                return PsoFileUtility.ComputeTextSha256(PsoDocumentJson.Serialize(plan, true));
             }
             finally
             {
@@ -30,19 +30,9 @@ namespace Yanagisawa.ShaderHitchPipeline
             bool validateEnvironment,
             bool validateFiles)
         {
-            var issues = new List<string>();
+            List<string> issues = PsoPlanRules.Validate(plan);
             if (plan == null)
-            {
-                issues.Add("Plan is null.");
                 return issues;
-            }
-
-            if (plan.schemaVersion != PsoConstants.SchemaVersion)
-                issues.Add("Unsupported schemaVersion: " + plan.schemaVersion + ".");
-            if (string.IsNullOrWhiteSpace(plan.profileId))
-                issues.Add("profileId is required.");
-            if (plan.phases == null || plan.phases.Length == 0)
-                issues.Add("At least one warmup phase is required.");
 
             string expectedPlanHash = ComputeContentHash(plan);
             if (string.IsNullOrWhiteSpace(plan.planSha256))
@@ -55,6 +45,12 @@ namespace Yanagisawa.ShaderHitchPipeline
 
             if (validateEnvironment)
             {
+                if (plan.compatibility != null)
+                {
+                    PsoCompatibilityResult compatibility = PsoCompatibility.Evaluate(
+                        plan.compatibility, PsoUnityEnvironment.Capture());
+                    issues.AddRange(compatibility.collectionReasons);
+                }
                 string currentPlatform = Application.platform.ToString();
                 string currentApi = SystemInfo.graphicsDeviceType.ToString();
                 string currentQuality = CurrentQualityName();
@@ -73,7 +69,6 @@ namespace Yanagisawa.ShaderHitchPipeline
             string planDirectory = string.IsNullOrWhiteSpace(planPath)
                 ? string.Empty
                 : Path.GetDirectoryName(Path.GetFullPath(planPath));
-            var phases = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             if (plan.phases != null)
             {
                 for (int index = 0; index < plan.phases.Length; index++)
@@ -85,33 +80,6 @@ namespace Yanagisawa.ShaderHitchPipeline
                         issues.Add(prefix + " is null.");
                         continue;
                     }
-
-                    if (string.IsNullOrWhiteSpace(phase.phase))
-                        issues.Add(prefix + ".phase is required.");
-                    else if (!phases.Add(phase.phase))
-                        issues.Add("Duplicate phase: " + phase.phase + ".");
-                    if (string.IsNullOrWhiteSpace(phase.collectionFile))
-                        issues.Add(prefix + ".collectionFile is required.");
-                    if (phase.minimumBatchSize < 1)
-                        issues.Add(prefix + ".minimumBatchSize must be positive.");
-                    if (phase.maximumBatchSize < phase.minimumBatchSize)
-                        issues.Add(prefix + ".maximumBatchSize is below minimumBatchSize.");
-                    if (phase.initialBatchSize < phase.minimumBatchSize ||
-                        phase.initialBatchSize > phase.maximumBatchSize)
-                        issues.Add(prefix + ".initialBatchSize is outside its bounds.");
-                    if (phase.targetFrameMilliseconds <= 0.0)
-                        issues.Add(prefix + ".targetFrameMilliseconds must be positive.");
-                    if (phase.deadlineMilliseconds < 0.0)
-                        issues.Add(prefix + ".deadlineMilliseconds cannot be negative.");
-                    if (phase.estimatedMillisecondsPerState <= 0.0)
-                        issues.Add(prefix +
-                                   ".estimatedMillisecondsPerState must be positive.");
-                    if (phase.expectedUseProbability < 0.0 ||
-                        phase.expectedUseProbability > 1.0)
-                        issues.Add(prefix +
-                                   ".expectedUseProbability must be between zero and one.");
-                    if (phase.hotSetTier < 0)
-                        issues.Add(prefix + ".hotSetTier cannot be negative.");
 
                     if (!validateFiles || string.IsNullOrEmpty(planDirectory) ||
                         string.IsNullOrWhiteSpace(phase.collectionFile))

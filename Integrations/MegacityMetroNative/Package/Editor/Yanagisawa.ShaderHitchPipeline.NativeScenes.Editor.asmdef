@@ -1,0 +1,5 @@
+{
+  "name": "Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor",
+  "references": ["Yanagisawa.ShaderHitchPipeline.Core", "Yanagisawa.ShaderHitchPipeline.Runtime", "Yanagisawa.ShaderHitchPipeline.Editor"],
+  "includePlatforms": ["Editor"]
+}

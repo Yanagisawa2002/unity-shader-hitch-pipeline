@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-08",
+  "sources": [
+    {
+      "name": "Megacity Metro",
+      "kind": "external-application-scene",
+      "selected": true,
+      "lock": "source-lock.json"
+    },
+    {
+      "name": "EntityComponentSystemSamples",
+      "kind": "external-samples",
+      "selected": false,
+      "repository": "https://github.com/Unity-Technologies/EntityComponentSystemSamples",
+      "commit": "6786a741ee1f118ed14cecfa02beae8e926937b0",
+      "licenseNoticeUrl": "https://raw.githubusercontent.com/Unity-Technologies/EntityComponentSystemSamples/6786a741ee1f118ed14cecfa02beae8e926937b0/LICENSE.md",
+      "licenseNoticeSha256": "0ff5d530e5930935eb2f7c5fc2086660d77ec9c398b27ea132b6bc14c7861bc4",
+      "license": "Unity Companion License",
+      "reason": "Official sample catalog; no single comparable PSO workload selected or adapted"
+    },
+    {
+      "name": "Unity GraphicsStateCollection example",
+      "kind": "api-example",
+      "selected": false,
+      "url": "https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Experimental.Rendering.GraphicsStateCollection.html",
+      "reason": "Native API usage reference, not a benchmark workload"
+    }
+  ]
+}

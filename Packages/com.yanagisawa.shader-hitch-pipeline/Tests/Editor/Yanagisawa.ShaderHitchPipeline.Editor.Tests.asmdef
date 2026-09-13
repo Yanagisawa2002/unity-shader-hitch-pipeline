@@ -2,6 +2,7 @@
   "name": "Yanagisawa.ShaderHitchPipeline.Editor.Tests",
   "rootNamespace": "Yanagisawa.ShaderHitchPipeline.Tests",
   "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core",
     "Yanagisawa.ShaderHitchPipeline.Runtime",
     "Yanagisawa.ShaderHitchPipeline.Editor"
   ],

@@ -28,7 +28,9 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
         [MenuItem("Tools/Shader Hitch Pipeline/Build PSO Showcase")]
         public static void BuildWindowsPlayer()
         {
-            string scene = CreateScene();
+            string scene = PsoCommandLine.Current.HasFlag("-pso-reuse-generated-scene")
+                ? ReuseGeneratedScene()
+                : CreateScene();
             ConfigureWindowsD3D12();
 
             string defaultOutput = Path.GetFullPath(
@@ -45,6 +47,7 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
                 target = BuildTarget.StandaloneWindows64,
                 options = BuildOptions.Development,
             };
+            PipelineEditor.PsoBuildIdentityCapture.DeclareBuildInputs(options);
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
                 throw new InvalidOperationException(
@@ -68,6 +71,20 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
+            return ScenePath;
+        }
+
+        private static string ReuseGeneratedScene()
+        {
+            if (!File.Exists(ScenePath) || !File.Exists(GeneratedShaderPath) ||
+                AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null)
+                throw new InvalidOperationException("Generate and trace the showcase scene before reusing it.");
+            uint cacheBuster = StableHash(PsoCommandLine.Current.GetString(CacheBusterArgument, "default"));
+            string expectedDefine = "#define PSO_SHOWCASE_CACHE_BUSTER " + cacheBuster + "u";
+            if (!File.ReadAllText(GeneratedShaderPath).Split('\n').Any(line => line.Trim() == expectedDefine))
+                throw new InvalidOperationException("Frozen showcase shader does not match the requested cache key.");
+            // Preserve serialized scene object IDs between trace and final build.
+            // The ordinary build gate still verifies every content/shader input.
             return ScenePath;
         }
 
@@ -151,6 +168,11 @@ namespace Yanagisawa.ShaderHitchPipeline.Showcase.Editor
                 PipelineEditor.PsoProjectConfiguration.Load();
             configuration.targetRuntimePlatform = RuntimePlatform.WindowsPlayer.ToString();
             configuration.targetGraphicsDeviceType = GraphicsDeviceType.Direct3D12.ToString();
+            configuration.deferredDeadlineMilliseconds =
+                PsoShowcaseController.DeferredDeadlineSeconds * 1000.0;
+            configuration.deferredExpectedUseProbability = 1.0;
+            configuration.deferredHotSetTier = 1;
+            configuration.preinteractiveBootstrap = true;
             configuration.Save();
         }
     }

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PSO startup hotset evidence policy v1",
+  "description": "Opt-in selection evidence; current-build collection and cost compatibility must be validated separately. Required startup declarations come from the plan.",
+  "type": "object",
+  "required": ["schemaVersion", "planSha256", "startupBudgetMilliseconds", "units", "training"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "planSha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+    "startupBudgetMilliseconds": {"type": "number", "minimum": 0},
+    "units": {"type": "array", "items": {"$ref": "#/$defs/unit"}},
+    "training": {"type": "array", "items": {"$ref": "#/$defs/trace"}}
+  },
+  "$defs": {
+    "unit": {
+      "type": "object",
+      "required": ["id", "phase", "contentId", "contentRevision", "compatibilityNamespace", "collectionSha256", "graphicsStateCount"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "phase": {"type": "string", "minLength": 1},
+        "contentId": {"type": "string", "minLength": 1},
+        "contentRevision": {"type": "string", "minLength": 1},
+        "compatibilityNamespace": {"type": "string", "minLength": 1},
+        "collectionSha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "requiredStartup": {"type": "boolean", "description": "Core-only declaration; runtime adapter replaces it from the authoritative plan."},
+        "graphicsStateCount": {"type": "integer", "minimum": 0},
+        "estimatedWarmupMilliseconds": {"type": "number", "minimum": -1},
+        "residentBytes": {"type": "integer", "minimum": -1}
+      }
+    },
+    "trace": {
+      "type": "object",
+      "required": ["routeId", "captureId", "split", "compatibilityNamespace", "units", "uses"],
+      "properties": {
+        "routeId": {"type": "string", "minLength": 1},
+        "captureId": {"type": "string", "minLength": 1},
+        "split": {"const": "training"},
+        "compatibilityNamespace": {"type": "string", "minLength": 1},
+        "units": {"type": "array", "items": {"$ref": "#/$defs/unit"}},
+        "uses": {"type": "array", "items": {
+          "type": "object",
+          "required": ["unitId", "phaseOrdinal", "milliseconds", "frequency"],
+          "properties": {
+            "unitId": {"type": "string", "minLength": 1},
+            "phaseOrdinal": {"type": "integer", "minimum": 0},
+            "milliseconds": {"type": "number", "minimum": 0},
+            "frequency": {"type": "integer", "minimum": 1}
+          }
+        }}
+      }
+    }
+  }
+}

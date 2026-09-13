@@ -1,8 +1,8 @@
 {
   "name": "com.yanagisawa.shader-hitch-pipeline",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "Shader Hitch Pipeline",
-  "description": "Trace, rank, auto-tune, prewarm, and regression-test real Unity graphics pipeline states with deadline and cost-aware scheduling.",
+  "description": "Trace, plan, hard-budget schedule, and regression-test real graphics pipeline states with an engine-neutral core and Unity adapter.",
   "unity": "6000.0",
   "author": {
     "name": "Edwin Liu"
@@ -19,6 +19,11 @@
       "displayName": "Shader Hitch Showcase",
       "description": "Controlled real first-use material and graphics-state reveal workload.",
       "path": "Samples~/PSO Hitch Showcase"
+    },
+    {
+      "displayName": "Deadline Run",
+      "description": "Twelve-second cinematic deadline benchmark with a real tunnel-to-combat reveal.",
+      "path": "Samples~/Deadline Run"
     }
   ]
 }

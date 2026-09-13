@@ -1,0 +1,1114 @@
+{
+  "sourceStatus": [
+    " M Integrations/Addressables/README.md"
+  ],
+  "player": "C:\\Users\\EdwinLiu\\Downloads\\opt-next-pso-streaming\\Integrations\\Addressables\\UnityProject\\Builds\\StreamingFixture.exe",
+  "playerFiles": [
+    {
+      "path": "D3D12/D3D12Core.dll",
+      "sha256": "625bd40005b1c3708695d5256ecf230d278e6b8edba5a88af70f3d91324f3052"
+    },
+    {
+      "path": "D3D12/d3d12SDKLayers.dll",
+      "sha256": "c0730cc70d3250d3de19c04c17845ba9e70eecaf502d684d1409195ebc5b5959"
+    },
+    {
+      "path": "dstorage.dll",
+      "sha256": "cae65787f61514bec6f012f44546e68b19e39d8854a9ab52af813370d44b272a"
+    },
+    {
+      "path": "dstoragecore.dll",
+      "sha256": "cf85b19a92a8276f8baca0db9bbcd60735bad50768deb303d310e84d5f4fdd11"
+    },
+    {
+      "path": "MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll",
+      "sha256": "39e1bfac8edb5ecb5a728e83f514a0dd1d6ea1d45d6e3cebf70a9e83e7cea7ae"
+    },
+    {
+      "path": "MonoBleedingEdge/EmbedRuntime/MonoPosixHelper.dll",
+      "sha256": "5f7c68a0d01f476dc636eb9d576a1df111dc939b2258390d84238a13b821e037"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/2.0/Browsers/Compat.browser",
+      "sha256": "8a1082057ac5681dcd4e9c227ed7fb8eb42ac1618963b5de3b65739dd77e2741"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx",
+      "sha256": "751861040b69ea63a3827507b7c8da9c7f549dc181c1c8af4b7ca78cc97d710a"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/2.0/machine.config",
+      "sha256": "e91782a27fa39fc6c1d6ee8b08529f5d35052310d0006034b878eb04b8f2af30"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/2.0/settings.map",
+      "sha256": "49c6160f9d54af4270a3b4e997fc4a8301f79b9e2070118fa46ddbcbbc44f9a2"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/2.0/web.config",
+      "sha256": "cf2b54339e069b9e42f7d6795eecbf562c50c1011f4ca8f65f578fe52d97ff92"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.0/Browsers/Compat.browser",
+      "sha256": "8a1082057ac5681dcd4e9c227ed7fb8eb42ac1618963b5de3b65739dd77e2741"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx",
+      "sha256": "751861040b69ea63a3827507b7c8da9c7f549dc181c1c8af4b7ca78cc97d710a"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.0/machine.config",
+      "sha256": "e60aec2c5115d65b3acb3c55ea21576dbd770f579166c017125571e46ae560ed"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.0/settings.map",
+      "sha256": "ce1db1ad8a9512073164e3eccdc193f7eda036e1a9733caec4635de21b2865c8"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.0/web.config",
+      "sha256": "e38bb8cc68fe5b4edecdfd288d094b9e8ced7629039b2a347682aba0d8bd7492"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.5/Browsers/Compat.browser",
+      "sha256": "8a1082057ac5681dcd4e9c227ed7fb8eb42ac1618963b5de3b65739dd77e2741"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx",
+      "sha256": "751861040b69ea63a3827507b7c8da9c7f549dc181c1c8af4b7ca78cc97d710a"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.5/machine.config",
+      "sha256": "ee950004b576fb28dc85f4b0435ed04bf96612de2e8b53be84d07afe85a0de6c"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.5/settings.map",
+      "sha256": "ce1db1ad8a9512073164e3eccdc193f7eda036e1a9733caec4635de21b2865c8"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/4.5/web.config",
+      "sha256": "c4cbddd4fd9347b58cc5a72b36dc4ba1ad2bb699e65869d05cd3fb9865f0d824"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/browscap.ini",
+      "sha256": "4ddd50f31fb968f30bedefc253a46dc3f2890192d05cdaa9e0a64a056eee807e"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/config",
+      "sha256": "5776169973a26a387b8b3e5c0f2301a7ab9a6dd7c7d3efa22a96abc47fbf8662"
+    },
+    {
+      "path": "MonoBleedingEdge/etc/mono/mconfig/config.xml",
+      "sha256": "0c56e34c69124510fa8c19e7b4c2ca6c1c4ff460ae19f798dd0ca035809e396d"
+    },
+    {
+      "path": "StreamingFixture_Data/app.info",
+      "sha256": "569de529a339fa06260194759f95f3a4234dfb68d2805dd82eede24c5ad76a17"
+    },
+    {
+      "path": "StreamingFixture_Data/boot.config",
+      "sha256": "df832c5685b3c70b2f8e6d480f94c9ee2813a213445358cc64185c30a65bed11"
+    },
+    {
+      "path": "StreamingFixture_Data/globalgamemanagers",
+      "sha256": "16b2eb4bf804b8564744f9b5ba7f5cbc8007baa0b2c6d2060c2894f9c6ae99c5"
+    },
+    {
+      "path": "StreamingFixture_Data/globalgamemanagers.assets",
+      "sha256": "b5529e836829ff4d57a8078ac24d1c622b262b424ae7948fda0590af35b85357"
+    },
+    {
+      "path": "StreamingFixture_Data/globalgamemanagers.assets.resS",
+      "sha256": "ebf0f91664c0aa69e3b92e93d4d4e6feae1a9152529b0efeac047e3c9c3b0fc0"
+    },
+    {
+      "path": "StreamingFixture_Data/level0",
+      "sha256": "83c7124e809f6439708a00de3733bc203ff5aca9d33ab03c74ff530334896c02"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Mono.Security.dll",
+      "sha256": "1849437c1d2fe7698c0fde2a9a6aad9a864372a373b7c1d887da902a36965b36"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/mscorlib.dll",
+      "sha256": "f7698bd46af58d3ee9dac59a286cfedfd28e51f71c0fe3940671a3ccc7af5711"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/netstandard.dll",
+      "sha256": "6ae62e082dc494a2433984177f60ca4db5fae69b1f360a8b33754172b310b8c5"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/StreamingFixture.dll",
+      "sha256": "95beb504b61e53cccb58e87357f458f33f105bdfb3fc5368b2f70b732ab33977"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/StreamingFixture.pdb",
+      "sha256": "08da9b6405d572a004fa531752db7abcc8a1ec867ea5f954f03d020c15e0acb9"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Buffers.dll",
+      "sha256": "762f8fdbe975e05b76be5fe996c53ce7c75e4a2830f2f50b02a5948ef6ba0aeb"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Collections.Immutable.dll",
+      "sha256": "5b1b1c83ba3d135c2fdfe425842fbe9c7432878b7e468623acb554c69b4c130f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.ComponentModel.Composition.dll",
+      "sha256": "335d76d10ae5b80d1faae4833937b9166551ccc9e79ee8262d2da4d58843f79d"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Configuration.dll",
+      "sha256": "d7139dd6b622233d316aac733b392b9c1a545375804f62685f57f9d36f1c7ac2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Core.dll",
+      "sha256": "a4637c44a11ea827d686313cfca3f5191225d2a96f7eaf0f10aa32de446380d2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Data.DataSetExtensions.dll",
+      "sha256": "80432a96154f8d2935b2f1c9e61b2ee6109fd6234e281327b3b297451c8931ba"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Data.dll",
+      "sha256": "ab47d362cff6f6e665cadbc8c6c81f9fa3612f23483a44d08b339347ac99f116"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.dll",
+      "sha256": "d26cada0fc3dcae061f0fa421df15a082cb35ccf81ccaeebc8b0e2d2e6877099"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Drawing.dll",
+      "sha256": "3c3586ba170c1788a8d3a4e419eb1f50f092070f4d81e90238b2fe6c5405cf2c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.EnterpriseServices.dll",
+      "sha256": "00595c8eea345fe0e47da702100e460aaaf8f14d27a24950b71d926cbf1201c4"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.IO.Compression.dll",
+      "sha256": "a2803c059bd49c7fe520673f7e2b06657bb0419b253a5267e3f1da14b357dd5a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.IO.Compression.FileSystem.dll",
+      "sha256": "f45ca89827639a880dcbeab1917af99a5bd18aec4433fbcb2d7774ccf9fe7121"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Memory.dll",
+      "sha256": "c4f030a2cba7da7cdcf493257c24560e203d355904aee490d645a935842f834a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Net.Http.dll",
+      "sha256": "128b31fec424c70356952314abff2f6b1408f64b7613d2ae4bde5e84c2f8ac03"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Numerics.dll",
+      "sha256": "b968dc8852985029fd5dd08a1a9c3a6b8750ea4470cd677a5051c33fc5a08639"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Reflection.Metadata.dll",
+      "sha256": "afcfd6c166fe0d59f45cc6363082806f6a7ea8ceed9dc6c75eec9fd79ccb5717"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Runtime.CompilerServices.Unsafe.dll",
+      "sha256": "fd67abc4c4af10affbcd42fd68a2a7bc361b26714afe6965d4d0d139459d8297"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Runtime.Serialization.dll",
+      "sha256": "685123acdbb6ac313e503e89f4831fed096be838ccb000b85b33ee903562807f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Security.dll",
+      "sha256": "02d51b98dc8c877124fea386c9fbf7264790aae381ab15577eb0e2d082d1bcc4"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.ServiceModel.Internals.dll",
+      "sha256": "077333adc8bf20eb40e94d1909db2d07a16925a9192b69064f34eaf128804c8b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Transactions.dll",
+      "sha256": "6557e5029469211193ccec80dd4d3ad090f5eb87d80f5d5341d77a6d3506b64b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Xml.dll",
+      "sha256": "32129a7d847a5efeacee6bd4b0d6bbffc8923551c5446a8c216d8ef1191b1de1"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/System.Xml.Linq.dll",
+      "sha256": "fd300e794b9ccd85d95bbab54e282da1333faa20a9209457944e831c27452b00"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.Addressables.dll",
+      "sha256": "e50c10a8e26b30e2b6b703415ec12e5ccf1c804271fbeb8f2f2f057dfecd3512"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.Addressables.pdb",
+      "sha256": "58acd743b08bf40fd19715deab868210b05addd28c98a2c8f8fd84a514b79770"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.Profiling.Core.dll",
+      "sha256": "fd8c48d9a954b648580ce9e17574f3ededa70339a73910770835a71d3a80e2f8"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.Profiling.Core.pdb",
+      "sha256": "e045ced55f29d6bd1a3db4ad637adcc4ad4829d64b0ee7530972df2169783363"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.ResourceManager.dll",
+      "sha256": "419f4b47b6a6a67420ab9dbfbe68c36249d59711a1e83ba9383d246654696f1f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.ResourceManager.pdb",
+      "sha256": "96e5f46edaf90b2f201c34193fc654464cb9ea138f297888863cc4d4176963ec"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.ScriptableBuildPipeline.dll",
+      "sha256": "1509177f3f0a168b13a8d0af388608c7d9569f235ef7b954fe80224ae5829f66"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.ScriptableBuildPipeline.pdb",
+      "sha256": "3c3f3924c2f3e2f68efd244bd93b63df5094c6b7f7fdd04546038b9045fb15cd"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.Scripting.dll",
+      "sha256": "8d5073d98e050c6afb8d467770925955bd54a79a246fe5bd5dc8bd6f605e1f7b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Unity.Scripting.pdb",
+      "sha256": "8f8b4cdc4c4b59a999c6fbb0e71ac6e9eb8acb71319712b99cd6df81be408185"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AccessibilityModule.dll",
+      "sha256": "a862c24147676744a09a2c2771e2f157aa8784dd10dd1a09d3c4fdb27c9a53f5"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AccessibilityModule.pdb",
+      "sha256": "1af5349a6617297c7ebb481f0b133362d4d3285ae648f17639e369edea6dd07e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AdaptivePerformanceModule.dll",
+      "sha256": "2e97a83eb3d5bd3934107423eda3f8602148e10659b649abb728bcbea44bafe2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AdaptivePerformanceModule.pdb",
+      "sha256": "e2d1a76c0f82afdb97efa7c0915ebfb33ac68281298e5930723e3e468fc49501"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AIModule.dll",
+      "sha256": "c1c3bd1ea9568b87d7d6985dfde7e360daa85aea9afd17b63eeabf8a9dd248e2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AIModule.pdb",
+      "sha256": "d4c6823f0e41e4c85964ee359cad43bd92ae5693117c5b3fdb2df059ac844884"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AMDModule.dll",
+      "sha256": "a2485b1a7d430ace9769d5a7e823c9fa2751228928152d88c3412e3ba616888a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AMDModule.pdb",
+      "sha256": "e31c9b69910b1b73366a52478bce88cbf1b7651fdf057ce176ec62381d8a5c57"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AndroidJNIModule.dll",
+      "sha256": "b1a74897c7c3373cd6920b0f38fd858cbfe900c0c2ad00d6f5be8db9ac635596"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AndroidJNIModule.pdb",
+      "sha256": "714421a7b347b83ff33c650d0c240b9b61926cebde960e781ab9fe3ebdcedb49"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AnimationModule.dll",
+      "sha256": "068eb9f643973708483e5dd80bcfa44488ec3b0cb61502348710183c21dbaf2f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AnimationModule.pdb",
+      "sha256": "4b9ce41c257ca8bcbf8e006bc7aa1b70afc3e9379a49036eb1ad585c3e90404c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ARModule.dll",
+      "sha256": "0372940128e457fff1bba2bcdc8bd09aedf16012b210d18585bd25d65d1af2d9"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ARModule.pdb",
+      "sha256": "6ec276616ada7aff0b42dad846410eee81d1c74f48e7539fd6dbdc909a054529"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AssetBundleModule.dll",
+      "sha256": "a09baadf31547a1050be0502f7b1b18dbb65337bc21616fafb43edb5db48b8d9"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AssetBundleModule.pdb",
+      "sha256": "75ea7bb24a21d30c216ca89b661bce8aa4d9e270beff6321f8bc77bfb775506f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AudioModule.dll",
+      "sha256": "ea4497d10a9d62aa482ecd3e86a426abf7309a51e5f89ce17d462d2502da27bc"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.AudioModule.pdb",
+      "sha256": "2be6c2ac9700121da5714d9f774388ab5021f821b6d4c6848e04ea8b3fd8b640"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ClothModule.dll",
+      "sha256": "35a6c85db9d15719cb2646198fd97cce9b71752884e0874587bf228a6e3178a3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ClothModule.pdb",
+      "sha256": "c53d02f640f9ad5f40689d5fefc44970be49509eb7b5300e280a20e6331a33b9"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ClusterInputModule.dll",
+      "sha256": "3bd4aa38c96e30e5b3a0e1d05da2b901aff17666ab58d052735f70916e710d1c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ClusterInputModule.pdb",
+      "sha256": "276d79af91911ed846ce8d4025d6ff82c80cfc3fbb4991bdf8e42f36b8132273"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ClusterRendererModule.dll",
+      "sha256": "73221c88a4b490d3d9bb81b15028b79c2e950d99ce5f2422c6d2f633ccd705b3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ClusterRendererModule.pdb",
+      "sha256": "85a1a5da76fbe8a009b8a1a23110d242bbcbc66ac834b4de8d35cd0331b82153"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ContentLoadModule.dll",
+      "sha256": "fda2b08b8858b46cae05281664e0219c81ba0335e5afd72f149dbef9ec061bff"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ContentLoadModule.pdb",
+      "sha256": "da7de6fe9252aae1dcaf0ab96c7b81c41b7b0ef2ee45f606bbcd9d4c1e6678e5"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.CoreModule.dll",
+      "sha256": "563d01a656a0676b0210ed8b31cf4da3d7fde4f2880c704e2a5e89d1e118e2ba"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.CoreModule.pdb",
+      "sha256": "342afbfaf58d42c9bd5af408f6b3e6f1a3addf5d4f65e463fa93214f58e0cae2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.CrashReportingModule.dll",
+      "sha256": "bcb9454228343479f3d8bdd471cba371479623b9a5faa8f941e4bdfc17ec1c18"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.CrashReportingModule.pdb",
+      "sha256": "156276d109b340e9248beb680a5948d78fad509b26bab2c72a3a75e98f49c1fc"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.DirectorModule.dll",
+      "sha256": "1110a4db181fdcd7c3d0819e3931d7142777397c3f5999a29e055859e23021d4"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.DirectorModule.pdb",
+      "sha256": "2fb01dbf0bc71cfc7a61587a47f46c9e6cf3f88afba2a8c65a8614b8f3ddf76b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.dll",
+      "sha256": "8d481b6aa01a3d91b0b9cf5c6084c4a5915861aae6718433300534b005ac3001"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.DSPGraphModule.dll",
+      "sha256": "a50509da3c32ff7a882f477fc169077c7121600e98020222ddb59cd9bce0a3da"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.DSPGraphModule.pdb",
+      "sha256": "6e600c5b025c199eeeb6da57797f4198086483fd9479577304e6c46a2417623f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GameCenterModule.dll",
+      "sha256": "4480ed05de61460007d3137a9e096cc1b52480711b5f4ead9c38b1961572c7f2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GameCenterModule.pdb",
+      "sha256": "c2f732a03ea5964a4288260168f74dd42ec33e0bc7c503d333c1b6d4c64fc7f8"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GIModule.dll",
+      "sha256": "de0533f5571ea118b02d3bf2294eb16ab41a5f503066839ea5c450d4191dbde7"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GIModule.pdb",
+      "sha256": "60aa60cadd5964dd8946eca820fad60d890cd5a6cab97d76092db4239c18dad1"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GraphicsStateCollectionSerializerModule.dll",
+      "sha256": "fb9021d2f65adcf39150f64f0fefcb7ce7358dada1a484756f11c2d4b232bd99"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GraphicsStateCollectionSerializerModule.pdb",
+      "sha256": "e09062d1b32848db83c92dd0ad2cc2bb9650d36bbbadbd953490208dd9d92c10"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GridModule.dll",
+      "sha256": "7f6d26a5ba4d9c703a9e3b2c3e06d55dec6840cf8af841ab2ac0f959003fd280"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.GridModule.pdb",
+      "sha256": "1adf50c734ffbb5b06a3e0bf7943a1047ac70611e3bb191eef916ace533e7126"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.HierarchyCoreModule.dll",
+      "sha256": "7a6988df3f54b7adc8b38a3ef59cdcd0364cea7c7ed337bab8a877dab3dfbd2e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.HierarchyCoreModule.pdb",
+      "sha256": "25a58cfadd634949947a1770c85284851104fca796e9497db18f44e30e6aba11"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.HierarchyModule.dll",
+      "sha256": "bd572695859ec28bd71abc0524c71dcf1bd289e9a317083fe8c8c59b2c75d452"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.HierarchyModule.pdb",
+      "sha256": "73e590f076d7481d521a523ec96bb6792d3e09ae65cf253021f6bb3186994912"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.HotReloadModule.dll",
+      "sha256": "4402053f6cc784693471cb02cd3e882d5fc5663b7e6e3e52db0ff12018daa447"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.HotReloadModule.pdb",
+      "sha256": "c1394853ac9017beb795728e8c6efa76177d3468d47253de8974294142de0c72"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.IdentifiersModule.dll",
+      "sha256": "36b76acc325388eb1ae6551f150413efe903e408a20172f9858a8a7c90790b75"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.IdentifiersModule.pdb",
+      "sha256": "42b50eb1c6642ed3c267b879b40153501085b8a1310449a8333b85307d1c74a0"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ImageConversionModule.dll",
+      "sha256": "904a099997c2b07771a8ff1f6c5c83d0015d7649b226f6268ba0483593238163"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ImageConversionModule.pdb",
+      "sha256": "e9f006d4d0d9f0379b894a14191e7d0063176528ff64b911da31323ccaf59cb3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.IMGUIModule.dll",
+      "sha256": "70899b47c04dd3e535404fc117bc6db2d23a13b2bffd1b031816ffca86f53175"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.IMGUIModule.pdb",
+      "sha256": "f599a6ba7ae4ccb343a6abea56c14b72bf984c14e8f8f496849e0f8cd94fa993"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InputForUIModule.dll",
+      "sha256": "7c90f2d4a05bb2c9c48596635c149ff4ebddec93aa011352afd49fe434bbe1d1"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InputForUIModule.pdb",
+      "sha256": "81c24d2ad219ffe5c9f3868748401d6c237a3cbf7c4a304f0f2f187f6b4c2a35"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InputLegacyModule.dll",
+      "sha256": "b3110f010e10261c24040def6598573df412a736b3bde045d46155b631f168f3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InputLegacyModule.pdb",
+      "sha256": "af9c81be2037981bae5278a6fc1608600ab173543b0da93093bc1b8dbd96245e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InputModule.dll",
+      "sha256": "3bd47762cbac0a31619aaea9b8ede409c50d9892bd42e57f15382631e932bb26"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InputModule.pdb",
+      "sha256": "d677fd80ccd5d19fee96c491786a548eff1b969cee927bfc33e44373930801df"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InsightsModule.dll",
+      "sha256": "d3f1f97811e3e7d8d53f37bfdc63d0ff0763c14bfaa45e225af1c37adf30e1cf"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.InsightsModule.pdb",
+      "sha256": "9a1be2f23e8dd3af6e4dbcf8b65f068cd81ac879229f6ae27b478a15145b9a57"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.JSONSerializeModule.dll",
+      "sha256": "76675b5a5acd1db30e69253cb03e23447f0d418e72355f5ed1d72de170a823cf"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.JSONSerializeModule.pdb",
+      "sha256": "846649a8873f2a01e61e6982803ae9210b73443cd3da531d4df1bca9bae4b503"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.LocalizationModule.dll",
+      "sha256": "40516691388a2d1eb05e722a95d7ff38aba0ff20902540cfdc724c7d5ca4319c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.LocalizationModule.pdb",
+      "sha256": "e482c96efe6d42d9c8c9351da239197b33e6d9ef586004e0a02bff4ebc1721c6"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.MarshallingModule.dll",
+      "sha256": "f7cbb652919da7d3b4cf7f37587fdd99c06cc336f0bc9df93917a5c89c030602"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.MarshallingModule.pdb",
+      "sha256": "f27b9a2b8d0719d4e9aca4256d3634676855d3554eca5b4ecb4228b515d9fa39"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.MathematicsModule.dll",
+      "sha256": "5a84121fc7da417483bcb130481486473c7420b0d7667d12c6580b848dbc7e5f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.MathematicsModule.pdb",
+      "sha256": "98e8894dcd894ad4800ce905b743f63774d68076a8bf431fd6ba90a50f451405"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.MultiplayerModule.dll",
+      "sha256": "5719b4b14398fe30c673852d376ac94868c9e3b0be6228e38da4258734cd52b3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.MultiplayerModule.pdb",
+      "sha256": "6d899bf41c3f43f173819668c32f30651d6d0e26107dcec866d5663fc6a21352"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.NVIDIAModule.dll",
+      "sha256": "67e34052bb8e7feb74fef01d8cb779640683420faeeb638326fb8af2f306d9c5"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.NVIDIAModule.pdb",
+      "sha256": "fd0c46c86dd086292366fe5ed83649f945b64fa4b3a53bb8914431d1a8df7288"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ParticleSystemModule.dll",
+      "sha256": "ae406d47ed75aa29168e806bf4b67538875b127435e5b19196c6d7477b593886"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ParticleSystemModule.pdb",
+      "sha256": "8ef3bd9ee76ff076a71654be0212c576fe43864ba6372665d45a3e65262d9b44"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.pdb",
+      "sha256": "daa5f7b739e7280a4c26a67ab1c4ea27095080b55d43b2e521c4f0c1987c2d5a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PerformanceReportingModule.dll",
+      "sha256": "cbda2dc85305aed31394e2461f66c630b065a2622b6faa91be6257cf925166aa"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PerformanceReportingModule.pdb",
+      "sha256": "907bca9061d411d3db28222cd243cd0ff2242ccb9421e767081952e5cb6b7bac"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.Physics2DModule.dll",
+      "sha256": "514f73b9e55e7b532446cd19670eb22c0bf7689788b1d072a14a5184b57ca4ac"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.Physics2DModule.pdb",
+      "sha256": "0acbab57b64cec4c4c2cd41d5bee37ae78dac780f477c7f8083e682f502f53f9"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PhysicsBackendPhysXModule.dll",
+      "sha256": "9bbf105688e60943ee7acf9c2eb8c643d46e2c190b30d980b912de4da71e4d93"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PhysicsBackendPhysXModule.pdb",
+      "sha256": "81e9481c8a42896c42e9e2fad8c03d8120ad78f819a8331aad67b3418478a62c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PhysicsCore2DModule.dll",
+      "sha256": "3bea1d500b39daedf5bb297b9c80497715172a834aac636a85acdd79fddf804f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PhysicsCore2DModule.pdb",
+      "sha256": "7c69b58dafdd68f65f3a790c9f4e848b4755c21d20ae9fb0f7cc484ee2864dc4"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PhysicsModule.dll",
+      "sha256": "81b6205cbbbad8c9f4513146946afe7f686a03fbf6e6b4f8a2e49ca82d3e9fec"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PhysicsModule.pdb",
+      "sha256": "29366ea8e38d135efe586795cd86736bc1a64e8f6efbfafb095ecf86c25ea191"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PropertiesModule.dll",
+      "sha256": "be7014b79e04d7f65418a303651dd6c4ef71ed37e48f1a808b8fb674c913a500"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.PropertiesModule.pdb",
+      "sha256": "5592893caba2b1b5b7a4da829ff30ad68ed2124e9a1b6634e23a257fab44d146"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.RenderAs2DModule.dll",
+      "sha256": "d10018de7a42ada26f5b46ec027a22d827e78f7c1201aca92923c20ac0cd00de"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.RenderAs2DModule.pdb",
+      "sha256": "cc95f2f9cd59c8e8bd5c904cbe591e909648d9978839b6ae981dad564c1e9907"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll",
+      "sha256": "c5116d0f4f326be3f89a81476d8996f7ef7c6f3d8d70da9dcd69af7c052bfcbb"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.pdb",
+      "sha256": "490678e5ba2d4b93e06799da821e3a3b7e4e55efa2e8b50d7995f4215e989911"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
+      "sha256": "5c6e16aa0f9ab0eeb0f78cb91b846cfaf71920db7ef0f0a7b48a6d282232588e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ScreenCaptureModule.pdb",
+      "sha256": "a11e06049c3456e4e88dd4d2a1cc307496e551958f9984de4cfe57d9c0759154"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ScriptingModule.dll",
+      "sha256": "8182949007a3d3feb4e5dc88163eb2866c0368b0e0a537ea1127830cf0feeaaa"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ScriptingModule.pdb",
+      "sha256": "57061e11c504d571d9113d5e8815240e258612e989b7a7a24f7b081677b3052d"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ShaderVariantAnalyticsModule.dll",
+      "sha256": "f7a616f6f8fb744ea6ac38e9f7907fe343619de0bf7eed0db7dbb187eacc77a2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.ShaderVariantAnalyticsModule.pdb",
+      "sha256": "2cb905082d9936e905bd79226b8ac1922ba13645d9c961d3add368d26763c80a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SharedInternalsModule.dll",
+      "sha256": "5d1cc4a491d5b9e211f70bba4a2cc7724e54d8445b77f4ca88949afffec0ac57"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SharedInternalsModule.pdb",
+      "sha256": "ad76ae952b02c3f68fbbec0ad28478e100317f819f7f8e66664548303debcabd"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SpriteMaskModule.dll",
+      "sha256": "ffdd1ac5f8d5c95701f06cabe3e826c4a422cce397616f8add0d7fa0e9551d2b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SpriteMaskModule.pdb",
+      "sha256": "9573a4de36c64c94ae672b92c5910d0402b028bb8f28b017a36e6c1b011db40b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SpriteShapeModule.dll",
+      "sha256": "82985766b301ebe537628016379d3912122b2d96dcf539c79cb4b0b9eea31e11"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SpriteShapeModule.pdb",
+      "sha256": "7943cce25041cce254b8f5dd988d819479c1e933a9fc44105da27e27fbf2f2ab"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.StreamingModule.dll",
+      "sha256": "6b093deb79913c676dd0189e4ad6f7fdfe8a6d21be7edbc49356145bef769c81"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.StreamingModule.pdb",
+      "sha256": "afa675b8f889bbb7b9e2a91e641da1941c467a3134bd4dd985fc5d7fe52253d8"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SubstanceModule.dll",
+      "sha256": "906fdf9fcfe587927ef2915af93cbbb286e471cf2e83f988ac16721b4f7fe05b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SubstanceModule.pdb",
+      "sha256": "4ff2476df1040db15602c32ed03632f9f1192d4b8bcb3286a02dd1b22230cddc"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SubsystemsModule.dll",
+      "sha256": "39c5c8a7600070fac809ed3cc5d9ba5230c800ad89f6c13453a2c9cbc95346fb"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.SubsystemsModule.pdb",
+      "sha256": "f56734c72d4805dddee0959d55e40484089fc746d8339fbc688c316216c801b9"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TerrainModule.dll",
+      "sha256": "104af1cc93c6dbc3c9e6c5aad6c5ddafab05e73bc40d9d2c60ab37f5e6ff805b"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TerrainModule.pdb",
+      "sha256": "87ec4234552db23b079a7285c2d6f3c06e13631e58c777499e454e8e81a89bf1"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TerrainPhysicsModule.dll",
+      "sha256": "cff4f0f0e7004f0c615f711f77fe20c866077301b1b2f0a33d5bf46e3af4d748"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TerrainPhysicsModule.pdb",
+      "sha256": "015efe6d6b4eb013d79412511dcbf0df8038e7e008beb49eab9bd5ef85967ac8"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TextCoreFontEngineModule.dll",
+      "sha256": "01c23f0883a009ca515b4cb8dacd9189ade289b428cae61d5279615b5679008a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TextCoreFontEngineModule.pdb",
+      "sha256": "73b41fa8d6abacc0a921e591fa66e864757804bbbf5c4316f886edb1c1c77d6e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TextCoreTextEngineModule.dll",
+      "sha256": "f35851ff8a0b5babb65141a55a27a1382d336777c4ada154ede052e5c7448bd1"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TextCoreTextEngineModule.pdb",
+      "sha256": "709d83d6c3e858b4bc65eccf38f40310d7d95421a1a2be9bca1c1a67e61d1874"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TextRenderingModule.dll",
+      "sha256": "905a1e545b11c604bcfbcc4d359cda984ac8297342721161ddd25362e93c6b02"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TextRenderingModule.pdb",
+      "sha256": "76b13eab718a9f33d74cbdc3cd38e878ad5fee5109447db084e99b7ae0b0734e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TilemapModule.dll",
+      "sha256": "9ca7e32be881aa1f3af049498d6cd9b81b4a2e44f9d7ced67c1f1008ea9948a7"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TilemapModule.pdb",
+      "sha256": "d007a8eed4e2a9155e25595827c374657363e6b980dab0becd23c30e68f10231"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TLSModule.dll",
+      "sha256": "1f3fa0adf8db00097fc48e2a5c2b55ef23d721ad640c8c1bc8f48bb93096743d"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.TLSModule.pdb",
+      "sha256": "abcb787bf40c308354d60379557506519f8afe2703c28fd48466490a4b6ac18c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.U2DRuntimeModule.dll",
+      "sha256": "8e1b174dcec726b76e3e704c413f3b97e5fd5f9261248369f116d5cda24c87c3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.U2DRuntimeModule.pdb",
+      "sha256": "3b19a581fb30a04f2813cb846a02cf9a4e60de34998745bf877e3a1d3bd3e598"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UIElementsModule.dll",
+      "sha256": "3c388030f0423452b843b23a2d476cc89379d0fc6f2c6c0eefdbd4af62cb16e2"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UIElementsModule.pdb",
+      "sha256": "a93993fd80663847ff4d55b9185671ad37c1d0126f2c8f442e5275af07a46914"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UIModule.dll",
+      "sha256": "6de785f780de7f9f2c57b08f9909e4e531987e98f1f252abea20888270968826"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UIModule.pdb",
+      "sha256": "43cd86655a18cc0bcd1d3abd5c35a66673bd48df90472cd738782210848fa1d6"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UmbraModule.dll",
+      "sha256": "c07b3dfab4de413eacf6930332bb5ab38d8743e3b432ab3f0773ca98f60c6a0f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UmbraModule.pdb",
+      "sha256": "f8e544abe3fe87dd5907cc3aeae1d173032d36691b290299f9df60c5120c1152"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityAnalyticsCommonModule.dll",
+      "sha256": "108ccb01ce0bc7875758649169bee3997658628413c68d91c51c9db6ce9bd082"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityAnalyticsCommonModule.pdb",
+      "sha256": "5dba29fa1bfa70f4d2dcf8adaf7b361e028b68d783b9c2e1f7dd1aa0dbf8499f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityAnalyticsModule.dll",
+      "sha256": "698368e89bde2900ba01591a3b1fbbe67031ba09bb466500c625b471b94a45ca"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityAnalyticsModule.pdb",
+      "sha256": "56b79c7a73689842d468c4cd3bc602b8f0a7b9726ee235fd880211a4c41cf561"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityConnectModule.dll",
+      "sha256": "59f5df080c879b596a0681a4bc080cadbbd76f4b2bfa10af2fc61a5c5b63de93"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityConnectModule.pdb",
+      "sha256": "0dfe847c89b0b0d15ae267db7b2d08b4e190129c7df0bedfbbcf20184e7b6e92"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityConsentModule.dll",
+      "sha256": "e9546f50c18161564813ce223b073a8b5765d25e590dc9970790477ffde2c68a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityConsentModule.pdb",
+      "sha256": "653997b927b0fd04e30fc21dd7227324a8a2f44d9e7c8a4470e47a3cff97b15e"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityCurlModule.dll",
+      "sha256": "3e4909e183fb5694d45f3fe0b840e1bfa7a8610ab72a1ebc854328deb62cf0e6"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityCurlModule.pdb",
+      "sha256": "fc46ba41732ec38f5de7b2d95862ffd432835f8470d9c8ca5e187f49ccd64e68"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.dll",
+      "sha256": "dd073fa8e34545076b2e4c9ecf713f958726ecb1abe10ef2bef724e44966a985"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.pdb",
+      "sha256": "ef5623d405f3c34761e617d27b39a12f6683d5544827cb3036be14c0b0769b47"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestAudioModule.dll",
+      "sha256": "c177977127fbac01ff6a2bc9e22932b7542d63efaf57b35166f6c7f559fb26c0"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestAudioModule.pdb",
+      "sha256": "817c0f17165184779383df4899a023bc20f74f922d05dcd1fae525c32e6b008a"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestModule.dll",
+      "sha256": "96fe32011ec3db1fc40d3cfff5b4c32ba4b7fe72bfa18447ef905f157297c1b8"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestModule.pdb",
+      "sha256": "62395598e6bda57f0ba46414990adda69f9923fea2a874be39a4039e1d9e5971"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestTextureModule.dll",
+      "sha256": "ecaab2b142f725a674f27583c6c50d614ebd53de47fb00905a463b55828c97c4"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestTextureModule.pdb",
+      "sha256": "feb0365a63d222fe18cf7573e8f175b998a95bedfb5e631c627cad1c0ef29d91"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
+      "sha256": "82295baca4c79130f5fd624793ba5bc8e39b884af0cf02c1a2b4afb8b6b6a7e3"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.UnityWebRequestWWWModule.pdb",
+      "sha256": "737874d281d2143b1bec53294f576d37bb34f659acf40f203bdfa965deb8bd19"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VectorGraphicsModule.dll",
+      "sha256": "351bd300774cf6463ae2d62e3358254a6b1f124cea4bb2a16d1c6921dd0c74ec"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VectorGraphicsModule.pdb",
+      "sha256": "aa3f4e9e89d8e9710591a1ed4de8162842db342c59fd5ca3d112aa7a3da46adf"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VehiclesModule.dll",
+      "sha256": "7acc2b15ed05f4c701c60a2d3f9b8c2f2c4749181fd1c36cc51bcd492020de3f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VehiclesModule.pdb",
+      "sha256": "8b2b843940dc86b93dd0fbd8b344cc30460bb19815aef70e91c027ff3d9fe68f"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VFXModule.dll",
+      "sha256": "9c0cb124c1e92aa07f5c7dc9c62d2c71cec45c39e64a8215921854393332e7b6"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VFXModule.pdb",
+      "sha256": "7348801947c1a614359b098602f1c4e74bed21e53b9ba023a71f8885acedf87c"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VideoModule.dll",
+      "sha256": "6c62fae45d5c5085e6259b153241e8cba948c39ea417159f44cefad99c65fa90"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VideoModule.pdb",
+      "sha256": "a2641175aa36d72416675b88d79b5f4cc8d6962cd0ae4e6ba2c7f17d96778545"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VirtualTexturingModule.dll",
+      "sha256": "7295adfa4d9548b87e17dd49683902645ef13fda2f113fcf716b5add38882446"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.VirtualTexturingModule.pdb",
+      "sha256": "82cf36ebc36f3cb03197ff3525db0c19fdd0c5e91ee4a344696e9e2ce0409d49"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.WindModule.dll",
+      "sha256": "bdd5fcd08fc415928ea47fad4cea8a85960e05c5091968f624f6b237d28bd780"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.WindModule.pdb",
+      "sha256": "efddcb95bbe200ad789fca03cd7ba1b45c01a4cb1c8efc8ad50446a2a5446a81"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.XRModule.dll",
+      "sha256": "9f7edfe3600fb4840b138a99bfd64f52a18c919e0b8672d6c1e7f47714302224"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/UnityEngine.XRModule.pdb",
+      "sha256": "98df279221c4d2dd2be79c3a80eecfb9a054ac037d19c38092f805320c78f8db"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Yanagisawa.ShaderHitchPipeline.Addressables.dll",
+      "sha256": "7151295af78833c65b0533b32ee6fe4f20419a2845af69e72dbbb1b5ae3a0294"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Yanagisawa.ShaderHitchPipeline.Addressables.pdb",
+      "sha256": "ea27c2cf527997ed93f783b1cfdec23fdb1fa13d6527141e26b48d94fdd5f2f7"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Yanagisawa.ShaderHitchPipeline.Core.dll",
+      "sha256": "eb44538fb12954ca4b8d7b491e20d967311d2ef341ba537433d912fd70679654"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Yanagisawa.ShaderHitchPipeline.Core.pdb",
+      "sha256": "f11dee8fc2f4ed580708a9d34377191f51665b58819cdd9315ceb603ac901e83"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Yanagisawa.ShaderHitchPipeline.Runtime.dll",
+      "sha256": "13e66e9b0dfebcac257afc858e0cf47b7041ca1522e849010ffbeb6f4517ae40"
+    },
+    {
+      "path": "StreamingFixture_Data/Managed/Yanagisawa.ShaderHitchPipeline.Runtime.pdb",
+      "sha256": "ec2dec10967dfae56497a5c3d1bea297b02f24c371eda6539e1a00439d0d975c"
+    },
+    {
+      "path": "StreamingFixture_Data/Resources/unity default resources",
+      "sha256": "8a2af10a03beff92706eddcd6a8dbac8abddbee6866849123a79c21a03992661"
+    },
+    {
+      "path": "StreamingFixture_Data/Resources/unity_builtin_extra",
+      "sha256": "7fe51013bc6753c2232fe01d14e418c8258e8b1784ab6782c4a6fcb7a495388a"
+    },
+    {
+      "path": "StreamingFixture_Data/RuntimeInitializeOnLoads.json",
+      "sha256": "6d44b3de6a473d3e3b84ede2d385a0da7f2cc09acdd004756defa61a6bb068ea"
+    },
+    {
+      "path": "StreamingFixture_Data/ScriptingAssemblies.json",
+      "sha256": "b51f0d0fd9206638206a4b9544810917815f721d2fdaf711b0497e0dfda6dd61"
+    },
+    {
+      "path": "StreamingFixture_Data/sharedassets0.assets",
+      "sha256": "78d808f05243e4ade8e9d1ce0e9434956d939e1ea453f5ce7cd9e08518b0895f"
+    },
+    {
+      "path": "StreamingFixture_Data/sharedassets0.assets.resS",
+      "sha256": "393efe6399536384aa91bdfc4e64f244b4d3e1fbb6a4ff145c483ffee64ccb36"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/AddressablesLink/link.xml",
+      "sha256": "e95d969cb716f21ea7eb4f7d2ca63bb88c126a620b6fecd719a14b16b626c119"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/catalog.bin",
+      "sha256": "116d26617fb6f8d46519772e522aa78146f091c00b393deea9cbf962a21b6741"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/catalog.hash",
+      "sha256": "51da387a614faaed0ce1379e7c90265621d089b82fe145397c8a94e37c9f6781"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/settings.json",
+      "sha256": "ea838337c84cb7bff1c779d60d415e604252e5feb9c13a51a4f2c308d3953931"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/StandaloneWindows64/a76ddee18b2c5b84377431e62512bd34_unitybuiltinassets_7cc43a371d86fa75b6c5ee6fefafab9b.bundle",
+      "sha256": "bac933acb4a9af36f49915744df8609482dde1bb8970dc3ac015ae61601e1485"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/StandaloneWindows64/collections_assets_all_425e108b24aedf7edc2f17d8227c4e2b.bundle",
+      "sha256": "c278ed6149fbd7a34d0e9c4c7c461d69a0e3f03c399b2672c311c51f49c9cc50"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/StandaloneWindows64/content-r1_assets_all_910888e9abf72d476e7e825d5d6eb5fd.bundle",
+      "sha256": "19b8bfa17d88d01e5e61366fc62787faf0729692355b37f35df48903a65019b0"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/StandaloneWindows64/content-r2_assets_all_64aea75735f0f21894b0042efa94ad51.bundle",
+      "sha256": "4831723eee5063c9e07caf17151af26bc01f8b812b5f38c4a0388c7b72a19045"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/aa/StandaloneWindows64/sharedshaders_assets_all_3dfc6cc15fd77671e2ecddedb66eab59.bundle",
+      "sha256": "ccb202fee25e742edd8f2d7399cef2b83b28fc95a4edce675c298724fec35e57"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/fixture-import-r1.json",
+      "sha256": "6e4cc4928df4263631079efbb987927163814076370f7fdfac4ed32063366382"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/fixture-import-r2.json",
+      "sha256": "3df83697a7097ea4fb1df63311fc7fd93fab1248815b430bc753d2d0ba408f7f"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/fixture-origin-r1.bytes",
+      "sha256": "cec2528aec561b96194dd04d4e925bf683b1b4009e2aea8f9e7b30635666b3cd"
+    },
+    {
+      "path": "StreamingFixture_Data/StreamingAssets/fixture-origin-r2.bytes",
+      "sha256": "cec2528aec561b96194dd04d4e925bf683b1b4009e2aea8f9e7b30635666b3cd"
+    },
+    {
+      "path": "StreamingFixture.exe",
+      "sha256": "34a412b81651ed571b97f4d1ba71a9ca79457ff5779d56969b8f0c4772ad2cee"
+    },
+    {
+      "path": "UnityCrashHandler64.exe",
+      "sha256": "d1cd87c8b9f20601d1aacf866b3a99dc6bb3795864a796d911ca0c7e6b5c06af"
+    },
+    {
+      "path": "UnityPlayer.dll",
+      "sha256": "a91fa2a547edb565ea2142eb5a0eb4ca119cc3f39a7e2d0f23127ea9e2f35ca8"
+    },
+    {
+      "path": "WinPixEventRuntime.dll",
+      "sha256": "81adcfd8253c3489be720da7e30f16004dc9a1f02a8b418c6c3aef4993032e6d"
+    }
+  ],
+  "unity": "C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Unity.exe",
+  "sourceCommit": "92f8e357378000841ac3689a46f8f156e511b7e5",
+  "seedTraceRoot": "C:/Users/EdwinLiu/Downloads/opt-next-pso-streaming/Evidence/Local/addressables-after-load-frame-20260907",
+  "playerSha256": "34a412b81651ed571b97f4d1ba71a9ca79457ff5779d56969b8f0c4772ad2cee",
+  "unitySha256": "2a37263b47b55c1a45ea62745480d26e8f3a1e69617abe70950f72c3f54ce11f",
+  "scope": "correctness smoke; not formal timing or OS capture",
+  "schemaVersion": 1,
+  "artifacts": [
+    {
+      "path": "build.log",
+      "sha256": "7d20cc56a154f723c4b5692966b89e7c1eb717e62f846534ba96917a7da015d6"
+    },
+    {
+      "path": "fixture-r1.graphicsstate",
+      "sha256": "cec2528aec561b96194dd04d4e925bf683b1b4009e2aea8f9e7b30635666b3cd"
+    },
+    {
+      "path": "fixture-r2.graphicsstate",
+      "sha256": "cec2528aec561b96194dd04d4e925bf683b1b4009e2aea8f9e7b30635666b3cd"
+    },
+    {
+      "path": "smoke.json",
+      "sha256": "03aec9d55371250731fa59da338fa84abf38589f2761dfe9da87da8c221055cd"
+    },
+    {
+      "path": "smoke.log",
+      "sha256": "8fc85ddb5fef46408d8ddc6edffb94cd8adace28eb64de18664477ed466f62a4"
+    },
+    {
+      "path": "trace-r1.json",
+      "sha256": "424e0597e86abd35d0f08feaad577ae301c4f8f2eaa335fce07740b190551006"
+    },
+    {
+      "path": "trace-r2.json",
+      "sha256": "de19d64e0dca6c20c084c5e4b456234ba5e4c85dff092a6fb9ae0f60dd160462"
+    },
+    {
+      "path": "trace.json",
+      "sha256": "de19d64e0dca6c20c084c5e4b456234ba5e4c85dff092a6fb9ae0f60dd160462"
+    },
+    {
+      "path": "trace.log",
+      "sha256": "8816bc79596fff7499150b56f6d03043ba41575e9b300592f667f7bad6862af9"
+    }
+  ],
+  "utc": "2026-09-07T06:01:32.7261178Z"
+}
