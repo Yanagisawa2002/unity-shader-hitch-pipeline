@@ -57,6 +57,16 @@ $unity = 'C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe'
         $inputs = Join-Path $stage 'source-inputs'
         New-Item -ItemType Directory -Path $inputs | Out-Null
         Copy-Item -LiteralPath (Join-Path $repo 'Packages/com.yanagisawa.shader-hitch-pipeline') -Destination $inputs -Recurse
+        $hostManifest = Get-Content -Raw -LiteralPath (Join-Path $nativeHost 'Packages/manifest.json') | ConvertFrom-Json
+        if ($hostManifest.dependencies.PSObject.Properties.Name -contains 'com.yanagisawa.shader-hitch-native-scenes') {
+            $nativePackage = Join-Path $repo 'Integrations/MegacityMetroNative/Package'
+            $declared = $hostManifest.dependencies.'com.yanagisawa.shader-hitch-native-scenes'
+            if (-not $declared.StartsWith('file:') -or
+                [IO.Path]::GetFullPath($declared.Substring(5), (Join-Path $nativeHost 'Packages')) -ne $nativePackage) {
+                throw 'Unexpected native observer package source; record and review it before building.'
+            }
+            Copy-Item -LiteralPath $nativePackage -Destination (Join-Path $inputs 'com.yanagisawa.shader-hitch-native-scenes') -Recurse
+        }
         Get-ChildItem -LiteralPath (Join-Path $nativeHost 'Assets') -Directory -Filter 'Pso*Adapter' | ForEach-Object {
             Copy-Item -LiteralPath $_.FullName -Destination $inputs -Recurse
         }

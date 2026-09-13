@@ -47,7 +47,7 @@ try {
         $sample = @{ utc = $now.ToString('o'); processId = $Process.Id; volumes = $volumes }
         $sample | ConvertTo-Json -Depth 4 -Compress | Add-Content -LiteralPath $samplesPath -Encoding utf8
         $processes = @(Get-CimInstance Win32_Process)
-        if (-not $moduleEvidenceSaved -and $Process.ProcessName -match '^(BoatAttack|UrpExternal)') {
+        if (-not $moduleEvidenceSaved -and $Process.ProcessName -match '^(BoatAttack|UrpExternal|Megacity)') {
             try {
                 $modules = @($Process.Modules | Where-Object { $_.ModuleName -in @('GameAssembly.dll','UnityPlayer.dll') } | ForEach-Object {
                     @{ name = $_.ModuleName; path = $_.FileName; baseAddress = $_.BaseAddress.ToInt64(); bytes = $_.ModuleMemorySize }

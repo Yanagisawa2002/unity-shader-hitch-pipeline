@@ -63,6 +63,7 @@ public sealed class PsoExternalPhaseBridge : MonoBehaviour
     string loadingPhase, revision;
     bool renderCold, trainingPhases, requestedLoading, quitting;
     bool windowActive, reportedFeedbackArmed;
+    bool manualDependencies;
 
     public static void Attach(GameObject host, string[] scenePaths, string[] phases, string loading)
     {
@@ -76,6 +77,25 @@ public sealed class PsoExternalPhaseBridge : MonoBehaviour
         bridge.lifecycle = new PsoContentPhaseLifecycle(new Sink(bridge));
         SceneManager.sceneLoaded += bridge.Loaded;
         SceneManager.sceneUnloaded += bridge.Unloaded;
+    }
+    // Explicit application/ECS readiness can differ from SceneManager.loaded.
+    // Reuse the same real lifecycle/sink without assigning a process-wide GSC
+    // to individual SubScenes or treating a scene label as resource readiness.
+    public static PsoExternalPhaseBridge AttachManual(GameObject host, string processPhase)
+    {
+        Attach(host, Array.Empty<string>(), Array.Empty<string>(), processPhase);
+        var bridge = host.GetComponent<PsoExternalPhaseBridge>();
+        bridge.manualDependencies = true;
+        return bridge;
+    }
+    public void ObserveDependenciesReady(string content, string phase)
+    {
+        if (!manualDependencies) throw new InvalidOperationException("Explicit readiness requires manual attachment.");
+        foreach (var request in requests) if (request.ContentId == content) return;
+        RetainLoadedShaders();
+        if (string.IsNullOrEmpty(revision)) revision = PsoUnityBuildIdentity.Capture().contentRevision;
+        Request(content, phase);
+        Dispatch();
     }
     public void ObserveOriginalWarmupWindow(bool active, double budgetMilliseconds)
     {
@@ -94,6 +114,12 @@ public sealed class PsoExternalPhaseBridge : MonoBehaviour
     }
     void Loaded(Scene scene, LoadSceneMode mode)
     {
+        if (manualDependencies)
+        {
+            RetainLoadedShaders();
+            Record("scene-loaded-awaiting-native-dependencies", loadingPhase, scene.path);
+            return;
+        }
         if (!scenes.TryGetValue(scene.path, out string phase)) return;
         RetainLoadedShaders();
         // Depth/offscreen rendering can occur during Awake, before this event.

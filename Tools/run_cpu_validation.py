@@ -15,6 +15,7 @@ TESTS = (
     "test_warmup_evidence",
     "test_external_capture",
     "test_urp_capture",
+    "test_megacity_capture",
 )
 
 if __name__ == "__main__":
