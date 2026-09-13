@@ -37,6 +37,7 @@ $roots = @(@($BudgetPath, $EvidenceDirectory, [IO.Path]::GetTempPath()) | ForEac
 } | Sort-Object -Unique)
 $nextProgress = $started
 $descendants = @{}
+$moduleEvidenceSaved = $false
 try {
     while (-not $Process.HasExited) {
         $now = [DateTime]::UtcNow
@@ -46,6 +47,17 @@ try {
         $sample = @{ utc = $now.ToString('o'); processId = $Process.Id; volumes = $volumes }
         $sample | ConvertTo-Json -Depth 4 -Compress | Add-Content -LiteralPath $samplesPath -Encoding utf8
         $processes = @(Get-CimInstance Win32_Process)
+        if (-not $moduleEvidenceSaved -and $Process.ProcessName -match '^(BoatAttack|UrpExternal)') {
+            try {
+                $modules = @($Process.Modules | Where-Object { $_.ModuleName -in @('GameAssembly.dll','UnityPlayer.dll') } | ForEach-Object {
+                    @{ name = $_.ModuleName; path = $_.FileName; baseAddress = $_.BaseAddress.ToInt64(); bytes = $_.ModuleMemorySize }
+                })
+                if ($modules.Count -eq 2) {
+                    $modules | ConvertTo-Json | Set-Content (Join-Path $EvidenceDirectory 'native-module-ranges.json') -Encoding utf8
+                    $moduleEvidenceSaved = $true
+                }
+            } catch { } # Optional symbolization evidence; never changes workload eligibility.
+        }
         $ownership = Get-PsoOwnedProcessSnapshot -RootProcessId $Process.Id -RootStartedUtc $record.processStartedUtc `
             -Processes $processes -ObservedDescendants $descendants
         $ownerIds = $ownership.ProcessIds
@@ -54,11 +66,19 @@ try {
         # A non-cooperating external native workload can start after the stage's
         # mutex/process preflight. Stop our own process, never the external one.
         $conflicts = @($processes | Where-Object {
-            $nativeWorkload = $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
+            $nativeWorkload = $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|cl|link|lld-link|clang.*|PresentMon.*|ffmpeg|obs64|BoatAttack.*|UrpExternal.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
             $managedClient = $_.Name -match '^(dotnet|MSBuild|VBCSCompiler|csc)(\.exe)?$' -and
                 $_.CommandLine -notmatch '(VBCSCompiler\.(dll|exe)|MSBuild\.dll.* /nodemode:1\b)'
             ($nativeWorkload -or $managedClient) -and -not $ownerIds.Contains([int]$_.ProcessId)
         } | Select-Object ProcessId, ParentProcessId, Name, ExecutablePath, CreationDate)
+        $ownedProgress = @($processes | Where-Object { $ownerIds.Contains([int]$_.ProcessId) } | ForEach-Object {
+            @{ processId = $_.ProcessId; name = $_.Name; created = $_.CreationDate;
+                cpuSeconds = ([double]$_.KernelModeTime + [double]$_.UserModeTime) / 10000000;
+                privateBytes = [double]$_.PrivatePageCount; readBytes = [double]$_.ReadTransferCount;
+                writeBytes = [double]$_.WriteTransferCount }
+        })
+        @{ utc = $now.ToString('o'); scope = 'Build/process liveness, not PSO performance'; ownedProcesses = $ownedProgress } |
+            ConvertTo-Json -Depth 5 -Compress | Add-Content (Join-Path $EvidenceDirectory 'process-progress.jsonl') -Encoding utf8
         if (@($volumes | Where-Object { $_.freeGiB -lt 25 }).Count) {
             $record.stopReason = 'Capacity approached the 20 GiB reserve (25 GiB early-stop threshold).'
         } elseif ($conflicts.Count) {
@@ -70,7 +90,14 @@ try {
         if ($record.stopReason) { break }
         if ($now -ge $nextProgress) {
             $tail = if ($LogPath -and (Test-Path -LiteralPath $LogPath)) {
-                (Get-Content -LiteralPath $LogPath -Tail 2) -join ' | '
+                # Raw logs remain private evidence. Do not echo license tokens,
+                # signed URLs or complete tool/process commands to progress output.
+                $safe = @(Get-Content -LiteralPath $LogPath -Tail 20 | Where-Object {
+                    $_ -match '^(\[\d+/\d+|\[PSO |\[ShaderHitchPipeline\]|Build completed|Building |Compiling |Linking )' -and
+                    $_ -notmatch '(?i)(licens|serial number|https?://|command line|arguments:)'
+                } | Select-Object -Last 1)
+                if ($safe.Count) { $safe[0].Substring(0, [Math]::Min(220, $safe[0].Length)) }
+                else { 'Raw log retained; no public progress marker in recent lines' }
             } else { 'Waiting for log creation' }
             Write-Output ("NATIVE_STAGE pid={0} freeGiB={1:N2} log={2}" -f $Process.Id,
                 ($volumes.freeGiB | Measure-Object -Minimum).Minimum, $tail)

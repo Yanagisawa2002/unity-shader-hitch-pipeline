@@ -72,6 +72,12 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
             string installed = PsoProjectConfiguration.Load().installedPlanDirectory.Replace('\\', '/').TrimEnd('/');
             var content = new StringBuilder();
             var shaders = new StringBuilder();
+            var generatedMetadata = new StringBuilder();
+            var packages = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages();
+            bool hasAddressables = packages.Any(p => p.name == "com.unity.addressables");
+            // Other versions retain ordinary content attestation until their
+            // producer schema has been checked, rather than assuming its fields.
+            bool hasPerformanceTesting = packages.Any(p => p.name == "com.unity.test-framework.performance" && p.version == "3.1.0");
             // Includes registry and local package imported assets, shader includes and dependencies.
             foreach (string path in AssetDatabase.GetAllAssetPaths().OrderBy(p => p, StringComparer.Ordinal))
             {
@@ -79,12 +85,24 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     AssetDatabase.IsValidFolder(path) || IsGenerated(path, installed)) continue;
                 string entry = path + "|" + AssetDatabase.AssetPathToGUID(path) + "|" +
                     AssetDatabase.GetAssetDependencyHash(path) + "\n";
+                if (PsoBuildGeneratedMetadata.RequiresByteIdentity(path, hasAddressables))
+                    entry = path + "|generated-guid-content-sha256|" + PsoFileUtility.ComputeSha256(path) + "\n";
+                if (PsoBuildGeneratedMetadata.IsGenerated(path, hasAddressables, hasPerformanceTesting))
+                {
+                    // Content-update cache and performance-test run metadata are
+                    // regenerated/deleted by Unity's build callbacks. Their GUIDs
+                    // and dependency hashes are evidence, not runtime content.
+                    generatedMetadata.Append(entry);
+                    continue;
+                }
                 content.Append(entry);
                 string extension = Path.GetExtension(path).ToLowerInvariant();
                 if (extension == ".shader" || extension == ".compute" || extension == ".hlsl" ||
                     extension == ".cginc" || extension == ".shadergraph" || extension == ".shadersubgraph") shaders.Append(entry);
             }
             var settings = new StringBuilder();
+            if (hasPerformanceTesting)
+                settings.Append(PsoBuildGeneratedMetadata.PerformanceSettingsFromArguments(Environment.GetCommandLineArgs())).Append('\n');
             foreach (string path in Directory.GetFiles("ProjectSettings").OrderBy(p => p, StringComparer.Ordinal))
             {
                 // Scheduler policy and Editor window state do not change shader/content inputs.
@@ -107,13 +125,30 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                 settings.Append("\nassetBundleManifest=").Append(PsoFileUtility.ComputeSha256(assetBundleManifestPath));
             string contentHash = PsoFileUtility.ComputeTextSha256(content.ToString());
             string shaderHash = PsoFileUtility.ComputeTextSha256(shaders.ToString());
-            return new PsoContentIdentity
+            var identity = new PsoContentIdentity
             {
                 version = 1, source = PsoCompatibility.BuildIdentitySource,
                 buildInputSha256 = PsoFileUtility.ComputeTextSha256(settings + "\n" + contentHash + "\n" + shaderHash),
                 shaderSha256 = shaderHash, contentSha256 = contentHash,
                 contentId = "player-content", contentRevision = contentHash
             };
+            if (PsoCommandLine.Current.HasFlag("-pso-build-input-evidence"))
+            {
+                // Optional immutable diagnostics outside Assets. Preserve the
+                // actual hashed inputs so a failed gate can name the difference.
+                string file = Path.GetFullPath("PsoArtifacts/BuildInputEvidence/" + identity.buildInputSha256 + ".json");
+                if (!File.Exists(file)) PsoFileUtility.WriteJsonAtomic(file, new InputEvidence {
+                    identity = identity, assets = content.ToString(), shaders = shaders.ToString(), settings = settings.ToString(),
+                    generatedMetadataExcludedFromIdentity = generatedMetadata.ToString()
+                });
+            }
+            return identity;
+        }
+
+        [Serializable] private sealed class InputEvidence
+        {
+            public PsoContentIdentity identity;
+            public string assets, shaders, settings, generatedMetadataExcludedFromIdentity;
         }
 
         private static bool IsGenerated(string path, string installed) =>

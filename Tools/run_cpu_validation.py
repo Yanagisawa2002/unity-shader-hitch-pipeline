@@ -13,6 +13,7 @@ TESTS = (
     "test_execution_policy",
     "test_scheduling_schema",
     "test_warmup_evidence",
+    "test_external_capture",
 )
 
 if __name__ == "__main__":

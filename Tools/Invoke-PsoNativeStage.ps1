@@ -17,7 +17,7 @@ New-Item -ItemType Directory -Path $outputRoot | Out-Null
 function Get-Workloads {
     param([ref]$IdleServers)
     $candidates = @(Get-CimInstance Win32_Process | Where-Object {
-        $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|MSBuild|dotnet|VBCSCompiler|csc|cl|link|lld-link|clang.*|PresentMon.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
+        $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|MSBuild|dotnet|VBCSCompiler|csc|cl|link|lld-link|clang.*|PresentMon.*|ffmpeg|obs64|BoatAttack.*|UrpExternal.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
     })
     # Resident Roslyn/MSBuild servers can outlive the build that created them.
     # Only exempt recognized services with zero CPU growth during observation.

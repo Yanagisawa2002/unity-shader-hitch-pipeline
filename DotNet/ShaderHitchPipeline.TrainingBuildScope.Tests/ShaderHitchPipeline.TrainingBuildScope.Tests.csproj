@@ -1,4 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework></PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <UseAppHost>false</UseAppHost>
+    <UseSharedCompilation>false</UseSharedCompilation>
+  </PropertyGroup>
   <ItemGroup><Compile Include="../../Packages/com.yanagisawa.shader-hitch-pipeline/Editor/PsoTrainingBuildScope.cs" Link="PsoTrainingBuildScope.cs" /></ItemGroup>
 </Project>

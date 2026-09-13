@@ -298,9 +298,45 @@ Test("caller mutations cannot silently change selected policy", () =>
 });
 Test("partial dependency resolution cannot attest warmup or trace baseline", () =>
 {
-    Throws<InvalidOperationException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 3));
-    Throws<InvalidOperationException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 0));
+    Throws<PsoCollectionNotReadyException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 3));
+    Throws<PsoCollectionNotReadyException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 0));
     PsoCollectionReadiness.RequireFullCollection("deferred", 40, 40);
+    PsoCollectionReadiness.RequireFullCollection("empty", 0, 0);
+    foreach (var counts in new[] { (-1, 0), (40, -1), (40, 41), (0, 1) })
+    {
+        try { PsoCollectionReadiness.RequireFullCollection("invalid", counts.Item1, counts.Item2); throw new Exception("Invalid identity accepted."); }
+        catch (PsoCollectionNotReadyException) { throw new Exception("Invalid identity must not request a retry."); }
+        catch (InvalidOperationException) { }
+    }
+});
+Test("build metadata exclusions retain scene, shader and unknown input attestation", () =>
+{
+    string unspecified = PsoBuildGeneratedMetadata.PerformanceSettingsIdentity(null);
+    Check(PsoBuildGeneratedMetadata.PerformanceSettingsFromArguments(new[] { "-performance-measurement-count", "50", "-performance-measurement-count", "51" }) ==
+          PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50"), "Producer uses its first exact option.");
+    Check(PsoBuildGeneratedMetadata.PerformanceSettingsFromArguments(new[] { "-performance-measurement-count=50" }) == unspecified,
+          "Producer does not implement equals-style arguments.");
+    Check(unspecified == PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("-1") &&
+          unspecified == PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("invalid"), "Effective producer defaults differ.");
+    Check(PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50") == PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("050") &&
+          PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50") != PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("51") &&
+          unspecified != PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50"), "Effective measurement count is not attested canonically.");
+    string cache = "Assets/AddressableAssetsData/Windows/addressables_content_state.bin";
+    Check(PsoBuildGeneratedMetadata.IsGenerated(cache, true, false), "Official content-update cache was not recognized.");
+    Check(!PsoBuildGeneratedMetadata.IsGenerated(cache, false, true), "Uninstalled producer must not grant an exclusion.");
+    string linker = "Assets/AddressableAssetsData/link.xml";
+    Check(!PsoBuildGeneratedMetadata.IsGenerated(linker, true, true) &&
+          PsoBuildGeneratedMetadata.RequiresByteIdentity(linker, true), "Linker input must retain byte attestation.");
+    Check(!PsoBuildGeneratedMetadata.RequiresByteIdentity("Assets/Shaders/Water.shader", true), "Shader dependency identity was weakened.");
+    foreach (string path in new[] { "Assets/Resources/PerformanceTestRunInfo.json", "Assets/Resources/PerformanceTestRunSettings.json" })
+    {
+        Check(PsoBuildGeneratedMetadata.IsGenerated(path, false, true), "Official test metadata not recognized.");
+        Check(!PsoBuildGeneratedMetadata.IsGenerated(path, true, false), "Unknown runtime resource excluded.");
+    }
+    foreach (string path in new[] { "Assets/Scenes/Island.unity", "Assets/Shaders/Water.shader", "Assets/Resources/PsoProfile.json",
+        "Assets/AddressableAssetsData/Windows/addressables_content_state.bin.shader", "Assets/AddressableAssetsData/addressables_content_state.bin",
+        "Assets/AddressableAssetsData/Windows/subdir/addressables_content_state.bin", "Assets/Custom/addressables_content_state.bin" })
+        Check(!PsoBuildGeneratedMetadata.IsGenerated(path, true, true), "Real or unknown content was excluded: " + path);
 });
 Test("all cost-critical environment fields participate in invalidation", () =>
 {
