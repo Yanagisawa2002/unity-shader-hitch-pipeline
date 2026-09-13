@@ -23,6 +23,20 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         internal static string[] CaptureFileNames()
         {
+            var modules = CaptureModules();
+            var paths = new string[modules.Length];
+            for (int i = 0; i < modules.Length; ++i) paths[i] = modules[i].FileName;
+            return paths;
+        }
+
+        internal struct LoadedModule
+        {
+            public string FileName;
+            public long BaseAddress;
+        }
+
+        internal static LoadedModule[] CaptureModules()
+        {
             int capacity = 128;
             for (int attempt = 0; attempt < 4; attempt++)
             {
@@ -39,11 +53,11 @@ namespace Yanagisawa.ShaderHitchPipeline
                     capacity = (int)required;
                     continue;
                 }
-                var paths = new List<string>((int)(needed / IntPtr.Size));
+                var paths = new List<LoadedModule>((int)(needed / IntPtr.Size));
                 for (int i = 0; i < needed / IntPtr.Size; i++)
                 {
                     if (modules[i] == IntPtr.Zero) throw new IOException("Current-process module inventory contains a null handle.");
-                    paths.Add(ReadFileName(modules[i]));
+                    paths.Add(new LoadedModule { FileName = ReadFileName(modules[i]), BaseAddress = modules[i].ToInt64() });
                 }
                 return paths.ToArray();
             }

@@ -254,9 +254,28 @@
               "sha256": {
                 "type": "string",
                 "pattern": "^[0-9a-fA-F]{64}$"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "lastWriteUtcTicks": {
+                "type": "integer",
+                "minimum": 1
               }
             }
           }
+        },
+        "driverBytesAttestedUtc": {
+          "type": "string",
+          "description": "UTC of successful byte hashing; unchanged during process-local metadata-checked reuse."
+        },
+        "driverMetadataCheckedUtc": {
+          "type": "string",
+          "description": "UTC of latest device/registry/loaded-module/file-metadata check; not a fresh byte hash."
+        },
+        "driverByteAttestationReused": {
+          "type": "boolean"
         }
       }
     }

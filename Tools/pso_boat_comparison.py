@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 from statistics import median
-from pso_external_capture import load, sha
+from pso_external_capture import HITCH_THRESHOLDS, load, sha
 
 ARMS = ['disabled', 'all-at-once', 'scheduled', 'observed-budget']
 ORDER = [[0, 1, 3, 2], [1, 2, 0, 3], [2, 3, 1, 0], [3, 0, 2, 1]]
@@ -65,8 +65,8 @@ def freeze(attempt, player_stage, pilot_suffix, output):
         observation='Same seeded plan baseline and encountered-shader retention in all arms; disabled has zero activations. No screenshots, phase-switching training trace or diagnostic watchdog in formal runs.',
         cache='Existing application/OS/driver caches retained after recorded training/pilots; new processes. No driver-cold claim, no cache purge. Artifact hashing also reads local files before this sequence.',
         timing='All CPU Update intervals, first warmup-route pass, native warmed samples, startup-to-quit callback, loads and total route; not GPU completion or presentation.',
-        hitchThresholdMilliseconds=[16.67,33.33,50], percentile='nearest rank per process, no discarded intervals/outliers',
-        coverage='Native seeded GSC entry growth is reported with its observation blind interval. Prior pilot: +94 entries but only 18 public-payload differences explained; unresolved remainder, no useful first-draw coverage percentage.',
+        hitchThresholdMilliseconds=list(HITCH_THRESHOLDS), percentile='nearest rank per process, no discarded intervals/outliers',
+        coverage='Native seeded GSC entry growth is reported with its observation blind interval. The uninterrupted diagnostic retained 94 states/public fields through offline round-trip but differed from the segmented union. Opaque native state identity and useful first-draw coverage remain unresolved; no coverage percentage.',
         order='Four-period balanced Williams order; four new processes per arm. Caches continue across row boundaries; no selective replacement.',
         stop='Stop remaining runs on native/process errors, external workload, reserve threat, any missing route/work/cleanup/identity gate, or 150 second timeout. Retain all failures and unexecuted arms.',
         minimumFreeGiBReserve=20, earlyStopFreeGiB=25, estimatedAdditionalPeakGiB=2, maximumProcessSeconds=150,
@@ -100,7 +100,9 @@ def summarize(root):
         by_arm[arm] = dict(processes=len(items), accepted=sum(s['accepted'] for s in items),
             medianElapsedSeconds=median(s['elapsedSeconds'] for s in items) if items else None,
             medianFirstPassP95=median(s['firstPass']['p95Milliseconds'] for s in items) if items else None,
-            medianFirstPassP99=median(s['firstPass']['p99Milliseconds'] for s in items) if items else None)
+            medianFirstPassP99=median(s['firstPass']['p99Milliseconds'] for s in items) if items else None,
+            maximumUpdateMilliseconds=max((s['allUpdates']['maximumMilliseconds'] for s in items), default=None),
+            totalHitches={str(limit): sum(s['allUpdates']['hitchCounts'].get(str(limit),0) for s in items) for limit in HITCH_THRESHOLDS})
     result = dict(protocolSha256=sha(root/'protocol.json'), completed=len(samples)==16 and all(s['accepted'] for s in samples),
         allSamples=samples, unexecuted=missing, byArm=by_arm,
         scope='Observed native external-workload CPU intervals on existing caches; four processes/arm, no population significance, driver-cold or coverage-gain claim.')

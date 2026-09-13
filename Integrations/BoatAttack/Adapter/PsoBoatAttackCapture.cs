@@ -81,6 +81,7 @@ public sealed class PsoBoatAttackCapture : MonoBehaviour
         capture = new Capture { startedUtc = DateTime.UtcNow.ToString("o"), unityVersion = Application.unityVersion,
             buildGuid = Application.buildGUID, graphicsApi = SystemInfo.graphicsDeviceType.ToString(), gpu = SystemInfo.graphicsDeviceName,
             screenshotsEnabled = PsoCommandLine.Current.HasFlag("-pso-external-screenshots") };
+        nativeResultsBefore = NativeResultInventory();
         capture.observerRealtimeOriginSeconds = Time.realtimeSinceStartupAsDouble - clock.Elapsed.TotalSeconds;
         warmupWindowMilliseconds = PsoCommandLine.Current.GetDouble("-pso-external-warmup-window-ms", 1000, 1, 60000);
         diagnostic = PsoCommandLine.Current.HasFlag("-pso-external-diagnostic");
@@ -173,17 +174,36 @@ public sealed class PsoBoatAttackCapture : MonoBehaviour
         capture.frames = frames.ToArray(); capture.renders = renders.ToArray(); capture.events = events.ToArray();
         File.WriteAllText(Path.Combine(output, "external-capture.json"), JsonUtility.ToJson(capture));
         // The native writer uses minute-resolution filenames in persistentDataPath.
-        // Preserve this process's completed native files before a later run can
-        // reuse that name. Never remove or rewrite the native result directory.
+        // Retain only new/changed files from this process, using an exact startup
+        // metadata snapshot. A wall-clock grace interval can accidentally include
+        // the immediately preceding process's completed result.
         string nativeResults = Path.Combine(Application.persistentDataPath, "PerformanceResults");
         if (Directory.Exists(nativeResults))
         {
             string retained = Path.Combine(output, "upstream-results");
             Directory.CreateDirectory(retained);
-            foreach (string path in Directory.GetFiles(nativeResults, "*.json"))
-                if (File.GetLastWriteTimeUtc(path) >= DateTime.Parse(capture.startedUtc).ToUniversalTime().AddSeconds(-2))
-                    File.Copy(path, Path.Combine(retained, Path.GetFileName(path)), false);
+            var after = NativeResultInventory();
+            foreach (var item in after)
+                if (!nativeResultsBefore.Exists(old => old.file == item.file && old.bytes == item.bytes && old.writeUtcTicks == item.writeUtcTicks))
+                    File.Copy(Path.Combine(nativeResults, item.file), Path.Combine(retained, item.file), false);
+            File.WriteAllText(Path.Combine(output, "native-results-inventory.json"), JsonUtility.ToJson(
+                new NativeInventory { before = nativeResultsBefore.ToArray(), after = after.ToArray() }, true));
         }
+    }
+    [Serializable] sealed class NativeFile { public string file; public long bytes, writeUtcTicks; }
+    [Serializable] sealed class NativeInventory { public NativeFile[] before, after; }
+    List<NativeFile> nativeResultsBefore;
+    static List<NativeFile> NativeResultInventory()
+    {
+        string directory = Path.Combine(Application.persistentDataPath, "PerformanceResults");
+        var items = new List<NativeFile>();
+        if (Directory.Exists(directory))
+            foreach (string path in Directory.GetFiles(directory, "*.json"))
+            {
+                var file = new FileInfo(path);
+                items.Add(new NativeFile { file = file.Name, bytes = file.Length, writeUtcTicks = file.LastWriteTimeUtc.Ticks });
+            }
+        return items;
     }
     void OnDestroy()
     {

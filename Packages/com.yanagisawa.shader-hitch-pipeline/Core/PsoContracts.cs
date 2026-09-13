@@ -7,6 +7,8 @@ namespace Yanagisawa.ShaderHitchPipeline
     {
         public string file;
         public string sha256;
+        public long bytes;
+        public long lastWriteUtcTicks;
     }
 
     [Serializable]
@@ -37,6 +39,9 @@ namespace Yanagisawa.ShaderHitchPipeline
         public string driverVersion;
         public string driverIdentityError;
         public string driverRegistryIdentity;
+        public string driverBytesAttestedUtc;
+        public string driverMetadataCheckedUtc;
+        public bool driverByteAttestationReused;
         public PsoDriverModuleIdentity[] driverModules = Array.Empty<PsoDriverModuleIdentity>();
         public PsoContentIdentity identity;
 

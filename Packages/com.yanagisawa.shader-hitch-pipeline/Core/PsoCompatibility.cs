@@ -172,7 +172,7 @@ namespace Yanagisawa.ShaderHitchPipeline
             !string.Equals(value, "unknown", StringComparison.OrdinalIgnoreCase) &&
             !string.Equals(value, "n/a", StringComparison.OrdinalIgnoreCase) &&
             !string.Equals(value, "unavailable", StringComparison.OrdinalIgnoreCase);
-        private static bool IsSha256(string value)
+        internal static bool IsSha256(string value)
         {
             if (value == null || value.Length != 64 || value == new string('0', 64)) return false;
             foreach (char c in value) if (!Uri.IsHexDigit(c)) return false;

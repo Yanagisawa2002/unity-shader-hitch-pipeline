@@ -14,6 +14,7 @@ import math
 from pathlib import Path
 import re
 
+HITCH_THRESHOLDS = (16.67, 33.33, 50, 200, 500)
 
 def sha(path):
     with Path(path).open('rb') as stream:
@@ -33,7 +34,7 @@ def statistics(samples):
                 p95Milliseconds=ordered[math.ceil(len(values)*.95)-1],
                 p99Milliseconds=ordered[math.ceil(len(values)*.99)-1],
                 maximumMilliseconds=ordered[-1],
-                hitchCounts={str(limit): sum(v > limit for v in values) for limit in (16.67, 33.33, 50)},
+                hitchCounts={str(limit): sum(v > limit for v in values) for limit in HITCH_THRESHOLDS},
                 percentileDefinition='nearest rank; no trimming')
 
 

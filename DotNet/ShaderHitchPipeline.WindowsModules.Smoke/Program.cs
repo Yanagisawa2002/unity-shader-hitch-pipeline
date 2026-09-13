@@ -14,6 +14,9 @@ if (!OperatingSystem.IsWindows())
 for (int capture = 0; capture < 2; capture++)
 {
     string[] paths = PsoWindowsProcessModules.CaptureFileNames();
+    var modules = PsoWindowsProcessModules.CaptureModules();
+    if (modules.Length < 2 || modules.Any(m => m.BaseAddress == 0 || !File.Exists(m.FileName)))
+        throw new InvalidOperationException("Actual loaded-module identity is missing.");
     if (paths.Length < 2 || paths.Any(path => !Path.IsPathFullyQualified(path) || !File.Exists(path)))
         throw new InvalidOperationException("Actual module inventory is empty, relative or points to a missing file.");
     if (!paths.Any(path => string.Equals(Path.GetFileName(path), "kernel32.dll", StringComparison.OrdinalIgnoreCase)))

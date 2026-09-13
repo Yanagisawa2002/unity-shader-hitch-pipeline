@@ -20,6 +20,59 @@ PsoWarmupPhasePlan Phase(string name, double deadline = 0, int tier = 1, int pri
     new PsoWarmupPhasePlan { phase = name, deadlineMilliseconds = deadline, hotSetTier = tier,
         targetFrameMilliseconds = 20, priority = priority };
 
+Test("driver attestation reuses byte evidence but never aliases mutable receipts", () =>
+{
+    var cache = new PsoDriverAttestationCache(text => new string('c',64));
+    var probe = new PsoDriverIdentityProbe { Device = "device", RegistryIdentity = "registry", Version = "1",
+        Modules = new[] { new PsoDriverFileStamp { File = "driver.dll", LoadedModule = 17, Bytes = 42,
+            LastWriteUtcTicks = 1, CreationUtcTicks = 1 } } };
+    int hashes = 0, utc = 0;
+    string Hash(string path) { hashes++; return new string('a',64); }
+    var first = new PsoEnvironmentSnapshot();
+    cache.CaptureInto(first, () => probe, Hash, () => "utc-" + ++utc);
+    string identity = first.driverIdentity, attestedAt = first.driverBytesAttestedUtc;
+    first.driverModules[0].sha256 = "corrupt caller receipt"; first.driverIdentity = "corrupt";
+    var second = new PsoEnvironmentSnapshot();
+    cache.CaptureInto(second, () => probe, Hash, () => "utc-" + ++utc);
+    Check(hashes == 1 && second.driverByteAttestationReused && second.driverIdentity == identity &&
+        second.driverModules[0].sha256 == new string('a',64), "Repeated capture rehashed or receipt mutation poisoned cache.");
+    Check(second.driverBytesAttestedUtc == attestedAt && second.driverMetadataCheckedUtc != first.driverMetadataCheckedUtc,
+        "Metadata check was falsely labelled a fresh byte attestation.");
+    foreach (Action change in new Action[] { () => probe.Device = "new-device", () => probe.RegistryIdentity = "new-registry",
+        () => probe.Modules[0].LoadedModule++, () => probe.Modules[0].Bytes++,
+        () => probe.Modules[0].LastWriteUtcTicks++, () => probe.Modules[0].CreationUtcTicks++, () => cache.Invalidate() })
+    {
+        int old = hashes; change(); cache.CaptureInto(second, () => probe, Hash, () => "utc-" + ++utc);
+        Check(hashes == old + 1 && !second.driverByteAttestationReused, "Identity change reused stale byte evidence.");
+    }
+});
+Test("failed or unstable driver probes invalidate evidence and force fresh recovery", () =>
+{
+    var cache = new PsoDriverAttestationCache(text => new string('c',64));
+    var probe = new PsoDriverIdentityProbe { Device = "device", RegistryIdentity = "registry", Version = "1",
+        Modules = new[] { new PsoDriverFileStamp { File = "driver.dll", LoadedModule = 17, Bytes = 42,
+            LastWriteUtcTicks = 1, CreationUtcTicks = 1 } } };
+    int hashes = 0;
+    string Hash(string path) { hashes++; return new string('b',64); }
+    var result = new PsoEnvironmentSnapshot();
+    cache.CaptureInto(result, () => probe, Hash, () => "time");
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => throw new System.IO.IOException("missing metadata"), Hash, () => "time"));
+    Check(result.driverIdentity == null && result.driverModules.Length == 0, "Failed probe exposed stale identity.");
+    cache.CaptureInto(result, () => probe, Hash, () => "time");
+    Check(hashes == 2 && !result.driverByteAttestationReused, "Recovery reused invalidated evidence.");
+    cache.Invalidate(); int probes = 0;
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => {
+        if (++probes == 2) probe.Modules[0].LastWriteUtcTicks++; return probe;
+    }, Hash, () => "time"));
+    Check(result.driverIdentity == null, "Changed-during-hash evidence was accepted.");
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => probe, p => "malformed", () => "time"));
+    cache.CaptureInto(result, () => probe, Hash, () => "time");
+    Check(!result.driverByteAttestationReused && result.driverIdentity != null, "Failed hash did not recover freshly.");
+    probe.Modules = new[] { probe.Modules[0], probe.Modules[0] };
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => probe, Hash, () => "time"));
+    Check(result.driverModules.Length == 0, "Ambiguous inventory retained evidence.");
+});
+
 Test("reject nonfinite inputs without poisoning cost state", () =>
 {
     Throws<ArgumentOutOfRangeException>(() => Policy(double.PositiveInfinity));
