@@ -23,6 +23,13 @@ EXPECTED_SCENES = {
 MENU, MAIN = 'Assets/Scenes/Menu.unity', 'Assets/Scenes/Main.unity'
 
 
+def engine_window(start, end):
+    values = start['engineRealtimeSeconds'], end['engineRealtimeSeconds']
+    if not all(math.isfinite(v) for v in values) or values[1] <= values[0] or end['frame'] <= start['frame']:
+        raise ValueError('Invalid direct engine-clock observation window')
+    return values
+
+
 def scene_payloads(snapshot):
     """Actual same-world requests + all resolved section loads + positive bytes/entities."""
     ready = {}
@@ -144,16 +151,16 @@ def megacity(stage):
     require(bool(accepted_snapshots), 'Six original payloads + actual native player/traffic/blimp/render population not proven in one world')
     sustained = []
     if ready and quit_event:
-        origin = capture['observerRealtimeOriginSeconds']
-        sustained = sustained_population(snapshots, origin+ready[0]['seconds'], origin+quit_event[0]['seconds'])
+        # Native snapshots and these event timestamps use the same engine clock.
+        # A single BeforeSplash offset is not exact cross-clock attestation.
+        sustained = sustained_population(snapshots, *engine_window(ready[0], quit_event[0]))
         require(any(s['accepted'] for s in sustained), 'Same-world six-payload/native population or advancing simulation did not persist across the declared observation')
         during = [r for r in visible_renders if ready[0]['seconds'] <= r['seconds'] <= quit_event[0]['seconds']]
         require(during and during[0]['seconds']-ready[0]['seconds'] <= 2 and
             quit_event[0]['seconds']-during[-1]['seconds'] <= 2, 'Original visible camera did not span the declared post-readiness interval')
     accepted_worlds = {s['worldSequence'] for s in sustained if s['accepted']}
     motion_snapshots = [s for s in snapshots if s['worldSequence'] in accepted_worlds and ready and quit_event and
-        capture['observerRealtimeOriginSeconds']+ready[0]['seconds']-2 <= s['realtimeSeconds'] <=
-        capture['observerRealtimeOriginSeconds']+quit_event[0]['seconds']]
+        ready[0]['engineRealtimeSeconds']-2 <= s['realtimeSeconds'] <= quit_event[0]['engineRealtimeSeconds']]
     dynamic = {kind: movement(motion_snapshots, kind) for kind in ('traffic', 'blimp')}
     for kind, tracks in dynamic.items():
         require(any(t['positiveMovement'] for t in tracks), 'No stable actual moving '+kind+' entity over 20 seconds')

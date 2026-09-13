@@ -40,7 +40,7 @@ public sealed class PsoMegacityAcceptanceCapture : MonoBehaviour
     {
         public string kind, scene, detail;
         public int frame;
-        public double seconds;
+        public double seconds, engineRealtimeSeconds;
     }
     [Serializable] public sealed class Capture
     {
@@ -122,7 +122,8 @@ public sealed class PsoMegacityAcceptanceCapture : MonoBehaviour
     void Record(string kind, string detail)
     {
         var value = new Event { kind = kind, detail = detail, scene = SceneManager.GetActiveScene().path,
-            frame = Time.frameCount, seconds = clock.Elapsed.TotalSeconds };
+            frame = Time.frameCount, seconds = clock.Elapsed.TotalSeconds,
+            engineRealtimeSeconds = Time.realtimeSinceStartupAsDouble };
         events.Add(value); UnityEngine.Debug.Log("[PSO Megacity Observer] " + JsonUtility.ToJson(value));
     }
 

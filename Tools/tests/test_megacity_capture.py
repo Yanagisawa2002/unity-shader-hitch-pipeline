@@ -1,10 +1,18 @@
 """Small data-integrity fixtures, not native workload or timing evidence."""
 import copy
 import unittest
-from pso_megacity_capture import EXPECTED_SCENES, movement, scene_payloads, sustained_population
+from pso_megacity_capture import EXPECTED_SCENES, engine_window, movement, scene_payloads, sustained_population
 
 
 class MegacityCaptureTests(unittest.TestCase):
+    def test_native_window_uses_direct_engine_clock_not_stopwatch_offset(self):
+        start = dict(frame=100, seconds=5.0, engineRealtimeSeconds=500.0)
+        end = dict(frame=1000, seconds=65.0, engineRealtimeSeconds=560.25)
+        self.assertEqual(engine_window(start,end),(500.0,560.25))
+        with self.assertRaises(ValueError): engine_window(start,dict(end,engineRealtimeSeconds=499))
+        with self.assertRaises(ValueError): engine_window(start,dict(end,frame=100))
+        with self.assertRaises(KeyError): engine_window(start,dict(frame=1000,seconds=65))
+
     def test_scene_labels_and_loaded_flags_do_not_replace_payloads(self):
         section = dict(guid='original', requested=True, loaded=True, fileBytes=100, payloadEntities=2, renderEntities=1)
         snapshot = dict(scenes=[dict(guid='original', requested=True, loaded=True, sections=[section])])

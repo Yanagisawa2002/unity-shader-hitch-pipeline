@@ -25,6 +25,10 @@ populations. All original content and simulation remain active. The validator
 requires persistent same-world payloads and advancing simulation across the
 declared observation window, positive native movement, sustained original-camera
 render submissions and a normal exit through the original public QuitSystem.
+Events record both Stopwatch seconds and direct Unity realtime. The ECS population
+window uses the event and snapshot values from that same engine clock; frame IDs
+and CPU intervals remain explicit. A bootstrap clock offset is not used to infer
+exact cross-clock alignment.
 
 This is bounded application acceptance with the original stationary player camera
 and evolving city content. It is not a whole-city trajectory, six isolated traces,
