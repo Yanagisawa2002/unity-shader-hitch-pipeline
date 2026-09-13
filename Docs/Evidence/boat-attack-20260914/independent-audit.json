@@ -1,0 +1,278 @@
+{
+  "verifiedUtc": "2026-09-13T20:01:00.860856+00:00",
+  "results": [
+    {
+      "directory": "boat-formal-01",
+      "protocolSha256": "ac9cf5c877e297a1b50b82e08c9e114afb43d68d1bed17eaeee9a7fea22af1f8",
+      "buildGuid": "d03a7a0d35224c32be7aa887a3dc1cc6",
+      "allPassed": true,
+      "runs": [
+        {
+          "index": 1,
+          "policy": "disabled",
+          "elapsedSeconds": 32.2077536,
+          "maximumUpdateMilliseconds": 47.08870000000065,
+          "firstFlythroughP99Milliseconds": 35.4479999999997,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 2,
+          "policy": "all-at-once",
+          "elapsedSeconds": 32.865688399999996,
+          "maximumUpdateMilliseconds": 584.435199999998,
+          "firstFlythroughP99Milliseconds": 34.03229999999979,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 3,
+          "policy": "observed-budget",
+          "elapsedSeconds": 34.2556934,
+          "maximumUpdateMilliseconds": 594.0529999999998,
+          "firstFlythroughP99Milliseconds": 34.73469999999956,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 4,
+          "policy": "scheduled",
+          "elapsedSeconds": 34.053753,
+          "maximumUpdateMilliseconds": 629.2878000000002,
+          "firstFlythroughP99Milliseconds": 32.92629999999974,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 5,
+          "policy": "all-at-once",
+          "elapsedSeconds": 33.1224977,
+          "maximumUpdateMilliseconds": 583.2759000000003,
+          "firstFlythroughP99Milliseconds": 32.28450000000027,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 6,
+          "policy": "scheduled",
+          "elapsedSeconds": 33.0333725,
+          "maximumUpdateMilliseconds": 584.2966,
+          "firstFlythroughP99Milliseconds": 36.85850000000013,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 7,
+          "policy": "disabled",
+          "elapsedSeconds": 31.5706459,
+          "maximumUpdateMilliseconds": 44.59520000000072,
+          "firstFlythroughP99Milliseconds": 34.3517999999996,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 8,
+          "policy": "observed-budget",
+          "elapsedSeconds": 33.3430171,
+          "maximumUpdateMilliseconds": 587.1680999999995,
+          "firstFlythroughP99Milliseconds": 36.099300000000056,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 9,
+          "policy": "scheduled",
+          "elapsedSeconds": 34.5546799,
+          "maximumUpdateMilliseconds": 595.0504000000017,
+          "firstFlythroughP99Milliseconds": 34.71560000000018,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 10,
+          "policy": "observed-budget",
+          "elapsedSeconds": 33.195991,
+          "maximumUpdateMilliseconds": 593.1547000000004,
+          "firstFlythroughP99Milliseconds": 34.46950000000015,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 11,
+          "policy": "all-at-once",
+          "elapsedSeconds": 33.811538,
+          "maximumUpdateMilliseconds": 585.5663,
+          "firstFlythroughP99Milliseconds": 36.72879999999967,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 12,
+          "policy": "disabled",
+          "elapsedSeconds": 34.2844183,
+          "maximumUpdateMilliseconds": 43.98159999999951,
+          "firstFlythroughP99Milliseconds": 35.13970000000022,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 13,
+          "policy": "observed-budget",
+          "elapsedSeconds": 33.8503891,
+          "maximumUpdateMilliseconds": 593.7471000000016,
+          "firstFlythroughP99Milliseconds": 33.52619999999984,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 14,
+          "policy": "disabled",
+          "elapsedSeconds": 34.0928356,
+          "maximumUpdateMilliseconds": 45.60899999999979,
+          "firstFlythroughP99Milliseconds": 36.98409999999974,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 15,
+          "policy": "scheduled",
+          "elapsedSeconds": 34.7141605,
+          "maximumUpdateMilliseconds": 584.4867000000029,
+          "firstFlythroughP99Milliseconds": 35.67270000000011,
+          "intervalsOver200Milliseconds": 2
+        },
+        {
+          "index": 16,
+          "policy": "all-at-once",
+          "elapsedSeconds": 33.767997,
+          "maximumUpdateMilliseconds": 591.8264999999998,
+          "firstFlythroughP99Milliseconds": 36.78500000000007,
+          "intervalsOver200Milliseconds": 2
+        }
+      ]
+    },
+    {
+      "directory": "boat-formal-02",
+      "protocolSha256": "f48cf3b2c7f3e38153b6d27a0370acb6b7a4ceea05a4fcba3f53b40a3a9a6103",
+      "buildGuid": "253edbfc746f44d0b455794639595cfe",
+      "allPassed": true,
+      "runs": [
+        {
+          "index": 1,
+          "policy": "disabled",
+          "elapsedSeconds": 32.872526199999996,
+          "maximumUpdateMilliseconds": 58.353299999999834,
+          "firstFlythroughP99Milliseconds": 40.516499999999844,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 2,
+          "policy": "all-at-once",
+          "elapsedSeconds": 33.598975599999996,
+          "maximumUpdateMilliseconds": 49.88290000000006,
+          "firstFlythroughP99Milliseconds": 37.70720000000027,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 3,
+          "policy": "observed-budget",
+          "elapsedSeconds": 33.631606999999995,
+          "maximumUpdateMilliseconds": 90.25620000000245,
+          "firstFlythroughP99Milliseconds": 37.87910000000005,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 4,
+          "policy": "scheduled",
+          "elapsedSeconds": 33.8167336,
+          "maximumUpdateMilliseconds": 50.1716000000001,
+          "firstFlythroughP99Milliseconds": 39.26639999999981,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 5,
+          "policy": "all-at-once",
+          "elapsedSeconds": 33.487255399999995,
+          "maximumUpdateMilliseconds": 46.43510000000006,
+          "firstFlythroughP99Milliseconds": 38.459100000000305,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 6,
+          "policy": "scheduled",
+          "elapsedSeconds": 32.9065531,
+          "maximumUpdateMilliseconds": 57.728399999999795,
+          "firstFlythroughP99Milliseconds": 39.90179999999999,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 7,
+          "policy": "disabled",
+          "elapsedSeconds": 30.0570468,
+          "maximumUpdateMilliseconds": 57.13429999999997,
+          "firstFlythroughP99Milliseconds": 41.849300000000426,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 8,
+          "policy": "observed-budget",
+          "elapsedSeconds": 32.7897412,
+          "maximumUpdateMilliseconds": 59.639100000000056,
+          "firstFlythroughP99Milliseconds": 39.53009999999946,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 9,
+          "policy": "scheduled",
+          "elapsedSeconds": 33.2591886,
+          "maximumUpdateMilliseconds": 49.10350000000019,
+          "firstFlythroughP99Milliseconds": 35.917299999999486,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 10,
+          "policy": "observed-budget",
+          "elapsedSeconds": 33.2852124,
+          "maximumUpdateMilliseconds": 45.78100000000029,
+          "firstFlythroughP99Milliseconds": 37.74440000000023,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 11,
+          "policy": "all-at-once",
+          "elapsedSeconds": 32.5287059,
+          "maximumUpdateMilliseconds": 50.2252000000003,
+          "firstFlythroughP99Milliseconds": 36.53160000000044,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 12,
+          "policy": "disabled",
+          "elapsedSeconds": 33.467317699999995,
+          "maximumUpdateMilliseconds": 46.28910000000008,
+          "firstFlythroughP99Milliseconds": 38.86880000000037,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 13,
+          "policy": "observed-budget",
+          "elapsedSeconds": 33.9158755,
+          "maximumUpdateMilliseconds": 49.238500000001295,
+          "firstFlythroughP99Milliseconds": 38.18910000000031,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 14,
+          "policy": "disabled",
+          "elapsedSeconds": 33.067948,
+          "maximumUpdateMilliseconds": 46.06280000000007,
+          "firstFlythroughP99Milliseconds": 36.32919999999995,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 15,
+          "policy": "scheduled",
+          "elapsedSeconds": 33.7158022,
+          "maximumUpdateMilliseconds": 56.372899999999944,
+          "firstFlythroughP99Milliseconds": 38.98699999999966,
+          "intervalsOver200Milliseconds": 0
+        },
+        {
+          "index": 16,
+          "policy": "all-at-once",
+          "elapsedSeconds": 33.2924724,
+          "maximumUpdateMilliseconds": 51.73720000000026,
+          "firstFlythroughP99Milliseconds": 38.26850000000004,
+          "intervalsOver200Milliseconds": 0
+        }
+      ]
+    }
+  ],
+  "scope": "Existing files and raw captured CPU intervals only. No new Player execution or performance test."
+}

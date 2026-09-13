@@ -14,6 +14,7 @@ TESTS = (
     "test_scheduling_schema",
     "test_warmup_evidence",
     "test_external_capture",
+    "test_urp_capture",
 )
 
 if __name__ == "__main__":

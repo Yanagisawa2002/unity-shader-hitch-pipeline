@@ -19,3 +19,6 @@
 
 # Captured evidence must retain the bytes whose SHA-256 was recorded.
 /Matrix/evidence/amd-r9700-system-probe-20260907/** -text -whitespace
+# Keep the reviewed plot and public point bundle byte-identical across checkouts.
+# Matplotlib SVG path data includes harmless trailing spaces.
+/Docs/Evidence/boat-attack-20260914/** -text -whitespace

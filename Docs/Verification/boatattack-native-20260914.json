@@ -1,0 +1,2648 @@
+{
+  "schemaVersion": 1,
+  "workload": "Official Boat Attack, declared native route/configuration repairs",
+  "upstreamCommit": "6d51b73619199c6dc8266045ea5c494355acf6b5",
+  "upstreamTree": "3dea6169e8c4799e781e64af9c91043670a5df52",
+  "baseCommit": "6218483755b40f6fd3742754b9e71c53b74d3bd4",
+  "rawEvidenceRoot": "work/actual-20260914-external-01",
+  "originalFiles": 1366,
+  "originalBytes": 983323082,
+  "lfsPayloadFiles": 183,
+  "lfsPayloadBytes": 946564614,
+  "sourceIndexSha256": "2ee15b34621b832e3e4f023d4a4ecbd81afdf3679ec4bcc14b8e85573b83978a",
+  "editor": "6000.1.0f1 (9ea152932a88)",
+  "editorSha256": "d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b",
+  "backend": "native-async-bulk",
+  "platform": "Windows x64 IL2CPP Development Player / D3D12 / 1920x1080 / High",
+  "gpu": "AMD Radeon AI PRO R9700",
+  "driverVersion": "32.0.31041.1004",
+  "driverIdentitySha256": "e97d5c545ccdc38bcfd39c4a0f53f6116f6a3fe55832479256d79e16bbc6985c",
+  "cache": "New processes with existing application/OS/driver caches retained; no driver-cold claim.",
+  "timings": "CPU Update intervals and render submissions, not GPU/presentation. All samples retained, nearest-rank percentiles.",
+  "diagnosticTimingsSha256": "4e637e5fda316a752432b7933720d3c869f3f55d1c98a2b1234faef5da320f12",
+  "continuousTraceAuditSha256": "58e79d470e5389275971186ef61a50eafb755063adf8f1969083df092ca04d56",
+  "renderGraphBackportDiffSha256": "3919576b71dce6808905e6ab4879c1201a01b2e61715a603896115911106219f",
+  "sourceRepairsDiffSha256": "082653d1429c09241d58a813d84b6a386711e620fcb31b5c1449798de5f882ff",
+  "comparisons": [
+    {
+      "evidenceSubdirectory": "boat-formal-01",
+      "protocolSha256": "ac9cf5c877e297a1b50b82e08c9e114afb43d68d1bed17eaeee9a7fea22af1f8",
+      "comparisonSummarySha256": "6d501adf2eec379a1f6bf75fd8dc71b21c13c5615ef1fbfeef392d9eec487850",
+      "buildGuid": "d03a7a0d35224c32be7aa887a3dc1cc6",
+      "playerFiles": 672,
+      "playerBytes": 1586187303,
+      "playerIndexSha256": "edf7e94d82523f3355e958e83a087010df13c02dfd4ef3be9b5e8aaf00d87a10",
+      "sourceInputIndexSha256": "5da957870d262631c94252e3e67898773cb8715a210f666d4aa221f2cda4f9cc",
+      "matchingSourceCheckpoint": "073f4d4be51c5714fa1b64389ac2eee70428a424",
+      "planFileSha256": "c7865757ce9dae10d6a8274c5bbc40004bf5801f475414863e1a43591777e8c4",
+      "planContentSha256": "ce08a7b8f39de607b6ee584a6ac59713b9c31d9856d29ee61f2c84e6fac4cce8",
+      "collections": [
+        {
+          "phase": "boat-flythrough",
+          "sha256": "cac76e9d62d786e74adc0ede33266bd786daf4753a8bca1c44577c63be98dda8",
+          "states": 83
+        },
+        {
+          "phase": "boat-loading",
+          "sha256": "75a4dd840b7a9d4b09fa576f178159ca8a81607c1b85d0ae566e22cff46f5d13",
+          "states": 6
+        },
+        {
+          "phase": "boat-static",
+          "sha256": "cb7be09a8ba19f588710d97a758d36d8895ffe70e6cc96cd060e6d29372558ef",
+          "states": 66
+        }
+      ],
+      "order": [
+        "disabled",
+        "all-at-once",
+        "observed-budget",
+        "scheduled",
+        "all-at-once",
+        "scheduled",
+        "disabled",
+        "observed-budget",
+        "scheduled",
+        "observed-budget",
+        "all-at-once",
+        "disabled",
+        "observed-budget",
+        "disabled",
+        "scheduled",
+        "all-at-once"
+      ],
+      "byArm": {
+        "disabled": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 33.150294599999995,
+          "medianFirstPassP95": 28.320149999999433,
+          "medianFirstPassP99": 35.29384999999996
+        },
+        "all-at-once": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 33.44524735,
+          "medianFirstPassP95": 27.86825000000004,
+          "medianFirstPassP99": 35.38054999999973
+        },
+        "scheduled": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 34.30421645,
+          "medianFirstPassP95": 27.6740000000002,
+          "medianFirstPassP99": 35.19415000000015
+        },
+        "observed-budget": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 33.5967031,
+          "medianFirstPassP95": 28.199450000000237,
+          "medianFirstPassP99": 34.60209999999986
+        }
+      },
+      "allProcessSamples": [
+        {
+          "index": 1,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "197b8d32a868767173eb87befb768225d8f5059082dac5832de125ef14e88960",
+          "elapsedSeconds": 32.2077536,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6403.7654999999995,
+            "p95Milliseconds": 27.804999999999858,
+            "p99Milliseconds": 35.4479999999997,
+            "maximumMilliseconds": 47.08870000000065,
+            "hitchCounts": {
+              "16.67": 230,
+              "33.33": 9,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 352.86239999999935,
+            "p95Milliseconds": 27.136999999999745,
+            "p99Milliseconds": 27.188299999998833,
+            "maximumMilliseconds": 27.188299999998833,
+            "hitchCounts": {
+              "16.67": 11,
+              "33.33": 0,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2387,
+            "sumMilliseconds": 27879.1445,
+            "p95Milliseconds": 27.468999999999966,
+            "p99Milliseconds": 34.173800000001364,
+            "maximumMilliseconds": 47.08870000000065,
+            "hitchCounts": {
+              "16.67": 981,
+              "33.33": 28,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250668027,
+          "peakReservedBytes": 393322496,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 2,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "5294cd4428bb348c0c4d49950f849882c9a74b78aed26bb681a3158923481bb8",
+          "elapsedSeconds": 32.865688399999996,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6839.0893,
+            "p95Milliseconds": 27.457899999999924,
+            "p99Milliseconds": 34.03229999999979,
+            "maximumMilliseconds": 584.3799999999994,
+            "hitchCounts": {
+              "16.67": 227,
+              "33.33": 6,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 923.6131999999984,
+            "p95Milliseconds": 26.51639999999844,
+            "p99Milliseconds": 584.435199999998,
+            "maximumMilliseconds": 584.435199999998,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2403,
+            "sumMilliseconds": 28507.880100000002,
+            "p95Milliseconds": 27.391200000000282,
+            "p99Milliseconds": 32.842099999999874,
+            "maximumMilliseconds": 584.435199999998,
+            "hitchCounts": {
+              "16.67": 967,
+              "33.33": 21,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 252406587,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.58899999999994,
+              "batchDurationsMilliseconds": [
+                44.013999999999214
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.55160000000069,
+              "batchDurationsMilliseconds": [
+                7.865499999999884
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 14.236100000001898,
+              "batchDurationsMilliseconds": [
+                13.734800000001997
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "5278ea2e123d88078c94de5a576302e1a10f4ea644e9e0a5960428a2857dd048",
+          "elapsedSeconds": 34.2556934,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6993.6344,
+            "p95Milliseconds": 28.56930000000002,
+            "p99Milliseconds": 34.73469999999956,
+            "maximumMilliseconds": 594.0529999999998,
+            "hitchCounts": {
+              "16.67": 227,
+              "33.33": 7,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 941.6031999999994,
+            "p95Milliseconds": 25.960399999998884,
+            "p99Milliseconds": 585.6341999999977,
+            "maximumMilliseconds": 585.6341999999977,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2389,
+            "sumMilliseconds": 28742.796299999998,
+            "p95Milliseconds": 27.869400000000155,
+            "p99Milliseconds": 32.99180000000135,
+            "maximumMilliseconds": 594.0529999999998,
+            "hitchCounts": {
+              "16.67": 954,
+              "33.33": 22,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253172198,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.890699999999924,
+              "batchDurationsMilliseconds": [
+                44.287499999999454
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.3791999999994,
+              "batchDurationsMilliseconds": [
+                7.380400000000009
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 13.426600000002509,
+              "batchDurationsMilliseconds": [
+                13.046800000000076
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "6ec70f259a750ff11deb5c7eeb39fef511bf5c7a234cbe06d102f774ae323e60",
+          "elapsedSeconds": 34.053753,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6833.956300000001,
+            "p95Milliseconds": 26.699800000000273,
+            "p99Milliseconds": 32.92629999999974,
+            "maximumMilliseconds": 586.3031000000003,
+            "hitchCounts": {
+              "16.67": 232,
+              "33.33": 5,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 956.650800000002,
+            "p95Milliseconds": 26.586399999999344,
+            "p99Milliseconds": 629.2878000000002,
+            "maximumMilliseconds": 629.2878000000002,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2385,
+            "sumMilliseconds": 28558.5458,
+            "p95Milliseconds": 26.907099999998962,
+            "p99Milliseconds": 31.997399999999843,
+            "maximumMilliseconds": 629.2878000000002,
+            "hitchCounts": {
+              "16.67": 942,
+              "33.33": 19,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253269617,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 45.77299999999923,
+              "batchDurationsMilliseconds": [
+                43.142800000000534
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 50.904099999999744,
+              "batchDurationsMilliseconds": [
+                7.084799999999632
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.97410000000309,
+              "batchDurationsMilliseconds": [
+                12.308899999999994
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "59a1bf7aa3c83d2e1f94f4f928050c55d8aaca9da0f90a19cc1aef14d0e67232",
+          "elapsedSeconds": 33.1224977,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6728.294,
+            "p95Milliseconds": 26.72320000000017,
+            "p99Milliseconds": 32.28450000000027,
+            "maximumMilliseconds": 583.2759000000003,
+            "hitchCounts": {
+              "16.67": 220,
+              "33.33": 5,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 931.019899999999,
+            "p95Milliseconds": 27.453300000001235,
+            "p99Milliseconds": 580.2626999999986,
+            "maximumMilliseconds": 580.2626999999986,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2400,
+            "sumMilliseconds": 28765.476700000003,
+            "p95Milliseconds": 27.82940000000167,
+            "p99Milliseconds": 33.02680000000002,
+            "maximumMilliseconds": 583.2759000000003,
+            "hitchCounts": {
+              "16.67": 965,
+              "33.33": 21,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 252279065,
+          "peakReservedBytes": 393322496,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 47.207799999999224,
+              "batchDurationsMilliseconds": [
+                44.6869999999999
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.612599999999475,
+              "batchDurationsMilliseconds": [
+                7.260200000000623
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 13.683899999999994,
+              "batchDurationsMilliseconds": [
+                13.295000000001892
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "ec1928248c1847ea251af453af88be78059b43f772a7a5e17977575bef4cfd49",
+          "elapsedSeconds": 33.0333725,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6973.8487000000005,
+            "p95Milliseconds": 27.92050000000046,
+            "p99Milliseconds": 36.85850000000013,
+            "maximumMilliseconds": 584.2966,
+            "hitchCounts": {
+              "16.67": 229,
+              "33.33": 11,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 918.248300000002,
+            "p95Milliseconds": 27.142300000001285,
+            "p99Milliseconds": 582.5393000000006,
+            "maximumMilliseconds": 582.5393000000006,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2386,
+            "sumMilliseconds": 28686.841299999996,
+            "p95Milliseconds": 27.62740000000008,
+            "p99Milliseconds": 34.18200000000038,
+            "maximumMilliseconds": 584.2966,
+            "hitchCounts": {
+              "16.67": 951,
+              "33.33": 30,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 252085643,
+          "peakReservedBytes": 393322496,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.524500000000444,
+              "batchDurationsMilliseconds": [
+                44.01339999999982
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.214200000001256,
+              "batchDurationsMilliseconds": [
+                7.568499999999403
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.538499999998749,
+              "batchDurationsMilliseconds": [
+                12.108100000001286
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "b4192e11a6c04efeeb691b33ac6f9e8825f812d386fcb81fa48b15b4782d92e5",
+          "elapsedSeconds": 31.5706459,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6187.6006,
+            "p95Milliseconds": 26.92899999999998,
+            "p99Milliseconds": 34.3517999999996,
+            "maximumMilliseconds": 44.59520000000072,
+            "hitchCounts": {
+              "16.67": 207,
+              "33.33": 6,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 324.9899000000021,
+            "p95Milliseconds": 24.289800000001804,
+            "p99Milliseconds": 26.657000000000153,
+            "maximumMilliseconds": 26.657000000000153,
+            "hitchCounts": {
+              "16.67": 11,
+              "33.33": 0,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2394,
+            "sumMilliseconds": 27213.2614,
+            "p95Milliseconds": 26.722599999999375,
+            "p99Milliseconds": 33.17750000000075,
+            "maximumMilliseconds": 44.59520000000072,
+            "hitchCounts": {
+              "16.67": 924,
+              "33.33": 23,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 252985905,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 8,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "b3b9948b06a032fddce0b6b2f2e4682921eae4c1d98763837384c8d7db0acb61",
+          "elapsedSeconds": 33.3430171,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6906.4886,
+            "p95Milliseconds": 27.43559999999956,
+            "p99Milliseconds": 36.099300000000056,
+            "maximumMilliseconds": 586.8897999999998,
+            "hitchCounts": {
+              "16.67": 231,
+              "33.33": 12,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 958.5195000000012,
+            "p95Milliseconds": 31.244199999999722,
+            "p99Milliseconds": 587.1680999999995,
+            "maximumMilliseconds": 587.1680999999995,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2392,
+            "sumMilliseconds": 29016.3602,
+            "p95Milliseconds": 27.57979999999982,
+            "p99Milliseconds": 34.4028999999999,
+            "maximumMilliseconds": 587.1680999999995,
+            "hitchCounts": {
+              "16.67": 1004,
+              "33.33": 31,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250955927,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 47.78319999999985,
+              "batchDurationsMilliseconds": [
+                45.19409999999971
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.99619999999959,
+              "batchDurationsMilliseconds": [
+                7.0768000000007305
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.45010000000184,
+              "batchDurationsMilliseconds": [
+                12.075099999998201
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "e92663a65d2ca255a578b684c195f293269c741f1bf29c178e3246e533ee8d06",
+          "elapsedSeconds": 34.5546799,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6857.205400000001,
+            "p95Milliseconds": 27.427499999999938,
+            "p99Milliseconds": 34.71560000000018,
+            "maximumMilliseconds": 591.6671999999999,
+            "hitchCounts": {
+              "16.67": 226,
+              "33.33": 8,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 941.3300999999983,
+            "p95Milliseconds": 28.08040000000034,
+            "p99Milliseconds": 595.0504000000017,
+            "maximumMilliseconds": 595.0504000000017,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2388,
+            "sumMilliseconds": 29022.752200000003,
+            "p95Milliseconds": 27.7926000000015,
+            "p99Milliseconds": 33.236499999999225,
+            "maximumMilliseconds": 595.0504000000017,
+            "hitchCounts": {
+              "16.67": 990,
+              "33.33": 23,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253048635,
+          "peakReservedBytes": 414294016,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.49250000000029,
+              "batchDurationsMilliseconds": [
+                43.97679999999946
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 51.731799999999566,
+              "batchDurationsMilliseconds": [
+                7.088700000001154
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 13.28859999999986,
+              "batchDurationsMilliseconds": [
+                12.889699999996083
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "8d217258dbeedff0d23ee74ef86120a3f77d37be7023c59687ed7a63aa2dac7c",
+          "elapsedSeconds": 33.195991,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6865.266299999999,
+            "p95Milliseconds": 27.829600000000454,
+            "p99Milliseconds": 34.46950000000015,
+            "maximumMilliseconds": 593.1547000000004,
+            "hitchCounts": {
+              "16.67": 222,
+              "33.33": 8,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 981.3048999999978,
+            "p95Milliseconds": 31.351799999999486,
+            "p99Milliseconds": 591.5312000000022,
+            "maximumMilliseconds": 591.5312000000022,
+            "hitchCounts": {
+              "16.67": 15,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2393,
+            "sumMilliseconds": 28855.2157,
+            "p95Milliseconds": 27.401199999999903,
+            "p99Milliseconds": 33.18379999999976,
+            "maximumMilliseconds": 593.1547000000004,
+            "hitchCounts": {
+              "16.67": 981,
+              "33.33": 23,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251048159,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.14080000000013,
+              "batchDurationsMilliseconds": [
+                43.59320000000025
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 51.83720000000085,
+              "batchDurationsMilliseconds": [
+                7.5374000000001615
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.203599999997095,
+              "batchDurationsMilliseconds": [
+                11.80489999999918
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "c53fabe4445d3b566175569b7a68c2a3c649a8a82a194a56a988873306d6f030",
+          "elapsedSeconds": 33.811538,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7018.9232,
+            "p95Milliseconds": 28.278600000000154,
+            "p99Milliseconds": 36.72879999999967,
+            "maximumMilliseconds": 585.5663,
+            "hitchCounts": {
+              "16.67": 230,
+              "33.33": 8,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 937.4769999999977,
+            "p95Milliseconds": 28.128399999999942,
+            "p99Milliseconds": 582.6796999999999,
+            "maximumMilliseconds": 582.6796999999999,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2390,
+            "sumMilliseconds": 29458.677699999997,
+            "p95Milliseconds": 28.193300000001642,
+            "p99Milliseconds": 33.74489999999852,
+            "maximumMilliseconds": 585.5663,
+            "hitchCounts": {
+              "16.67": 1013,
+              "33.33": 28,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253179607,
+          "peakReservedBytes": 414294016,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.42409999999927,
+              "batchDurationsMilliseconds": [
+                43.85860000000048
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.085399999999936,
+              "batchDurationsMilliseconds": [
+                7.538900000000467
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 13.276999999998225,
+              "batchDurationsMilliseconds": [
+                12.896600000000035
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "38d6f76264efbffd651dcd56e37dad8a17e2c9a55afa87b40381321a2921522f",
+          "elapsedSeconds": 34.2844183,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6815.288999999999,
+            "p95Milliseconds": 29.905199999999965,
+            "p99Milliseconds": 35.13970000000022,
+            "maximumMilliseconds": 43.98159999999951,
+            "hitchCounts": {
+              "16.67": 231,
+              "33.33": 9,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 355.51029999999884,
+            "p95Milliseconds": 28.801999999998884,
+            "p99Milliseconds": 29.813000000000756,
+            "maximumMilliseconds": 29.813000000000756,
+            "hitchCounts": {
+              "16.67": 12,
+              "33.33": 0,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2387,
+            "sumMilliseconds": 28763.1456,
+            "p95Milliseconds": 29.122600000000887,
+            "p99Milliseconds": 34.35900000000203,
+            "maximumMilliseconds": 43.98159999999951,
+            "hitchCounts": {
+              "16.67": 955,
+              "33.33": 31,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250848446,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 13,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "f64c68bbbfe003cb31bb31ba6068c62cb818fb533125d13236192647afb67ed1",
+          "elapsedSeconds": 33.8503891,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7222.8852,
+            "p95Milliseconds": 28.95599999999998,
+            "p99Milliseconds": 33.52619999999984,
+            "maximumMilliseconds": 590.9686,
+            "hitchCounts": {
+              "16.67": 238,
+              "33.33": 7,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 934.4254000000021,
+            "p95Milliseconds": 27.834699999999657,
+            "p99Milliseconds": 593.7471000000016,
+            "maximumMilliseconds": 593.7471000000016,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2377,
+            "sumMilliseconds": 29526.8949,
+            "p95Milliseconds": 28.833799999999243,
+            "p99Milliseconds": 34.74530000000087,
+            "maximumMilliseconds": 593.7471000000016,
+            "hitchCounts": {
+              "16.67": 987,
+              "33.33": 35,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250105255,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.29820000000018,
+              "batchDurationsMilliseconds": [
+                43.74569999999949
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 51.41620000000057,
+              "batchDurationsMilliseconds": [
+                6.9614999999994325
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.351299999998446,
+              "batchDurationsMilliseconds": [
+                11.936900000000605
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "34805c26763c43bcce5df1f3a6ee5bcdddbe077c5e575491d4344772455b9e76",
+          "elapsedSeconds": 34.0928356,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6640.3752,
+            "p95Milliseconds": 28.83529999999901,
+            "p99Milliseconds": 36.98409999999974,
+            "maximumMilliseconds": 45.60899999999979,
+            "hitchCounts": {
+              "16.67": 238,
+              "33.33": 10,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 360.6629999999989,
+            "p95Milliseconds": 28.824000000000183,
+            "p99Milliseconds": 30.579200000001805,
+            "maximumMilliseconds": 30.579200000001805,
+            "hitchCounts": {
+              "16.67": 11,
+              "33.33": 0,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2386,
+            "sumMilliseconds": 28546.0445,
+            "p95Milliseconds": 28.457500000000024,
+            "p99Milliseconds": 34.3391000000004,
+            "maximumMilliseconds": 45.60899999999979,
+            "hitchCounts": {
+              "16.67": 1012,
+              "33.33": 34,
+              "50": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 252142814,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 15,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "bb60dbbe99ae5676f726fb45d08e0c944ecc66021ef92ea27183ac54af829907",
+          "elapsedSeconds": 34.7141605,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6973.9344999999985,
+            "p95Milliseconds": 28.243999999999936,
+            "p99Milliseconds": 35.67270000000011,
+            "maximumMilliseconds": 581.8884999999998,
+            "hitchCounts": {
+              "16.67": 226,
+              "33.33": 11,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 962.2176000000024,
+            "p95Milliseconds": 30.241499999998922,
+            "p99Milliseconds": 584.4867000000029,
+            "maximumMilliseconds": 584.4867000000029,
+            "hitchCounts": {
+              "16.67": 15,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2386,
+            "sumMilliseconds": 29212.882599999994,
+            "p95Milliseconds": 28.33649999999821,
+            "p99Milliseconds": 34.150900000000206,
+            "maximumMilliseconds": 584.4867000000029,
+            "hitchCounts": {
+              "16.67": 955,
+              "33.33": 37,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250800532,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 46.445700000000215,
+              "batchDurationsMilliseconds": [
+                43.96680000000106
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 52.23859999999968,
+              "batchDurationsMilliseconds": [
+                7.6588999999994485
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.405400000003283,
+              "batchDurationsMilliseconds": [
+                11.95480000000316
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "244d9be0970eb91513320b65285e3f73ce8ead7367d513c83d5d5f63112fa595",
+          "elapsedSeconds": 33.767997,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7084.167799999999,
+            "p95Milliseconds": 29.282500000000766,
+            "p99Milliseconds": 36.78500000000007,
+            "maximumMilliseconds": 591.8264999999998,
+            "hitchCounts": {
+              "16.67": 221,
+              "33.33": 9,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 923.4126000000024,
+            "p95Milliseconds": 29.99150000000128,
+            "p99Milliseconds": 590.7268999999999,
+            "maximumMilliseconds": 590.7268999999999,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2385,
+            "sumMilliseconds": 29425.705899999997,
+            "p95Milliseconds": 28.28309999999945,
+            "p99Milliseconds": 33.83790000000175,
+            "maximumMilliseconds": 591.8264999999998,
+            "hitchCounts": {
+              "16.67": 994,
+              "33.33": 25,
+              "50": 2
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253169777,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 47.10769999999957,
+              "batchDurationsMilliseconds": [
+                44.569799999999304
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 53.7493000000004,
+              "batchDurationsMilliseconds": [
+                8.5007999999998
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.459000000002561,
+              "batchDurationsMilliseconds": [
+                12.063900000001013
+              ]
+            }
+          ]
+        }
+      ],
+      "playerUnchangedAfterRuns": true,
+      "originalRunnerAccepted": true,
+      "reverifiedSummaryFile": "comparison-summary-verified-02.json",
+      "reverifiedSummarySha256": "7485d29b93b1989ade1e65da1371784e1e92cab53b277e33fcf5e6ddd94ba929",
+      "reverificationScope": "Actual frozen Player/source file index, freeze hash, every native identity/content/policy gate and all published metrics rederived from original immutable captures, including total time and memory.",
+      "reverificationCompleted": true
+    },
+    {
+      "evidenceSubdirectory": "boat-formal-02",
+      "protocolSha256": "f48cf3b2c7f3e38153b6d27a0370acb6b7a4ceea05a4fcba3f53b40a3a9a6103",
+      "comparisonSummarySha256": "0ebb084b0386e4ee50f8ba3b217bd1f26f9dd1b45537807b84cea3d0e21dff1d",
+      "buildGuid": "253edbfc746f44d0b455794639595cfe",
+      "playerFiles": 672,
+      "playerBytes": 1586781503,
+      "playerIndexSha256": "22e929663ee53ed2a9dd524ceb4699a358de0fe7fce4e541f1daba78a8dcab59",
+      "sourceInputIndexSha256": "69ead26da87e431320a0bb318b1d11230263a718c4df77c75675621783e78046",
+      "matchingSourceCheckpoint": "fbe2d4813f7c980c0d9629606b7867001a5113b8",
+      "planFileSha256": "12621271de0ef8acb4e995369d2fb93b4adeace04062aa228e505051044c6258",
+      "planContentSha256": "7778257afbe816b6f9a5bbe28a40e84d7d0b7deffe2df770f3b93d6a3f24a250",
+      "collections": [
+        {
+          "phase": "boat-flythrough",
+          "sha256": "74acbb7062f863643eca7569274a806a401846d0f013758543015a553e245401",
+          "states": 83
+        },
+        {
+          "phase": "boat-loading",
+          "sha256": "75a4dd840b7a9d4b09fa576f178159ca8a81607c1b85d0ae566e22cff46f5d13",
+          "states": 6
+        },
+        {
+          "phase": "boat-static",
+          "sha256": "f89a6df2ab483ea2161281e3f8765e1e670d321d367496451e582ab1a8304839",
+          "states": 66
+        }
+      ],
+      "order": [
+        "disabled",
+        "all-at-once",
+        "observed-budget",
+        "scheduled",
+        "all-at-once",
+        "scheduled",
+        "disabled",
+        "observed-budget",
+        "scheduled",
+        "observed-budget",
+        "all-at-once",
+        "disabled",
+        "observed-budget",
+        "disabled",
+        "scheduled",
+        "all-at-once"
+      ],
+      "byArm": {
+        "disabled": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 32.9702371,
+          "medianFirstPassP95": 29.63685000000016,
+          "medianFirstPassP99": 39.69265000000011,
+          "maximumUpdateMilliseconds": 58.353299999999834,
+          "totalHitches": {
+            "16.67": 3925,
+            "33.33": 154,
+            "50": 4,
+            "200": 0,
+            "500": 0
+          }
+        },
+        "all-at-once": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 33.389863899999995,
+          "medianFirstPassP95": 30.01300000000029,
+          "medianFirstPassP99": 37.98785000000015,
+          "maximumUpdateMilliseconds": 51.73720000000026,
+          "totalHitches": {
+            "16.67": 4152,
+            "33.33": 181,
+            "50": 2,
+            "200": 0,
+            "500": 0
+          }
+        },
+        "scheduled": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 33.4874954,
+          "medianFirstPassP95": 29.929950000000094,
+          "medianFirstPassP99": 39.12669999999974,
+          "maximumUpdateMilliseconds": 57.728399999999795,
+          "totalHitches": {
+            "16.67": 4173,
+            "33.33": 171,
+            "50": 3,
+            "200": 0,
+            "500": 0
+          }
+        },
+        "observed-budget": {
+          "processes": 4,
+          "accepted": 4,
+          "medianElapsedSeconds": 33.4584097,
+          "medianFirstPassP95": 29.76224999999988,
+          "medianFirstPassP99": 38.03410000000018,
+          "maximumUpdateMilliseconds": 90.25620000000245,
+          "totalHitches": {
+            "16.67": 4207,
+            "33.33": 174,
+            "50": 2,
+            "200": 0,
+            "500": 0
+          }
+        }
+      },
+      "allProcessSamples": [
+        {
+          "index": 1,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "97eb3218be1644f185c68b48fe1e0ed18480535b7d40b717a21ac9aa7b5b0fe4",
+          "elapsedSeconds": 32.872526199999996,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6888.897799999999,
+            "p95Milliseconds": 29.819999999999958,
+            "p99Milliseconds": 40.516499999999844,
+            "maximumMilliseconds": 58.353299999999834,
+            "hitchCounts": {
+              "16.67": 245,
+              "33.33": 14,
+              "50": 2,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 340.36760000000044,
+            "p95Milliseconds": 26.997200000000277,
+            "p99Milliseconds": 28.42809999999929,
+            "maximumMilliseconds": 28.42809999999929,
+            "hitchCounts": {
+              "16.67": 12,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2394,
+            "sumMilliseconds": 29652.061499999996,
+            "p95Milliseconds": 29.410999999999632,
+            "p99Milliseconds": 35.86279999999942,
+            "maximumMilliseconds": 58.353299999999834,
+            "hitchCounts": {
+              "16.67": 1009,
+              "33.33": 45,
+              "50": 2,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253541144,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 2,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "6683574c3a8a95925e091c4a531d711446bf2194833ea31732e7429bfff6ec18",
+          "elapsedSeconds": 33.598975599999996,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7067.400699999999,
+            "p95Milliseconds": 29.15159999999961,
+            "p99Milliseconds": 37.70720000000027,
+            "maximumMilliseconds": 49.88290000000006,
+            "hitchCounts": {
+              "16.67": 251,
+              "33.33": 11,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 393.37640000000107,
+            "p95Milliseconds": 29.633599999996818,
+            "p99Milliseconds": 30.442000000000746,
+            "maximumMilliseconds": 30.442000000000746,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2386,
+            "sumMilliseconds": 30328.346799999996,
+            "p95Milliseconds": 29.890099999999364,
+            "p99Milliseconds": 36.293900000000434,
+            "maximumMilliseconds": 49.88290000000006,
+            "hitchCounts": {
+              "16.67": 1053,
+              "33.33": 53,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253871097,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 50.375600000000304,
+              "batchDurationsMilliseconds": [
+                47.72560000000021
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 56.97159999999985,
+              "batchDurationsMilliseconds": [
+                8.56899999999996
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.466400000001158,
+              "batchDurationsMilliseconds": [
+                12.079700000002049
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "c1167827eed90810205c6be9a2503df32191ff3e1f5275445cd2375dcb188bb7",
+          "elapsedSeconds": 33.631606999999995,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6950.8256999999985,
+            "p95Milliseconds": 29.76119999999982,
+            "p99Milliseconds": 37.87910000000005,
+            "maximumMilliseconds": 46.050099999999986,
+            "hitchCounts": {
+              "16.67": 243,
+              "33.33": 11,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 469.07510000000127,
+            "p95Milliseconds": 28.87229999999974,
+            "p99Milliseconds": 90.25620000000245,
+            "maximumMilliseconds": 90.25620000000245,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2400,
+            "sumMilliseconds": 30419.381799999996,
+            "p95Milliseconds": 30.13790000000327,
+            "p99Milliseconds": 37.32779999999991,
+            "maximumMilliseconds": 90.25620000000245,
+            "hitchCounts": {
+              "16.67": 1039,
+              "33.33": 53,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251363954,
+          "peakReservedBytes": 393322496,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 48.70719999999983,
+              "batchDurationsMilliseconds": [
+                45.95129999999972
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 55.756299999999555,
+              "batchDurationsMilliseconds": [
+                9.042199999999411
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.644200000002456,
+              "batchDurationsMilliseconds": [
+                12.235899999999674
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "cce4a803ce255ac1513f5a1b0ad71365cf84fdc67db92eedc005fec0ac66e1f3",
+          "elapsedSeconds": 33.8167336,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7083.5387,
+            "p95Milliseconds": 29.833400000000232,
+            "p99Milliseconds": 39.26639999999981,
+            "maximumMilliseconds": 50.1716000000001,
+            "hitchCounts": {
+              "16.67": 244,
+              "33.33": 11,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 384.3141999999986,
+            "p95Milliseconds": 27.822600000000364,
+            "p99Milliseconds": 29.92659999999958,
+            "maximumMilliseconds": 29.92659999999958,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2391,
+            "sumMilliseconds": 30573.0498,
+            "p95Milliseconds": 30.183499999999697,
+            "p99Milliseconds": 36.775699999999745,
+            "maximumMilliseconds": 50.1716000000001,
+            "hitchCounts": {
+              "16.67": 1041,
+              "33.33": 45,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253642902,
+          "peakReservedBytes": 414294016,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 51.26729999999998,
+              "batchDurationsMilliseconds": [
+                48.721499999999196
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 59.15729999999985,
+              "batchDurationsMilliseconds": [
+                9.772300000000541
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.894899999999325,
+              "batchDurationsMilliseconds": [
+                12.472799999999552
+              ]
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "67997be0aed0beb92f35f31b19d0e2ceb38ac51d1bb1434af04f03c3e2c4a829",
+          "elapsedSeconds": 33.487255399999995,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7022.2869,
+            "p95Milliseconds": 30.313500000000104,
+            "p99Milliseconds": 38.459100000000305,
+            "maximumMilliseconds": 46.43510000000006,
+            "hitchCounts": {
+              "16.67": 248,
+              "33.33": 12,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 402.61250000000007,
+            "p95Milliseconds": 31.2593000000021,
+            "p99Milliseconds": 41.02130000000059,
+            "maximumMilliseconds": 41.02130000000059,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2392,
+            "sumMilliseconds": 30240.557699999998,
+            "p95Milliseconds": 30.22129999999912,
+            "p99Milliseconds": 35.884299999999314,
+            "maximumMilliseconds": 46.43510000000006,
+            "hitchCounts": {
+              "16.67": 1028,
+              "33.33": 53,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251763607,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 48.98979999999983,
+              "batchDurationsMilliseconds": [
+                46.39559999999983
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 55.17309999999952,
+              "batchDurationsMilliseconds": [
+                8.095000000000255
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 13.356100000000879,
+              "batchDurationsMilliseconds": [
+                12.892000000003463
+              ]
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "4b1a828e5d060aea3fa20f591bfd4b6a4bbe83f457015042162c27867956bfba",
+          "elapsedSeconds": 32.9065531,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6871.6864000000005,
+            "p95Milliseconds": 30.05879999999994,
+            "p99Milliseconds": 39.90179999999999,
+            "maximumMilliseconds": 57.728399999999795,
+            "hitchCounts": {
+              "16.67": 243,
+              "33.33": 14,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 414.0798000000032,
+            "p95Milliseconds": 34.14599999999979,
+            "p99Milliseconds": 36.405200000000804,
+            "maximumMilliseconds": 36.405200000000804,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 2,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2401,
+            "sumMilliseconds": 29693.356899999995,
+            "p95Milliseconds": 29.714899999998323,
+            "p99Milliseconds": 36.4032000000023,
+            "maximumMilliseconds": 57.728399999999795,
+            "hitchCounts": {
+              "16.67": 1043,
+              "33.33": 42,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251035110,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 60.33109999999988,
+              "batchDurationsMilliseconds": [
+                57.6869999999999
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 68.65220000000045,
+              "batchDurationsMilliseconds": [
+                10.280100000000402
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.963499999998021,
+              "batchDurationsMilliseconds": [
+                12.51640000000043
+              ]
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "91217227b9b0b0498b9af956df58551ed7d2a6d6f9bfbf72caeac2b7f3248ad2",
+          "elapsedSeconds": 30.0570468,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6166.120499999999,
+            "p95Milliseconds": 25.932499999999692,
+            "p99Milliseconds": 41.849300000000426,
+            "maximumMilliseconds": 57.13429999999997,
+            "hitchCounts": {
+              "16.67": 208,
+              "33.33": 10,
+              "50": 2,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 347.6402999999983,
+            "p95Milliseconds": 28.374799999998146,
+            "p99Milliseconds": 40.11109999999718,
+            "maximumMilliseconds": 40.11109999999718,
+            "hitchCounts": {
+              "16.67": 12,
+              "33.33": 1,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2402,
+            "sumMilliseconds": 26809.5663,
+            "p95Milliseconds": 27.001999999999526,
+            "p99Milliseconds": 34.78099999999884,
+            "maximumMilliseconds": 57.13429999999997,
+            "hitchCounts": {
+              "16.67": 850,
+              "33.33": 28,
+              "50": 2,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250987816,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 8,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "f9548bf64bf7f997a003d19701c3e846876807a6b3ef17a2f5320cf8e8e3daa0",
+          "elapsedSeconds": 32.7897412,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6740.805599999999,
+            "p95Milliseconds": 29.352900000000126,
+            "p99Milliseconds": 39.53009999999946,
+            "maximumMilliseconds": 59.639100000000056,
+            "hitchCounts": {
+              "16.67": 238,
+              "33.33": 13,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 407.5981000000013,
+            "p95Milliseconds": 30.019299999999305,
+            "p99Milliseconds": 33.868900000001645,
+            "maximumMilliseconds": 33.868900000001645,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 1,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2396,
+            "sumMilliseconds": 29583.8023,
+            "p95Milliseconds": 29.325000000000045,
+            "p99Milliseconds": 35.93380000000046,
+            "maximumMilliseconds": 59.639100000000056,
+            "hitchCounts": {
+              "16.67": 1048,
+              "33.33": 39,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251171754,
+          "peakReservedBytes": 393322496,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 62.330999999999676,
+              "batchDurationsMilliseconds": [
+                59.52779999999984
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 70.05179999999973,
+              "batchDurationsMilliseconds": [
+                9.744700000000194
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.991300000001502,
+              "batchDurationsMilliseconds": [
+                12.584399999999732
+              ]
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "9586a883660d66e368109dd5823bb33419fdd9faeb538545c53bd1a8e2733059",
+          "elapsedSeconds": 33.2591886,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6694.1002,
+            "p95Milliseconds": 28.625700000000087,
+            "p99Milliseconds": 35.917299999999486,
+            "maximumMilliseconds": 49.10350000000019,
+            "hitchCounts": {
+              "16.67": 237,
+              "33.33": 11,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 403.70109999999926,
+            "p95Milliseconds": 29.126099999999155,
+            "p99Milliseconds": 29.129300000001024,
+            "maximumMilliseconds": 29.129300000001024,
+            "hitchCounts": {
+              "16.67": 12,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2405,
+            "sumMilliseconds": 30026.3244,
+            "p95Milliseconds": 29.1017999999994,
+            "p99Milliseconds": 35.917299999999486,
+            "maximumMilliseconds": 49.10350000000019,
+            "hitchCounts": {
+              "16.67": 1054,
+              "33.33": 41,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251793512,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 51.79790000000003,
+              "batchDurationsMilliseconds": [
+                49.0635999999995
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 58.04269999999997,
+              "batchDurationsMilliseconds": [
+                8.285599999999704
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.48569999999745,
+              "batchDurationsMilliseconds": [
+                12.08179999999993
+              ]
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "b6d4a3eaade079512806b587e4af2a8dcc8fe1db16bcc4db16469b28b205875a",
+          "elapsedSeconds": 33.2852124,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6854.2049,
+            "p95Milliseconds": 29.763299999999937,
+            "p99Milliseconds": 37.74440000000023,
+            "maximumMilliseconds": 45.78100000000029,
+            "hitchCounts": {
+              "16.67": 247,
+              "33.33": 14,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 412.38429999999937,
+            "p95Milliseconds": 31.036699999997808,
+            "p99Milliseconds": 33.13930000000198,
+            "maximumMilliseconds": 33.13930000000198,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2385,
+            "sumMilliseconds": 30033.7662,
+            "p95Milliseconds": 29.877900000002455,
+            "p99Milliseconds": 34.95440000000016,
+            "maximumMilliseconds": 45.78100000000029,
+            "hitchCounts": {
+              "16.67": 1057,
+              "33.33": 38,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250788993,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 48.34649999999965,
+              "batchDurationsMilliseconds": [
+                45.704299999999876
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 54.37890000000016,
+              "batchDurationsMilliseconds": [
+                7.930299999999988
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.214200000002165,
+              "batchDurationsMilliseconds": [
+                11.807400000005146
+              ]
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "84768bf8d9e3b2e2ab77ef37e985dadf17b895909dd44997812b1b5f0195ac5d",
+          "elapsedSeconds": 32.5287059,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6723.750099999999,
+            "p95Milliseconds": 29.712500000000475,
+            "p99Milliseconds": 36.53160000000044,
+            "maximumMilliseconds": 50.2252000000003,
+            "hitchCounts": {
+              "16.67": 238,
+              "33.33": 9,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 360.4549000000006,
+            "p95Milliseconds": 28.075799999999873,
+            "p99Milliseconds": 30.057299999999287,
+            "maximumMilliseconds": 30.057299999999287,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2383,
+            "sumMilliseconds": 29334.803299999996,
+            "p95Milliseconds": 29.3888000000031,
+            "p99Milliseconds": 34.020800000000406,
+            "maximumMilliseconds": 50.2252000000003,
+            "hitchCounts": {
+              "16.67": 1032,
+              "33.33": 30,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253367105,
+          "peakReservedBytes": 410099712,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 48.670900000000074,
+              "batchDurationsMilliseconds": [
+                46.17360000000053
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 54.547799999999825,
+              "batchDurationsMilliseconds": [
+                7.74730000000045
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.77100000000064,
+              "batchDurationsMilliseconds": [
+                12.393700000000536
+              ]
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "cbf0bde4ebb700423f17f64c7d7553955a54e157c8bfe0b1a427d9abaa5d17cd",
+          "elapsedSeconds": 33.467317699999995,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6945.576499999999,
+            "p95Milliseconds": 29.59669999999992,
+            "p99Milliseconds": 38.86880000000037,
+            "maximumMilliseconds": 46.28910000000008,
+            "hitchCounts": {
+              "16.67": 230,
+              "33.33": 13,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 386.90649999999846,
+            "p95Milliseconds": 30.443199999997006,
+            "p99Milliseconds": 30.64600000000084,
+            "maximumMilliseconds": 30.64600000000084,
+            "hitchCounts": {
+              "16.67": 12,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2384,
+            "sumMilliseconds": 30227.453,
+            "p95Milliseconds": 29.867599999999328,
+            "p99Milliseconds": 36.05930000000157,
+            "maximumMilliseconds": 46.28910000000008,
+            "hitchCounts": {
+              "16.67": 1038,
+              "33.33": 45,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 250630413,
+          "peakReservedBytes": 393322496,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 13,
+          "policy": "observed-budget",
+          "accepted": true,
+          "validationSha256": "298355e21fd1a7c7a588ad83003b47e5873d2ac544c8c5f8e309cc287852226d",
+          "elapsedSeconds": 33.9158755,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7078.9076,
+            "p95Milliseconds": 30.230800000000002,
+            "p99Milliseconds": 38.18910000000031,
+            "maximumMilliseconds": 43.574800000000025,
+            "hitchCounts": {
+              "16.67": 249,
+              "33.33": 14,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 448.6170999999999,
+            "p95Milliseconds": 31.21360000000095,
+            "p99Milliseconds": 35.60560000000024,
+            "maximumMilliseconds": 35.60560000000024,
+            "hitchCounts": {
+              "16.67": 16,
+              "33.33": 1,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2391,
+            "sumMilliseconds": 30644.4865,
+            "p95Milliseconds": 29.900599999997723,
+            "p99Milliseconds": 37.08070000000063,
+            "maximumMilliseconds": 49.238500000001295,
+            "hitchCounts": {
+              "16.67": 1063,
+              "33.33": 44,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 251265186,
+          "peakReservedBytes": 397516800,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 45.8413000000005,
+              "batchDurationsMilliseconds": [
+                43.17089999999962
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 51.47740000000067,
+              "batchDurationsMilliseconds": [
+                7.57549999999992
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 13.021600000000035,
+              "batchDurationsMilliseconds": [
+                12.556400000001304
+              ]
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "policy": "disabled",
+          "accepted": true,
+          "validationSha256": "7b6978d263ff97b4339f22ed2b4319e7406402d3bc73a020f1c2864079950485",
+          "elapsedSeconds": 33.067948,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 7052.5244999999995,
+            "p95Milliseconds": 29.677000000000398,
+            "p99Milliseconds": 36.32919999999995,
+            "maximumMilliseconds": 46.06280000000007,
+            "hitchCounts": {
+              "16.67": 251,
+              "33.33": 11,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 352.73879999999735,
+            "p95Milliseconds": 27.145199999999647,
+            "p99Milliseconds": 27.749899999999883,
+            "maximumMilliseconds": 27.749899999999883,
+            "hitchCounts": {
+              "16.67": 12,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2404,
+            "sumMilliseconds": 29798.596700000002,
+            "p95Milliseconds": 29.209800000000286,
+            "p99Milliseconds": 34.69990000000011,
+            "maximumMilliseconds": 46.06280000000007,
+            "hitchCounts": {
+              "16.67": 1028,
+              "33.33": 36,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253471687,
+          "peakReservedBytes": 414294016,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": []
+        },
+        {
+          "index": 15,
+          "policy": "scheduled",
+          "accepted": true,
+          "validationSha256": "af2fac4380858f9bff3e602d6ddc475e9c80c6fc867aacc1b5f176f1abed18e5",
+          "elapsedSeconds": 33.7158022,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6990.476499999999,
+            "p95Milliseconds": 30.026499999999956,
+            "p99Milliseconds": 38.98699999999966,
+            "maximumMilliseconds": 56.372899999999944,
+            "hitchCounts": {
+              "16.67": 241,
+              "33.33": 12,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 402.00249999999824,
+            "p95Milliseconds": 29.607700000003234,
+            "p99Milliseconds": 31.14930000000271,
+            "maximumMilliseconds": 31.14930000000271,
+            "hitchCounts": {
+              "16.67": 13,
+              "33.33": 0,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2390,
+            "sumMilliseconds": 30525.024,
+            "p95Milliseconds": 29.684999999997075,
+            "p99Milliseconds": 35.79350000000048,
+            "maximumMilliseconds": 56.372899999999944,
+            "hitchCounts": {
+              "16.67": 1035,
+              "33.33": 43,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 253898090,
+          "peakReservedBytes": 414294016,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 50.75790000000006,
+              "batchDurationsMilliseconds": [
+                48.20859999999948
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 57.81230000000005,
+              "batchDurationsMilliseconds": [
+                8.952099999999518
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.511399999999412,
+              "batchDurationsMilliseconds": [
+                12.032999999999447
+              ]
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "policy": "all-at-once",
+          "accepted": true,
+          "validationSha256": "3994235da97d2ae66a3b542152831e52c89e9bf0d03d991500573a478c7fd46d",
+          "elapsedSeconds": 33.2924724,
+          "firstPass": {
+            "count": 500,
+            "sumMilliseconds": 6990.1539999999995,
+            "p95Milliseconds": 30.454699999999946,
+            "p99Milliseconds": 38.26850000000004,
+            "maximumMilliseconds": 51.73720000000026,
+            "hitchCounts": {
+              "16.67": 243,
+              "33.33": 13,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "firstStaticPass": {
+            "count": 25,
+            "sumMilliseconds": 431.5519000000023,
+            "p95Milliseconds": 31.791300000001854,
+            "p99Milliseconds": 35.06529999999941,
+            "maximumMilliseconds": 35.06529999999941,
+            "hitchCounts": {
+              "16.67": 15,
+              "33.33": 1,
+              "50": 0,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "allUpdates": {
+            "count": 2391,
+            "sumMilliseconds": 30059.073200000003,
+            "p95Milliseconds": 29.635799999999435,
+            "p99Milliseconds": 35.46529999999848,
+            "maximumMilliseconds": 51.73720000000026,
+            "hitchCounts": {
+              "16.67": 1039,
+              "33.33": 45,
+              "50": 1,
+              "200": 0,
+              "500": 0
+            },
+            "percentileDefinition": "nearest rank; no trimming"
+          },
+          "peakAllocatedBytes": 252943446,
+          "peakReservedBytes": 414294016,
+          "failures": [],
+          "nativeTraceEntryGrowth": 94,
+          "warmupPhases": [
+            {
+              "phase": "boat-loading",
+              "states": 6,
+              "total": 6,
+              "milliseconds": 51.621399999999994,
+              "batchDurationsMilliseconds": [
+                48.853599999999915
+              ]
+            },
+            {
+              "phase": "boat-flythrough",
+              "states": 83,
+              "total": 83,
+              "milliseconds": 58.0041999999994,
+              "batchDurationsMilliseconds": [
+                8.419600000000628
+              ]
+            },
+            {
+              "phase": "boat-static",
+              "states": 66,
+              "total": 66,
+              "milliseconds": 12.71979999999894,
+              "batchDurationsMilliseconds": [
+                12.267400000000634
+              ]
+            }
+          ]
+        }
+      ],
+      "playerUnchangedAfterRuns": true,
+      "originalRunnerAccepted": true,
+      "reverifiedSummaryFile": "comparison-summary-verified-02.json",
+      "reverifiedSummarySha256": "3246b86305cdaee0c73a20ac29b7e7209dd5d0ef4817a4b44928865e5dd186ab",
+      "reverificationScope": "Actual frozen Player/source file index, freeze hash, every native identity/content/policy gate and all published metrics rederived from original immutable captures, including total time and memory.",
+      "reverificationCompleted": true
+    }
+  ],
+  "usefulFirstDrawCoverageVerified": false,
+  "schedulingGainEstablished": false,
+  "defaultPromoted": false,
+  "unavailableArms": [
+    "fixed-progressive: not selected/validated by the pinned native bulk backend"
+  ],
+  "limitations": [
+    "Before/after sequences have different identified Player/plan inputs and are not pooled as one unchanged cell.",
+    "Rare completion hitches were caused by verified receipt-path driver rehashing; fixed overhead does not establish scheduler gains.",
+    "Native seeded trace entry growth is not proven compilation misses or useful coverage.",
+    "Original benchmark HUD text overlaps; independent raw samples/camera/render events are used.",
+    "Raw third-party assets, Players, caches and private machine logs are retained locally, excluded from Git."
+  ],
+  "cpuReportedName": "AMD Ryzen 9 9950X 16-Core Processor",
+  "runtimeProcessorCount": 8,
+  "cpuContextLimit": "Runtime SystemInfo.processorCount=8 across both cohorts. No formal command worker/affinity override; reason unestablished. Not a claimed full 32-logical-processor measurement."
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "official-template-scene-workload",
+  "package": "com.unity.template.urp-sample",
+  "version": "17.1.5",
+  "archiveUrl": "https://download.packages.unity.com/com.unity.template.urp-sample/-/com.unity.template.urp-sample-17.1.5.tgz",
+  "archiveBytes": 924710979,
+  "archiveSha256": "c2a2bcbd8bac1340be683b33ca53e1fddc78c2ae80fa3a0b5406bd616df6628f",
+  "registrySha1": "cbf518aa0f1d9f0d4eb93d94c33a6cb4bf4fe43b",
+  "declaredUnity": "6000.0",
+  "projectVersionIncluded": false,
+  "selectedEditor": "6000.1.0f1",
+  "license": "Unity Companion License; original archive notice retained",
+  "files": [
+    {
+      "path": "package/ProjectData~/ProjectSettings/EditorBuildSettings.asset",
+      "bytes": 1259,
+      "sha256": "ff587fc4e9edc467c0259ce56c7929f31e0eacccc5d27cace583386a2649d1a4"
+    },
+    {
+      "path": "package/ProjectData~/ProjectSettings/QualitySettings.asset",
+      "bytes": 7211,
+      "sha256": "3bb358020f4954bcb6d222eb10b2f833de2fa36670422ee93370ca1e62e359c0"
+    },
+    {
+      "path": "package/ProjectData~/Assets/SharedAssets/Benchmark/PerformanceTest.cs",
+      "bytes": 11384,
+      "sha256": "99be8183185334072c27096d68d94044e94c8c20280d3bdcaa231cc2307f3bde"
+    },
+    {
+      "path": "package/ProjectData~/Assets/SharedAssets/Benchmark/PerformanceTestStage.cs",
+      "bytes": 20172,
+      "sha256": "93fd071fe17380219e82e1c5cb926444ce57c2812e7f6b000b491b855ce6928c"
+    },
+    {
+      "path": "package/ProjectData~/Packages/manifest.json",
+      "bytes": 2000,
+      "sha256": "f91f1f358559f4b040cf94d31d7e496727c8f9f1121ec7154e8031a5fac7a5ef"
+    },
+    {
+      "path": "package/LICENSE.md",
+      "bytes": 488,
+      "sha256": "8734d46ad06bcf24a40865a2a6d9ef2fda451210296f9298194631eff79e4b34"
+    },
+    {
+      "path": "package/ProjectData~/Assets/SharedAssets/Prefabs/Benchmark_Prefab.prefab",
+      "bytes": 6765,
+      "sha256": "4894ec0badb572b46a1d0b0b6a7e3ca0d787402370e7805428dadb2cc6f1bd28"
+    },
+    {
+      "path": "package/ProjectData~/Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+      "bytes": 6285,
+      "sha256": "4a84da358fd4ad8d6326a9759a8e650a92c38ad83f38fa7e74282f1a9d9382da"
+    },
+    {
+      "path": "package/ProjectData~/Packages/com.unity.render-pipelines.universal-config/LICENSE.md",
+      "bytes": 503,
+      "sha256": "fa2dcbc8ff967f49342c6c61854909ba4bbcc70b27f07d25538b8eaf7be5be3c"
+    }
+  ]
+}

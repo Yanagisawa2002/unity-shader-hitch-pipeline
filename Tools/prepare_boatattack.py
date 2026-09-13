@@ -46,6 +46,9 @@ def main():
     destination = host / "Assets/PsoBoatAttackAdapter"
     if destination.exists():
         raise ValueError("Adapter destination already exists")
+    configuration = host / "ProjectSettings/ShaderHitchPipeline.json"
+    if configuration.exists():
+        raise ValueError("An upstream project configuration already exists; review it before adapting")
     verified, _ = inspect(host, LOCK)
     receipt.mkdir(parents=True)
     originals = []
@@ -68,6 +71,7 @@ def main():
         raise ValueError("The local package dependency does not resolve to this repository")
     manifest["dependencies"]["com.yanagisawa.shader-hitch-pipeline"] = "file:" + relative_package
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    shutil.copy2(ROOT / "Integrations/BoatAttack/ShaderHitchPipeline.json", configuration)
     adapter = ROOT / "Integrations/BoatAttack/Adapter"
     shutil.copytree(adapter, destination)
     common = ROOT / "Integrations/ExternalScenes/Adapter"
@@ -85,6 +89,7 @@ def main():
          upstreamCommit=COMMIT, upstreamTree=TREE, integrationCommit=git(ROOT, "rev-parse", "HEAD").decode().strip(),
          originalManifestSha256=hashlib.sha256(original).hexdigest(), manifestSha256=sha(manifest_path),
          originalDependencyCount=len(json.loads(original)["dependencies"]),
+         projectConfigurationSha256=sha(configuration),
          newDependencies=["com.yanagisawa.shader-hitch-pipeline"], adapterFiles=applied,
          packageIndexSha256=sha(receipt / "package-files.json"), checkoutIsPristineAfterOverlay=False))
     print(json.dumps(verified, indent=2))

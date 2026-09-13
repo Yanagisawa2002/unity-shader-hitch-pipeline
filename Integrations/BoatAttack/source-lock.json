@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "external-application-scene",
+  "repository": "https://github.com/Unity-Technologies/BoatAttack.git",
+  "commit": "6d51b73619199c6dc8266045ea5c494355acf6b5",
+  "tree": "3dea6169e8c4799e781e64af9c91043670a5df52",
+  "unityVersion": "6000.1.0f1",
+  "license": {
+    "name": "Unity Companion License",
+    "noticePath": "LICENSE.md",
+    "noticeUrl": "https://github.com/Unity-Technologies/BoatAttack/blob/6d51b73619199c6dc8266045ea5c494355acf6b5/LICENSE.md"
+  },
+  "files": [
+    {
+      "path": "Assets/Objects/misc/[benchmark].prefab",
+      "bytes": 1517,
+      "sha256": "8229954097ac3b01de26053a68845c233cbb104e00c2f7302ccb6b334120cb16"
+    },
+    {
+      "path": "Assets/Resources/BenchmarkSettings.asset",
+      "bytes": 979,
+      "sha256": "c86466bfb361236e1f46b9b24938e655da84c84882cfc3a7599f202c0309fd17"
+    },
+    {
+      "path": "Assets/scenes/Testing/benchmark_island-flythrough.unity",
+      "bytes": 82568,
+      "sha256": "ac45b76d0b6359e8066e472dc89758bd84a68bba9cd3bbd4a182cda27e0692bb"
+    },
+    {
+      "path": "Assets/scenes/Testing/benchmark_island-static.unity",
+      "bytes": 72925,
+      "sha256": "81400dcf10a7ab24321b3b3874658979c4af439cbef887eb25e1b44ae85ce1ae"
+    },
+    {
+      "path": "Assets/scenes/benchmark/loader.unity",
+      "bytes": 6213,
+      "sha256": "1a01495cb44817a968752d50217ed931a55b690c84d23883d8fcca0abbca4424"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 472,
+      "sha256": "afdf72c9db000993090eda9f2e53f3b7ff768b57e03080ee3e8b298ea1d3974d"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "bytes": 2170,
+      "sha256": "f4acbd00fc841cd92233055d62664328d6ef29ea49db4a0880cb8e431f4fd021"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "bytes": 83,
+      "sha256": "1a47686c7a9ac92eae6b23cf3358d1329fbbe8237051ed631faf6e15a945402a"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4504,
+      "sha256": "1f550d4b9803a5612dab9c23abbc45f13a37a3d7cc26a628fffd7d28385fc3f4"
+    }
+  ]
+}

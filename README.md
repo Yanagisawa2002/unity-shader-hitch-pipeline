@@ -1,6 +1,7 @@
 # Shader Hitch Pipeline
 
-Current code and validation boundary: [2026-09-13 fixes and reproduction](Docs/REVIEW_FIXES_20260913.md). Historical measurements below retain their original conditions.
+Current external evidence: [official Boat Attack, native repairs and comparisons](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md).
+The [September 13 fixes](Docs/REVIEW_FIXES_20260913.md) and historical measurements retain their original conditions.
 
 **Schedule graphics-state warmup around content loading, with explicit coverage and lifecycle contracts.**
 
@@ -17,7 +18,10 @@ driver perform shader compilation and pipeline creation.
 The working package is **0.3.0, unreleased**. The September 8 integration preserves
 the existing vNext production and streaming implementation and adds a faithful
 external scene adapter, lifecycle fixes, explicit policy alternatives, and CPU-only
-PR checks. **All new policies and integration changes are Unmeasured.** The existing
+PR checks. Boat Attack now has native content/training/plan validation and two
+separately frozen four-arm comparisons. A repeated driver-attestation completion
+stall was diagnosed and repaired; **no scheduling gain or useful-coverage improvement
+is established**. Other workloads retain their individual validation boundaries. The existing
 `scheduled` policy remains the default; `observed-budget` and `fixed-progressive`
 require explicit selection.
 
@@ -41,7 +45,18 @@ inconclusive hotset result, an unequal-work capture pair, and the original measu
 source/build identities. Neither those outcomes nor the outlier are claimed to be
 fixed by unmeasured code changes.
 
-## External workload
+## External workloads
+
+[Official Boat Attack](Integrations/BoatAttack/README.md) uses the original full
+flythrough and static benchmark routes, with declared correctness repairs and
+first-load capture. Sixteen post-repair processes completed; the earlier negative
+16-process sequence and all failed attempts remain recorded. This demonstrates
+a concrete runtime-overhead fix, not a general PSO score or a policy promotion.
+
+[Official URP 3D Sample source](Integrations/Urp3DSample/source-lock.json) pins
+template 17.1.5 and its Terminal, Garden, Oasis and Cockpit scenes. Its own original
+BenchmarkScene supplies the automatic scene/timeline route. Acceptance is tracked
+independently from Boat Attack and Megacity.
 
 [Megacity Metro native scene integration](Integrations/MegacityMetroNative/README.md)
 pins Unity's official application at `07652ee74a1f322c2c3e607020f07be720175680`.
