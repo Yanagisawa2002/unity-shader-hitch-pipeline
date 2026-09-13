@@ -21,12 +21,19 @@ namespace Yanagisawa.ShaderHitchPipeline.DeadlineRun.Editor
         private const string CacheBusterArgument = "-pso-scenario-cache-buster";
         private const string CacheBusterDefine = "#define DEADLINE_RUN_CACHE_BUSTER 0u";
 
+        [MenuItem("Tools/Shader Hitch Pipeline/Build Deadline Run Training Player (First Run)")]
+        public static void BuildTrainingPlayer()
+        {
+            using (new PipelineEditor.PsoTrainingBuildScope())
+                BuildWindowsPlayer();
+        }
+
         [MenuItem("Tools/Shader Hitch Pipeline/Build Deadline Run")]
         public static void BuildWindowsPlayer()
         {
             string scene = CreateScene();
             ConfigureWindowsD3D12();
-            bool trainingBuild = PsoCommandLine.Current.HasFlag(
+            bool trainingBuild = PipelineEditor.PsoTrainingBuildScope.IsActive || PsoCommandLine.Current.HasFlag(
                 PsoConstants.TrainingBuildArgument);
 
             string defaultOutput = Path.GetFullPath("Builds/Windows/DeadlineRun.exe");

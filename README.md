@@ -1,5 +1,7 @@
 # Shader Hitch Pipeline
 
+Current code and validation boundary: [2026-09-13 fixes and reproduction](Docs/REVIEW_FIXES_20260913.md). Historical measurements below retain their original conditions.
+
 **Schedule graphics-state warmup around content loading, with explicit coverage and lifecycle contracts.**
 
 The engineering goal is to control loading-time pressure while retaining total

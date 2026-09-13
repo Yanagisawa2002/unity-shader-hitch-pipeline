@@ -17,7 +17,7 @@ try {
     & (Join-Path $PSScriptRoot 'tests/Test-PsoProcessOwnership.ps1')
     & $Python Tools/run_cpu_validation.py
     if ($LASTEXITCODE -ne 0) { throw 'Pure CPU Python validation failed.' }
-    foreach ($project in @('ShaderHitchPipeline.Core.Smoke', 'ShaderHitchPipeline.Streaming.Smoke', 'ShaderHitchPipeline.Scheduler.Tests', 'ShaderHitchPipeline.PolicyExample', 'ShaderHitchPipeline.WindowsModules.Smoke')) {
+    foreach ($project in @('ShaderHitchPipeline.Core.Smoke', 'ShaderHitchPipeline.Streaming.Smoke', 'ShaderHitchPipeline.Scheduler.Tests', 'ShaderHitchPipeline.PolicyExample', 'ShaderHitchPipeline.WindowsModules.Smoke', 'ShaderHitchPipeline.TrainingBuildScope.Tests')) {
         $testOutput = @(& dotnet run --disable-build-servers --property:UseSharedCompilation=false --project "DotNet/$project/$project.csproj" --configuration Release)
         $testExitCode = $LASTEXITCODE
         $testOutput | Write-Output
