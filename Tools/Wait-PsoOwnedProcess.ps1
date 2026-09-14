@@ -66,7 +66,7 @@ try {
         # A non-cooperating external native workload can start after the stage's
         # mutex/process preflight. Stop our own process, never the external one.
         $conflicts = @($processes | Where-Object {
-            $nativeWorkload = $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|cl|link|lld-link|clang.*|PresentMon.*|ffmpeg|obs64|BoatAttack.*|UrpExternal.*|Megacity.*|Forest.*|SUMMIT.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
+            $nativeWorkload = $_.Name -match '^(Unity|UnityShaderCompiler|bee_backend|il2cpp|cl|link|lld-link|clang.*|PresentMon.*|ffmpeg|obs64|BoatAttack.*|UrpExternal.*|Megacity.*|Forest.*|SUMMIT.*|GISTutorial.*|FourSceneMain.*|DataLayout.*|ShaderHitch.*)(\.exe)?$'
             $managedClient = $_.Name -match '^(dotnet|MSBuild|VBCSCompiler|csc)(\.exe)?$' -and
                 $_.CommandLine -notmatch '(VBCSCompiler\.(dll|exe)|MSBuild\.dll.* /nodemode:1\b)'
             ($nativeWorkload -or $managedClient) -and -not $ownerIds.Contains([int]$_.ProcessId)
