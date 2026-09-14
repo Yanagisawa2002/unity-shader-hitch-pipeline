@@ -151,6 +151,87 @@
       "file": "megacity-conflict-diagnosis-01.json",
       "bytes": 903,
       "sha256": "86f8b7671e7339ea5a47dbcfd49b6360f148135d353d4eea37953c1670c87e77"
+    },
+    {
+      "file": "megacity-training-04/process.json",
+      "bytes": 11214,
+      "sha256": "3c96b58bbc49777b5cb985c048bb55e1bee6333a6b9e8762320e4519b761776b"
+    },
+    {
+      "file": "megacity-training-04/stage.json",
+      "bytes": 10933,
+      "sha256": "733c490cca49da378611676212d96406428556bfadbc4e5cb38ea05cd0406114"
+    },
+    {
+      "file": "megacity-training-04/editor.log",
+      "bytes": 504957,
+      "sha256": "289c28569a7dab7bbef379a2905ff954e7629ceddb8ed326208af7a974d4c51f"
+    },
+    {
+      "file": "megacity-training-04/short-path-release.json",
+      "bytes": 85,
+      "sha256": "b35c407d852c2078664f78955e048a4ab3ec1dc65d8c685c9a05ff86c8798dfe"
+    },
+    {
+      "file": "megacity-conflict-diagnosis-02.json",
+      "bytes": 1224,
+      "sha256": "d2fe1e78a2783d718ca63f577bf8eb943706e6dfc24425a418d8748eb94648d3"
+    },
+    {
+      "file": "megacity-exclusive-window-check-03/stage.json",
+      "bytes": 10225,
+      "sha256": "dbf6a595f249035fae1e7d14d9b54659bf8e6da85aa76a35d6a6fec8cd8fb3dd"
+    },
+    {
+      "file": "external-cpu-validation-08/validation.log",
+      "bytes": 20397,
+      "sha256": "35ce0885d916550596a7ec16ac2b7cbb9bf277f4d37c5342bcd16056289c986e"
+    },
+    {
+      "file": "external-cpu-validation-08/stage.json",
+      "bytes": 1863,
+      "sha256": "3c55671ba17f7b29061e5fa62a1c9aa00dbcbd7cf137699a5ca2023f3750c8f6"
+    },
+    {
+      "file": "github-publication-02/receipt.json",
+      "bytes": 1080,
+      "sha256": "111875b00487be16d3039e47fcde091d90715636023b601b8372a4a4dd15c9c5"
     }
-  ]
+  ],
+  "interruptedBuildAfterPeerCompletion": {
+    "stage": "megacity-training-04",
+    "actualBuildCommandCommit": "0c307208ba0bd0fb6cf22bb53cbc049e05d222cf",
+    "startedUtc": "2026-09-14T03:33:57.3816467Z",
+    "stoppedUtc": "2026-09-14T03:37:16.658352Z",
+    "result": "Owned tree stopped on two new non-resident-classified managed CLI processes",
+    "exactExternalCommands": "Not retained; not inferred after the children and parents exited",
+    "measuredFreeGiBBefore": 668.4279937744141,
+    "measuredFreeGiBAfter": 664.9081382751465,
+    "completedPlayer": false,
+    "entryClearance": "Four resident MSBuild/Roslyn services had identical CPU ticks over the existing three-second preflight; the later clients were new processes",
+    "ownedProcessesAbsentAtUtc": "2026-09-14T03:39:41.0974404Z",
+    "shortPathAndMutexReleased": true
+  },
+  "subsequentPreflight": {
+    "stage": "megacity-exclusive-window-check-03",
+    "startedUtc": "2026-09-14T03:45:04.5507504Z",
+    "status": "rejected",
+    "nativeActionStarted": false,
+    "reason": "New separate Unity 6000.5.2f1 Editor and workers/shader compilers active",
+    "mutexReleased": true,
+    "fifthNativeBuildStarted": false
+  },
+  "functionalValidation": {
+    "localStage": "external-cpu-validation-08",
+    "pythonChecks": 78,
+    "schedulerCases": 42,
+    "sixDotNetProgramsPassed": true,
+    "toolsPowerShellSyntaxPassed": true,
+    "latestVerifiedCloudHead": "0c307208ba0bd0fb6cf22bb53cbc049e05d222cf",
+    "cloudChecks": [
+      "cpu (ubuntu-latest): SUCCESS",
+      "cpu (windows-latest): SUCCESS"
+    ],
+    "scope": "CPU/API/schema/ownership checks, not native Main or performance evidence"
+  }
 }

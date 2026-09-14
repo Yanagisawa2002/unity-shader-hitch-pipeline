@@ -3,7 +3,8 @@
 The new adapted original-application Player has completed a real Windows x64
 D3D12/IL2CPP build. Its first run exposed a camera-observation error before Main
 entry. The repair passed targeted checks and real Editor compilation, but its
-new Player link was interrupted by an external Unity workload. **Main, the six
+new Player build was interrupted twice by external work. A subsequent clearance
+attempt was rejected while another Unity workload was active. **Main, the six
 SubScenes, usable Main training, installed plan and policy comparisons are not
 accepted.** Boat Attack and URP results do not substitute for this acceptance.
 
@@ -41,6 +42,8 @@ in training-10 is not attributed to these changes without new native proof.
 | Native training 01 | 28,594 original Menu-camera submissions, then readiness timeout/exit 79; no Main entry. |
 | Camera repair | Both Menu and Main gates now separate active route from original persistent-camera ownership; eight targeted checks passed. |
 | Training 03 | Repaired source compiled and reached MSVC link. At 03:14:41 UTC an external Unity 6000.5.2f1 workload appeared. The monitor stopped only its owned tree; no completed Player or build receipt. |
+| Training 04 | After the earlier peer task completed, fresh clearance accepted four resident build services with zero CPU growth. Two new unowned managed CLI processes appeared at 03:37:03 UTC; the monitor stopped its owned build. This is another incomplete output. |
+| Further clearance | At 03:45:04 UTC, preflight found a separate Unity 6000.5.2f1 Editor and its workers/shader compilers. The action never started; no fifth native attempt was launched. |
 
 Training-02 build GUID is `839c626320694c07a0f9957ea5a18fc3`, actual build-command
 commit `b2cd6ddbf2fb9f455509d5b719322de323f393cf`. Its complete packaged inventory
@@ -64,11 +67,28 @@ No foreign process was stopped or changed. A follow-up at 03:16:33 UTC confirmed
 the owned Editor/link were absent and N: and the mutex were released. That
 snapshot does not establish a future exclusive execution window.
 
+Training-04 used `0c307208ba0bd0fb6cf22bb53cbc049e05d222cf` and included the updated
+package README in its newly captured asset identity. Its non-resident-classified
+`dotnet` clients and parents had exited before follow-up, so their exact commands
+are not inferred from process names. Owned processes were absent and N: released
+at 03:39:41 UTC. The later rejected preflight proves new external Unity work was
+still present; completion of the earlier peer task did not reserve the machine
+against subsequent work. Independent local build/test reviews also need the
+shared resource boundary before the next long native build.
+
+The full explicit CPU CI entry passed 78 Python checks, 42 scheduler cases,
+Core/streaming/lifecycle checks, the simulated-sink public API example, the actual
+current-process Windows module API smoke and training-build scope checks. Tools
+PowerShell syntax passed. The two subsequent workload-name additions also passed
+syntax checks and Ubuntu/Windows PR CI at `0c307208`; neither CPU CI nor these
+process checks substitutes for the missing native Main run.
+
 ## Capacity, provenance and remaining execution
 
 Training-03 started with measured 682.327202 GiB available and ended with
 677.729752 GiB; the follow-up measured 675.998638 GiB while external work was
-active. Its 80 GiB additional-peak budget was a conservative estimate, with a
+active. Training-04 measured 668.427994 GiB before and 664.908138 GiB after.
+The 80 GiB additional-peak budget was a conservative estimate, with a
 20 GiB reserve and 25 GiB early-stop threshold. Net space growth is not the
 temporary peak. No cache or old evidence was deleted.
 

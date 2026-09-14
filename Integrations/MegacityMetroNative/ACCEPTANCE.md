@@ -120,3 +120,7 @@ logs and retained Library/Bee inputs remain intact. The next build requires fres
 workload clearance and a new output directory; it must use the current declared
 package/documentation inputs and obtain its own identity. See the
 [dated execution record](../../Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md).
+Training-04 was also interrupted by new external managed clients after fresh
+clearance; a later preflight rejected active external Unity work without starting
+another build. A stable exclusive build/test window remains the immediate
+prerequisite, with all original native content and policy gates still required.
