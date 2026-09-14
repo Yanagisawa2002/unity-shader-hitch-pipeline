@@ -10,7 +10,8 @@ import json
 import math
 from pathlib import Path
 import re
-from pso_external_capture import load, sha, statistics
+from pso_external_capture import load, sha, statistics, native_policy_failures
+from pso_boat_comparison import ENVIRONMENT_KEYS
 
 EXPECTED_SCENES = {
     'd15a274585a786440ad97fbd9f40d43a': 'Blimps',
@@ -21,6 +22,14 @@ EXPECTED_SCENES = {
     '46dffb08de5f4cf498cabf1a709740e0': 'Traffic',
 }
 MENU, MAIN = 'Assets/Scenes/Menu.unity', 'Assets/Scenes/Main.unity'
+
+
+def original_route_renders(renders, route):
+    """Active route + actual original camera submission; never infer route from ownership."""
+    return [r for r in renders if r.get('activeScene') == route and r['originalHybridCamera'] and
+        r['cameraType'] == 'Game' and not r['targetTexture'] and
+        r['pixelWidth'] == 1920 and r['pixelHeight'] == 1080 and
+        (r.get('menuInitialized', False) if route == MENU else r['hybridInitialized'])]
 
 
 def engine_window(start, end):
@@ -104,7 +113,57 @@ def sustained_population(snapshots, start, end):
     return results
 
 
-def megacity(stage):
+def policy_execution_failures(command, warmup, feedback, capture, plan, plan_sha256):
+    """Content success alone cannot establish that a selected native policy ran."""
+    failures = native_policy_failures(command, warmup, feedback, ['megacity-process'])
+    if len(warmup) != 1 or len(feedback) != 1:
+        return failures
+    run, scheduler = warmup[0]['data'], feedback[0]['data']
+    expected = {'disabled': 'scheduled', 'all-at-once': 'throughput',
+                'scheduled': 'scheduled', 'observed-budget': 'observed-budget'}[command['policy']]
+    if run['strategy'] != expected or scheduler['policy'] != expected:
+        failures.append('Actual native strategy differs from the requested arm')
+    if not plan_sha256 or run['planSha256'] != plan_sha256 or scheduler['planSha256'] != plan_sha256:
+        failures.append('Native and scheduling receipts do not attest the installed plan')
+    if run['environment'].get('buildGuid') != capture['buildGuid']:
+        failures.append('Warmup receipt belongs to another captured Player')
+    for key in ENVIRONMENT_KEYS:
+        if key not in run['environment'] or run['environment'][key] != capture['environment'].get(key):
+            failures.append('Warmup receipt environment differs from actual capture: '+key)
+    expected_phases = {p['phase']: p['graphicsStateCount'] for p in plan['phases']}
+    if len(plan['phases']) != 1 or set(expected_phases) != {'megacity-process'} or any(
+            p['prewarmAtStartup'] or p['graphicsStateCount'] <= 0 for p in plan['phases']):
+        failures.append('Expected one non-startup process-wide native collection')
+    for phase in run['phases'] + scheduler['activations']:
+        if phase['totalGraphicsStates'] != expected_phases.get(phase['phase']):
+            failures.append('Actual native work differs from installed collection count: '+phase['phase'])
+    expected_mode = 'native-async-throughput' if expected == 'throughput' else 'deadline-gated-native-async-bulk'
+    if any(phase['strategy'] != expected or phase['backendSchedulingMode'] != expected_mode for phase in run['phases']):
+        failures.append('Actual native backend differs from the selected bulk cell')
+    return failures
+
+
+def installed_plan(command):
+    """Bind the receipt to actual installed plan/collection bytes, not a stale pair."""
+    player = Path(command['player'])
+    if sha(player) != command['sha256']:
+        raise ValueError('Actual Player executable differs from its launch receipt')
+    root = player.parent/(player.stem+'_Data')/'StreamingAssets/ShaderHitchPipeline'
+    path = root/'plan.json'
+    plan = load(path)
+    collections = []
+    for phase in plan['phases']:
+        collection = (root/phase['collectionFile']).resolve()
+        if not collection.is_relative_to(root.resolve()):
+            raise ValueError('Collection escapes installed plan directory')
+        digest = sha(collection)
+        if digest != phase['collectionSha256']:
+            raise ValueError('Installed native collection bytes differ from plan: '+phase['phase'])
+        collections.append(dict(phase=phase['phase'],sha256=digest,states=phase['graphicsStateCount']))
+    return plan, dict(planFileSha256=sha(path),planContentSha256=plan['planSha256'],collections=collections)
+
+
+def megacity(stage, require_warmup=False):
     stage = Path(stage)
     capture = load(stage / 'capture/external-capture.json')
     command, process, boundary = (load(stage / p) for p in ('command.json', 'process.json', 'stage.json'))
@@ -121,7 +180,7 @@ def megacity(stage):
     require('-pso-megacity-single-player' in command['arguments'] and '-batchmode' not in command['arguments'], 'Wrong application entry')
     log = (stage / 'player.log').read_text(encoding='utf-8-sig', errors='replace')
     errors = [line for line in log.splitlines() if re.search(
-        r'(^\w*(?:Exception|Error):|\b(?:NullReferenceException|AccessViolationException|InvalidOperationException|Assertion failed|Crash!!!)\b|\[ShaderHitchPipeline\].*Failed)', line)]
+        r'\b\w*Exception:|^Error:|\bAssertion failed\b|Crash!!!|\[ShaderHitchPipeline\].*Failed', line)]
     leaks = [line for line in log.splitlines() if re.search(r'Persistent.*allocations?|Leak Detected|leaked.*allocation', line, re.I)]
     require(not errors and not leaks, 'Full post-exit Player log contains errors/leak markers')
     frames, renders, events = (capture[k] for k in ('frames', 'renders', 'events'))
@@ -134,10 +193,9 @@ def megacity(stage):
     quit_event = kinds['original-quit-system-requested']
     require(len(entry) == len(ready) == len(quit_event) == 1, 'Missing/duplicated entry/readiness/quit events')
     require(not kinds['acceptance-timeout'] and not kinds['original-quit-system-timeout'], 'Timed out native gate/quit')
-    menu_renders = [r for r in renders if r['scene'] == MENU and r['cameraType'] == 'Game' and not r['targetTexture']]
-    native_renders = [r for r in renders if r['scene'] == MAIN and r['originalHybridCamera'] and
-        r['hybridInitialized'] and r['cameraType'] == 'Game' and not r['targetTexture'] and
-        r['pixelWidth'] == 1920 and r['pixelHeight'] == 1080]
+    require(capture.get('schemaVersion', 0) >= 2, 'Capture lacks distinct active-route/camera-ownership telemetry')
+    menu_renders = original_route_renders(renders, MENU)
+    native_renders = original_route_renders(renders, MAIN)
     visible_renders = [r for r in native_renders if not r['loadingVisible'] and not r['tutorialVisible']]
     require(menu_renders and entry and min(r['seconds'] for r in menu_renders) < entry[0]['seconds'], 'Entry preceded actual original Menu rendering')
     require(len(visible_renders) >= 120, 'No sustained visible original Main camera submissions')
@@ -170,8 +228,34 @@ def megacity(stage):
     intervals = [f['updateIntervalMilliseconds'] for f in frames[1:]]
     first_main = min((r['seconds'] for r in native_renders), default=None)
     main_frames = [f['updateIntervalMilliseconds'] for f in frames[1:] if f['scene'] == MAIN]
-    return dict(schemaVersion=1, accepted=not failures, failures=failures, buildGuid=capture['buildGuid'],
-        policy=command['policy'], nativePolicyValidated=False,
+    phases = [json.loads(line.split('[PSO External Phase] ', 1)[1]) for line in log.splitlines()
+              if '[PSO External Phase] ' in line]
+    require(not any(e['status'] == 'Failed' for e in phases), 'Content lifecycle failed')
+    feedback = [dict(file=p.relative_to(stage).as_posix(), sha256=sha(p), data=load(p))
+                for p in sorted((stage/'capture').rglob('*scheduling*.json'))]
+    warmup = [dict(file=p.relative_to(stage).as_posix(), sha256=sha(p), data=load(p))
+              for p in sorted((stage/'capture').rglob('*.warmup.json'))]
+    content_accepted = not failures
+    policy_failures, plan_binding = [], None
+    if require_warmup:
+        try:
+            plan, plan_binding = installed_plan(command)
+            policy_failures = policy_execution_failures(command, warmup, feedback, capture, plan, plan_binding['planFileSha256'])
+        except (OSError, ValueError, KeyError) as error:
+            policy_failures.append('Actual installed plan/native receipt gate unavailable: '+str(error))
+    failures.extend(policy_failures)
+    first_load = [f['updateIntervalMilliseconds'] for f in frames[1:]
+                  if ready and f['seconds'] <= ready[0]['seconds']]
+    observed_main = [f['updateIntervalMilliseconds'] for f in frames[1:]
+                     if ready and quit_event and ready[0]['seconds'] < f['seconds'] <= quit_event[0]['seconds']]
+    return dict(schemaVersion=1, accepted=not failures, contentAccepted=content_accepted,
+        failures=failures, buildGuid=capture['buildGuid'],
+        policy=command['policy'], nativePolicyValidated=require_warmup and not policy_failures,
+        screenshotsEnabled=capture['screenshotsEnabled'], traceEnabled=command['trace'],
+        renderSettings=dict(vSyncCount=capture['vSyncCount'],targetFrameRate=capture['targetFrameRate']),
+        focusSamples=dict(focused=sum(f['focused'] for f in frames),unfocused=sum(not f['focused'] for f in frames)),
+        cacheCondition=command['cacheCondition'], requestedObservationSeconds=capture['requestedObservationSeconds'],
+        captureSha256=sha(stage/'capture/external-capture.json'), playerLogSha256=sha(stage/'player.log'),
         scope='External adapted original SinglePlayer application content acceptance; stationary original camera, evolving simulation; no whole-city coverage or performance gain claim.',
         environment=capture['environment'], observerElapsedSeconds=capture['elapsedSeconds'],
         observerToFirstUpdateSeconds=frames[0]['seconds'] if frames else None,
@@ -179,10 +263,15 @@ def megacity(stage):
         processLaunchUtc=process.get('processStartedUtc'), monitorObservedExitUtc=process.get('finishedUtc'),
         allObservedUpdateIntervals=statistics(intervals) if intervals else None,
         mainObservedUpdateIntervals=statistics(main_frames) if main_frames else None,
+        firstLoadThroughReadinessUpdateIntervals=statistics(first_load) if first_load else None,
+        declaredMainObservationUpdateIntervals=statistics(observed_main) if observed_main else None,
+        intervalBoundaryDefinition='Intervals selected by the following Update timestamp in the observer Stopwatch domain; the boundary-straddling interval remains whole. Phase events retain engine realtime and actual frame IDs separately.',
         mainFirstNativeCameraSubmissionSeconds=first_main, visibleNativeCameraSubmissions=len(visible_renders),
         firstSixPayloadSnapshot=accepted_snapshots[0][1] if accepted_snapshots else None,
         dynamicEntityEvidence=dynamic, sustainedPopulation=sustained, entryEvents=entry, readinessEvents=ready, quitEvents=quit_event,
         screenshots=pictures, persistentAllocationWarnings=leaks, errorMarkers=errors,
+        phaseEvents=phases, schedulingFeedback=feedback, warmupReceipts=warmup,
+        installedPlanBinding=plan_binding,
         peakObservedAllocatedBytes=max((f['allocatedBytes'] for f in frames), default=0),
         peakObservedReservedBytes=max((f['reservedBytes'] for f in frames), default=0),
         rawFiles=[dict(file=str(p.relative_to(stage)).replace('\\','/'),sha256=sha(p),bytes=p.stat().st_size)
@@ -192,9 +281,10 @@ def megacity(stage):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--stage', required=True, type=Path); p.add_argument('--output', required=True, type=Path)
+    p.add_argument('--require-warmup', action='store_true')
     args = p.parse_args()
     if args.output.exists(): raise ValueError('Retain old validation; choose a new output file')
-    result = megacity(args.stage)
+    result = megacity(args.stage, args.require_warmup)
     args.output.write_text(json.dumps(result, indent=2)+'\n', encoding='utf-8')
     print(json.dumps({k: result[k] for k in ('accepted','failures','buildGuid','observerElapsedSeconds')}))
     raise SystemExit(0 if result['accepted'] else 1)

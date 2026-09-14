@@ -1,10 +1,102 @@
 """Small data-integrity fixtures, not native workload or timing evidence."""
 import copy
+import json
+from pathlib import Path
+import tempfile
 import unittest
-from pso_megacity_capture import EXPECTED_SCENES, engine_window, movement, scene_payloads, sustained_population
+from pso_megacity_capture import EXPECTED_SCENES, MENU, MAIN, original_route_renders, engine_window, movement, scene_payloads, sustained_population, policy_execution_failures, installed_plan
+from pso_boat_comparison import ENVIRONMENT_KEYS
+from pso_external_capture import sha, statistics
+from pso_megacity_comparison import aggregate_samples
 
 
 class MegacityCaptureTests(unittest.TestCase):
+    def test_persistent_original_camera_requires_explicit_active_route_and_readiness(self):
+        row = dict(scene='', cameraSceneName='DontDestroyOnLoad', activeScene=MENU,
+            originalHybridCamera=True, cameraType='Game', targetTexture=False,
+            pixelWidth=1920, pixelHeight=1080, menuInitialized=True, hybridInitialized=False)
+        self.assertEqual(original_route_renders([row], MENU), [row])
+        self.assertEqual(original_route_renders([row], MAIN), [])
+        main = dict(row, activeScene=MAIN, hybridInitialized=True)
+        self.assertEqual(original_route_renders([main], MAIN), [main])
+        for field, value in [('originalHybridCamera', False), ('targetTexture', True),
+                             ('cameraType', 'Reflection'), ('pixelWidth', 0), ('menuInitialized', False)]:
+            self.assertEqual(original_route_renders([dict(row, **{field: value})], MENU), [])
+        self.assertEqual(original_route_renders([dict(main, hybridInitialized=False)], MAIN), [])
+        # Camera ownership alone is not a route, even if it names the target scene.
+        legacy = dict(row, scene=MENU); legacy.pop('activeScene')
+        self.assertEqual(original_route_renders([legacy], MENU), [])
+
+    def test_partial_content_failure_retains_available_tail_without_invented_windows(self):
+        metrics = statistics([1,2,600])
+        good = dict(policy='scheduled',accepted=True,elapsedSeconds=61,allUpdates=metrics,firstLoad=metrics,mainObservation=metrics)
+        failed = dict(policy='scheduled',accepted=False,elapsedSeconds=481,allUpdates=metrics,firstLoad=None,mainObservation=None)
+        rows = [good,failed]
+        result = aggregate_samples(rows,[50])['scheduled']
+        self.assertEqual((result['processes'],result['accepted'],result['updateAvailableProcesses']),(2,1,2))
+        self.assertEqual(result['totalHitches']['50'],2)
+        self.assertEqual(result['maximumUpdateMilliseconds'],600)
+        self.assertEqual(result['windows']['mainObservation']['availableProcesses'],1)
+        self.assertEqual(result['windows']['mainObservation']['p99'],600)
+        empty = aggregate_samples([dict(failed,allUpdates=None)],[50])['scheduled']
+        self.assertIsNone(empty['maximumUpdateMilliseconds'])
+        self.assertIsNone(empty['totalHitches']['50'])
+        self.assertIsNone(empty['windows']['firstLoad']['p99'])
+        self.assertEqual(empty['windows']['firstLoad']['availableProcesses'],0)
+        self.assertIsNone(rows[1]['mainObservation'])
+
+    def test_actual_installed_plan_rejects_changed_collection_or_executable_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            player = Path(tmp)/'Fixture.exe'; player.write_bytes(b'CPU artifact fixture')
+            root = player.parent/'Fixture_Data/StreamingAssets/ShaderHitchPipeline'
+            root.mkdir(parents=True)
+            collection = root/'collection'; collection.write_bytes(b'CPU collection byte fixture, not native evidence')
+            plan = dict(planSha256='fixture-content',phases=[dict(phase='megacity-process',collectionFile='collection',
+                collectionSha256=sha(collection),graphicsStateCount=10)])
+            (root/'plan.json').write_text(json.dumps(plan))
+            command = dict(player=str(player),sha256=sha(player))
+            self.assertEqual(installed_plan(command)[1]['collections'][0]['states'],10)
+            collection.write_bytes(b'changed')
+            with self.assertRaises(ValueError): installed_plan(command)
+            player.write_bytes(b'changed')
+            with self.assertRaises(ValueError): installed_plan(command)
+
+    def test_content_and_requested_policy_cannot_replace_matching_native_execution(self):
+        command = dict(policy='disabled', planBaselineForDisabled=True)
+        run = dict(error='', phases=[], cacheMissTrace=dict(armed=True,error=''),
+                   strategy='scheduled', planSha256='same-plan')
+        scheduler = dict(hasInFlightBatch=False, hasPendingRetirement=False, activations=[],
+                         policy='scheduled', planSha256='same-plan')
+        environment = {key: 'stable-'+key for key in ENVIRONMENT_KEYS}
+        run['environment'] = environment
+        capture = dict(buildGuid=environment['buildGuid'],environment=environment)
+        plan = dict(phases=[dict(phase='megacity-process',graphicsStateCount=10,prewarmAtStartup=False)])
+        def check(cmd=command, warm=run, schedule=scheduler, observed=capture, installed=plan, digest='same-plan'):
+            return policy_execution_failures(cmd,[dict(data=warm)],[dict(data=schedule)],observed,installed,digest)
+        self.assertEqual(check(),[])
+        self.assertTrue(policy_execution_failures(command,[],[],capture,plan,'same-plan'))
+        self.assertTrue(check(cmd=dict(command,policy='scheduled')))
+        self.assertTrue(check(schedule=dict(scheduler,policy='throughput')))
+        self.assertTrue(check(schedule=dict(scheduler,planSha256='different-plan')))
+        self.assertTrue(check(schedule=dict(scheduler,hasPendingRetirement=True)))
+        self.assertTrue(check(observed=dict(capture,buildGuid='other-player')))
+        self.assertTrue(check(observed=dict(capture,environment=dict(environment,driverIdentity='other-driver'))))
+        self.assertTrue(check(digest='other-installed-plan'))
+        self.assertTrue(check(installed=dict(phases=[dict(plan['phases'][0],prewarmAtStartup=True)])))
+        phase = dict(phase='megacity-process',error='',totalGraphicsStates=10,completedGraphicsStates=10,
+            backendReportedWarmedUp=True,batchCount=1,strategy='throughput',backendSchedulingMode='native-async-throughput')
+        activation = dict(phase='megacity-process',state='Completed',failure='',ownerReleased=True,hasInFlightBatch=False,
+            backendReportedWarmedUp=True,completedPermutations=9,totalGraphicsStates=10)
+        active_run = dict(run,strategy='throughput',phases=[phase])
+        active_scheduler = dict(scheduler,policy='throughput',activations=[activation])
+        # Real warmup permutations and graphics states are distinct units; 9 vs
+        # 10 is valid only with the backend completion/owner/count evidence.
+        self.assertEqual(check(cmd=dict(command,policy='all-at-once'),warm=active_run,schedule=active_scheduler),[])
+        self.assertTrue(check(cmd=dict(command,policy='all-at-once'),warm=active_run,
+            schedule=dict(active_scheduler,activations=[dict(activation,totalGraphicsStates=9)])))
+        self.assertTrue(check(cmd=dict(command,policy='all-at-once'),schedule=active_scheduler,
+            warm=dict(active_run,phases=[dict(phase,backendSchedulingMode='progressive-batches')])))
+
     def test_native_window_uses_direct_engine_clock_not_stopwatch_offset(self):
         start = dict(frame=100, seconds=5.0, engineRealtimeSeconds=500.0)
         end = dict(frame=1000, seconds=65.0, engineRealtimeSeconds=560.25)

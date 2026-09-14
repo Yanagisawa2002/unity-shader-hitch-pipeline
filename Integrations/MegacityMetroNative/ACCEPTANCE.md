@@ -71,8 +71,45 @@ Validate real content and a compatible installed plan before freezing a common
 final Player and any supported serial comparison. No driver-cache purge or default
 policy promotion is part of this workflow.
 
-The adapter passed a real pinned Editor compilation/configuration on 2026-09-14
-after the first compile exposed a missing `Unity.Mathematics.Extensions` reference
-for SceneSectionData. That failure is retained. At this source checkpoint, the new
-Player and Main acceptance are still pending; source/Editor success is not native
-content or performance evidence.
+For the common final Player, run independent non-diagnostic pilots into new
+`megacity-policy-pilot-POLICY-SUFFIX` directories. Use `-PlanBaselineForDisabled`
+for the disabled arm so its observation cost matches the other arms while it
+submits zero warmup work. Keep the same original entry and observation duration.
+The following gates refuse missing content, stale internally consistent receipts,
+incomplete native work or an unretired owner:
+
+```powershell
+python Tools/pso_megacity_capture.py --stage $pilotStage --output $newValidation --require-warmup
+python Tools/pso_megacity_comparison.py freeze $attempt --player-stage $finalStageName `
+  --pilot-suffix $pilotSuffix --output $newComparison
+Tools/Invoke-PsoMegacityComparison.ps1 -Protocol "$newComparison/protocol.json"
+```
+
+Freezing reads and revalidates all four actual pilots, the installed plan and
+collection bytes, actual captured/receipt environments, and the complete common
+Player/source indices. The finite runner checks frozen execution tools and
+identities, holds the shared resource gate separately for each native/CPU stage,
+and stops on failure without replacing samples. A new `summarize` output can
+record partial failure evidence; missing windows remain null with available
+sample counts, and failed attempts remain distinct from unexecuted runs.
+Graphics states and native warmup permutations remain different units.
+Throughput receipts use `native-async-throughput`; scheduled/observed receipts in
+this selected cell use `deadline-gated-native-async-bulk`. Neither is evidence of
+fixed-progressive support. These commands do not themselves establish that any
+Megacity policy has passed its native gate.
+
+The adapter passed real pinned Editor compilation/configuration after repairing
+a missing `Unity.Mathematics.Extensions` reference. The first complete training
+Player (`839c626320694c07a0f9957ea5a18fc3`, source `b2cd6dd`) built with zero errors
+and 23 warnings. Its first process retained 28,594 real Menu render submissions,
+then exited 79 at the declared readiness timeout. The original camera's owning
+scene is `DontDestroyOnLoad`; the observer incorrectly required Menu/Main camera
+ownership. This failed Menu-only trace is excluded from Main training.
+
+The repaired observer records `activeScene` separately from the retained camera
+scene path/name, and associates both Menu and Main with the actual original
+HybridCameraManager screen camera and application readiness. Eight targeted
+data-integrity checks passed, including rejection of unrelated cameras and
+ownership-only route inference. A newly built Player must still prove Main,
+all six payloads, simulation, visible content and normal exit. Neither this repair
+nor the completed build establishes content or performance acceptance.

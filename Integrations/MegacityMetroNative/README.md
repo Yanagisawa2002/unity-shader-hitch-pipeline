@@ -1,4 +1,28 @@
-# Original Megacity Metro scene adapter — Unmeasured
+# Official Megacity Metro integration
+
+The new [opt-in application acceptance adapter](ACCEPTANCE.md) shares the
+original Single Player application action with the menu UI, after initialized
+Menu has actually rendered. It retains the original async Main loader, all six
+SubScenes, native content, simulation and original stationary player camera.
+This declared source adaptation has a separate Player identity from the
+historical training-10/manual-entry cell below. It also records real section
+payloads, sustained native populations/movement and actual camera submissions;
+source or Editor compilation alone does not satisfy those runtime gates.
+
+The first complete new IL2CPP Player built successfully. Its Menu-only run exposed
+an observer association error: the original persistent camera belongs to
+`DontDestroyOnLoad`, which differs from the active Menu/Main route. That timeout
+and trace are retained; both render gates have been corrected for native retest.
+New Main acceptance, usable training/plan and comparisons remain pending.
+The prospective comparison tools refuse to freeze timing until independent
+final content/native-work/ownership pilots pass. They preserve unavailable
+metrics and failed attempts, and bind actual installed plan/collection bytes,
+capture/receipt environment and Player identity. There is no new Megacity
+performance or coverage claim at this checkpoint.
+
+The following describes the original optional SubScene observer and retained
+preparation/history. Its six phase labels are not the new uninterrupted
+`megacity-process` trace, and are not proof of isolated SubScene coverage.
 
 This optional UPM package observes the official application's Entities SubScene
 loading lifecycle. It preserves the original workload: Menu then Main, original

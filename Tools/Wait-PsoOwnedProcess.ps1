@@ -99,8 +99,13 @@ try {
                 if ($safe.Count) { $safe[0].Substring(0, [Math]::Min(220, $safe[0].Length)) }
                 else { 'Raw log retained; no public progress marker in recent lines' }
             } else { 'Waiting for log creation' }
-            Write-Output ("NATIVE_STAGE pid={0} freeGiB={1:N2} log={2}" -f $Process.Id,
-                ($volumes.freeGiB | Measure-Object -Minimum).Minimum, $tail)
+            # Reuse the existing liveness snapshot. These are the current live
+            # owners' cumulative CPU/private bytes, not workload timing metrics;
+            # sums can drop when an owned child exits. No additional query.
+            Write-Output ("NATIVE_STAGE pid={0} freeGiB={1:N2} liveOwnedCpuSeconds={2:N1} liveOwnedPrivateGiB={3:N2} log={4}" -f $Process.Id,
+                ($volumes.freeGiB | Measure-Object -Minimum).Minimum,
+                ($ownedProgress.cpuSeconds | Measure-Object -Sum).Sum,
+                (($ownedProgress.privateBytes | Measure-Object -Sum).Sum / 1GB), $tail)
             $nextProgress = $now.AddSeconds(45)
         }
         [void]$Process.WaitForExit(5000)

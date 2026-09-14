@@ -30,11 +30,13 @@ public sealed class PsoMegacityAcceptanceCapture : MonoBehaviour
     [Serializable] public struct Render
     {
         public int frame, cameraId, pixelWidth, pixelHeight;
-        public string scene, camera, cameraType;
+        // Camera ownership is distinct from the active application route: the
+        // original HybridCameraManager lives under DontDestroyOnLoad.
+        public string scene, cameraSceneName, activeScene, camera, cameraType;
         public double seconds;
         public Vector3 position;
         public Quaternion rotation;
-        public bool targetTexture, originalHybridCamera, hybridInitialized, loadingVisible, tutorialVisible;
+        public bool targetTexture, originalHybridCamera, hybridInitialized, menuInitialized, loadingVisible, tutorialVisible;
     }
     [Serializable] public struct Event
     {
@@ -44,7 +46,7 @@ public sealed class PsoMegacityAcceptanceCapture : MonoBehaviour
     }
     [Serializable] public sealed class Capture
     {
-        public int schemaVersion = 1;
+        public int schemaVersion = 2;
         public string startedUtc, finishedUtc, unityVersion, buildGuid, graphicsApi, gpu, quality;
         public string route = "Opt-in shared application API: initialized rendered Menu -> original SinglePlayer mode -> original async Main; original stationary player camera and evolving content; no injected trajectory.";
         public string timingScope = "CPU Update intervals and endCameraRendering submissions, not GPU completion or presentation; first load included; pre-first-Update and post-last-Update gaps reported separately.";
@@ -179,7 +181,9 @@ public sealed class PsoMegacityAcceptanceCapture : MonoBehaviour
         if (now - lastProgress >= 10)
         {
             lastProgress = now;
-            Record("progress", "status=" + status + "; ready=" + capture.contentReadinessObserved + "; observationSeconds=" + (readyAt < 0 ? 0 : now - readyAt));
+            Record("progress", "status=" + status + "; ready=" + capture.contentReadinessObserved + "; observationSeconds=" + (readyAt < 0 ? 0 : now - readyAt) +
+                "; menuInitialized=" + (MainMenu.Instance != null && MainMenu.Instance.IsInitialized) +
+                "; menuRenderFrame=" + menuRenderedFrame + "; mainRenderFrame=" + nativeMainRenderFrame + "; worlds=" + latestWorlds.Count);
         }
         if (readyAt < 0 && now > 480 && !quitSent)
         {
@@ -195,15 +199,21 @@ public sealed class PsoMegacityAcceptanceCapture : MonoBehaviour
     {
         bool native = camera == OriginalCamera;
         string scene = camera.gameObject.scene.path;
-        if (scene == Menu && !camera.targetTexture && camera.cameraType == CameraType.Game) menuRenderedFrame = Time.frameCount;
-        if (native && scene == Main && !camera.targetTexture) nativeMainRenderFrame = Time.frameCount;
+        string activeScene = SceneManager.GetActiveScene().path;
+        bool menuInitialized = MainMenu.Instance != null && MainMenu.Instance.IsInitialized;
+        bool hybridInitialized = HybridCameraManager.Instance != null && HybridCameraManager.Instance.WasInitialized;
+        bool originalScreenCamera = native && !camera.targetTexture && camera.cameraType == CameraType.Game &&
+            camera.pixelWidth > 0 && camera.pixelHeight > 0;
+        if (originalScreenCamera && activeScene == Menu && menuInitialized) menuRenderedFrame = Time.frameCount;
+        if (originalScreenCamera && activeScene == Main && hybridInitialized) nativeMainRenderFrame = Time.frameCount;
         renders.Add(new Render { frame = Time.frameCount, seconds = clock.Elapsed.TotalSeconds, scene = scene,
+            cameraSceneName = camera.gameObject.scene.name, activeScene = activeScene, menuInitialized = menuInitialized,
             cameraId = camera.GetInstanceID(), camera = camera.name, cameraType = camera.cameraType.ToString(),
             targetTexture = camera.targetTexture != null, pixelWidth = camera.pixelWidth, pixelHeight = camera.pixelHeight,
             position = camera.transform.position, rotation = camera.transform.rotation, originalHybridCamera = native,
-            hybridInitialized = HybridCameraManager.Instance != null && HybridCameraManager.Instance.WasInitialized,
+            hybridInitialized = hybridInitialized,
             loadingVisible = LoadingVisible, tutorialVisible = TutorialVisible });
-        if (!capture.screenshotsEnabled || !native || LoadingVisible || TutorialVisible || readyAt < 0) return;
+        if (!capture.screenshotsEnabled || !originalScreenCamera || activeScene != Main || LoadingVisible || TutorialVisible || readyAt < 0) return;
         double elapsed = clock.Elapsed.TotalSeconds - readyAt;
         int stage = elapsed >= capture.requestedObservationSeconds * 0.8 ? 2 : elapsed >= capture.requestedObservationSeconds * 0.5 ? 1 : 0;
         if (screenshotStages.Add(stage))
