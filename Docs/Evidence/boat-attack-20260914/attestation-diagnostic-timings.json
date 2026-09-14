@@ -1,0 +1,194 @@
+{
+  "boat-attestation-diagnostic-before-01": [
+    {
+      "operation": "driver-attestation",
+      "frame": 0,
+      "startRealtimeSeconds": 2.047027902437642,
+      "milliseconds": 563.3231000000001
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 0,
+      "startRealtimeSeconds": 2.046360702437642,
+      "milliseconds": 564.2155
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 198,
+      "startRealtimeSeconds": 3.4548280024376417,
+      "milliseconds": 563.0201000000001
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 198,
+      "startRealtimeSeconds": 3.454537002437642,
+      "milliseconds": 563.4685000000001
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 2311,
+      "startRealtimeSeconds": 30.427963102437644,
+      "milliseconds": 562.5382000000001
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 2311,
+      "startRealtimeSeconds": 30.427663202437643,
+      "milliseconds": 562.9931
+    }
+  ],
+  "boat-native-training-10": [
+    {
+      "operation": "driver-attestation",
+      "frame": 0,
+      "startRealtimeSeconds": 2.048704904535147,
+      "milliseconds": 574.3201
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 0,
+      "startRealtimeSeconds": 2.0482208045351475,
+      "milliseconds": 575.0148
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 158,
+      "startRealtimeSeconds": 3.461695004535147,
+      "milliseconds": 0.3577
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 158,
+      "startRealtimeSeconds": 3.4613803045351474,
+      "milliseconds": 0.7558
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 2271,
+      "startRealtimeSeconds": 23.426615304535147,
+      "milliseconds": 0.3412
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 2271,
+      "startRealtimeSeconds": 23.426207804535146,
+      "milliseconds": 0.8435
+    }
+  ],
+  "boat-policy-pilot-all-at-once-04": [
+    {
+      "operation": "driver-attestation",
+      "frame": 0,
+      "startRealtimeSeconds": 2.033246004761905,
+      "milliseconds": 573.3019
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 0,
+      "startRealtimeSeconds": 2.032969404761905,
+      "milliseconds": 573.778
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 0,
+      "startRealtimeSeconds": 2.611025704761905,
+      "milliseconds": 0.2692
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 0,
+      "startRealtimeSeconds": 2.6109083047619053,
+      "milliseconds": 0.46480000000000005
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 0,
+      "startRealtimeSeconds": 2.655126004761905,
+      "milliseconds": 0.3252
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 0,
+      "startRealtimeSeconds": 2.6549808047619052,
+      "milliseconds": 0.5852
+    },
+    {
+      "operation": "warmup-receipt",
+      "frame": 0,
+      "startRealtimeSeconds": 2.654918704761905,
+      "milliseconds": 7.2721
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 150,
+      "startRealtimeSeconds": 3.491618304761905,
+      "milliseconds": 0.4249
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 150,
+      "startRealtimeSeconds": 3.4914751047619053,
+      "milliseconds": 0.6852
+    },
+    {
+      "operation": "warmup-receipt",
+      "frame": 150,
+      "startRealtimeSeconds": 3.4914618047619053,
+      "milliseconds": 16.4135
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 2248,
+      "startRealtimeSeconds": 28.961705904761903,
+      "milliseconds": 0.33340000000000003
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 2248,
+      "startRealtimeSeconds": 28.961351204761904,
+      "milliseconds": 0.7717
+    },
+    {
+      "operation": "warmup-receipt",
+      "frame": 2248,
+      "startRealtimeSeconds": 28.961337404761903,
+      "milliseconds": 25.1351
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 2397,
+      "startRealtimeSeconds": 31.035488404761903,
+      "milliseconds": 0.3336
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 2397,
+      "startRealtimeSeconds": 31.035349604761905,
+      "milliseconds": 0.5690000000000001
+    },
+    {
+      "operation": "warmup-receipt",
+      "frame": 2397,
+      "startRealtimeSeconds": 31.035334404761905,
+      "milliseconds": 16.4882
+    },
+    {
+      "operation": "driver-attestation",
+      "frame": 2397,
+      "startRealtimeSeconds": 31.052047704761904,
+      "milliseconds": 0.2926
+    },
+    {
+      "operation": "environment-capture",
+      "frame": 2397,
+      "startRealtimeSeconds": 31.051936504761905,
+      "milliseconds": 0.45980000000000004
+    },
+    {
+      "operation": "warmup-receipt",
+      "frame": 2397,
+      "startRealtimeSeconds": 31.051922304761902,
+      "milliseconds": 11.4162
+    }
+  ]
+}

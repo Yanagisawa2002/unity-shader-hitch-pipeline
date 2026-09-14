@@ -1,7 +1,8 @@
 # Shader Hitch Pipeline
 
-Current external evidence: [official Boat Attack](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md)
-and [official URP four-scene native comparisons](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md).
+Current results: [verified improvements in official external workloads](#verified-external-results),
+with full [Boat Attack](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md)
+and [URP four-scene reports](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md).
 The [September 13 fixes](Docs/REVIEW_FIXES_20260913.md) and historical measurements retain their original conditions.
 
 **Schedule graphics-state warmup around content loading, with explicit coverage and lifecycle contracts.**
@@ -16,17 +17,37 @@ This Unity 6 package captures native `GraphicsStateCollection` states, validates
 trace/plan/build identity, and coordinates phase warmup. Unity and the graphics
 driver perform shader compilation and pipeline creation.
 
-The working package is **0.3.0, unreleased**. The September 8 integration preserves
-the existing vNext production and streaming implementation and adds a faithful
-external scene adapter, lifecycle fixes, explicit policy alternatives, and CPU-only
-PR checks. Boat Attack now has native content/training/plan validation and two
-separately frozen four-arm comparisons. A repeated driver-attestation completion
-stall was diagnosed and repaired; **no scheduling gain or useful-coverage improvement
-is established**. URP completed its original four-scene route and a separate
-16-process comparison with mixed scene-specific results and no overall gain claim.
-Other workloads retain their individual validation boundaries. The existing
+The working package is **0.3.0, unreleased**. It includes production/streaming
+lifecycle contracts, official external-scene adapters, explicit policy alternatives
+and CPU-only PR checks. The existing
 `scheduled` policy remains the default; `observed-budget` and `fixed-progressive`
 require explicit selection.
+
+## Verified external results
+
+As of 14 September 2026, the pipeline has completed native evidence from the official workloads'
+own full benchmark routes. The clearest measured improvement is the repair of
+repeated driver-attestation stalls in our receipt-writing path.
+
+| Verified result | Observed evidence | Scope and details |
+|---|---|---|
+| Repeated driver checks reduced from **about 563 ms to 0.27–0.42 ms** | Native diagnostic timings before and after process-local attestation reuse | Initial full byte hashing remains about 574 ms; every reuse checks device/module/file metadata. [Repair and timings](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md#verified-completion-hitch-repair). |
+| Boat Attack's roughly **0.6-second completion stalls did not recur** in the repaired cohort | **16/16** full-route processes passed, with **zero sampled Update intervals above 200 ms** | Both separately frozen 16-process cohorts are retained: **32 processes total**, four per policy per cohort. [All process points and figure](Docs/Evidence/boat-attack-20260914/README.md). |
+| Official URP **Terminal, Garden, Oasis and Cockpit** completed native integration | **16/16** formal processes passed full original timelines, native-work completion, ownership, identity and normal-exit checks | All 29 original scene/timeline/animation files remain byte-identical; declared host adaptations are documented. [Four-scene evidence](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md). |
+| Boat Attack's repeated warning about **216 Persistent allocations** stopped appearing | Subsequent complete native runs, including both formal cohorts, contain no allocation-leak warning | Narrow backport of Unity's official RenderGraph cleanup fix; earlier failures and upstream attribution remain. [Declared repairs](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md#declared-repairs). |
+
+The evidence bundles retain every process point, frozen Player/protocol identities,
+raw-evidence hashes, independent audit results and figure reproduction scripts.
+The [Boat Attack](Docs/Evidence/boat-attack-20260914/README.md) PNG and
+[URP](Docs/Evidence/urp-sample-20260914/README.md) PNG/SVG were reproduced
+byte-for-byte from their public points.
+
+These are sampled **CPU Update intervals** on one Windows D3D12/IL2CPP hardware
+cell, with application/OS/driver caches retained. **Overall scheduling speedup and
+useful first-draw coverage improvement remain unproven.** The valid URP
+**381.3446 ms** interval and all negative results remain in the reports; its cause
+is unresolved. [Megacity Main/six-SubScene acceptance](Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md)
+remains incomplete and is not counted among these validated results.
 
 ## What the historical evidence establishes
 

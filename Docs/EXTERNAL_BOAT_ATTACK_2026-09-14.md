@@ -97,7 +97,15 @@ or a continuous file-integrity guarantee; callers still refresh scheduling
 compatibility on relevant environment changes.
 
 Same-route native diagnosis retained the initial approximately **574 ms** byte
-attestation, then measured subsequent complete environment captures at about
+attestation. Repeated driver checks measured **0.27–0.42 ms** after the repair,
+down from approximately **563 ms**. The
+[published diagnostic timings](Evidence/boat-attack-20260914/attestation-diagnostic-timings.json)
+preserve all recorded operations from the three diagnostic processes; their
+SHA-256 is `4e637e5fda316a752432b7933720d3c869f3f55d1c98a2b1234faef5da320f12`,
+matching `diagnosticTimingsSha256` in the
+[verification receipt](Verification/boatattack-native-20260914.json).
+These diagnostic operations are separate from the formal comparison cohorts.
+The same-route training diagnostic measured subsequent complete environment captures at about
 **0.76–0.84 ms**. A final-Player diagnostic measured receipt writes around
 **16–25 ms**; these costs remain visible in the full capture. This fixes our
 instrumentation overhead, not Unity/driver shader compilation.
