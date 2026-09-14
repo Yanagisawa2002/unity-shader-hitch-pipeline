@@ -5,9 +5,15 @@ policy choices, coverage and resource ownership. Unity and the graphics driver
 perform native compilation and pipeline creation; this package captures states,
 validates identity and coordinates when work is submitted.
 
-The working package is **0.3.0, unreleased**. New policies and lifecycle/native
-scene integration are **Unmeasured**. The existing `scheduled` policy remains
-default; `observed-budget` and `fixed-progressive` require explicit selection.
+The working package is **0.3.0, unreleased**. Official Boat Attack and URP 3D Sample
+now have separately identified native content, plan and policy comparisons.
+They establish no overall scheduling gain or useful-coverage improvement.
+Megacity Main acceptance remains incomplete. The existing `scheduled` policy
+remains default; alternatives require explicit selection and backend support.
+
+[Boat Attack results and runtime-overhead repair](../../Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md) ·
+[URP four-scene results](../../Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md) ·
+[Megacity acceptance status](../../Integrations/MegacityMetroNative/ACCEPTANCE.md)
 
 ## Start with the scheduling tradeoff
 
@@ -46,11 +52,15 @@ in Unity.
 
 ## Compare the policy, not just cold versus warm
 
-The external application contract has four arms: cold, all-at-once, fixed
-progressive and the candidate policy. Preserve identical engine/dependency
+The measured Unity 6000.1 native-bulk cell compares warmup-disabled, all-at-once,
+scheduled and observed-budget. A fixed-progressive reference needs a separately
+validated common backend; this native-bulk cell cannot supply it. Preserve identical engine/dependency
 versions, player/shader build, content, resolved collections, routes, activation
 events and cache protocol. Report full-frame tails, warmup-window
-pressure, completion time, deadline outcomes, unused work and useful coverage.
+pressure, completion time, deadline outcomes, unused work and useful coverage
+where observable. Opaque native entry growth is not a verified miss count or
+first-draw coverage percentage. Fresh processes with retained caches are not
+driver-cold; the external reports preserve that condition and all negative samples.
 
 [Native Megacity integration](../../Integrations/MegacityMetroNative/README.md)
 uses an official application with pinned source/dependencies. The pinned Unity

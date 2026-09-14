@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "status": "partial",
+  "baseCommit": "6218483755b40f6fd3742754b9e71c53b74d3bd4",
+  "upstream": "Unity-Technologies/megacity-metro",
+  "upstreamCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "upstreamTree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "editor": "6000.1.0f1 (9ea152932a88)",
+  "editorSha256": "d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b",
+  "platform": "Windows x64 Development IL2CPP Player / D3D12 / NetCode Client / High / 1920x1080",
+  "selectedBackend": "native-async-bulk; fixed-progressive not validated",
+  "sourceAdaptation": "Shared original SinglePlayer API after initialized rendered Menu; original async Main, loading and simulation retained; declared lifetime and observation repairs",
+  "rawEvidenceRoot": "work/actual-20260914-external-01",
+  "completedBuild": {
+    "stage": "megacity-training-02",
+    "actualBuildCommandCommit": "b2cd6ddbf2fb9f455509d5b719322de323f393cf",
+    "summary": {
+      "result": "Succeeded",
+      "guid": "839c626320694c07a0f9957ea5a18fc3",
+      "bytes": 3988683731,
+      "seconds": 11501.364942299999,
+      "errors": 0,
+      "warnings": 23,
+      "scenes": [
+        "Assets/Scenes/Menu.unity",
+        "Assets/Scenes/Main.unity"
+      ]
+    },
+    "playerFiles": 1431,
+    "playerBytes": 3989983150,
+    "playerIndexSha256": "e71e2203fee9a223aa9967bad2e0309660fbec136760e71f56cc90e1ae0450d4",
+    "sourceInputIndexSha256": "c0699ba95451613cda9d825ef20391c2b22c1a28bbbaafad93b4174bcc8628cc"
+  },
+  "firstNativeAttempt": {
+    "stage": "megacity-native-training-01",
+    "accepted": false,
+    "exitCode": 79,
+    "menuOnly": true,
+    "captureSha256": "ae677d23768c51a75013b120dc67f7b68203815f8aefe9dea2ed80cda22622bc",
+    "playerLogSha256": "9f74c5ecabbbb9e34bc0866d5cfe67939ac2d77ef4061d6188c2c1709314aa47",
+    "renderedSubmissions": 28594,
+    "renderGroups": [
+      {
+        "cameraScenePath": "DontDestroyOnLoad",
+        "camera": "MainCamera",
+        "originalHybridCamera": true,
+        "cameraType": "Game",
+        "targetTexture": false,
+        "width": 1920,
+        "height": 1080,
+        "count": 28594
+      }
+    ],
+    "traceExcludedFromMainTraining": true,
+    "persistentAllocationWarnings": [],
+    "errorMarkers": []
+  },
+  "observationRepair": {
+    "commit": "977d81fcf081f63376567023d22e92845993d60c",
+    "beforeSha256": "dabe7b299dd88ef7820955d6646f6a90f2da123f26e072f5b1a288b4ef70f41c",
+    "afterSha256": "15028b0076ef2bee797474c2a2421ce61cb45466454aa830a165e57b31f39141",
+    "targetedChecksPassed": 8,
+    "nativeRetestCompleted": false,
+    "change": "Retain camera scene path/name and add activeScene, menuInitialized; require actual original screen camera and active route for BOTH Menu and Main."
+  },
+  "interruptedBuild": {
+    "stage": "megacity-training-03",
+    "actualBuildCommandCommit": "977d81fcf081f63376567023d22e92845993d60c",
+    "result": "Owned tree stopped on actual external Unity workload; no complete Player",
+    "externalEditor": "6000.5.2f1",
+    "externalProjectDirectoryName": "FourSceneMain20260914",
+    "foreignProcessesChanged": false,
+    "measuredFreeGiBBefore": 682.3272018432617,
+    "measuredFreeGiBAfter": 677.7297515869141,
+    "estimatedAdditionalPeakGiB": 80,
+    "minimumFreeGiBReserve": 20,
+    "earlyStopFreeGiB": 25
+  },
+  "releaseObservation": {
+    "utc": "2026-09-14T03:16:33.8485712Z",
+    "ownEditorAbsent": true,
+    "ownLinkState": "absent",
+    "shortPathReleased": true,
+    "mutexAvailableAndReleased": true,
+    "measuredFreeGiB": 675.9986381530762,
+    "externalWorkloadStillPresent": true,
+    "scope": "Historical post-stop snapshot, not future execution clearance"
+  },
+  "unexecuted": [
+    "Repaired full Player completion",
+    "Original Main and six-SubScene sustained content acceptance",
+    "Usable original Main training trace",
+    "Plan merge/install/validation",
+    "Common final Player and independent native policy pilots",
+    "Frozen formal Megacity comparisons"
+  ],
+  "completedMegacityComparisons": [],
+  "performanceOrCoverageGainEstablished": false,
+  "rawFiles": [
+    {
+      "file": "megacity-training-02/build-summary.json",
+      "bytes": 268,
+      "sha256": "36b9ef137ee696e94917f73b6c91557051801f82c51e122032db106fd14ee7dd"
+    },
+    {
+      "file": "megacity-training-02-verification/receipt.json",
+      "bytes": 1799,
+      "sha256": "ad8c6500e45d302dee7a6b00b8dd9bfc58ae5dab623cf2377149f43405c0c358"
+    },
+    {
+      "file": "megacity-native-training-01/process.json",
+      "bytes": 816,
+      "sha256": "d11a4b89af8fbfaef05ffe70fdec9dce5d6786c6607a33295eb1bab4ce203e17"
+    },
+    {
+      "file": "megacity-native-training-01/stage.json",
+      "bytes": 3183,
+      "sha256": "1bbcba783807e859829567b1278da639a037473a95e8a5c152e02bd7c6628d32"
+    },
+    {
+      "file": "megacity-camera-repair-01/receipt.json",
+      "bytes": 1517,
+      "sha256": "b5985435a363498a11b25aa39bd621df288755a173030b4d9844f51678334c2e"
+    },
+    {
+      "file": "megacity-camera-repair-checks-01/tests.log",
+      "bytes": 111,
+      "sha256": "6ba5859ae26e0254e052a12847ca201c0f98761f37b0291971d69ec0c060adcd"
+    },
+    {
+      "file": "megacity-training-03/process.json",
+      "bytes": 11463,
+      "sha256": "07db40d00e2517cd94c05f1897fc5f92ef881b871edff70408c4c6cbdc0a7388"
+    },
+    {
+      "file": "megacity-training-03/stage.json",
+      "bytes": 7975,
+      "sha256": "5f51d838920ca392f9d0ab92472be08cc9c8b8cfea946575d33e68b6b151335a"
+    },
+    {
+      "file": "megacity-training-03/editor.log",
+      "bytes": 525772,
+      "sha256": "b066f9a2c0f123c7dc60a5fbc03b4cd5b7e751f8081743c7982b2664d9dc5067"
+    },
+    {
+      "file": "megacity-training-03/short-path-release.json",
+      "bytes": 85,
+      "sha256": "56eb4bff08c3e0ff22b25aa5c06cfbc5b1908fd69a84b212277b8351ff940cd8"
+    },
+    {
+      "file": "megacity-conflict-diagnosis-01.json",
+      "bytes": 903,
+      "sha256": "86f8b7671e7339ea5a47dbcfd49b6360f148135d353d4eea37953c1670c87e77"
+    }
+  ]
+}

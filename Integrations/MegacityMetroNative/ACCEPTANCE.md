@@ -113,3 +113,10 @@ data-integrity checks passed, including rejection of unrelated cameras and
 ownership-only route inference. A newly built Player must still prove Main,
 all six payloads, simulation, visible content and normal exit. Neither this repair
 nor the completed build establishes content or performance acceptance.
+
+The repaired training-03 source reached MSVC linking, then an external Unity
+6000.5.2f1 workload triggered the owned-process stop gate. Its incomplete output,
+logs and retained Library/Bee inputs remain intact. The next build requires fresh
+workload clearance and a new output directory; it must use the current declared
+package/documentation inputs and obtain its own identity. See the
+[dated execution record](../../Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md).

@@ -14,6 +14,10 @@ an observer association error: the original persistent camera belongs to
 `DontDestroyOnLoad`, which differs from the active Menu/Main route. That timeout
 and trace are retained; both render gates have been corrected for native retest.
 New Main acceptance, usable training/plan and comparisons remain pending.
+The repaired build subsequently reached native linking, then the serial monitor
+stopped its owned tree when an external Unity workload started. The retained
+[September 14 execution record](../../Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md)
+separates that interruption, the Menu-only failure and the completed earlier Player.
 The prospective comparison tools refuse to freeze timing until independent
 final content/native-work/ownership pilots pass. They preserve unavailable
 metrics and failed attempts, and bind actual installed plan/collection bytes,

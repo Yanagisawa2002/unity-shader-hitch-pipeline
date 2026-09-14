@@ -65,6 +65,10 @@ This external-scene result is independent of Megacity large acceptance.
 
 [Megacity Metro native scene integration](Integrations/MegacityMetroNative/README.md)
 pins Unity's official application at `07652ee74a1f322c2c3e607020f07be720175680`.
+Its [new large-acceptance attempt](Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md)
+has a complete IL2CPP Player and a repaired Menu-camera observation failure.
+The repair's new link was interrupted by external Unity work; Main, six-SubScene
+content and Megacity policy comparisons remain unaccepted.
 It retains the original Menu/Main scenes, SubScenes, materials, gameplay, camera
 and ECS simulation. The optional package observes asynchronous SubScene requests;
 it creates no render workload. This is an **external application scene**, not a
