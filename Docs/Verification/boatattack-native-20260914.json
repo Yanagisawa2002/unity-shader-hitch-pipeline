@@ -2644,5 +2644,15 @@
   ],
   "cpuReportedName": "AMD Ryzen 9 9950X 16-Core Processor",
   "runtimeProcessorCount": 8,
-  "cpuContextLimit": "Runtime SystemInfo.processorCount=8 across both cohorts. No formal command worker/affinity override; reason unestablished. Not a claimed full 32-logical-processor measurement."
+  "cpuContextLimit": "Runtime SystemInfo.processorCount=8 across both cohorts. No formal command worker/affinity override; reason unestablished. Not a claimed full 32-logical-processor measurement.",
+  "cpuContext": {
+    "observedUtc": "2026-09-13T21:30:57.1787112Z",
+    "runtimeProcessorType": "AMD Ryzen 9 9950X 16-Core Processor",
+    "runtimeProcessorCount": 8,
+    "windowsVisibleCores": 8,
+    "windowsEnabledCores": 8,
+    "windowsLogicalProcessors": 8,
+    "whyWindowsExposesEight": "Not established; no BIOS/boot/affinity/priority changes.",
+    "observationSha256": "ccbb7cb6498e7aa928e5cb1566124395fff160f5d823d4e2b6845e26cfa0ab16"
+  }
 }

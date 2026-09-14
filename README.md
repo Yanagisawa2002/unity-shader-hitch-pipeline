@@ -1,6 +1,7 @@
 # Shader Hitch Pipeline
 
-Current external evidence: [official Boat Attack, native repairs and comparisons](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md).
+Current external evidence: [official Boat Attack](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md)
+and [official URP four-scene native comparisons](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md).
 The [September 13 fixes](Docs/REVIEW_FIXES_20260913.md) and historical measurements retain their original conditions.
 
 **Schedule graphics-state warmup around content loading, with explicit coverage and lifecycle contracts.**
@@ -21,7 +22,9 @@ external scene adapter, lifecycle fixes, explicit policy alternatives, and CPU-o
 PR checks. Boat Attack now has native content/training/plan validation and two
 separately frozen four-arm comparisons. A repeated driver-attestation completion
 stall was diagnosed and repaired; **no scheduling gain or useful-coverage improvement
-is established**. Other workloads retain their individual validation boundaries. The existing
+is established**. URP completed its original four-scene route and a separate
+16-process comparison with mixed scene-specific results and no overall gain claim.
+Other workloads retain their individual validation boundaries. The existing
 `scheduled` policy remains the default; `observed-budget` and `fixed-progressive`
 require explicit selection.
 
@@ -53,10 +56,12 @@ first-load capture. Sixteen post-repair processes completed; the earlier negativ
 16-process sequence and all failed attempts remain recorded. This demonstrates
 a concrete runtime-overhead fix, not a general PSO score or a policy promotion.
 
-[Official URP 3D Sample source](Integrations/Urp3DSample/source-lock.json) pins
+[Official URP 3D Sample](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md) pins
 template 17.1.5 and its Terminal, Garden, Oasis and Cockpit scenes. Its own original
-BenchmarkScene supplies the automatic scene/timeline route. Acceptance is tracked
-independently from Boat Attack and Megacity.
+BenchmarkScene supplies the automatic full scene/timeline route. Sixteen matched
+processes passed content/native-work/ownership and identity checks, with all
+first-load samples, the 381 ms outlier and a separate diagnostic retained.
+This external-scene result is independent of Megacity large acceptance.
 
 [Megacity Metro native scene integration](Integrations/MegacityMetroNative/README.md)
 pins Unity's official application at `07652ee74a1f322c2c3e607020f07be720175680`.

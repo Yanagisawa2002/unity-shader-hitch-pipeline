@@ -3,9 +3,10 @@
 The pinned official template has completed actual Windows D3D12/IL2CPP import,
 packaging, full four-scene content validation, process-wide training, native
 collection merge, plan installation, strict final-build verification and four
-independent policy pilots. A finite 16-process formal sequence is frozen and in
-progress; this checkpoint does not claim that sequence is complete or that any
-policy improves performance. The default remains unchanged.
+independent policy pilots. **All 16 predeclared formal processes completed and
+passed the content, native-work, ownership, identity and normal-exit gates.**
+The results do not establish an overall scheduling gain or useful-coverage
+improvement. The default remains unchanged.
 
 ## Source and adapted cell
 
@@ -27,8 +28,11 @@ not inferred from a registry version. Editor SHA-256 is
 `d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b`.
 The cell is Windows x64 Development IL2CPP Player, D3D12, 1920×1080 windowed,
 original **PC High**, AMD Radeon AI PRO R9700, driver 32.0.31041.1004. Runtime
-reports Ryzen 9 9950X 16-Core Processor and `processorCount=8`; its cause is not
-established. No worker/affinity, driver, power or priority adjustment was applied.
+reports Ryzen 9 9950X 16-Core Processor and `processorCount=8`. A separate read-only
+Windows CIM observation also reports eight cores, eight enabled cores and eight
+logical processors. The reason Windows exposes that topology is not established;
+this is not a full 32-logical-processor measurement. No worker/affinity, driver,
+power or priority adjustment was applied.
 
 Original BenchmarkScene is enabled as the build entry. Its resolved original
 prefab stages are **Terminal → Garden → Oasis → Cockpit**, with five-second
@@ -60,9 +64,10 @@ not edited. The full original/adapted package inventory and exact diff remain.
 
 The post-build audit verifies all 3,501 original project paths with no missing
 files. Eight originals differ: manifest/lock, EditorBuildSettings, ProjectSettings,
-VFXManager, UniversalRenderPipelineGlobalSettings, PC_High and PC_Low. The first
-five-file import audit initially failed this later eight-file comparison, and its
-failure is retained. The additional differences were then reviewed against the
+VFXManager, UniversalRenderPipelineGlobalSettings, PC_High and PC_Low. The initial
+import audit passed with five changed files. A later post-build check expecting
+the same five failed on the three additional migrations; that failure is retained.
+The additional differences were then reviewed against the
 actual official producer code: URP 17.1 serialized defaults/renames and
 ShaderBuildPreprocessor's prefilter fields, plus VFXManagerEditor's official
 PrefixSum shader reference. This is an adapted engine cell, not pristine settings.
@@ -103,13 +108,16 @@ phase counts with overlap, not 480 unique useful PSOs. Installation and strict
 final build passed. The accepted training/final input hash is identical:
 `4772e83a205379db57f86820834bcc6fa1fc618ee72b9dbcb0213cae286112a2`.
 
-The common final Player build GUID is`6039c8ddc983453a84f2987c54c35bef`,
+The common final Player build GUID is `6039c8ddc983453a84f2987c54c35bef`,
 681 files / 2,450,900,245 bytes. Player index SHA-256 is
 `aacb1da0e3f50296824aa22ec6c3ba722ccf135b27a29c3e4b2cdd4ede5c6995`;
 adapter/package source index SHA-256 is
 `34026f2d3ab852c213904f3df6d11a9b2a41a45c41627bc7df60f9b951417199`.
 The build retained its actual HEAD plus dirty source snapshot. A subsequent
 source checkpoint must not be described as the earlier binary's build command.
+The matching runtime source checkpoint is
+`9546671a1abc4b9b33b44854b814ec5019e517d1`; later Megacity/shared-adapter changes
+were not compiled into this frozen URP Player.
 
 Four independent final pilots passed native content/work/ownership and normal
 exit: disabled 264.605121 s, all-at-once 264.845100 s, scheduled 264.715544 s and
@@ -128,6 +136,65 @@ Sixteen predeclared processes use Williams order
 C=scheduled, D=observed-budget. Each arm uses the same final Player and seeded
 baseline. Formal captures disable screenshots and training phase switching.
 
+All four complete processes per arm are retained. Median elapsed time is the
+observer's startup-to-quit-callback span; maxima and hitch counts below cover the
+sampled CPU Update intervals only. Counts are totals across four processes, not
+per-process means.
+
+| Policy | Median observer seconds | Maximum sampled Update ms | >16.67 ms | >33.33 ms | >50 ms | >200 ms |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Disabled | 264.786502 | 220.9166 | 13,449 | 107 | 9 | 4 |
+| All-at-once | 264.783203 | 221.4843 | 14,056 | 118 | 6 | 4 |
+| Scheduled | 264.757952 | 217.3337 | 13,886 | 145 | 9 | 5 |
+| Observed-budget | 264.885529 | 381.3446 | 14,665 | 124 | 7 | 5 |
+
+There were no >500 ms sampled intervals. Median nearest-rank P99 of each
+original five-second warmup traversal, in milliseconds:
+
+| Policy | Terminal | Garden | Oasis | Cockpit |
+| --- | ---: | ---: | ---: | ---: |
+| Disabled | 30.2992 | 33.6601 | 30.0952 | 9.9639 |
+| All-at-once | 28.9456 | 33.5996 | 30.5120 | 10.0593 |
+| Scheduled | 29.2727 | 33.9140 | 28.8467 | 8.7154 |
+| Observed-budget | 29.1679 | 32.7804 | 29.1604 | 10.4073 |
+
+These are four descriptive repetitions per policy with cache carryover and
+mixed scene-specific outcomes. The roughly 0.029-second scheduled/disabled
+median total-time difference does not establish a general gain. Native work
+completed in every intended phase, with zero disabled activations and no
+pending owners or allocation-leak warnings at exit.
+
+[All process points and independently audited figure](Evidence/urp-sample-20260914/README.md)
+and [machine-readable results](Verification/urp-sample-native-20260914.json) retain
+the actual protocol, Player/plan/collection identities and raw evidence hashes.
+The final Player index matched before and after the sequence.
+
+### Tail diagnosis and unsampled intervals
+
+Every process includes a roughly 212–221 ms second-Update interval before
+Terminal's scene-loaded event and before its warmup activation. In 15 processes
+this is the maximum. Run 8 also contains a 381.3446 ms interval at Oasis warmup,
+frame 16404→16405. The actual native batch reports 16.2263 ms; phase completion
+and original Timeline start occur in frame 16404. This is correlation by actual
+frame identity, not proof that the batch or policy caused the entire interval.
+
+One separately identified diagnostic repeated the complete route with the same
+final Player and the opt-in own-code timing flag. It passed content/native work
+and exited normally after 264.765047 observer seconds, without reproducing that
+381 ms interval. First-process driver byte attestation took 570.75 ms; subsequent
+checks were below 0.45 ms and the largest measured warmup-receipt write was
+30.62 ms. The maximum sampled Update was 218.07 ms. The isolated larger formal
+interval remains unexplained and retained; no replacement or fabricated fix is
+claimed. This diagnostic is excluded from the frozen 16-process cohort.
+
+Across the formal cohort, the unsampled observer-to-first-Update gap is
+3.520540–3.842977 seconds; last Update to quit callback is 0.002461–0.068680
+seconds. All observed Update frame IDs are consecutive. Capture serialization
+and engine shutdown after the callback are outside these frame distributions.
+Launch-to-monitor-observed-exit times are separately retained, not described as
+exact presentation or shutdown timings. Observer Stopwatch and Unity realtime
+remain separate clock domains; a bootstrap offset is not exact alignment proof.
+
 The selected backend is **native-async-bulk**, not fixed-progressive. Scheduling
 admits ready phase work during the original five-second warmup, with a 1000 ms
 estimated per-admission cap. It adds no scene fence or wait and guarantees no
@@ -140,7 +207,7 @@ counts above 16.67/33.33/50/200/500 ms, maxima, memory and failures. CPU Update 
 render callbacks are not GPU completion or presentation. Native FrameTimingManager
 CSV columns are not promoted to independently verified GPU timings.
 
-Seeded native entry growth in pilots is397→781. The legacy field's 384 growth is
+Seeded native entry growth in pilots is 397→781. The legacy field's 384 growth is
 not 384 demonstrated compilation misses or a validated useful-coverage percentage.
 Process-wide trace intervals and scene readiness do not prove first draw or
 isolate every resource's first use. These limits remain even with complete

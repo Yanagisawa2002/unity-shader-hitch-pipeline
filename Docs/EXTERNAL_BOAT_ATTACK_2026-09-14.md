@@ -21,9 +21,11 @@ IL2CPP Player, D3D12, 1920×1080 windowed, original High quality, AMD Radeon AI 
 R9700, driver **32.0.31041.1004**. Editor SHA-256 is
 `d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b`.
 The actual runtime reports **AMD Ryzen 9 9950X 16-Core Processor** and
-`SystemInfo.processorCount=8` in both cohorts. The formal commands set no worker
-or affinity override. The reason for that observed count was not established;
-these results must not be described as a full 32-logical-processor measurement.
+`SystemInfo.processorCount=8` in both cohorts. A separate read-only Windows CIM
+observation also reports eight cores, eight enabled cores and eight logical
+processors. The formal commands set no worker or affinity override. The reason
+Windows exposes that topology was not established; these results must not be
+described as a full 32-logical-processor measurement.
 
 The entry is the original benchmark loader, followed by Island Flythrough
 **warmup + 3×500 frames**, Island Static **warmup + 5×25 frames**, and original
