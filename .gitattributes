@@ -23,3 +23,5 @@
 # Matplotlib SVG path data includes harmless trailing spaces.
 /Docs/Evidence/boat-attack-20260914/** -text -whitespace
 /Docs/Evidence/urp-sample-20260914/** -text -whitespace
+# Preserve the exact published preparation receipts, including raw archive-list fields.
+/Docs/Evidence/private-editor-preparation-g1-20260915/** -text -whitespace
