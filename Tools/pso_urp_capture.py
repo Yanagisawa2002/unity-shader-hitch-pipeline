@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 from pso_external_capture import load, sha, statistics, native_policy_failures
 from pso_whole_task_evidence import CELLS, cell_failures
+from pso_linux_contract import stage_failures as linux_stage_failures
 
 ROUTES = [('TerminalScene','Terminal'),('GardenScene','Garden'),('OasisScene','Oasis'),('CockpitScene','Cockpit')]
 PHASES = ['urp-loading','urp-terminal','urp-garden','urp-oasis','urp-cockpit']
@@ -82,6 +83,8 @@ def urp(stage,require_warmup=False,expected_unity='6000.1.0f1',expected_cell=Non
         if not condition: failures.append(reason)
     require(boundary['status']=='completed' and boundary['mutexReleased'],'Stage/mutex did not complete')
     require(process.get('exitCode')==0 and not process.get('stopReason'),'Abnormal Player exit')
+    if expected_cell == 'linux-vulkan-v1' or command.get('wholeTaskCell') == 'linux-vulkan-v1':
+        failures.extend(linux_stage_failures(stage,command,process,boundary))
     require(capture['applicationQuit'] and capture['originalBenchmarkFinished'],'Missing original benchmark completion and normal quit')
     require(capture['csvPublications']==1,'Missing/duplicate native aggregate publication')
     expected_api='Direct3D12' if expected_cell is None else CELLS[expected_cell][1]

@@ -18,6 +18,7 @@ TESTS = (
     "test_megacity_capture",
     "test_pso_whole_task_analysis",
     "test_pso_whole_task_evidence",
+    "test_pso_linux_stage",
 )
 
 if __name__ == "__main__":

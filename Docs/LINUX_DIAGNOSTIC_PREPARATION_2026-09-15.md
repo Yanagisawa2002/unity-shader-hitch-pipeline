@@ -72,7 +72,8 @@ Editor 阶段提供 `-ExpectedUnityVersion 6000.5.9f1 -BuildCell linux-vulkan-v1
 
 Linux 共享规则要求至少保留 10 GiB 数据盘空间；上表沿用该下限，并另设本阶段杂项空间。
 新 GPU 暂归 Data Layout，只有协调任务授予 Shader 对应阶段后才可传输/运行；每个重型远程命令持有实际主机锁直至所有子进程退出。
-需要能生成旧分析约定的 `command.json`、`process.json`、`stage.json` 的 Linux 进程监控适配，包含实际起止/退出码/资源/锁释放记录；**该远程启动监控尚未完成 native 验证**。
+Linux 进程监控适配源码已补齐，可生成旧分析约定的 `command.json`、`process.json`、`stage.json`，包含实际起止/退出码/资源/锁释放记录。
+详见 [Linux launch preparation](LINUX_LAUNCHER_PREPARATION_2026-09-15.md)；**该远程启动监控尚未完成 native 验证**。
 当前不调用 SSH 帮助程序、不建立显示服务、不安装模块、不扩盘。
 
 ## 最小机会诊断次序
