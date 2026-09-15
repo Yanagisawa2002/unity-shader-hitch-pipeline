@@ -1,0 +1,18 @@
+
+7-Zip 25.01 (x64) : Copyright (c) 1999-2025 Igor Pavlov : 2025-08-03
+
+Scanning the drive for archives:
+1 file, 59296160 bytes (57 MiB)
+
+Listing archive: D:\CodexWork\shader-whole-task-20260915\work\toolchains\unity-6000.5.9f1\downloads\UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe
+
+
+ERROR: D:\CodexWork\shader-whole-task-20260915\work\toolchains\unity-6000.5.9f1\downloads\UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe : D:\CodexWork\shader-whole-task-20260915\work\toolchains\unity-6000.5.9f1\downloads\UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe
+Open ERROR: Cannot open the file as [Nsis] archive
+
+
+ERRORS:
+Is not archive
+
+
+Errors: 1

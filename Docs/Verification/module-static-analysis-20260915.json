@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-static-module-analysis-closeout",
+  "utc": "2026-09-15T10:29:19.875894+00:00",
+  "status": "static-mapping-complete-payload-integrity-unverified",
+  "nativeExecutionReady": false,
+  "checks": {
+    "completeInstallerSha256Matched": true,
+    "exactMetadataStreamAndHashMatched": true,
+    "physicalCompressionBlocks": 102,
+    "metadataBlocksDecoded": 1,
+    "payloadBlocksDecoded": 0,
+    "moduleTargetFiles": 692,
+    "distinctModuleDataOffsets": 521,
+    "allDistinctDataOffsets": 529,
+    "maxAliases": 3,
+    "storedAliasCrcFieldsConsistent": true,
+    "inferredBytes": 230473980,
+    "officialInstalledSizeMatched": true,
+    "rawPayloadLengthsVerified": false,
+    "actualPayloadCrcVerified": false,
+    "actualPayloadSha256Available": false,
+    "nativeTrailerChecksumInterpreted": false,
+    "publishedAnalysisReproduced": true,
+    "python310GrammarParsed": true,
+    "installerExecuted": false,
+    "payloadFilesWritten": 0
+  },
+  "proposedNextStage": {
+    "requiresFreshCoordinatorGrant": true,
+    "decoderWorkers": 1,
+    "maxBlockDecodedBytes": 8388608,
+    "streamingSliceBytes": 65536,
+    "processMemoryBudgetBytes": 268435456,
+    "additionalDiskEnvelopeBytes": 1073741824,
+    "stagingAndCopyBytes": 460947960,
+    "optionalLogicalSpoolBytes": 210802002,
+    "evidenceAllowanceBytes": 16777216,
+    "budgetMeasured": false
+  },
+  "bindings": [
+    {
+      "path": "Docs/Verification/inspect_unity_module_metadata_20260915.py",
+      "bytes": 15916,
+      "sha256": "e36160fd78d53dc1c6e47d5350e77e78edfeda54d4a7f4b8b6e530ef7a10b733"
+    },
+    {
+      "path": "Docs/UNITY_MODULE_STATIC_ANALYSIS_2026-09-15.md",
+      "bytes": 15155,
+      "sha256": "9bd6340d3b521ec8ff64116e13fb30a1537e38ea89535850c8638e714e22daf0"
+    },
+    {
+      "path": "Docs/Evidence/module-static-analysis-20260915/coordinator-forced-nsis-probe.txt",
+      "bytes": 676,
+      "sha256": "171c6639c6a2f2fd4499dd2b1aadb707b6c944de4181a5b648131c4649a24ddc"
+    },
+    {
+      "path": "Docs/Evidence/module-static-analysis-20260915/coordinator-generation1-release.json",
+      "bytes": 166,
+      "sha256": "a8efcef4acca5984a0d1dca81492897fda33dfe3d8b8864d482622dcbda56e7c"
+    },
+    {
+      "path": "Docs/Evidence/module-static-analysis-20260915/exploration.json",
+      "bytes": 1176,
+      "sha256": "32c1ad7caf452eb16b1607ac00b8e00094e1da4387db60b5f72228bdeb7ef350"
+    },
+    {
+      "path": "Docs/Evidence/module-static-analysis-20260915/metadata-analysis.json",
+      "bytes": 594630,
+      "sha256": "2f7a0742953748358febb667527ac6b58e23c53cf030aabc11e5c7c814667882"
+    },
+    {
+      "path": "Docs/Evidence/module-static-analysis-20260915/official-module-metadata.json",
+      "bytes": 683,
+      "sha256": "2d562726dc37b455fe8c7c061fecc94eaf9954eb601c8feef1abe140307f7e05"
+    },
+    {
+      "path": "Docs/Evidence/module-static-analysis-20260915/sources.json",
+      "bytes": 3426,
+      "sha256": "a6ae82f8ad05061c27b1948d48c7df55d89b771a8c879bfcfb956b60028dfd24"
+    }
+  ]
+}

@@ -47,10 +47,18 @@ image** and listed sections/resources such as `.text`, `.rdata` and
 check at **09:53:01.071157 UTC** before issuing any extraction command.
 
 This does not establish that isolated extraction is impossible. The embedded
-payload/format and destination mapping have not been inspected further. The grant
-expired immediately afterward, so no forced-format attempt, extraction or installer
-execution followed. The Linux module is **not installed in the private Editor**.
-The downloaded installer is retained intact for a separately authorized next step.
+payload/format and destination mapping were not inspected further during generation
+1. The grant expired immediately afterward, so this worker made no forced-format
+attempt, extraction or installer execution. The Linux module is **not installed
+in the private Editor**. The downloaded installer was retained intact.
+
+After release, the coordinator's read-only forced-NSIS probe also failed.
+A separately authorized lightweight static investigation identified the NSISBI
+flags rejected by 7-Zip and decoded only the 86,096-byte metadata header. It
+produced a candidate 692-file mapping and an inferred byte total matching
+official metadata; payload CRC/SHA verification and extraction remain pending.
+See [the static analysis and next-stage bounds](UNITY_MODULE_STATIC_ANALYSIS_2026-09-15.md).
+This later evidence does not change generation 1's failed extraction status.
 
 ## Scope, bounds and release
 
@@ -114,8 +122,8 @@ The full Editor manifest SHA-256 is
 `02c50292a913cd07e385995d0daea0978f5e498b87192e90f34164db5d488927`.
 Neither proprietary binaries nor the large manifest is included in Git.
 
-Remaining: an authorized bounded investigation of the embedded module payload and
-safe destination mapping, private module extraction/file verification, then the
+The later bounded static format/mapping investigation is recorded separately.
+Remaining: authorized private module extraction and actual length/CRC/SHA verification, then the
 separately gated toolchain/project/build and graphical Vulkan validation. No
 Unity, Player, GPU workload, SSH, global installer or license changes occurred.
 No source/native test result or performance acceptance is inferred from this file

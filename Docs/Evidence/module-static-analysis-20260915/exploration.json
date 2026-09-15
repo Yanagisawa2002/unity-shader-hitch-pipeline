@@ -1,0 +1,35 @@
+{
+  "scope": "static metadata only",
+  "rawDeflateProbe": {
+    "offset": 56868,
+    "inputLimitBytes": 65536,
+    "outputLimitBytes": 86104,
+    "error": "Error -3 while decompressing data: invalid stored block lengths"
+  },
+  "lzmaMetadataProbe": {
+    "propertiesOffset": 56871,
+    "inputRange": [
+      56876,
+      68559
+    ],
+    "decodedMetadataBytes": 86096,
+    "decodedSizePrefixBytes": 8,
+    "eof": true,
+    "unusedCompressedInputBytes": 0
+  },
+  "earlyConsoleIssue": "A first metadata-print attempt encountered GBK UnicodeEncodeError; JSON output was rerun with ensure_ascii=True. Metadata file identity was unchanged.",
+  "nativeTrailer": {
+    "hex": "00000028438ab7d923853a",
+    "semantics": "zero-length framing terminator plus eight opaque bytes",
+    "interpretedAsNativeChecksum": false,
+    "standardCrc32Probes": {
+      "from512UntilLast4": "cc3b11a6",
+      "from0UntilLast4": "ea11b7c0",
+      "fromFirstHeaderUntilLast4": "9731210a",
+      "fromFirstCompressedPrefixUntilLast8": "18b0fd16",
+      "fromFirstHeaderUntilLast8": "b9e8a935",
+      "compressedBlocksWithoutTerminatorOrTrailer": "f4cd339f"
+    },
+    "payloadDataDecoded": false
+  }
+}
