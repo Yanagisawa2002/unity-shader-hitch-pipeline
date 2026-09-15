@@ -1,0 +1,11 @@
+{
+  "utc": "2026-09-15T10:50:24.964627+00:00",
+  "passed": true,
+  "featureVersion": "3.10",
+  "source": {
+    "path": "Tools/prepare_pso_linux_module.py",
+    "bytes": 21461,
+    "sha256": "2d1e089f7b341dcec597f71cf69e7e4b47a1da303e9d77f33aad1ca12c415ef5"
+  },
+  "sourceExecutedBySyntaxCheck": false
+}

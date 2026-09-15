@@ -46,8 +46,8 @@
     },
     {
       "path": "Docs/UNITY_MODULE_STATIC_ANALYSIS_2026-09-15.md",
-      "bytes": 15155,
-      "sha256": "9bd6340d3b521ec8ff64116e13fb30a1537e38ea89535850c8638e714e22daf0"
+      "bytes": 15729,
+      "sha256": "e134d33e540e663db28b2943541e50a7025dd2e4df22bb0aa7f90d76e12594e6"
     },
     {
       "path": "Docs/Evidence/module-static-analysis-20260915/coordinator-forced-nsis-probe.txt",
@@ -79,5 +79,13 @@
       "bytes": 3426,
       "sha256": "a6ae82f8ad05061c27b1948d48c7df55d89b771a8c879bfcfb956b60028dfd24"
     }
-  ]
+  ],
+  "laterExtraction": {
+    "generation": 2,
+    "status": "failed-first-record-crc",
+    "report": "Docs/PRIVATE_MODULE_EXTRACTION_G2_2026-09-15.md",
+    "originalStaticReportSha256": "9bd6340d3b521ec8ff64116e13fb30a1537e38ea89535850c8638e714e22daf0",
+    "bindingsUpdatedUtc": "2026-09-15T10:50:24.964627+00:00",
+    "staticChecksRemainScopedToOriginalPass": true
+  }
 }

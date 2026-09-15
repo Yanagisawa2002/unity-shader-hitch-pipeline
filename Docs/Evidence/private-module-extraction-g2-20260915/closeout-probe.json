@@ -1,0 +1,19 @@
+{
+  "utc": "2026-09-15T10:45:34.2879286Z",
+  "expectedPid": 26820,
+  "expectedStartedUtc": "2026-09-15T10:36:56.218856Z",
+  "currentPidPresent": false,
+  "currentPidCreationUtc": null,
+  "expectedIdentityStillPresent": false,
+  "mutex": null,
+  "mutexName": "Local\\CodexR9700VNextUnityGpu",
+  "mutexProbeAcquired": true,
+  "mutexProbeAbandoned": false,
+  "mutexProbeReleased": true,
+  "stagingPayloadFiles": 0,
+  "stagingPayloadBytes": 0,
+  "destinationExists": false,
+  "freeMemoryBytes": 11456049152,
+  "freeDBytes": 245776654336,
+  "payloadWorkAfterDeadline": false
+}

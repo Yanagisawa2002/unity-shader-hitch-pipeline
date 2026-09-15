@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\CodexWork\shader-whole-task-20260915\Tools\prepare_pso_linux_module.py", line 485, in <module>
+    run()
+  File "D:\CodexWork\shader-whole-task-20260915\Tools\prepare_pso_linux_module.py", line 405, in run
+    check_crc(crc, record["storedCrc32"])
+  File "D:\CodexWork\shader-whole-task-20260915\Tools\prepare_pso_linux_module.py", line 44, in check_crc
+    require(f"{actual:08x}" == expected,
+  File "D:\CodexWork\shader-whole-task-20260915\Tools\prepare_pso_linux_module.py", line 36, in require
+    raise ValueError(message)
+ValueError: Payload CRC32 mismatch: actual=0ccccd4c, expected=afec0faf

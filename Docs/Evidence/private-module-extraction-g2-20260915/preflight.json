@@ -1,0 +1,10 @@
+{
+  "utc": "2026-09-15T10:36:56.1635575Z",
+  "deadlineUtc": "2026-09-15T10:43:08.0001660Z",
+  "sourceLeaseSha256": "ac3ca8c8abad04e9fc65ed714921263cd9664c7ee04adc595b93528b85372be9",
+  "freeMemoryBytes": 8829722624,
+  "freeDBytes": 246251765760,
+  "processTemp": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\module-static-analysis-20260915\\supervisor-temp-generation2\\TMP\\",
+  "extractorSha256": "2d1e089f7b341dcec597f71cf69e7e4b47a1da303e9d77f33aad1ca12c415ef5",
+  "sourceHead": "8ed73a0d282b981166889b300ae156d253be7e2f"
+}

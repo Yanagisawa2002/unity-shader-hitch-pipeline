@@ -1,5 +1,15 @@
 # Unity Linux module: bounded static format analysis
 
+## Later generation-2 result
+
+The separately granted extraction attempt failed at its first payload CRC
+check. Data-only IEEE CRC32 was `0ccccd4c`, while the instruction field was
+`afec0faf`. No module payload file was written. The CRC coverage assumption in
+the proposal below is therefore **unconfirmed and cannot authorize copying**.
+The process exited and the actual mutex was released before the grant expired.
+See [the generation-2 closeout](PRIVATE_MODULE_EXTRACTION_G2_2026-09-15.md).
+The following sections retain the earlier static pass's scope and observations.
+
 ## Result and current boundary
 
 **The 7-Zip failure is explained, and a complete candidate file mapping is now
