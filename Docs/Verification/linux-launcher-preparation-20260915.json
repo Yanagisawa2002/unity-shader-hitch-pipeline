@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "kind": "linux-launcher-source-and-offline-preparation",
-  "utc": "2026-09-15T09:17:17.035907+00:00",
+  "utc": "2026-09-15T09:18:51.028738+00:00",
   "sourcePreparationReady": true,
   "nativeExecutionReady": false,
-  "validatedFromHead": "b72e8de6b8a6f3a3961e0ec2e762b976d3aafe3c",
+  "validatedFromHead": "abf765b67683d78d20ab6a02e31a588d9894b9a1",
   "bindingScope": "Exact working bytes plus canonical Git blob OIDs; no self-referential commit hash",
   "python": {
     "version": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
@@ -62,9 +62,9 @@
     },
     {
       "path": "Docs/LINUX_LAUNCHER_PREPARATION_2026-09-15.md",
-      "sha256": "f63356d70e99f0e8e2ff4bccd82d1c495b0a27b1c7dad86947f23eaf0c1c71ac",
-      "bytes": 16837,
-      "gitBlobOid": "c18ac30b5307907b87500fe184acabb6a94c9ee4"
+      "sha256": "60b5c4e8c59f74bea6626af80c5ef2629a7e8f952f1223bda527d8fa62297bf9",
+      "bytes": 16858,
+      "gitBlobOid": "3c6cadee91ec2c78950019ef20365ec8d76698bd"
     },
     {
       "path": "Docs/LINUX_DIAGNOSTIC_PREPARATION_2026-09-15.md",
@@ -80,15 +80,15 @@
     },
     {
       "path": "Docs/Evidence/linux-launcher-preparation-20260915/unity-release-api.json",
-      "sha256": "002ecf7704e844ef4fa9ab6dc1de1b6ac823160b643cbb7cd0697a29f15c0038",
-      "bytes": 99058,
+      "sha256": "8cdac1a2fa864136f705a6d63405599779fbe64456518b22c0d458d5432dfcb4",
+      "bytes": 99057,
       "gitBlobOid": "a2bcff7061bc75b1f9dde1dd106e56abc5b90f26"
     },
     {
       "path": "Docs/Evidence/linux-launcher-preparation-20260915/unity-acquisition-metadata.json",
-      "sha256": "8e17dfdaf9a5b58b98ac6c9ec33c47505ef57860ff8de774229e4e0ba98d9eb9",
-      "bytes": 3477,
-      "gitBlobOid": "e6ac35ba57c20cc78a200c6ec5d959afa72fbf0f"
+      "sha256": "096e3d63381dad1c8d95f720ece5f62e76677cacc93e1d1f15a852d6f0b93acb",
+      "bytes": 3541,
+      "gitBlobOid": "df3d35d8a80381ab4dd050a78f46f71b815854cf"
     }
   ],
   "previousVerification": "Docs/Verification/whole-task-preparation-20260915.json",

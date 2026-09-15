@@ -176,7 +176,7 @@ download and is not the Windows module.
 
 The exact URLs, official integrity strings and source JSON hash are saved in
 `Docs/Evidence/linux-launcher-preparation-20260915/unity-acquisition-metadata.json`.
-Only the 99,058-byte JSON metadata response was retrieved. Installer binary
+Only JSON metadata was retrieved; the stored UTF-8/LF document is 99,057 bytes. Installer binary
 SHA-256, signature verification and actual installed size are **unknown** until
 download/inspection. A source-provided MD5 is not a locally verified installer.
 
