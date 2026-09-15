@@ -1,0 +1,15 @@
+{
+  "pid": 26820,
+  "startedUtc": "2026-09-15T10:36:56.2188560Z",
+  "startTicks": 639250654162188560,
+  "executable": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "arguments": [
+    "-B",
+    "D:\\CodexWork\\shader-whole-task-20260915\\Tools\\prepare_pso_linux_module.py",
+    "--run-granted-generation2"
+  ],
+  "exitCode": 1,
+  "stopReason": null,
+  "allOwnedExited": true,
+  "finishedUtc": "2026-09-15T10:36:57.1352973Z"
+}

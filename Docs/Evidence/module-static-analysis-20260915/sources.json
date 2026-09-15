@@ -1,0 +1,77 @@
+{
+  "utc": "2026-09-15T10:06:43.054538+00:00",
+  "sources": [
+    {
+      "path": "7zip-25.01-NsisIn.cpp",
+      "url": "https://raw.githubusercontent.com/ip7z/7zip/25.01/CPP/7zip/Archive/Nsis/NsisIn.cpp",
+      "bytes": 146848,
+      "sha256": "9a4ad5cf62b4c8f73ac1f34c74cd90ad2abbae6ab757938bf8cafde5b2e72dfe"
+    },
+    {
+      "path": "7zip-25.01-NsisIn.h",
+      "url": "https://raw.githubusercontent.com/ip7z/7zip/25.01/CPP/7zip/Archive/Nsis/NsisIn.h",
+      "bytes": 10861,
+      "sha256": "66d575b5cdea1a07e5f129077923226203125d134f13e33e5f406bb6e7b3e240"
+    },
+    {
+      "path": "nsis-master-fileform.h",
+      "url": "https://raw.githubusercontent.com/NSIS-Dev/nsis/master/Source/fileform.h",
+      "bytes": 2239,
+      "sha256": "e0885aca68b367580f6ed9b1bab8433b155748cea0242000dc4fdfd61c01c226"
+    }
+  ],
+  "sevenZipTagCommit": "5e96a8279489832924056b1fa82f29d5837c9469",
+  "officialDocumentation": [
+    {
+      "url": "https://docs.unity3d.com/6000.5/Documentation/Manual/InstallingUnity.html",
+      "usedFor": "Supported component installer switches and root containing Editor"
+    },
+    {
+      "url": "https://nsis.sourceforge.io/Docs/Chapter3.html",
+      "usedFor": "Installer switches do not specify a generic payload-only extraction mode"
+    },
+    {
+      "url": "https://nsis.sourceforge.io/Can_I_decompile_an_existing_installer%3F",
+      "usedFor": "NSIS signature and extraction/decompilation limitations"
+    },
+    {
+      "url": "https://sourceforge.net/projects/nsisbi/files/nsisbi3.10.3/",
+      "usedFor": "Maintainer release notes for multithreaded compressor support"
+    },
+    {
+      "url": "https://reverseengineering.stackexchange.com/questions/27136/unpacking-nsisbi-compressed-data",
+      "usedFor": "Primary maintainer explanation of extended headers, instruction parameters and file lengths"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NSIS-Dev/nsis/master/Source/crc32.c",
+      "usedFor": "Standard streaming CRC32 algorithm; actual payload CRC remains unverified"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/sbscs/application-manifests",
+      "usedFor": "highestAvailable semantics"
+    }
+  ],
+  "coordinatorReceipts": [
+    {
+      "rawLocalPath": "D:\\CodexWork\\whole-task-validation-20260915\\coordination\\shader-module-nsis-probe.txt",
+      "rawSha256": "2c49db5a13236b77847a19ec14496fb2983f0aeee2360e3ac4dcbb99239aa4a9",
+      "publishedPath": "Docs/Evidence/module-static-analysis-20260915/coordinator-forced-nsis-probe.txt",
+      "publishedSha256": "171c6639c6a2f2fd4499dd2b1aadb707b6c944de4181a5b648131c4649a24ddc"
+    },
+    {
+      "rawLocalPath": "D:\\CodexWork\\whole-task-validation-20260915\\coordination\\local-preparation-generation1-root-release.json",
+      "rawSha256": "af0e3cae3a2b5b0720a5c0930920fed62a2967afc13991e0422545c7d9ea469a",
+      "publishedPath": "Docs/Evidence/module-static-analysis-20260915/coordinator-generation1-release.json",
+      "publishedSha256": "a8efcef4acca5984a0d1dca81492897fda33dfe3d8b8864d482622dcbda56e7c"
+    }
+  ],
+  "fetchLimitations": {
+    "utc": "2026-09-15T10:09:12.029159+00:00",
+    "url": "https://downloads.sourceforge.net/project/nsisbi/nsisbi3.10.3/nsis-code-7423-3-NSIS-trunk.zip",
+    "maxDownloadBytes": 3145728,
+    "maxSourceMemberBytes": 524288,
+    "selected": [],
+    "status": "failed",
+    "error": "HTTPError: HTTP Error 403: Forbidden"
+  }
+}

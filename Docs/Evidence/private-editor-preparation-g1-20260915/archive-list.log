@@ -1,0 +1,181 @@
+
+7-Zip 25.01 (x64) : Copyright (c) 1999-2025 Igor Pavlov : 2025-08-03
+
+Scanning the drive for archives:
+1 file, 59296160 bytes (57 MiB)
+
+Listing archive: D:\CodexWork\shader-whole-task-20260915\work\toolchains\unity-6000.5.9f1\downloads\UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe
+
+--
+Path = D:\CodexWork\shader-whole-task-20260915\work\toolchains\unity-6000.5.9f1\downloads\UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe
+Type = PE
+Physical Size = 59296160
+CPU = x86
+Characteristics = Executable 32-bit NoRelocs
+Created = 2025-05-15 03:12:23
+Headers Size = 1024
+Checksum = 59340964
+Image Size = 393216
+Section Alignment = 4096
+File Alignment = 512
+Code Size = 32768
+Initialized Data Size = 140288
+Uninitialized Data Size = 2048
+Linker Version = 14.42
+OS Version = 5.1
+Image Version = 6.0
+Subsystem Version = 5.1
+Subsystem = Windows GUI
+DLL Characteristics = Relocated NX-Compatible NoSEH TerminalServerAware
+Stack Reserve = 1048576
+Stack Commit = 4096
+Heap Reserve = 1048576
+Heap Commit = 4096
+Virtual Address = 0x400000
+Comment = 
+{
+FileVersion: 6000.5.9.32235
+ProductVersion: 6000.5.9.32235
+CompanyName: Unity Technologies ApS
+FileDescription: Unity 6000.5.9f1 Linux IL2CPP Support Installer  for Editor 6000.5.9.32235
+LegalCopyright: (c) 2005-2026 Unity Technologies. All rights reserved.
+ProductName: Unity 6000.5.9f1 Linux IL2CPP Support
+Unity Version: 6000.5.9f1
+Data Directories: 16
+{
+index=1 name=IMPORT VA=0x9A60 Size=160
+index=2 name=RESOURCE VA=0x5C000 Size=15472
+index=4 name=SECURITY VA=0x3889FF8 Size=10664
+index=12 name=IAT VA=0x9000 Size=712
+}
+}
+
+----------
+Path = .text
+Size = 32734
+Packed Size = 32768
+Virtual Size = 32734
+Characteristics = Code Execute Read
+Offset = 1024
+Virtual Address = 0x1000
+
+Path = .rdata
+Size = 6532
+Packed Size = 6656
+Virtual Size = 6532
+Characteristics = InitializedData Read
+Offset = 33792
+Virtual Address = 0x9000
+
+Path = .data
+Size = 512
+Packed Size = 512
+Virtual Size = 128640
+Characteristics = InitializedData Read Write
+Offset = 40448
+Virtual Address = 0xB000
+
+Path = .ndata
+Size = 0
+Packed Size = 0
+Virtual Size = 200704
+Characteristics = UninitializedData Read Write
+Offset = 0
+Virtual Address = 0x2B000
+
+Path = .rsrc\version.txt
+Size = 1546
+Packed Size = 1546
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\BITMAP\110.bmp
+Size = 1652
+Packed Size = 1638
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\ICON\1.ico
+Size = 9662
+Packed Size = 9640
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\DIALOG\103
+Size = 288
+Packed Size = 288
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\DIALOG\104
+Size = 280
+Packed Size = 280
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\DIALOG\105
+Size = 514
+Packed Size = 514
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\DIALOG\106
+Size = 248
+Packed Size = 248
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\DIALOG\111
+Size = 238
+Packed Size = 238
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\GROUP_ICON\103
+Size = 20
+Packed Size = 20
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = .rsrc\MANIFEST\1
+Size = 1077
+Packed Size = 1077
+Virtual Size = 
+Characteristics = 
+Offset = 
+Virtual Address = 
+
+Path = CERTIFICATE
+Size = 10664
+Packed Size = 10664
+Virtual Size = 10664
+Characteristics = 
+Offset = 59285496
+Virtual Address = 
+
+Path = [0]
+Size = 59228664
+Packed Size = 59228664
+Virtual Size = 59228664
+Characteristics = 
+Offset = 56832
+Virtual Address = 
+

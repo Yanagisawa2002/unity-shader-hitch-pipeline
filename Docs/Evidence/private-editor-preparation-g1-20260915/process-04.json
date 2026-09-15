@@ -1,0 +1,1171 @@
+{
+  "processId": 26088,
+  "startedUtc": "2026-09-15T09:47:22.6852229Z",
+  "executable": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\resumed-preparation\\validation-env\\Scripts\\python.exe",
+  "arguments": [
+    "-B",
+    "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\prepare_files.py",
+    "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04",
+    "1789465983",
+    "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe"
+  ],
+  "exitCode": 1,
+  "stopReason": null,
+  "children": [
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    },
+    {
+      "ProcessId": 25936,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.69059+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "Name": "conhost.exe",
+      "actualStartTicks": 639250624426905904
+    },
+    {
+      "ProcessId": 58020,
+      "ParentProcessId": 26088,
+      "CreationDate": "2026-09-15T17:47:22.708182+08:00",
+      "ExecutablePath": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "Name": "python.exe",
+      "actualStartTicks": 639250624427081820
+    }
+  ],
+  "finishedUtc": "2026-09-15T09:53:02.7052937Z",
+  "peakObservedPrivateLogicalBytes": 10065380480,
+  "allObservedChildrenExited": true
+}

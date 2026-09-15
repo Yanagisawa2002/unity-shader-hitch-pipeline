@@ -1,0 +1,19 @@
+{
+  "utc": "2026-09-15T10:50:24.964627+00:00",
+  "sourceCodeExecuted": false,
+  "crcCoverageResolved": false,
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/kichik/nsis/master/Source/crc32.c",
+      "observation": "IEEE polynomial 0xedb88320 and conventional xor on input/output"
+    },
+    {
+      "url": "https://reverseengineering.stackexchange.com/questions/27136/unpacking-nsisbi-compressed-data",
+      "observation": "NSISBI maintainer describes wider lengths and extra CRC instruction slots; coverage not specified"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/KokerZhou/NSISExtractor/main/nsis_extractor/codecs/ndata.py",
+      "observation": "Examined NData codec is framed DEFLATE, with no per-record CRC rule for this LZMA package"
+    }
+  ]
+}

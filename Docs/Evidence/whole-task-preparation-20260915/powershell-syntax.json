@@ -1,0 +1,10 @@
+[
+  {
+    "path": "Tools/Invoke-PsoExternalEditor.ps1",
+    "errors": []
+  },
+  {
+    "path": "Tools/Invoke-PsoWholeTaskStage.ps1",
+    "errors": []
+  }
+]

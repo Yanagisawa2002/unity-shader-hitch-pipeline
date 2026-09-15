@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "linux-launcher-source-and-offline-preparation",
+  "utc": "2026-09-15T09:18:51.028738+00:00",
+  "sourcePreparationReady": true,
+  "nativeExecutionReady": false,
+  "validatedFromHead": "abf765b67683d78d20ab6a02e31a588d9894b9a1",
+  "bindingScope": "Exact working bytes plus canonical Git blob OIDs; no self-referential commit hash",
+  "python": {
+    "version": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "testsPassed": 122,
+    "testsFailed": 0,
+    "addedLinuxFixtureTests": 29,
+    "scope": "Offline fixtures and mocked syscalls only; no child workload or native GPU/display/Unity execution",
+    "log": {
+      "path": "Docs/Evidence/linux-launcher-preparation-20260915/offline-tests.log",
+      "sha256": "e8fbf44b596a16c4273b8ea142838071f1f7d5159261dbd21a0c447e13ed46a6",
+      "bytes": 20070,
+      "gitBlobOid": "9cd8dad9cbc444568cd5d2406dc8bcbeb5cdcade"
+    }
+  },
+  "syntax": {
+    "python310GrammarPassed": [
+      "Tools/pso_linux_contract.py",
+      "Tools/run_pso_linux_player.py",
+      "Tools/pso_urp_capture.py",
+      "Tools/run_cpu_validation.py",
+      "Tools/tests/test_pso_linux_stage.py"
+    ],
+    "gitDiffCheckPassed": true
+  },
+  "sourceInputs": [
+    {
+      "path": "Tools/pso_linux_contract.py",
+      "sha256": "d9d472091aa5b73c50123a7185eebf0695cab4c5ed2818e4cdb7925d105ae291",
+      "bytes": 21038,
+      "gitBlobOid": "c292b47ebd9183e756ca523584ac3a3f3838a084"
+    },
+    {
+      "path": "Tools/run_pso_linux_player.py",
+      "sha256": "8d458322ed32697cdfe9b90a44c86c02d99f87a587a7aa21f658323da6307989",
+      "bytes": 36861,
+      "gitBlobOid": "11208a8500afc50931ba5b83f6a1266e5495a145"
+    },
+    {
+      "path": "Tools/pso_urp_capture.py",
+      "sha256": "dc3b459c1bdfcfe788174b15229b6fdfaab8d01f5f977965fa7946a96c21c0d7",
+      "bytes": 14031,
+      "gitBlobOid": "e74d1dd0703146405a04e94d363ea15338618904"
+    },
+    {
+      "path": "Tools/run_cpu_validation.py",
+      "sha256": "01e75bb05dc23557a882e42615bb7e208afe1de84d2ec52af60c920e856b50b5",
+      "bytes": 910,
+      "gitBlobOid": "6fd464f5fc56332bc8abe73ccf8e2ad0f4d12d20"
+    },
+    {
+      "path": "Tools/tests/test_pso_linux_stage.py",
+      "sha256": "ae0dca1728fce4e05956959277aee88d8e840c5c75bfcf4d857afe02765f6ed5",
+      "bytes": 24444,
+      "gitBlobOid": "f32454e96f328801e73ed4b8ab85f32a9e0ead91"
+    },
+    {
+      "path": "Docs/LINUX_LAUNCHER_PREPARATION_2026-09-15.md",
+      "sha256": "60b5c4e8c59f74bea6626af80c5ef2629a7e8f952f1223bda527d8fa62297bf9",
+      "bytes": 16858,
+      "gitBlobOid": "3c6cadee91ec2c78950019ef20365ec8d76698bd"
+    },
+    {
+      "path": "Docs/LINUX_DIAGNOSTIC_PREPARATION_2026-09-15.md",
+      "sha256": "40ad5677cf6319277bca7e78eb69723f2077cb4cde82a0fccf7851eaa71230f5",
+      "bytes": 14910,
+      "gitBlobOid": "5ee2603c6d2b494f6e0403cde903af4c183fca75"
+    },
+    {
+      "path": "Docs/Examples/linux-player-launch-spec.example.json",
+      "sha256": "f84ec59f272a12a8cd7400bcd6b4dd4790cbac31b5d25f4f1459f3bfeca8f0a0",
+      "bytes": 1169,
+      "gitBlobOid": "8b975a3c4f550a5f0920a81c6d4d474934b4a9ca"
+    },
+    {
+      "path": "Docs/Evidence/linux-launcher-preparation-20260915/unity-release-api.json",
+      "sha256": "8cdac1a2fa864136f705a6d63405599779fbe64456518b22c0d458d5432dfcb4",
+      "bytes": 99057,
+      "gitBlobOid": "a2bcff7061bc75b1f9dde1dd106e56abc5b90f26"
+    },
+    {
+      "path": "Docs/Evidence/linux-launcher-preparation-20260915/unity-acquisition-metadata.json",
+      "sha256": "096e3d63381dad1c8d95f720ece5f62e76677cacc93e1d1f15a852d6f0b93acb",
+      "bytes": 3541,
+      "gitBlobOid": "df3d35d8a80381ab4dd050a78f46f71b815854cf"
+    }
+  ],
+  "previousVerification": "Docs/Verification/whole-task-preparation-20260915.json",
+  "nativeNotRun": [
+    "Linux flock inheritance and kernel descriptor behavior",
+    "subreaper/escaped-group/pidfd cleanup",
+    "NVML/cgroup telemetry on actual target",
+    "private Editor/module/toolchain acquisition or installation",
+    "full official Unity host import and Linux IL2CPP build",
+    "shared graphical Vulkan capability probe",
+    "original four-route Player, visual review or profiler coverage"
+  ],
+  "ownership": {
+    "remoteHardwareStarted": false,
+    "localHeavyHardwareStarted": false,
+    "heldHardwareLock": false,
+    "ownedHeavyPids": [],
+    "remoteOwner": "data-layout pending its own release receipt"
+  },
+  "claims": {
+    "fullRouteAccepted": false,
+    "newPerformanceClaimEligible": false
+  }
+}

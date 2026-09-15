@@ -1,0 +1,10 @@
+{
+  "utc": "2026-09-15T09:53:00.9032318Z",
+  "status": "Valid",
+  "statusMessage": "Signature verified.",
+  "signerSubject": "CN=Unity Technologies SF, O=Unity Technologies SF, L=San Francisco, S=California, C=US, SERIALNUMBER=3183233, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=California, OID.1.3.6.1.4.1.311.60.2.1.3=US",
+  "signerThumbprint": "228FB6411B0A144478C86AAA3CD9473C43A8ABA7",
+  "timestampSubject": "CN=DigiCert SHA256 RSA4096 Timestamp Responder 2025 1, O=\"DigiCert, Inc.\", C=US",
+  "signatureType": "Authenticode",
+  "installerExecuted": false
+}

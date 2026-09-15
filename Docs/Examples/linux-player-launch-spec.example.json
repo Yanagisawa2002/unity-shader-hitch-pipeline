@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "shader-linux-player-stage-v1",
+  "owner": "shader",
+  "campaignRoot": "/root/autodl-tmp/codex-whole-task-20260915",
+  "stage": "/root/autodl-tmp/codex-whole-task-20260915/shader/stages/d0-NEW-ID",
+  "payloadRoot": "/root/autodl-tmp/codex-whole-task-20260915/shader/payloads/VERIFIED-BUILD-ID",
+  "runtimeState": "/root/autodl-tmp/codex-whole-task-20260915/shader/runtime-state/VERIFIED-BUILD-ID",
+  "playerRelativePath": "Player.x86_64",
+  "manifestSha256": "REQUIRED_ACTUAL_PAYLOAD_MANIFEST_SHA256",
+  "runnerSha256": "REQUIRED_DEPLOYED_RUNNER_FILE_SHA256",
+  "contractSha256": "REQUIRED_DEPLOYED_CONTRACT_FILE_SHA256",
+  "mode": "profile",
+  "session": "shader-discovery-01",
+  "gpu": { "uuid": "unknown", "name": "unknown", "driver": "unknown" },
+  "environment": { "DISPLAY": "REQUIRED_VALIDATED_DISPLAY" },
+  "allowedGpuProcesses": [],
+  "timeoutSeconds": 600,
+  "sampleSeconds": 2,
+  "termGraceSeconds": 10,
+  "killGraceSeconds": 10,
+  "budget": {
+    "outputBytes": 8589934592,
+    "runtimeGrowthBytes": 2147483648,
+    "freeReserveBytes": 10737418240,
+    "stopHeadroomBytes": 1073741824,
+    "perFileBytes": 7516192768
+  }
+}

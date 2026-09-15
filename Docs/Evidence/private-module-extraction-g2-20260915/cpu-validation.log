@@ -1,0 +1,145 @@
+test_compatibility_schema (unittest.loader._FailedTest.test_compatibility_schema) ... ERROR
+test_changed_binary_inventory_and_absent_etl_block_group (test_pso_system_acceptance.SystemAcceptanceTests.test_changed_binary_inventory_and_absent_etl_block_group) ... ok
+test_clock_jump_and_foreign_marker_pid_rejected (test_pso_system_acceptance.SystemAcceptanceTests.test_clock_jump_and_foreign_marker_pid_rejected) ... ok
+test_five_copies_of_historical_claim_never_pass (test_pso_system_acceptance.SystemAcceptanceTests.test_five_copies_of_historical_claim_never_pass) ... ok
+test_five_unique_valid_fixtures_pass_and_duplicate_is_rejected (test_pso_system_acceptance.SystemAcceptanceTests.test_five_unique_valid_fixtures_pass_and_duplicate_is_rejected) ... ok
+test_missing_metrics_are_null (test_pso_system_acceptance.SystemAcceptanceTests.test_missing_metrics_are_null) ... ok
+test_no_warmup_overlap_does_not_fall_back_to_full_csv (test_pso_system_acceptance.SystemAcceptanceTests.test_no_warmup_overlap_does_not_fall_back_to_full_csv) ... ok
+test_process_filter_and_local_utc_offset (test_pso_system_acceptance.SystemAcceptanceTests.test_process_filter_and_local_utc_offset) ... ok
+test_receipt_outside_process_and_wrong_build_are_rejected (test_pso_system_acceptance.SystemAcceptanceTests.test_receipt_outside_process_and_wrong_build_are_rejected) ... ok
+test_successful_exit_without_declared_workload_is_rejected (test_pso_system_acceptance.SystemAcceptanceTests.test_successful_exit_without_declared_workload_is_rejected) ... ok
+test_summary_forgery_is_rejected_even_when_rehashed (test_pso_system_acceptance.SystemAcceptanceTests.test_summary_forgery_is_rejected_even_when_rehashed) ... ok
+test_tampered_raw_csv_and_false_exists_are_rejected (test_pso_system_acceptance.SystemAcceptanceTests.test_tampered_raw_csv_and_false_exists_are_rejected) ... ok
+test_dominant_swap_chain_and_tail_are_reported (test_pso_windows_evidence.PresentMonEvidenceTests.test_dominant_swap_chain_and_tail_are_reported) ... ok
+test_native_qpc_aliases_preserve_integer_ticks_and_select_phase (test_pso_windows_evidence.PresentMonEvidenceTests.test_native_qpc_aliases_preserve_integer_ticks_and_select_phase) ... ok
+test_qpc_does_not_fall_back_when_markers_missing_or_wrong_source (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_does_not_fall_back_when_markers_missing_or_wrong_source) ... ok
+test_qpc_malformed_rows_fail_without_using_date_column (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_malformed_rows_fail_without_using_date_column) ... ok
+test_qpc_rejects_backwards_or_single_anchors_and_naive_utc (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_rejects_backwards_or_single_anchors_and_naive_utc) ... ok
+test_qpc_rejects_clock_discontinuity_and_cumulative_drift (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_rejects_clock_discontinuity_and_cumulative_drift) ... ok
+test_qpc_rejects_foreign_pid_and_mixed_sessions (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_rejects_foreign_pid_and_mixed_sessions) ... ok
+test_qpc_requires_positive_constant_frequency_and_valid_bracket (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_requires_positive_constant_frequency_and_valid_bracket) ... ok
+test_qpc_without_matching_window_stays_unavailable (test_pso_windows_evidence.PresentMonEvidenceTests.test_qpc_without_matching_window_stays_unavailable) ... ok
+test_unpadded_real_date_syntax_does_not_infer_offset (test_pso_windows_evidence.PresentMonEvidenceTests.test_unpadded_real_date_syntax_does_not_infer_offset) ... ok
+test_camera_origin_drift_is_rejected (test_validate_deadline_run.DeadlineRunAcceptanceTests.test_camera_origin_drift_is_rejected) ... ok
+test_generic_sampler_must_use_scenario_gate (test_validate_deadline_run.DeadlineRunAcceptanceTests.test_generic_sampler_must_use_scenario_gate) ... ok
+test_measured_window_gc_is_rejected (test_validate_deadline_run.DeadlineRunAcceptanceTests.test_measured_window_gc_is_rejected) ... ok
+test_scheduled_deadline_miss_is_rejected (test_validate_deadline_run.DeadlineRunAcceptanceTests.test_scheduled_deadline_miss_is_rejected) ... ok
+test_valid_megacity_contract_passes (test_validate_deadline_run.DeadlineRunAcceptanceTests.test_valid_megacity_contract_passes) ... ok
+test_every_owned_row_and_chain_retained_with_integer_boundaries (test_capture_windows.FullWindowAuditTests.test_every_owned_row_and_chain_retained_with_integer_boundaries) ... ok
+test_mutated_raw_input_rejected (test_capture_windows.FullWindowAuditTests.test_mutated_raw_input_rejected) ... ok
+test_checked_in_recipe_retains_unknown_evidence (test_external_host.ExternalHostTests.test_checked_in_recipe_retains_unknown_evidence) ... ok
+test_dirty_old_adapter_rejected (test_external_host.ExternalHostTests.test_dirty_old_adapter_rejected) ... ok
+test_lfs_payload_digest_verified (test_external_host.ExternalHostTests.test_lfs_payload_digest_verified) ... ok
+test_lock_requires_immutable_full_commit (test_external_host.ExternalHostTests.test_lock_requires_immutable_full_commit) ... ok
+test_missing_asset_rejected (test_external_host.ExternalHostTests.test_missing_asset_rejected) ... ok
+test_normal_text_crlf_is_accepted_without_custom_filters (test_external_host.ExternalHostTests.test_normal_text_crlf_is_accepted_without_custom_filters) ... ok
+test_objects_only_is_not_asset_readiness (test_external_host.ExternalHostTests.test_objects_only_is_not_asset_readiness) ... ok
+test_portable_path_rejects_traversal_and_windows_drive (test_external_host.ExternalHostTests.test_portable_path_rejects_traversal_and_windows_drive) ... ok
+test_preparation_cannot_write_to_upstream_checkout (test_external_host.ExternalHostTests.test_preparation_cannot_write_to_upstream_checkout) ... ok
+test_pristine_inspection_never_claims_compiled_or_measured (test_external_host.ExternalHostTests.test_pristine_inspection_never_claims_compiled_or_measured) ... ok
+test_source_digest_mismatch_rejected (test_external_host.ExternalHostTests.test_source_digest_mismatch_rejected) ... ok
+test_unhydrated_lfs_is_rejected (test_external_host.ExternalHostTests.test_unhydrated_lfs_is_rejected) ... ok
+test_worktree_hash_detects_change_hidden_from_git_status (test_external_host.ExternalHostTests.test_worktree_hash_detects_change_hidden_from_git_status) ... ok
+test_wrong_revision_rejected (test_external_host.ExternalHostTests.test_wrong_revision_rejected) ... ok
+test_historical_runtime_entrypoints_remain_normal_explicit_commands (test_execution_policy.ExecutionPolicyTests.test_historical_runtime_entrypoints_remain_normal_explicit_commands) ... ok
+test_safe_entry_does_not_call_unity_or_discover_tests (test_execution_policy.ExecutionPolicyTests.test_safe_entry_does_not_call_unity_or_discover_tests) ... ok
+test_scheduling_schema (unittest.loader._FailedTest.test_scheduling_schema) ... ERROR
+test_cancelled_run_and_missing_plan_identity_fail (test_warmup_evidence.WarmupEvidenceTests.test_cancelled_run_and_missing_plan_identity_fail) ... ok
+test_complete_armed_trace_can_prove_zero_misses (test_warmup_evidence.WarmupEvidenceTests.test_complete_armed_trace_can_prove_zero_misses) ... ok
+test_missing_warmup_receipt_is_not_valid_coverage (test_warmup_evidence.WarmupEvidenceTests.test_missing_warmup_receipt_is_not_valid_coverage) ... ok
+test_new_strategies_cannot_bypass_budget_gate (test_warmup_evidence.WarmupEvidenceTests.test_new_strategies_cannot_bypass_budget_gate) ... ok
+test_partial_inconsistent_or_errored_baseline_is_not_zero_misses (test_warmup_evidence.WarmupEvidenceTests.test_partial_inconsistent_or_errored_baseline_is_not_zero_misses) ... ok
+test_unarmed_and_unrequested_feedback_are_unavailable (test_warmup_evidence.WarmupEvidenceTests.test_unarmed_and_unrequested_feedback_are_unavailable) ... ok
+test_complete_native_work_required_independently_of_content (test_external_capture.ExternalCaptureTests.test_complete_native_work_required_independently_of_content) ... ok
+test_declared_order_balances_positions_and_directed_carryover (test_external_capture.ExternalCaptureTests.test_declared_order_balances_positions_and_directed_carryover) ... ok
+test_original_render_frame_coverage (test_external_capture.ExternalCaptureTests.test_original_render_frame_coverage) ... ok
+test_summary_binds_native_validation_and_frozen_run_identity (test_external_capture.ExternalCaptureTests.test_summary_binds_native_validation_and_frozen_run_identity) ... ok
+test_summary_does_not_trust_stale_total_time_or_memory (test_external_capture.ExternalCaptureTests.test_summary_does_not_trust_stale_total_time_or_memory) ... ok
+test_summary_file_index_detects_modified_bytes_extra_files_and_changed_index (test_external_capture.ExternalCaptureTests.test_summary_file_index_detects_modified_bytes_extra_files_and_changed_index) ... ok
+test_tail_and_strict_hitch_thresholds_keep_extreme_samples (test_external_capture.ExternalCaptureTests.test_tail_and_strict_hitch_thresholds_keep_extreme_samples) ... ok
+test_all_original_csv_routes_and_positive_samples_are_required (test_urp_capture.UrpCaptureTests.test_all_original_csv_routes_and_positive_samples_are_required) ... ok
+test_original_first_load_camera_is_retained_without_duplicating_native_run (test_urp_capture.UrpCaptureTests.test_original_first_load_camera_is_retained_without_duplicating_native_run) ... ok
+test_real_completion_is_separate_from_time_based_render_sampling (test_urp_capture.UrpCaptureTests.test_real_completion_is_separate_from_time_based_render_sampling) ... ok
+test_actual_installed_plan_rejects_changed_collection_or_executable_bytes (test_megacity_capture.MegacityCaptureTests.test_actual_installed_plan_rejects_changed_collection_or_executable_bytes) ... ok
+test_content_and_requested_policy_cannot_replace_matching_native_execution (test_megacity_capture.MegacityCaptureTests.test_content_and_requested_policy_cannot_replace_matching_native_execution) ... ok
+test_initial_readiness_cannot_cover_later_scene_disappearance_or_freeze (test_megacity_capture.MegacityCaptureTests.test_initial_readiness_cannot_cover_later_scene_disappearance_or_freeze) ... ok
+test_motion_requires_same_live_entity_and_native_simulation_state (test_megacity_capture.MegacityCaptureTests.test_motion_requires_same_live_entity_and_native_simulation_state) ... ok
+test_native_window_uses_direct_engine_clock_not_stopwatch_offset (test_megacity_capture.MegacityCaptureTests.test_native_window_uses_direct_engine_clock_not_stopwatch_offset) ... ok
+test_partial_content_failure_retains_available_tail_without_invented_windows (test_megacity_capture.MegacityCaptureTests.test_partial_content_failure_retains_available_tail_without_invented_windows) ... ok
+test_persistent_original_camera_requires_explicit_active_route_and_readiness (test_megacity_capture.MegacityCaptureTests.test_persistent_original_camera_requires_explicit_active_route_and_readiness) ... ok
+test_scene_labels_and_loaded_flags_do_not_replace_payloads (test_megacity_capture.MegacityCaptureTests.test_scene_labels_and_loaded_flags_do_not_replace_payloads) ... ok
+test_formal_gate_rejects_discovery_and_profiler_modes (test_pso_whole_task_analysis.WholeTaskContracts.test_formal_gate_rejects_discovery_and_profiler_modes) ... ok
+test_frame_gap_stays_visible (test_pso_whole_task_analysis.WholeTaskContracts.test_frame_gap_stays_visible) ... ok
+test_incomplete_or_ragged_recorder_fails (test_pso_whole_task_analysis.WholeTaskContracts.test_incomplete_or_ragged_recorder_fails) ... ok
+test_inconsistent_stored_interval_fails (test_pso_whole_task_analysis.WholeTaskContracts.test_inconsistent_stored_interval_fails) ... ok
+test_initial_stall_and_blind_boundaries_are_retained (test_pso_whole_task_analysis.WholeTaskContracts.test_initial_stall_and_blind_boundaries_are_retained) ... ok
+test_unavailable_is_not_zero_and_unknown_unit_is_not_ns (test_pso_whole_task_analysis.WholeTaskContracts.test_unavailable_is_not_zero_and_unknown_unit_is_not_ns) ... ok
+test_actual_native_calls_required_and_wrong_api_or_count_rejected (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_actual_native_calls_required_and_wrong_api_or_count_rejected) ... ok
+test_complete_pixel_files_are_not_visual_acceptance_and_stale_poses_fail (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_complete_pixel_files_are_not_visual_acceptance_and_stale_poses_fail) ... ok
+test_linux_metadata_cannot_claim_driver_bytes_or_cost_reuse (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_linux_metadata_cannot_claim_driver_bytes_or_cost_reuse) ... ok
+test_linux_quota_is_separate_from_visible_cpu_count_and_drift_fails (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_linux_quota_is_separate_from_visible_cpu_count_and_drift_fails) ... ok
+test_missing_or_mislabeled_backend_device_or_content_fails (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_missing_or_mislabeled_backend_device_or_content_fails) ... ok
+test_native_partial_completion_and_overlap_fail_without_trimming (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_native_partial_completion_and_overlap_fail_without_trimming) ... ok
+test_png_checks_real_row_lengths_and_crc (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_png_checks_real_row_lengths_and_crc) ... ok
+test_profiler_pair_rejects_workload_binary_device_and_capture_changes (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_profiler_pair_rejects_workload_binary_device_and_capture_changes) ... ok
+test_profiler_pair_retains_long_frame_differences_without_certification (test_pso_whole_task_evidence.WholeTaskEvidenceTests.test_profiler_pair_retains_long_frame_differences_without_certification) ... ok
+test_rehashed_but_empty_resource_stream_is_still_ineligible (test_pso_linux_stage.EvidenceGateFixtures.test_rehashed_but_empty_resource_stream_is_still_ineligible) ... ok
+test_success_shape_is_compatible_but_never_promotes_performance (test_pso_linux_stage.EvidenceGateFixtures.test_success_shape_is_compatible_but_never_promotes_performance) ... ok
+test_tampered_raw_or_shortcut_arguments_fail_bound_gate (test_pso_linux_stage.EvidenceGateFixtures.test_tampered_raw_or_shortcut_arguments_fail_bound_gate) ... ok
+test_timeout_cleanup_unknown_release_missing_and_payload_drift_fail (test_pso_linux_stage.EvidenceGateFixtures.test_timeout_cleanup_unknown_release_missing_and_payload_drift_fail) ... ok
+test_fdinfo_requires_inherited_exclusive_flock_on_exact_inode (test_pso_linux_stage.LinuxOwnershipFixtures.test_fdinfo_requires_inherited_exclusive_flock_on_exact_inode) ... ok
+test_leaderless_or_not_waitable_group_and_supervisor_group_refused (test_pso_linux_stage.LinuxOwnershipFixtures.test_leaderless_or_not_waitable_group_and_supervisor_group_refused) ... ok
+test_none_waitid_result_is_a_live_child_not_a_release (test_pso_linux_stage.LinuxOwnershipFixtures.test_none_waitid_result_is_a_live_child_not_a_release) ... ok
+test_pid_reuse_and_foreign_group_members_are_never_killed (test_pso_linux_stage.LinuxOwnershipFixtures.test_pid_reuse_and_foreign_group_members_are_never_killed) ... ok
+test_proc_stat_comm_parentheses_and_spaces_do_not_shift_birth (test_pso_linux_stage.LinuxOwnershipFixtures.test_proc_stat_comm_parentheses_and_spaces_do_not_shift_birth) ... ok
+test_release_requires_cleanup_and_only_unlocks_inherited_description (test_pso_linux_stage.LinuxOwnershipFixtures.test_release_requires_cleanup_and_only_unlocks_inherited_description) ... ok
+test_root_exit_does_not_hide_live_or_adopted_descendants (test_pso_linux_stage.LinuxOwnershipFixtures.test_root_exit_does_not_hide_live_or_adopted_descendants) ... ok
+test_closed_modes_keep_the_same_original_route_arguments (test_pso_linux_stage.PayloadAndCommandTests.test_closed_modes_keep_the_same_original_route_arguments) ... ok
+test_full_manifest_drift_extra_and_permission_changes_fail (test_pso_linux_stage.PayloadAndCommandTests.test_full_manifest_drift_extra_and_permission_changes_fail) ... ok
+test_manifest_records_every_file_and_intended_permissions (test_pso_linux_stage.PayloadAndCommandTests.test_manifest_records_every_file_and_intended_permissions) ... ok
+test_manifest_rejects_payload_alias (test_pso_linux_stage.PayloadAndCommandTests.test_manifest_rejects_payload_alias) ... ok
+test_native_control_needs_a_pinned_payload_plan_and_count (test_pso_linux_stage.PayloadAndCommandTests.test_native_control_needs_a_pinned_payload_plan_and_count) ... ok
+test_new_outputs_cannot_overwrite_and_helper_stays_foreground (test_pso_linux_stage.PayloadAndCommandTests.test_new_outputs_cannot_overwrite_and_helper_stays_foreground) ... ok
+test_unknown_gpu_surface_escape_and_bad_budget_fail_before_launch (test_pso_linux_stage.PayloadAndCommandTests.test_unknown_gpu_surface_escape_and_bad_budget_fail_before_launch) ... ok
+test_disk_thresholds_fail_before_declared_cap_or_reserve (test_pso_linux_stage.ResourceFixtures.test_disk_thresholds_fail_before_declared_cap_or_reserve) ... ok
+test_file_at_hard_limit_cannot_hide_below_aggregate_threshold (test_pso_linux_stage.ResourceFixtures.test_file_at_hard_limit_cannot_hide_below_aggregate_threshold) ... ok
+test_foreign_cpu_sample_retains_birth_identity_and_quota (test_pso_linux_stage.ResourceFixtures.test_foreign_cpu_sample_retains_birth_identity_and_quota) ... ok
+test_gpu_process_buffer_growth_and_unknown_memory (test_pso_linux_stage.ResourceFixtures.test_gpu_process_buffer_growth_and_unknown_memory) ... ok
+test_linux_cgroup_namespace_unknown_is_not_host_root (test_pso_linux_stage.ResourceFixtures.test_linux_cgroup_namespace_unknown_is_not_host_root) ... ok
+test_missing_graphics_process_list_is_unknown_not_empty (test_pso_linux_stage.ResourceFixtures.test_missing_graphics_process_list_is_unknown_not_empty) ... ok
+test_quota_uses_25_core_time_not_208_host_threads (test_pso_linux_stage.ResourceFixtures.test_quota_uses_25_core_time_not_208_host_threads) ... ok
+test_failed_stage_preserves_all_three_receipts_and_logs_after_cleanup (test_pso_linux_stage.SupervisorFlowFixtures.test_failed_stage_preserves_all_three_receipts_and_logs_after_cleanup) ... ok
+test_live_descendant_prevents_reaping_and_release_even_after_root_exit (test_pso_linux_stage.SupervisorFlowFixtures.test_live_descendant_prevents_reaping_and_release_even_after_root_exit) ... ok
+test_pid_changed_before_signal_gets_neither_kill_nor_resume (test_pso_linux_stage.SupervisorFlowFixtures.test_pid_changed_before_signal_gets_neither_kill_nor_resume) ... ok
+test_unresolved_cleanup_stays_in_foreground_until_proven (test_pso_linux_stage.SupervisorFlowFixtures.test_unresolved_cleanup_stays_in_foreground_until_proven) ... ok
+
+======================================================================
+ERROR: test_compatibility_schema (unittest.loader._FailedTest.test_compatibility_schema)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_compatibility_schema
+Traceback (most recent call last):
+  File "C:\Users\cgliu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\CodexWork\shader-whole-task-20260915\Tools\tests\test_compatibility_schema.py", line 6, in <module>
+    from jsonschema import Draft202012Validator
+ModuleNotFoundError: No module named 'jsonschema'
+
+
+======================================================================
+ERROR: test_scheduling_schema (unittest.loader._FailedTest.test_scheduling_schema)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_scheduling_schema
+Traceback (most recent call last):
+  File "C:\Users\cgliu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\CodexWork\shader-whole-task-20260915\Tools\tests\test_scheduling_schema.py", line 5, in <module>
+    from jsonschema import Draft202012Validator
+ModuleNotFoundError: No module named 'jsonschema'
+
+
+----------------------------------------------------------------------
+Ran 114 tests in 1.271s
+
+FAILED (errors=2)

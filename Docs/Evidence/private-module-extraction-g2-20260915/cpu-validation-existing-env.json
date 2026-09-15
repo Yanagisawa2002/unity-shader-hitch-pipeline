@@ -1,0 +1,9 @@
+{
+  "utc": "2026-09-15T10:47:19.9604249Z",
+  "command": "work/whole-task-20260915/resumed-preparation/validation-env/Scripts/python.exe -B Tools/run_cpu_validation.py",
+  "exitCode": 0,
+  "scope": "Explicit offline functional-test allowlist; no Unity or performance runner",
+  "sourceHead": "8ed73a0d282b981166889b300ae156d253be7e2f",
+  "pendingExtractorSha256": "2d1e089f7b341dcec597f71cf69e7e4b47a1da303e9d77f33aad1ca12c415ef5",
+  "dependencyInstallation": false
+}

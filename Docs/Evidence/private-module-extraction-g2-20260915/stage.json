@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "startedUtc": "2026-09-15T10:36:54.9092725Z",
+  "mutex": "Local\\CodexR9700VNextUnityGpu",
+  "mutexAcquired": true,
+  "mutexAbandoned": false,
+  "mutexReleased": true,
+  "minimumFreeGiBReserve": 20,
+  "estimatedAdditionalPeakGiB": 1.0,
+  "requiredFreeGiBAtStart": 21.0,
+  "budgetScope": "Peak is a caller estimate, free space is measured; this does not establish a native peak.",
+  "action": "\n        if((Get-FileHash -LiteralPath $shaderLeasePath).Hash -ne $shaderLeaseHash) {throw 'Lease changed before action'}\n        if([DateTime]::UtcNow -ge $shaderDeadline.AddSeconds(-10)) {throw 'Absolute grant deadline'}\n        $freeMemory=(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory*1KB\n        if($freeMemory -lt 8GB) {throw 'Less than 8 GiB free memory'}\n        $shaderSelfTest | Set-Content -LiteralPath (Join-Path $shaderOutput 'offline-rejections.json') -Encoding utf8\n        $installer=Join-Path $shaderRoot 'work\\toolchains\\unity-6000.5.9f1\\downloads\\UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe'\n        $signature=Get-AuthenticodeSignature -LiteralPath $installer\n        [ordered]@{utc=[DateTime]::UtcNow.ToString('o');status=$signature.Status.ToString();signer=$signature.SignerCertificate.Subject;thumbprint=$signature.SignerCertificate.Thumbprint;installerExecuted=$false} |\n          ConvertTo-Json | Set-Content -LiteralPath (Join-Path $shaderOutput 'authenticode.json') -Encoding utf8\n        if($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Thumbprint -ne '228FB6411B0A144478C86AAA3CD9473C43A8ABA7') {throw 'Pinned Unity signer not valid'}\n        [ordered]@{utc=[DateTime]::UtcNow.ToString('o');deadlineUtc=$shaderDeadline.ToString('o');sourceLeaseSha256=$shaderLeaseHash.ToLowerInvariant();freeMemoryBytes=$freeMemory;freeDBytes=([IO.DriveInfo]::new('D:\\')).AvailableFreeSpace;processTemp=[IO.Path]::GetTempPath();extractorSha256=(Get-FileHash -LiteralPath $shaderCode).Hash.ToLowerInvariant();sourceHead=(git -C $shaderRoot rev-parse HEAD)} |\n          ConvertTo-Json | Set-Content -LiteralPath (Join-Path $shaderOutput 'preflight.json') -Encoding utf8\n        $start=[Diagnostics.ProcessStartInfo]::new()\n        $start.FileName=$shaderPython\n        $start.UseShellExecute=$false\n        $start.CreateNoWindow=$true\n        $start.RedirectStandardOutput=$true\n        $start.RedirectStandardError=$true\n        $start.WorkingDirectory=$shaderRoot\n        foreach($arg in @('-B',$shaderCode,'--run-granted-generation2')) {$start.ArgumentList.Add($arg)}\n        $child=[Diagnostics.Process]::Start($start)\n        $stdout=$child.StandardOutput.ReadToEndAsync()\n        $stderr=$child.StandardError.ReadToEndAsync()\n        $birth=$child.StartTime.ToUniversalTime()\n        $process=[ordered]@{pid=$child.Id;startedUtc=$birth.ToString('o');startTicks=$birth.Ticks;executable=$start.FileName;arguments=@($start.ArgumentList);exitCode=$null;stopReason=$null;allOwnedExited=$false}\n        $process | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $shaderOutput 'process-active.json') -Encoding utf8\n        try {\n            do {\n                $done=$child.WaitForExit(1000)\n                $freeMemory=(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory*1KB\n                $freeD=([IO.DriveInfo]::new('D:\\')).AvailableFreeSpace\n                $bytes=[long](Get-ChildItem -LiteralPath $shaderOutput,$shaderTemp -File -Recurse | Measure-Object Length -Sum).Sum\n                if(Test-Path -LiteralPath $shaderTarget) {$bytes += [long](Get-ChildItem -LiteralPath $shaderTarget -File -Recurse | Measure-Object Length -Sum).Sum}\n                $privateBytes=$null\n                if(-not $done) {$child.Refresh();$privateBytes=$child.PrivateMemorySize64}\n                [ordered]@{utc=[DateTime]::UtcNow.ToString('o');freeMemoryBytes=$freeMemory;freeDBytes=$freeD;newLogicalBytes=$bytes;processPrivateBytes=$privateBytes;processExited=$done} |\n                  ConvertTo-Json -Compress | Add-Content -LiteralPath (Join-Path $shaderOutput 'resource-samples.jsonl') -Encoding utf8\n                if([DateTime]::UtcNow -ge $shaderDeadline.AddSeconds(-2)) {$process.stopReason='Absolute grant deadline'}\n                elseif($freeMemory -lt 8GB) {$process.stopReason='Free memory below 8 GiB'}\n                elseif($freeD -lt 20GB) {$process.stopReason='D reserve below 20 GiB'}\n                elseif($bytes -ge 1GB) {$process.stopReason='New logical data at 1 GiB limit'}\n                elseif($privateBytes -gt 512MB) {$process.stopReason='Private committed memory over 512 MiB'}\n                elseif((Get-FileHash -LiteralPath $shaderLeasePath).Hash -ne $shaderLeaseHash) {$process.stopReason='Lease revoked or changed'}\n                if($process.stopReason -and -not $done) {$child.Kill();$child.WaitForExit();$done=$true}\n            } while(-not $done)\n        } finally {\n            if(-not $child.HasExited) {$process.stopReason='Supervisor exception';$child.Kill();$child.WaitForExit()}\n            $process.exitCode=$child.ExitCode\n            $process.finishedUtc=[DateTime]::UtcNow.ToString('o')\n            $process.allOwnedExited=$child.HasExited\n            [IO.File]::WriteAllText((Join-Path $shaderOutput 'worker.stdout.log'),$stdout.GetAwaiter().GetResult())\n            [IO.File]::WriteAllText((Join-Path $shaderOutput 'worker.stderr.log'),$stderr.GetAwaiter().GetResult())\n            $child.Dispose()\n            $process | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $shaderOutput 'process.json') -Encoding utf8\n        }\n        if($process.stopReason) {throw $process.stopReason}\n        if($process.exitCode -ne 0) {throw \"Generation2 worker exit $($process.exitCode)\"}\n        $global:LASTEXITCODE=0\n    ",
+  "actionStarted": true,
+  "status": "failed",
+  "error": "Generation2 worker exit 1",
+  "processesBefore": [],
+  "idleBuildServersBefore": [],
+  "volumesBefore": [
+    {
+      "volume": "D:\\",
+      "freeGiB": 229.33982849121094
+    }
+  ],
+  "processesAfter": [],
+  "idleBuildServersAfter": [],
+  "volumesAfter": [
+    {
+      "volume": "D:\\",
+      "freeGiB": 229.3398208618164
+    }
+  ],
+  "endedUtc": "2026-09-15T10:36:57.5966648Z"
+}

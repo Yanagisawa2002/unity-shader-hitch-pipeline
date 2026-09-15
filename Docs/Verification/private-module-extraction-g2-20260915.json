@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "kind": "generation2-file-extraction-failed-closeout",
+  "utc": "2026-09-15T10:50:24.964627+00:00",
+  "generation": 2,
+  "status": "failed-first-record-crc",
+  "attemptedFromHead": "8ed73a0d282b981166889b300ae156d253be7e2f",
+  "nativeExecutionReady": false,
+  "moduleExtracted": false,
+  "moduleInstalled": false,
+  "modulePayloadFilesWritten": 0,
+  "deadlineUtc": "2026-09-15T10:43:08.0001660Z",
+  "stageEndedUtc": "2026-09-15T10:36:57.5966648Z",
+  "worker": {
+    "pid": 26820,
+    "startedUtc": "2026-09-15T10:36:56.2188560Z",
+    "startTicks": 639250654162188560,
+    "executable": "C:\\Users\\cgliu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "arguments": [
+      "-B",
+      "D:\\CodexWork\\shader-whole-task-20260915\\Tools\\prepare_pso_linux_module.py",
+      "--run-granted-generation2"
+    ],
+    "exitCode": 1,
+    "stopReason": null,
+    "allOwnedExited": true,
+    "finishedUtc": "2026-09-15T10:36:57.1352973Z"
+  },
+  "actualMutexReleased": true,
+  "independentReleaseProbePassed": true,
+  "payloadWorkAfterDeadline": false,
+  "failure": {
+    "logicalOffset": 0,
+    "inferredBytes": 154544,
+    "lengthMatchEvidence": "Executed control flow reached CRC comparison; separate raw prefix not persisted",
+    "actualDataOnlyIeeeCrc32": "0ccccd4c",
+    "storedInstructionField": "afec0faf",
+    "crcFieldCoverageResolved": false
+  },
+  "integrityScope": {
+    "metadataStreamVerified": true,
+    "payloadStreamsFullyVerified": 0,
+    "logicalRecordsCrcVerified": 0,
+    "all529RawLengthsVerified": false,
+    "all692FinalFileHashesVerified": false,
+    "postCopyInputHashVerified": false,
+    "opaqueTrailerInterpreted": false
+  },
+  "memory": {
+    "hardJobLimitAppliedBytes": 536870912,
+    "initialJobQueryPeakBytes": 76115968,
+    "wholeRunObservedPeakBytes": null,
+    "peakLimitation": "No final Job query on failed branch; process had exited at supervisor sample"
+  },
+  "offline": {
+    "rejectionCasesPassed": 21,
+    "positiveCasesPassed": 4,
+    "initialFullSuiteExitCode": 1,
+    "initialFullSuiteFailure": "Base interpreter lacks jsonschema; two import errors",
+    "existingEnvironmentTestsPassed": 122,
+    "dependencyInstalledOrDownloaded": false,
+    "python310GrammarPassed": true,
+    "powershellParsingPassed": true
+  },
+  "bindings": [
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/authenticode.json",
+      "bytes": 395,
+      "sha256": "d41ff34a7381190962d4696f7f75e7ae4fff93f67aeabf13d4a634dff605984f"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/authorization.json",
+      "bytes": 3689,
+      "sha256": "38cc3b63490ea76f930d71692f3e1a344c7876ab1859f26e9cd3c3295f9fe9fc"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/closeout-probe.json",
+      "bytes": 591,
+      "sha256": "732fb994a7de4a3be3d59bdda324dbce469e2a971850911786bb9fb8b3dd9306"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/cpu-validation-existing-env.json",
+      "bytes": 476,
+      "sha256": "42ce9522e679edcbb34652ca9ac6c1c2f6423eacea001ac6ad3fb823e7bd0bd7"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/cpu-validation-existing-env.log",
+      "bytes": 20070,
+      "sha256": "d8732f75422dfeec630b43a754c1a9eb1fc0e2abc5c6a4dbfa9ba506f68c4656"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/cpu-validation.json",
+      "bytes": 368,
+      "sha256": "c743ba378bef6027d98bc01f0edb0793234f20bb0d9696ac73e0c7093d7c431c"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/cpu-validation.log",
+      "bytes": 20313,
+      "sha256": "a346b445e8918ae06e59ad6bb19d99d0601bfe4477d1fbf9795c9716d450625a"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/invoke-generation2.ps1",
+      "bytes": 8324,
+      "sha256": "7f067271f3bf612960cfd500dba6fba80059e02bf9904e5ead3f5b376120c84c"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/Invoke-Generation2FileStage.ps1",
+      "bytes": 6977,
+      "sha256": "6b3654cfae9d1c74f4898851d59b3c33f161573023935539e8919dd593cd6bcc"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/memory-job.json",
+      "bytes": 120,
+      "sha256": "23cf03ebd2dca9d29a0bf152c7a1077816c41edc6412e4420199e86f32a7ef9a"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/offline-rejections-repeat.json",
+      "bytes": 168,
+      "sha256": "d1d58741b0be6cfff231d20bd8fbcd1c6c86152a8dab99261d322c1160561109"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/offline-rejections.json",
+      "bytes": 168,
+      "sha256": "d1d58741b0be6cfff231d20bd8fbcd1c6c86152a8dab99261d322c1160561109"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/powershell-syntax.json",
+      "bytes": 303,
+      "sha256": "5a5a71e1fe34e26e9a9d1c4fcd4d1ca45212c82f9846a51e59fc981311f4d26a"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/preflight.json",
+      "bytes": 564,
+      "sha256": "1d340f9571766ece5b5613d1f24797fdd5281448acdd7b45a50c4e224355ceee"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/process-active.json",
+      "bytes": 452,
+      "sha256": "2cc31d6af17e1c858e86112752f8576bfa30128300bec64227f9c8ca33dda7f7"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/process.json",
+      "bytes": 498,
+      "sha256": "d045d689a7c0edde40a4a51e50a25b48e6c957585accf4fa57be4952b33c9e67"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/public-source-review.json",
+      "bytes": 794,
+      "sha256": "932c0abcddfd0357a28ae44d99a1bffe620a2ba92f5c89de9072eca0131b0f5a"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/python-syntax.json",
+      "bytes": 303,
+      "sha256": "750862b25dfc1f00119874d2770f37f5bfef6abefa8a34cd4cfcd197460bf9a8"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/resource-samples.jsonl",
+      "bytes": 166,
+      "sha256": "603a26b449a0a83cbd21f3b7e456ef86209c3f0304bc6a238627c5ebf284c1c8"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/stage.json",
+      "bytes": 6303,
+      "sha256": "566c54c44ba2c835743c0737dfa171a449d6e5ff32f7d8339cc4584fd75db55c"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/worker-failure.json",
+      "bytes": 176,
+      "sha256": "7067f13a81acfe102f828abdfa67fe5decd1591d5882902b1a5fc7a6e351dfdc"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/worker.stderr.log",
+      "bytes": 656,
+      "sha256": "c7831b8ac5380b5383bc6c3c9e26a81caa54d8cfdbd31fcce422cf345945165f"
+    },
+    {
+      "path": "Docs/Evidence/private-module-extraction-g2-20260915/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Tools/prepare_pso_linux_module.py",
+      "bytes": 21461,
+      "sha256": "2d1e089f7b341dcec597f71cf69e7e4b47a1da303e9d77f33aad1ca12c415ef5"
+    },
+    {
+      "path": "Docs/PRIVATE_MODULE_EXTRACTION_G2_2026-09-15.md",
+      "bytes": 7869,
+      "sha256": "a07c6606ebdb03c19074aecad20de7af78edd6ece574c7e1e5464029856e8739"
+    },
+    {
+      "path": "Docs/UNITY_MODULE_STATIC_ANALYSIS_2026-09-15.md",
+      "bytes": 15729,
+      "sha256": "e134d33e540e663db28b2943541e50a7025dd2e4df22bb0aa7f90d76e12594e6"
+    },
+    {
+      "path": "Docs/Verification/module-static-analysis-20260915.json",
+      "bytes": 3394,
+      "sha256": "123cd4535fe2955ef5113e68eb25b38a8e5ed831d8cb8e766a907703f5d6471e"
+    }
+  ]
+}

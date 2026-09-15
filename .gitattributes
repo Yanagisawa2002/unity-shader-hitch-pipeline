@@ -23,3 +23,10 @@
 # Matplotlib SVG path data includes harmless trailing spaces.
 /Docs/Evidence/boat-attack-20260914/** -text -whitespace
 /Docs/Evidence/urp-sample-20260914/** -text -whitespace
+# Preserve the exact published preparation receipts, including raw archive-list fields.
+/Docs/Evidence/private-editor-preparation-g1-20260915/** -text -whitespace
+# Keep static module analysis and coordinator receipts bound to their recorded hashes.
+/Docs/Evidence/module-static-analysis-20260915/** -text -whitespace
+# Preserve the failed generation-2 attempt and its exact executed source bytes.
+/Docs/Evidence/private-module-extraction-g2-20260915/** -text -whitespace
+/Tools/prepare_pso_linux_module.py -text -whitespace

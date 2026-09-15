@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "kind": "official-acquisition-metadata-only",
+  "retrievedDateUtc": "2026-09-15",
+  "version": "6000.5.9f1",
+  "revision": "b57deb96f08d",
+  "releaseDate": "2026-08-19T05:39:32.222Z",
+  "sourceUrl": "https://services.api.unity.com/unity/editor/release/v1/releases?version=6000.5.9f1&limit=10",
+  "releaseNotesUrl": "https://unity.com/releases/editor/whats-new/6000.5.9f1",
+  "rawApiSha256": "8cdac1a2fa864136f705a6d63405599779fbe64456518b22c0d458d5432dfcb4",
+  "editor": {
+    "host": "WINDOWS X86_64",
+    "url": "https://download.unity3d.com/download_unity/b57deb96f08d/Windows64EditorInstaller/UnitySetup64-6000.5.9f1.exe",
+    "downloadBytes": 4062966208,
+    "advertisedInstalledBytes": 9016556142,
+    "officialIntegrity": "md5-Afy4gvU4ygO9sBcCrcd66A==",
+    "officialMd5": "01fcb882f538ca03bdb01702adc77ae8",
+    "actualInstallerSha256": null,
+    "downloaded": false,
+    "installed": false
+  },
+  "linuxIl2cppModule": {
+    "id": "linux-il2cpp",
+    "host": "WINDOWS X86_64",
+    "target": "Linux x86-64 IL2CPP graphical Player",
+    "url": "https://download.unity3d.com/download_unity/b57deb96f08d/TargetSupportInstaller/UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe",
+    "type": "EXE",
+    "downloadBytes": 59296160,
+    "advertisedInstalledBytes": 230473980,
+    "officialIntegrity": "md5-feCYhjRs7mIox3VGNe43jg==",
+    "officialMd5": "7de09886346cee6228c7754635ee378e",
+    "actualInstallerSha256": null,
+    "downloaded": false,
+    "installed": false
+  },
+  "proposedPrivatePaths": {
+    "root": "D:/CodexWork/shader-whole-task-20260915/work/toolchains/unity-6000.5.9f1",
+    "editor": "D:/CodexWork/shader-whole-task-20260915/work/toolchains/unity-6000.5.9f1/Editor",
+    "module": "D:/CodexWork/shader-whole-task-20260915/work/toolchains/unity-6000.5.9f1/Editor/Data/PlaybackEngines/LinuxStandaloneSupport",
+    "downloads": "D:/CodexWork/shader-whole-task-20260915/work/toolchains/downloads",
+    "installerTemp": "D:/CodexWork/shader-whole-task-20260915/work/toolchains/installer-tmp"
+  },
+  "budgetObservation": {
+    "observedUtc": "2026-09-15T09:09:34.685942Z",
+    "borrowedEditorReadOnly": "D:\\CodexWork\\babel-dot-20260915\\Artifacts\\dot-20260915\\unity\\Editor",
+    "borrowedEditorFileCount": 68215,
+    "borrowedEditorLogicalBytes": 9967644867,
+    "copyPlusModuleKnownAdditionalBytes": 10257415007,
+    "freshInstallerKnownAdditionalBytes": 13369292490,
+    "proposedEditorModuleGrowthEnvelopeBytes": 21474836480,
+    "localFreeReserveBytes": 21474836480,
+    "DDriveFreeBytes": 256875958272,
+    "CDriveFreeBytes": 17278156800,
+    "actualInstallerScratchPeakBytes": null,
+    "actualProjectLibraryBuildPeakBytes": null,
+    "actualToolchainPackageBytes": null,
+    "allocationUnitOverheadBytes": null
+  },
+  "toolchainPackages": [
+    "com.unity.toolchain.win-x86_64-linux@1.1.0",
+    "com.unity.sysroot.base@1.1.0",
+    "com.unity.sdk.linux-x86_64@1.1.0"
+  ],
+  "nativeExecutionReady": false,
+  "limitations": [
+    "Official MD5 is acquisition metadata, not a downloaded-file SHA256 attestation.",
+    "Logical directory inventory is not a measured copy/import/build peak.",
+    "No Unity module, Editor copy, sysroot, toolchain or large scene archive was downloaded or installed in this preparation.",
+    "Task-private acquisition remains gated by local heavy queue. Borrowed Editor and global caches must not be changed."
+  ],
+  "rawApiStoredBytes": 99057,
+  "rawApiStorageEncoding": "UTF-8 without BOM, LF; response JSON text preserved, final newline retained"
+}

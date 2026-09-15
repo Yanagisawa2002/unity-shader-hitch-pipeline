@@ -1,0 +1,26 @@
+{
+  "utc": "2026-09-15T09:47:21.6255984Z",
+  "scope": "generation1 private file preparation only",
+  "scopedStageSha256": "32b236579ee7d8821912f3cca8f7d9a6d8d4b02fbaf67d92db87e6db299bba51",
+  "exclusions": [
+    {
+      "pid": 6192,
+      "name": "PresentMonService.exe",
+      "createdUtc": "2026-09-14T12:18:37.1803250Z",
+      "executablePath": null
+    },
+    {
+      "pid": 9248,
+      "name": "PresentMonService.exe",
+      "createdUtc": "2026-09-14T12:18:38.0572420Z",
+      "executablePath": null
+    }
+  ],
+  "previousRejectedStages": [
+    "stage-01",
+    "stage-02"
+  ],
+  "previousFailedCopyStage": "stage-03",
+  "resumeRule": "Never overwrite existing file bytes; reuse only after source and destination full SHA256 and size match",
+  "deadlineUtc": "2026-09-15T09:53:03Z"
+}

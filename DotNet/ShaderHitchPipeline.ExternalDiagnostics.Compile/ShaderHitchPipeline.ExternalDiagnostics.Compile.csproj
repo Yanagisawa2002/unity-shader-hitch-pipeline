@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../UnityReferences.props" />
+  <PropertyGroup><AssemblyName>Yanagisawa.ShaderHitchPipeline.ExternalDiagnostics</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ShaderHitchPipeline.Unity.Runtime.Compile/ShaderHitchPipeline.Unity.Runtime.Compile.csproj" />
+    <Compile Include="../../Integrations/ExternalScenes/Adapter/PsoWholeTaskProfiler*.cs" />
+    <Compile Include="../../Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs" />
+    <Compile Include="../../Integrations/ExternalScenes/Adapter/PsoNativeProgressiveControl.cs" />
+    <Compile Include="../../Integrations/ExternalScenes/Adapter/PsoRenderCheckpointRecorder.cs" />
+    <Reference Include="$(UnityManagedPath)/UnityEditor*.dll" Private="false" />
+    <Reference Include="$(UnityManagedPath)/UnityEngine/UnityEditor*.dll" Private="false" />
+  </ItemGroup>
+</Project>

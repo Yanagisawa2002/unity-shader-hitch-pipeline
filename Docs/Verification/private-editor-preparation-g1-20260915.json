@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "kind": "file-preparation-evidence-closeout",
+  "utc": "2026-09-15T09:57:29.4136745Z",
+  "nativeExecutionReady": false,
+  "overallStatus": "partial-preparation-extraction-blocked",
+  "editorCopyVerified": true,
+  "moduleDownloadedAndHashVerified": true,
+  "authenticodeStatus": "Valid",
+  "moduleExtracted": false,
+  "privateModuleInstalled": false,
+  "actualMutexReleased": true,
+  "manifestCounts": {
+    "matchingHashes": 68215,
+    "records": 68215,
+    "bytes": 9967644867,
+    "reused": 47
+  },
+  "completeLocalEditorManifest": {
+    "path": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\editor-file-manifest.jsonl",
+    "sha256": "02c50292a913cd07e385995d0daea0978f5e498b87192e90f34164db5d488927",
+    "bytes": 23967455,
+    "includedInGit": false
+  },
+  "publishedReceipts": [
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/closeout.json",
+      "sha256": "287124aa73799cf815fe25380ab64e417ea1ab9106cd5cd0d99aeb4e48b3613d",
+      "bytes": 3118,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\closeout.json",
+      "rawLocalSha256": "4ca4221f2aea9a1bbbd78d7265bd7099ad17f3e025b9afd0530894be267839d6"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/copy-summary.json",
+      "sha256": "0ae0860517f89c1794f3cbe4328e290307a2c728dd11909e3e6da16ac0253d9a",
+      "bytes": 358,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\copy-summary.json",
+      "rawLocalSha256": "0ae0860517f89c1794f3cbe4328e290307a2c728dd11909e3e6da16ac0253d9a"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/download.json",
+      "sha256": "85868bc3a3086e86b32a7cde4441f7de463e57a1946721e7e5650905521e5967",
+      "bytes": 514,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\download.json",
+      "rawLocalSha256": "85868bc3a3086e86b32a7cde4441f7de463e57a1946721e7e5650905521e5967"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/authenticode.json",
+      "sha256": "35440728cc224b1c7b09d64cb21ecfabb46f1126b2564d625cf372eac9551a03",
+      "bytes": 585,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\authenticode.json",
+      "rawLocalSha256": "fe5102a863c7d79cd756e25bc1d29c904da365b38cbe391e166eae9f61f160e8"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/stage-04.json",
+      "sha256": "c754c4d88a97ab22d98c2c47b7cdfdfbd165f898561fd2b47e458a81a2a0ed3c",
+      "bytes": 7644,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\stage.json",
+      "rawLocalSha256": "58a51c7deb87665d177ca9b95c22ae29bed58c46e8478fcc7c08b52652b46890"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/process-04.json",
+      "sha256": "c20e6fc7a9706c0393cf647d5374fa1f0beb949dcdf40e2a0b360eba6b78b7ea",
+      "bytes": 43372,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\process.json",
+      "rawLocalSha256": "a65335d3bb099202b48a003264f04baa073adae2684679c1bb70afe338184590"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/worker-events.jsonl",
+      "sha256": "6c2e3f6dde48bc732373bde69cf73c385c0838c106a70e37d746f246af41823d",
+      "bytes": 2127,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\worker-events.jsonl",
+      "rawLocalSha256": "a0b5cb2b721f6a006be2247632e5417431bcd38c550e8f9367f9aadd35aa6ce1"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/failure-04.json",
+      "sha256": "a8e018fe944935dc9771c985820c72ae5e3b4d33f2e43ed64e3b639477b5fd78",
+      "bytes": 237,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\failure.json",
+      "rawLocalSha256": "a8e018fe944935dc9771c985820c72ae5e3b4d33f2e43ed64e3b639477b5fd78"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/archive-list.log",
+      "sha256": "ad4e6f71b5772a876bab4e3b18e1c9a74c8a7e63abd5e81616b12cf48193fcf0",
+      "bytes": 3636,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-04\\archive-list.stdout.log",
+      "rawLocalSha256": "94012abec49b91c1b65c8f6bd5ae17bf734942654fee46a3ce9d10585e8e4a19"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/scope-exception.json",
+      "sha256": "457b32c9a53a3659b19f2974338259c6ab2c055c26eb497773efa97f6e106f68",
+      "bytes": 788,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\file-scope-stage-difference-v2.json",
+      "rawLocalSha256": "981382147b3f1647dac2b387c4d3ed71249015852b6d8ea20a6dce28368ce125"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/stage-01.json",
+      "sha256": "57894215ad8578b92bc048b9caa34a8dd00f769e36fefbc831e21812427773db",
+      "bytes": 8212,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-01\\stage.json",
+      "rawLocalSha256": "acd4b1d6861f47a9d02d734d3c2e50f1163ec7375e8497c71355160b84847731"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/stage-02.json",
+      "sha256": "8492b12358e7a0eeb686bc263e5180a04f50daca128ac96f6a7c1a41993fa8ea",
+      "bytes": 7629,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-02\\stage.json",
+      "rawLocalSha256": "f70cb5ae9b99eabcfae75d3f62e71e98e43ff98f7a1e2843f4a0515f5136b065"
+    },
+    {
+      "path": "Docs/Evidence/private-editor-preparation-g1-20260915/stage-03.json",
+      "sha256": "add3eaa07fdb4bcaf656e9753e6609e173a18c8d6b9ff1763ace780354470587",
+      "bytes": 7644,
+      "rawLocalPath": "D:\\CodexWork\\shader-whole-task-20260915\\work\\whole-task-20260915\\private-editor-preparation-g1\\stage-03\\stage.json",
+      "rawLocalSha256": "ee40a0898b2039686e970062d70161a35900f44e49af7dadaee088dcb5be6c40"
+    }
+  ],
+  "storageScope": "Published text receipts are UTF-8/LF; original files and all earlier failed attempts remain in the local preparation directory. Binaries and the full 68,215-file manifest are retained locally."
+}

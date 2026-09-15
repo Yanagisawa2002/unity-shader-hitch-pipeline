@@ -1,0 +1,23 @@
+{
+  "id": "linux-il2cpp",
+  "slug": "6000.5.9f1-windows-x86_64-linux-il2cpp",
+  "name": "Linux Build Support (IL2CPP)",
+  "description": "Linux Playback Engine (IL2CPP Scripting Backend)",
+  "category": "PLATFORM",
+  "url": "https://download.unity3d.com/download_unity/b57deb96f08d/TargetSupportInstaller/UnitySetup-Linux-IL2CPP-Support-for-Editor-6000.5.9f1.exe",
+  "type": "EXE",
+  "downloadSize": {
+    "value": 59296160,
+    "unit": "BYTE"
+  },
+  "installedSize": {
+    "value": 230473980,
+    "unit": "BYTE"
+  },
+  "required": false,
+  "hidden": false,
+  "preSelected": false,
+  "integrity": "md5-feCYhjRs7mIox3VGNe43jg==",
+  "subModules": [],
+  "destination": "{UNITY_PATH}"
+}

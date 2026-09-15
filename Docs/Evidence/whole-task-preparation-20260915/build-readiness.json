@@ -1,0 +1,14 @@
+{
+  "utc": "2026-09-15T08:18:04.6348799+00:00",
+  "editorVersion": "6000.5.9f1",
+  "editorPath": "D:/CodexWork/babel-dot-20260915/Artifacts/dot-20260915/unity/Editor/Unity.exe",
+  "editorPackageManifest": "D:\\CodexWork\\babel-dot-20260915\\Artifacts\\dot-20260915\\unity\\Editor\\Data\\Resources\\PackageManager\\Editor\\manifest.json",
+  "editorPackageManifestSha256": "93736756f132f53b981d9abbf86832c143ca92cdbaf414fa0f0f366f2f3f70db",
+  "playbackModules": [
+    "windowsstandalonesupport"
+  ],
+  "workVolumeFreeGiB": 239.672,
+  "nativeHostAvailable": false,
+  "linuxBuildPerformed": false,
+  "remoteAccessPerformed": false
+}
