@@ -62,11 +62,12 @@ public sealed class PsoUrpSampleCapture : MonoBehaviour
         public int schemaVersion=2;
         public string startedUtc,finishedUtc,unityVersion,buildGuid,graphicsApi,gpu,quality,culture;
         public string timingScope="CPU Update intervals and endCameraRendering submissions, not GPU completion/presentation. Original first-load and 5-second warmup included; native CSV measures warmed full timelines separately.";
-        public bool applicationQuit,screenshotsEnabled,originalBenchmarkFinished;
+        public bool applicationQuit,screenshotsEnabled,originalBenchmarkFinished,profilerEnabledDuringUpdates;
         public int width,height,errors,exceptions,csvPublications,vSyncCount,targetFrameRate;
         public double elapsedSeconds,observerRealtimeOriginSeconds;
         public Frame[] frames; public Render[] renders; public Event[] events;
         public TimelineEvent[] timelineEvents; public BindingEvidence[] bindings;
+        public PsoWholeTaskCell.Snapshot wholeTaskCell, wholeTaskCellAtQuit;
     }
     readonly Stopwatch clock=Stopwatch.StartNew();
     readonly List<Frame> frames=new List<Frame>(65536);
@@ -80,6 +81,8 @@ public sealed class PsoUrpSampleCapture : MonoBehaviour
     readonly HashSet<string> screenshots=new HashSet<string>();
     PlayableDirector[] directors=Array.Empty<PlayableDirector>();
     Capture capture; PsoExternalPhaseBridge bridge;
+    PsoNativeProgressiveControl nativeControl;
+    PsoRenderCheckpointRecorder checkpointRecorder;
     string output,upstreamCsv;
     double previousUpdate;
     int quitAtFrame=-1;
@@ -100,12 +103,33 @@ public sealed class PsoUrpSampleCapture : MonoBehaviour
         if (File.Exists(Path.Combine(output,"external-capture.json"))) throw new IOException("Capture already exists.");
         capture=new Capture { startedUtc=DateTime.UtcNow.ToString("o"),unityVersion=Application.unityVersion,
             buildGuid=Application.buildGUID,graphicsApi=SystemInfo.graphicsDeviceType.ToString(),gpu=SystemInfo.graphicsDeviceName,
-            culture=CultureInfo.CurrentCulture.Name,screenshotsEnabled=PsoCommandLine.Current.HasFlag("-pso-external-screenshots") };
+            culture=CultureInfo.CurrentCulture.Name,screenshotsEnabled=PsoCommandLine.Current.HasFlag("-pso-external-screenshots") ||
+                PsoCommandLine.Current.HasFlag("-pso-fixed-checkpoints") };
+        capture.wholeTaskCell=PsoWholeTaskCell.Capture();
         capture.observerRealtimeOriginSeconds=Time.realtimeSinceStartupAsDouble-clock.Elapsed.TotalSeconds;
         SceneManager.sceneLoaded+=Loaded; SceneManager.sceneUnloaded+=Unloaded;
         RenderPipelineManager.endCameraRendering+=Rendered;
         Application.logMessageReceivedThreaded+=Message;
-        PsoExternalPhaseBridge.Attach(gameObject,ScenePaths,new[] { "urp-terminal","urp-garden","urp-oasis","urp-cockpit" },"urp-loading");
+        // Discovery can observe the original app without shader retention, plan
+        // loading or phase scheduling. The command must also disable warmup.
+        if (PsoCommandLine.Current.HasFlag("-pso-external-observer-only"))
+        {
+            if (!PsoCommandLine.Current.HasFlag(PsoConstants.DisableWarmupArgument))
+                throw new InvalidOperationException("Observer-only requires disabled warmup.");
+        }
+        else PsoExternalPhaseBridge.Attach(gameObject,ScenePaths,new[] { "urp-terminal","urp-garden","urp-oasis","urp-cockpit" },"urp-loading");
+        if (PsoCommandLine.Current.HasFlag("-pso-native-progressive-control"))
+        {
+            nativeControl=gameObject.AddComponent<PsoNativeProgressiveControl>();
+            nativeControl.Configure(ScenePaths,new[] { "urp-terminal","urp-garden","urp-oasis","urp-cockpit" },"urp-loading");
+        }
+        if (PsoCommandLine.Current.HasFlag("-pso-fixed-checkpoints"))
+        {
+            if (capture.wholeTaskCell==null || PsoCommandLine.Current.HasFlag("-pso-whole-task-profile"))
+                throw new InvalidOperationException("Fixed checkpoints require an explicit cell and a separate correctness run without deep profiling.");
+            checkpointRecorder=gameObject.AddComponent<PsoRenderCheckpointRecorder>();
+            checkpointRecorder.Configure(new[] { "TerminalScene","GardenScene","OasisScene","CockpitScene" });
+        }
         bridge=GetComponent<PsoExternalPhaseBridge>();
         AddEvent("observer-before-splash",default,"");
     }
@@ -134,13 +158,15 @@ public sealed class PsoUrpSampleCapture : MonoBehaviour
     }
     void Update()
     {
+        capture.profilerEnabledDuringUpdates |= Profiler.enabled;
         double now=clock.Elapsed.TotalSeconds;
         var active=ActiveStage();
         frames.Add(new Frame { frame=Time.frameCount,seconds=now,updateIntervalMilliseconds=frames.Count==0?0:(now-previousUpdate)*1000,
             scene=SceneManager.GetActiveScene().path,stage=active?.sceneName??"",status=active?.status.ToString()??"",
             allocatedBytes=Profiler.GetTotalAllocatedMemoryLong(),reservedBytes=Profiler.GetTotalReservedMemoryLong() });
         previousUpdate=now;
-        bridge.ObserveOriginalWarmupWindow(active!=null && active.status==TestStageStatus.Warming,1000);
+        bridge?.ObserveOriginalWarmupWindow(active!=null && active.status==TestStageStatus.Warming,1000);
+        nativeControl?.ObserveOriginalWarmupWindow(active!=null && active.status==TestStageStatus.Warming);
         if (PerformanceTest.RunningBenchmark)
         {
             var stages=PerformanceTest.instance._stages;
@@ -233,6 +259,12 @@ public sealed class PsoUrpSampleCapture : MonoBehaviour
             timelineState=director==null?"":director.state.ToString(),timelineBoundToRenderingCamera=director!=null };
         renders.Add(value);
         if (!capture.screenshotsEnabled || camera.targetTexture!=null || director==null || active==null) return;
+        if (checkpointRecorder!=null)
+        {
+            checkpointRecorder.Observe(active.sceneName,active.status.ToString(),camera.name,director.playableAsset.name,
+                director.time,director.duration,camera.transform.position,camera.transform.rotation);
+            return;
+        }
         bool warmup=active.status==TestStageStatus.Warming && director.time>=1;
         bool middle=active.status==TestStageStatus.Running && director.time>=director.duration*.5;
         if (warmup || middle)
@@ -264,6 +296,7 @@ public sealed class PsoUrpSampleCapture : MonoBehaviour
         capture.vSyncCount=QualitySettings.vSyncCount;capture.targetFrameRate=Application.targetFrameRate;
         capture.frames=frames.ToArray();capture.renders=renders.ToArray();capture.events=events.ToArray();
         capture.timelineEvents=timelineEvents.ToArray();capture.bindings=bindings.ToArray();
+        capture.wholeTaskCellAtQuit=PsoWholeTaskCell.Capture();
         File.WriteAllText(Path.Combine(output,"external-capture.json"),JsonUtility.ToJson(capture));
         if (upstreamCsv!=null) File.WriteAllText(Path.Combine(output,"upstream-results.csv"),upstreamCsv);
     }

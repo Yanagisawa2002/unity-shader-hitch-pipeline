@@ -1,0 +1,51 @@
+
+欢迎使用 .NET 10.0!
+---------------------
+SDK 版本: 10.0.201
+
+遥测
+---------
+.NET 工具会收集用法数据，帮助我们改善你的体验。它由 Microsoft 收集并与社区共享。你可通过使用喜欢的 shell 将 DOTNET_CLI_TELEMETRY_OPTOUT 环境变量设置为 "1" 或 "true" 来选择退出遥测。
+
+阅读有关 .NET CLI 工具遥测的更多信息: https://aka.ms/dotnet-cli-telemetry
+
+----------------
+已安装 ASP.NET Core HTTPS 开发证书。
+若要信任该证书，请运行 "dotnet dev-certs https --trust"
+了解 HTTPS: https://aka.ms/dotnet-https
+
+----------------
+编写第一个应用: https://aka.ms/dotnet-hello-world
+了解新增功能: https://aka.ms/dotnet-whats-new
+浏览文档: https://aka.ms/dotnet-docs
+报告问题并在 GitHub 上查找来源: https://github.com/dotnet/core
+使用 "dotnet --help" 查看可用命令或访问: https://aka.ms/dotnet-cli
+--------------------------------------------------------------------------------------
+  正在确定要还原的项目…
+  已还原 D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.ExternalDiagnostics.Compile\ShaderHitchPipeline.ExternalDiagnostics.Compile.csproj (用时 90 毫秒)。
+  已还原 D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj (用时 90 毫秒)。
+  已还原 D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Core\ShaderHitchPipeline.Core.csproj (用时 1.8 秒)。
+  ShaderHitchPipeline.Core -> D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Core\bin\Debug\netstandard2.0\ShaderHitchPipeline.Core.dll
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(12,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.generatedUtc”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(11,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.profileId”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(18,20): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.sourceSessionCount”赋值，字段将一直保持其默认值 0 [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(14,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.graphicsDeviceType”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(13,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.runtimePlatform”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(21,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.planSha256”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(15,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.qualityLevelName”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+  ShaderHitchPipeline.Unity.Runtime.Compile -> D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\bin\Debug\netstandard2.1\Yanagisawa.ShaderHitchPipeline.Runtime.dll
+  ShaderHitchPipeline.ExternalDiagnostics.Compile -> D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.ExternalDiagnostics.Compile\bin\Debug\netstandard2.1\Yanagisawa.ShaderHitchPipeline.ExternalDiagnostics.dll
+
+已成功生成。
+
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(12,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.generatedUtc”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(11,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.profileId”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(18,20): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.sourceSessionCount”赋值，字段将一直保持其默认值 0 [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(14,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.graphicsDeviceType”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(13,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.runtimePlatform”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(21,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.planSha256”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+D:\CodexWork\shader-whole-task-20260915\Packages\com.yanagisawa.shader-hitch-pipeline\Runtime\PsoLegacyPlanHashDocument.cs(15,23): warning CS0649: 从未对字段“PsoLegacyPlanHashDocument.qualityLevelName”赋值，字段将一直保持其默认值 null [D:\CodexWork\shader-whole-task-20260915\DotNet\ShaderHitchPipeline.Unity.Runtime.Compile\ShaderHitchPipeline.Unity.Runtime.Compile.csproj]
+    7 个警告
+    0 个错误
+
+已用时间 00:00:05.97

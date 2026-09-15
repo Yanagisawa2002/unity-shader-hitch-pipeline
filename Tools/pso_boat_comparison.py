@@ -89,6 +89,8 @@ def identity_failures(result, run, protocol):
     if result.get('buildGuid') != protocol['buildGuid']: failures.append('Build GUID differs from frozen Player')
     if result.get('screenshotsEnabled') is not False or result.get('traceEnabled') is not False:
         failures.append('Formal diagnostic/screenshot mode differs from protocol')
+    if result.get('diagnosticOnly') or result.get('observerOnly'):
+        failures.append('Whole-task discovery/profiler mode is not a formal policy comparison arm')
     if result.get('cacheCondition') != protocol.get('processCacheCondition',PROCESS_CACHE):
         failures.append('Cache condition differs from protocol')
     if result.get('persistentAllocationWarnings'): failures.append('Native shutdown allocation warnings')

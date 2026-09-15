@@ -4,6 +4,9 @@ param(
     [Parameter(Mandatory)][string]$HostPath,
     [Parameter(Mandatory)][string]$Output,
     [Parameter(Mandatory)][string]$Method,
+    [string]$UnityPath = 'C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe',
+    [string]$ExpectedUnityVersion = '6000.1.0f1',
+    [ValidateSet('windows-d3d12-v1','linux-vulkan-v1')][string]$BuildCell = 'windows-d3d12-v1',
     [string]$PlayerPath = '',
     [switch]$Training,
     [string[]]$ExtraArguments = @(),
@@ -16,7 +19,11 @@ $nativeHost = [IO.Path]::GetFullPath($HostPath)
 $stage = [IO.Path]::GetFullPath($Output)
 $relativeHost = [IO.Path]::GetRelativePath($repo, $nativeHost)
 if ($relativeHost.StartsWith('..') -or [IO.Path]::IsPathRooted($relativeHost)) { throw 'The external host must be within this repository work directory.' }
-$unity = 'C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe'
+$unity = (Get-Item -LiteralPath $UnityPath -ErrorAction Stop).FullName
+$actualVersion = (Get-Item -LiteralPath $unity).VersionInfo.ProductVersion.Split('_')[0]
+if ($actualVersion -cne $ExpectedUnityVersion) { throw "Editor version mismatch: expected $ExpectedUnityVersion, found $actualVersion." }
+if ($BuildCell -eq 'linux-vulkan-v1' -and $ExpectedUnityVersion -ne '6000.5.9f1') { throw 'Linux Vulkan requires the explicitly reviewed 6000.5.9f1 Editor.' }
+$buildTarget = if ($BuildCell -eq 'linux-vulkan-v1') { 'Linux64' } else { 'Win64' }
 & (Join-Path $PSScriptRoot 'Invoke-PsoNativeStage.ps1') -Output $stage -BudgetPath $nativeHost -EstimatedAdditionalPeakGiB $EstimatedAdditionalPeakGiB -Action {
     $mapped = $false
     try {
@@ -26,9 +33,22 @@ $unity = 'C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe'
         $mapped = $true
         $ownedMapping = @(& subst) | Where-Object { $_.StartsWith('N:\: => ') }
         if (@($ownedMapping).Count -ne 1) { throw 'Could not record the owned short-path mapping.' }
-        if ((Get-Content -Raw N:/.git) -ne (Get-Content -Raw (Join-Path $repo '.git'))) { throw 'Short-path mapping identity mismatch.' }
+        # Both a standalone clone (.git directory) and a linked worktree (.git file)
+        # are valid hosts. Compare the resolved Git common directory, not file text.
+        $actualCommon = (& git -C 'N:/' rev-parse --path-format=absolute --git-common-dir).Trim()
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve mapped Git directory.' }
+        $expectedCommon = (& git -C $repo rev-parse --path-format=absolute --git-common-dir).Trim()
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve source Git directory.' }
+        $mappedCommon = [IO.Path]::GetFullPath($actualCommon)
+        if ($mappedCommon.StartsWith('N:\', [StringComparison]::OrdinalIgnoreCase)) {
+            $mappedCommon = [IO.Path]::GetFullPath((Join-Path $repo $mappedCommon.Substring(3)))
+        }
+        if ($mappedCommon -ine [IO.Path]::GetFullPath($expectedCommon)) { throw 'Short-path mapping identity mismatch.' }
         $shortHost = Join-Path 'N:/' $relativeHost
-        $arguments = @('-batchmode', '-quit', '-buildTarget', 'Win64', '-force-d3d12', '-pso-build-input-evidence',
+        # The Windows Editor uses D3D12 for import; the target Player API is an
+        # independent explicit setting. Never label Editor rendering as Vulkan.
+        $arguments = @('-batchmode', '-quit', '-buildTarget', $buildTarget, '-force-d3d12', '-pso-build-input-evidence',
+            '-pso-external-build-cell', $BuildCell,
             '-projectPath', ('"' + $shortHost + '"'), '-executeMethod', $Method,
             '-logFile', ('"' + (Join-Path $stage 'editor.log') + '"'))
         if ($Training) { $arguments += '-pso-training-build' }
@@ -40,6 +60,7 @@ $unity = 'C:/Program Files/Unity/Hub/Editor/6000.1.0f1/Editor/Unity.exe'
                 '-pso-build-receipt', ('"' + (Join-Path $stage 'build-summary.json') + '"'))
         }
         $arguments += $ExtraArguments
+        $arguments += @('-pso-external-editor-version', $ExpectedUnityVersion)
         foreach ($suffix in @('before')) {
             New-Item -ItemType Directory -Path (Join-Path $stage "settings-$suffix") | Out-Null
             Copy-Item -LiteralPath (Join-Path $nativeHost 'ProjectSettings') -Destination (Join-Path $stage "settings-$suffix") -Recurse

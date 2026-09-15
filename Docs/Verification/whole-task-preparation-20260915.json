@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "utc": "2026-09-15T16:27:03.4397874+08:00",
+  "kind": "lightweight whole-task diagnostic preparation; no native experiment",
+  "sourceBaseHead": "9c7fc7b75fa7ac1bca2e407821414cf5941e9b8c",
+  "branch": "codex/shader-whole-task-20260915",
+  "nativeExecutionReady": false,
+  "sourcePreparationReady": true,
+  "pythonFunctionalTests": {
+    "passed": 93,
+    "failed": 0,
+    "log": "Docs/Evidence/whole-task-preparation-20260915/python-functional-tests-final.log",
+    "sha256": "338e1750c8059e75323092bc97cf85b02ec0672fb60e352f4cd0d919b0f4ca5e",
+    "scope": "Synthetic/offline functional tests only",
+    "gitBlobOid": "0554ff248a2b99533a342c2023024bc4f1e3906a"
+  },
+  "sharedDiagnosticsCompile": {
+    "succeeded": true,
+    "errors": 0,
+    "legacyDtoWarnings": 7,
+    "unityVersion": "6000.5.9f1",
+    "apiDefines": "UNITY_EDITOR;UNITY_6000_5_OR_NEWER",
+    "log": "Docs/Evidence/whole-task-preparation-20260915/shared-diagnostics-compile.log",
+    "hostAdapterCompilationIncluded": false,
+    "gitBlobOid": "19692238124723f51ca7403ed5661a4982815220"
+  },
+  "sourceInputs": [
+    {
+      "path": "DotNet/ShaderHitchPipeline.ExternalDiagnostics.Compile/ShaderHitchPipeline.ExternalDiagnostics.Compile.csproj",
+      "sha256": "f53b846136805b0a052e5bebde5118ec83962c9175e48a20a752150596afa63d",
+      "bytes": 917,
+      "gitBlobOid": "930d47918a53e604a89ab8c34e00585724321d9b"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoNativeProgressiveControl.cs",
+      "sha256": "933974029788e1fe87a34a1631a33ba51f0e3d432bc8b77eebaaf196bf31489b",
+      "bytes": 9282,
+      "gitBlobOid": "1e211f983324d52d98ba87a193980f4e69c56efd"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoNativeProgressiveControl.cs.meta",
+      "sha256": "e7568300bf67e9650ac1772956c05983528178fe8ffcb95dc71fa29ae3b0759b",
+      "bytes": 60,
+      "gitBlobOid": "f35c70c4afd346f2b9a1264d399bb19d8bdd9895"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoRenderCheckpointRecorder.cs",
+      "sha256": "90ee5b6427ac0e29a268bf02db5a5ec7d7b744aaeef8517e6f8763c01850ba57",
+      "bytes": 4532,
+      "gitBlobOid": "f8565afcde390cca9d007288f382eba8ae6508e8"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoRenderCheckpointRecorder.cs.meta",
+      "sha256": "34f92512770fc31916739ea6649e3efdd8c799662c6d97f489845e9aa2447dd0",
+      "bytes": 60,
+      "gitBlobOid": "b20b881d8b5c12cb7a63ba9cb149a90d0ab6b484"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs",
+      "sha256": "9785e2ff04ac6a964ec4b7ab89a58d91d26304b3708ac19c60258e8820ac057c",
+      "bytes": 5036,
+      "gitBlobOid": "e350ba6aed62efe88a7d898e941cae11b2a710fc"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs.meta",
+      "sha256": "e32d251d3a67d414d85a948b325188814312aa9c914f50480407f8ae0edea4df",
+      "bytes": 60,
+      "gitBlobOid": "ed331ee4a8af2a6d10dee34e6e9863395e27c098"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskProfiler.cs",
+      "sha256": "c9cbdcdacf28c261091d479cf27fc8d280179fe361b0d50290b315883839729b",
+      "bytes": 6187,
+      "gitBlobOid": "3e16326d7ecf61eb1a823e94db03147ccde34275"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskProfiler.cs.meta",
+      "sha256": "49292d7e05bac701c414ab279416a9cef3f0f198f1c44e8b81c9e4c70294b0b4",
+      "bytes": 60,
+      "gitBlobOid": "f1e4944d0496dd74e2746279291142b32eb786b2"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskProfilerExport.cs",
+      "sha256": "974d5cd3bce19253a74d66d1c63e730ea098ba2c27fda75549e573c952b396b4",
+      "bytes": 6619,
+      "gitBlobOid": "5206f8b01cf3fc7b30a244373cb27dfbdf1f9bb1"
+    },
+    {
+      "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskProfilerExport.cs.meta",
+      "sha256": "694163b484ba56c7360140866ee56b359bbfb2bb4c885bcbc5f7fae388e32e18",
+      "bytes": 60,
+      "gitBlobOid": "02f6f5468c942ca09edd9388d936341992247917"
+    },
+    {
+      "path": "Integrations/Urp3DSample/Adapter/Editor/PsoUrpSampleBuild.cs",
+      "sha256": "b85b8fcff505e41bc2e35cb92762eaef6a455483ea6dbae1d11b072213ab7686",
+      "bytes": 6630,
+      "gitBlobOid": "1abec000bf25ae77af9d782286a203f00ede98c0"
+    },
+    {
+      "path": "Integrations/Urp3DSample/Adapter/PsoUrpSampleCapture.cs",
+      "sha256": "d72456a6fb1bc81b70cfd586651f1797052601a98eaf12480e1cbf7d5f239f66",
+      "bytes": 18252,
+      "gitBlobOid": "0d69409ddb19abfbf24cc20021fa1f2d105e599f"
+    },
+    {
+      "path": "Tools/compare_pso_profiler.py",
+      "sha256": "b346d01c148711c87dd8f0436ebc4a9a7a6545ff66fe394860826a7f5bb1ef77",
+      "bytes": 953,
+      "gitBlobOid": "2e5293eaacd5a5508156e4fddf22392cf47f4fc2"
+    },
+    {
+      "path": "Tools/Invoke-PsoExternalEditor.ps1",
+      "sha256": "7cc8ce3d47ac0b2296703ef74e2d3127aa0f06b51ce0162e60a080ce5ff1a682",
+      "bytes": 9333,
+      "gitBlobOid": "f6bd5770fd07c2f91c3a0b6d5ce5bde30f688ec6"
+    },
+    {
+      "path": "Tools/Invoke-PsoWholeTaskStage.ps1",
+      "sha256": "cee13fe9439285a4e184dca86b297ff409da501ddd53f081b9b8bf403b53f16b",
+      "bytes": 4121,
+      "gitBlobOid": "5c5d6c0c388d14ee1b810fce9e970dc31abdbb3b"
+    },
+    {
+      "path": "Tools/prepare_urp_sample.py",
+      "sha256": "0c6bae9b5d3b96d563e8f67589a7583892c9227644a363bb49e02919c072198f",
+      "bytes": 6850,
+      "gitBlobOid": "24cf4cdb4c6b3175432959705837f7d425c9c6a5"
+    },
+    {
+      "path": "Tools/pso_boat_comparison.py",
+      "sha256": "48d673c64152b23983a725f42edfb4e2737ecb9e92260ff0b50e605355229e74",
+      "bytes": 14181,
+      "gitBlobOid": "678a92dab1bf75cc073b6336ace564d26f06e0e1"
+    },
+    {
+      "path": "Tools/pso_urp_capture.py",
+      "sha256": "b669d079a379943968adf31969a3651ac7e6b50e4cc75e22dc8d0201245987f1",
+      "bytes": 13787,
+      "gitBlobOid": "92d1014bea8d1539866ade9613bf24e978585f70"
+    },
+    {
+      "path": "Tools/pso_urp_comparison.py",
+      "sha256": "18762d6002c701c9f270407fa7074e5f93039f4bd4606301a49af03134874cc8",
+      "bytes": 12497,
+      "gitBlobOid": "ad78f7e47575bffd808c46c9e58dd5903116dea5"
+    },
+    {
+      "path": "Tools/pso_whole_task_analysis.py",
+      "sha256": "30db33d3ef3cc25478aaa002d7b42db26bef54b4affef0f07412e1705c0fe25f",
+      "bytes": 10960,
+      "gitBlobOid": "d61a37c80509ea9c76695edd4b89b4f7c7d4b1a3"
+    },
+    {
+      "path": "Tools/pso_whole_task_evidence.py",
+      "sha256": "1d573f724d164401a7356ac00dbabf3ff4ecf0491a07a4475e0b543b52fc8397",
+      "bytes": 16637,
+      "gitBlobOid": "15f1c85b249bd0297f6befde3e35e13014601be1"
+    },
+    {
+      "path": "Tools/run_cpu_validation.py",
+      "sha256": "efecd623a64e7793d3374a099b435c00391bd1cdf56e0231d22b83fc938e14ee",
+      "bytes": 882,
+      "gitBlobOid": "b1630a8aeef4493a69348678ae8a24a575fa8cf9"
+    },
+    {
+      "path": "Tools/tests/test_pso_whole_task_analysis.py",
+      "sha256": "2d69518d960a10aa3ad58702a421ace8a00ae91a25afd3a41c438e63c7e28d74",
+      "bytes": 3283,
+      "gitBlobOid": "a0c6d3159b5d932bbca06704fdd27b1917946118"
+    },
+    {
+      "path": "Tools/tests/test_pso_whole_task_evidence.py",
+      "sha256": "d7c6cd0b871d68f7ef328fb9a891d01514915ca33d0b3414ba845471b61c874a",
+      "bytes": 9496,
+      "gitBlobOid": "3fd2f0fde7c13d786e9fc78b927cca8a0fb20422"
+    }
+  ],
+  "unvalidated": [
+    "Complete official URP host import and adapter compilation",
+    "Linux IL2CPP module/toolchain and full Player build",
+    "Real Linux Vulkan graphics surface and original rendered output",
+    "Direct native progressive jobs and ownership in Player",
+    "Native profiler record/export coverage and off/on perturbation",
+    "Linux calibrated cost reuse",
+    "End-to-end net benefit, GPU/presentation and current target performance"
+  ],
+  "remoteAccessPerformed": false,
+  "heavyLocalStageStarted": false,
+  "hardwareHeld": false,
+  "sourceHashScope": "sha256/bytes describe validation-host working files; gitBlobOid identifies the staged canonical source across Git line-ending conversion."
+}

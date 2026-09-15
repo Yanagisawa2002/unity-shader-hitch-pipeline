@@ -12,6 +12,7 @@ import math
 from pathlib import Path
 import re
 from pso_external_capture import load, sha, statistics, native_policy_failures
+from pso_whole_task_evidence import CELLS, cell_failures
 
 ROUTES = [('TerminalScene','Terminal'),('GardenScene','Garden'),('OasisScene','Oasis'),('CockpitScene','Cockpit')]
 PHASES = ['urp-loading','urp-terminal','urp-garden','urp-oasis','urp-cockpit']
@@ -73,7 +74,7 @@ def parse_native_csv(text):
     return results
 
 
-def urp(stage,require_warmup=False):
+def urp(stage,require_warmup=False,expected_unity='6000.1.0f1',expected_cell=None):
     stage=Path(stage); capture=load(stage/'capture/external-capture.json')
     command,process,boundary=(load(stage/p) for p in ('command.json','process.json','stage.json'))
     failures=[]
@@ -83,8 +84,11 @@ def urp(stage,require_warmup=False):
     require(process.get('exitCode')==0 and not process.get('stopReason'),'Abnormal Player exit')
     require(capture['applicationQuit'] and capture['originalBenchmarkFinished'],'Missing original benchmark completion and normal quit')
     require(capture['csvPublications']==1,'Missing/duplicate native aggregate publication')
+    expected_api='Direct3D12' if expected_cell is None else CELLS[expected_cell][1]
     require((capture['unityVersion'],capture['graphicsApi'],capture['width'],capture['height'],capture['quality'])==
-            ('6000.1.0f1','Direct3D12',1920,1080,'PC High'),'Wrong rendering cell')
+            (expected_unity,expected_api,1920,1080,'PC High'),'Wrong rendering cell')
+    if expected_cell is not None:
+        failures.extend(cell_failures(capture.get('wholeTaskCell'),capture.get('wholeTaskCellAtQuit'),expected_cell))
     require(capture['errors']==0 and capture['exceptions']==0,'Observer recorded errors/exceptions')
     log=(stage/'player.log').read_text(encoding='utf-8-sig',errors='replace')
     errors=[line for line in log.splitlines() if re.search(r'\b\w*Exception:|\bAssertion failed\b|Crash!!!|\[ShaderHitchPipeline\].*Failed',line)]
@@ -151,6 +155,10 @@ def urp(stage,require_warmup=False):
     failures.extend(policy_failures)
     return dict(schemaVersion=1,workload='Official URP 3D Sample 17.1.5 native BenchmarkScene, declared adapters',
         accepted=not failures,contentAccepted=content_accepted,nativePolicyValidated=require_warmup and not policy_failures,failures=failures,
+        expectedUnityVersion=expected_unity,actualUnityVersion=capture['unityVersion'],
+        expectedWholeTaskCell=expected_cell,
+        diagnosticOnly='-pso-whole-task-profile' in command['arguments'] or (stage/'capture/whole-task-profiler.json').exists(),
+        observerOnly='-pso-external-observer-only' in command['arguments'],
         captureSha256=sha(stage/'capture/external-capture.json'),playerLogSha256=sha(stage/'player.log'),
         nativeCsvSha256=sha(stage/'capture/upstream-results.csv') if (stage/'capture/upstream-results.csv').exists() else None,
         buildGuid=capture['buildGuid'],policy=command['policy'],screenshotsEnabled=capture['screenshotsEnabled'],traceEnabled=command['trace'],
@@ -169,7 +177,9 @@ def urp(stage,require_warmup=False):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('stage',type=Path)
     parser.add_argument('--output',type=Path,required=True);parser.add_argument('--require-warmup',action='store_true')
-    args=parser.parse_args();result=urp(args.stage,args.require_warmup)
+    parser.add_argument('--expected-unity',default='6000.1.0f1',choices=['6000.1.0f1','6000.5.9f1'])
+    parser.add_argument('--expected-cell',choices=sorted(CELLS))
+    args=parser.parse_args();result=urp(args.stage,args.require_warmup,args.expected_unity,args.expected_cell)
     with args.output.open('x',encoding='utf-8') as f: json.dump(result,f,indent=2);f.write('\n')
     print(json.dumps({k:result[k] for k in ('accepted','failures','buildGuid','policy','observerElapsedSeconds','persistentAllocationWarnings')}))
     raise SystemExit(0 if result['accepted'] else 1)

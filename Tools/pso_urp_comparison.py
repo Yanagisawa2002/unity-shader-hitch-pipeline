@@ -25,7 +25,7 @@ def freeze(attempt, player_stage, pilot_suffix, output, pilot_validation='valida
         result=load(path); actual=urp(path.parent,require_warmup=True)
         if result!=actual or not actual['accepted'] or not actual['nativePolicyValidated'] or actual['buildGuid']!=build['guid']:
             raise ValueError('Actual independent content/policy gate failed: '+str(path))
-        if actual['traceEnabled'] or actual['screenshotsEnabled']:
+        if actual['traceEnabled'] or actual['screenshotsEnabled'] or actual.get('diagnosticOnly') or actual.get('observerOnly'):
             raise ValueError('Policy pilots must use the final non-diagnostic modes')
         pilots.append(dict(policy=arm,path=str(path),sha256=sha(path)))
         environments.append(actual['warmupReceipts'][0]['data']['environment'])

@@ -16,6 +16,8 @@ TESTS = (
     "test_external_capture",
     "test_urp_capture",
     "test_megacity_capture",
+    "test_pso_whole_task_analysis",
+    "test_pso_whole_task_evidence",
 )
 
 if __name__ == "__main__":
