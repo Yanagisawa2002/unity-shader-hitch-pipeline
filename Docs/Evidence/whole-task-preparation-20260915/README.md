@@ -3,7 +3,9 @@
 These are retained local validation logs, not Unity scene captures or performance results.
 The latest checks after adding actual Unity job worker identity are
 `python-worker-identity-tests.log` (93 passing checks) and
-`shared-diagnostics-worker-identity-compile.log` (zero errors, seven existing warnings).
+the subsequent `native-control-collection-only-compile.log` (zero errors, seven existing warnings).
+The native control validates collection identity without triggering the project's
+driver-byte attestation, which serves calibrated cost reuse rather than this control.
 The earlier successful logs below remain available.
 `python-functional-tests-final.log` contains 93 passing offline checks.
 `shared-diagnostics-compile.log` records compilation against the installed Unity

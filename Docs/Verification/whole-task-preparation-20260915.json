@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "utc": "2026-09-15T08:34:17.1187556+00:00",
+  "utc": "2026-09-15T08:36:59.4559952+00:00",
   "kind": "lightweight whole-task diagnostic preparation; no native experiment",
   "sourceBaseHead": "9c7fc7b75fa7ac1bca2e407821414cf5941e9b8c",
   "branch": "codex/shader-whole-task-20260915",
@@ -20,9 +20,9 @@
     "legacyDtoWarnings": 7,
     "unityVersion": "6000.5.9f1",
     "apiDefines": "UNITY_EDITOR;UNITY_6000_5_OR_NEWER",
-    "log": "Docs/Evidence/whole-task-preparation-20260915/shared-diagnostics-worker-identity-compile.log",
+    "log": "Docs/Evidence/whole-task-preparation-20260915/native-control-collection-only-compile.log",
     "hostAdapterCompilationIncluded": false,
-    "gitBlobOid": "f39daab76789d517a9fa25188355575292df77ed"
+    "gitBlobOid": "150602a22b2e5398f51a6c9efd41cfef479e6d4b"
   },
   "sourceInputs": [
     {
@@ -33,9 +33,9 @@
     },
     {
       "path": "Integrations/ExternalScenes/Adapter/PsoNativeProgressiveControl.cs",
-      "sha256": "933974029788e1fe87a34a1631a33ba51f0e3d432bc8b77eebaaf196bf31489b",
-      "bytes": 9282,
-      "gitBlobOid": "1e211f983324d52d98ba87a193980f4e69c56efd"
+      "sha256": "9ff4d5ffdbca652dba5443fa391c9ff3f908d7e3beca67629414723fbe2131e2",
+      "bytes": 10327,
+      "gitBlobOid": "edb7e1a39aeb7c4594f87c6264f8c38aebc37a47"
     },
     {
       "path": "Integrations/ExternalScenes/Adapter/PsoNativeProgressiveControl.cs.meta",

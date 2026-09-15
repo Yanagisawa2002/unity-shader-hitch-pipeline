@@ -18,6 +18,8 @@
 
 ## 本轮实际检查
 
+原生对照仅校验 collection 所需的构建/GPU/API/内容身份与文件，不触发项目成本缓存所需的驱动字节哈希；该校验边界已经通过共享组件编译。
+
 可随源码审阅的[验证回执](D:/CodexWork/shader-whole-task-20260915/Docs/Verification/whole-task-preparation-20260915.json)记录改动文件哈希与检查范围；
 [保留日志副本](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/README.md)已纳入交付。
 
@@ -25,7 +27,7 @@
   [最终日志](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/python-worker-identity-tests.log)、[依赖锁](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/python-requirements-lock.txt)。
 - **共享诊断 C# 编译通过**：实际 Unity 6000.5.9f1 Managed 引用，`UNITY_6000_5_OR_NEWER`，0 错误、7 个已有 legacy DTO 未赋值字段警告；未启动 Editor。
   范围为 profiler/export、运行观察、直接 native control、检查点组件及其包 Runtime/Core 引用。
-  [编译日志](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/shared-diagnostics-worker-identity-compile.log)。
+  [编译日志](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/native-control-collection-only-compile.log)。
 - [两份 PowerShell 语法检查](D:/CodexWork/shader-whole-task-20260915/work/whole-task-20260915/resumed-preparation/powershell-syntax.json)没有错误；`git diff --check` 通过。
   原 URP Benchmark/Cinemachine 宿主依赖未导入，所以完整宿主编译、画面、native collection 行为、二进制 profiler 覆盖与 GPU/呈现测量均未验证。
 

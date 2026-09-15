@@ -64,8 +64,19 @@ public sealed class PsoNativeProgressiveControl : MonoBehaviour
             throw new InvalidDataException("Provide one frozen positive native progressive count, at most 65536.");
         string path = command.GetString("-pso-native-progressive-plan", "");
         if (string.IsNullOrWhiteSpace(path)) throw new InvalidDataException("Explicit native control plan required.");
-        var plan = PsoPlanValidation.LoadAndValidate(path, true, true);
+        // This control has no calibrated cost cache. Validate collection identity
+        // without charging it for the project's Windows driver-byte attestation.
+        var plan = PsoPlanValidation.LoadAndValidate(path, false, true);
         if (plan.compatibility == null) throw new InvalidDataException("Native control rejects unversioned legacy collection identity.");
+        var observed = new PsoEnvironmentSnapshot {
+            engineName = "Unity", engineVersion = Application.unityVersion, unityVersion = Application.unityVersion,
+            runtimePlatform = Application.platform.ToString(), graphicsDeviceType = SystemInfo.graphicsDeviceType.ToString(),
+            qualityLevelName = PsoUnityEnvironment.CurrentQualityName(), graphicsDeviceName = SystemInfo.graphicsDeviceName,
+            graphicsDeviceVendor = SystemInfo.graphicsDeviceVendor, graphicsDeviceId = SystemInfo.graphicsDeviceID,
+            graphicsDeviceVendorId = SystemInfo.graphicsDeviceVendorID, identity = PsoUnityBuildIdentity.Capture()
+        };
+        var collectionIssues = PsoCompatibility.Evaluate(plan.compatibility, observed).collectionReasons;
+        if (collectionIssues.Length != 0) throw new InvalidDataException(string.Join("\n", collectionIssues));
         string[] expected = new[] { loadingPhase }.Concat(phases).ToArray();
         if (scenes.Length != phases.Length || !plan.phases.Select(p => p.phase).OrderBy(p => p).SequenceEqual(expected.OrderBy(p => p)))
             throw new InvalidDataException("Native control requires exactly the original loading and four route phases.");
