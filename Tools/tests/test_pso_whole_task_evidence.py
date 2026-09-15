@@ -17,7 +17,7 @@ def cell(linux=False):
         cell='linux-vulkan-v1' if linux else 'windows-d3d12-v1', unityVersion='6000.5.9f1',
         runtimePlatform='LinuxPlayer' if linux else 'WindowsPlayer', graphicsApi='Vulkan' if linux else 'Direct3D12',
         graphicsDeviceName='fixture GPU', graphicsDeviceVersion='fixture driver', graphicsDeviceId=1,
-        graphicsDeviceVendorId=1, processorCount=208 if linux else 20, operatingSystem='fixture OS',
+        graphicsDeviceVendorId=1, processorCount=208 if linux else 20, jobWorkerCount=16, operatingSystem='fixture OS',
         processorType='fixture CPU', renderingThreadingMode='MultiThreaded', buildGuid='fixture build',
         buildInputSha256='a'*64, shaderSha256='b'*64, contentSha256='c'*64,
         backend=ORIGINAL_BACKEND, nativeApiContract='none', linuxCgroup='0::/' if linux else None,
@@ -129,9 +129,10 @@ class WholeTaskEvidenceTests(unittest.TestCase):
             self.assertTrue(any('fixed contract' in f for f in checkpoint_summary(root,dict(renders=renders))['failures']))
 
     def test_profiler_pair_rejects_workload_binary_device_and_capture_changes(self):
-        for change in ('workers','binary','backend','screenshot','incomplete','missing-profiler'):
+        for change in ('workers','actual-workers','binary','backend','screenshot','incomplete','missing-profiler'):
             on=audit(True)
             if change=='workers': on['command']['arguments'] += ['-job-worker-count','2']
+            if change=='actual-workers': on['wholeTaskCell']['jobWorkerCount']=8
             if change=='binary': on['command']['sha256']='1'*64
             if change=='backend': on['wholeTaskCell']['backend']=NATIVE_BACKEND
             if change=='screenshot': on['contentValidation']['screenshotsEnabled']=True

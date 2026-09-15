@@ -21,7 +21,7 @@ CHECKPOINTS = {f'{scene}-{point}' for scene in SCENES for point in
                ('warmup-1s', 'running-10', 'running-50', 'running-90')}
 STABLE_CELL_FIELDS = ('version', 'contract', 'cell', 'unityVersion', 'runtimePlatform',
     'graphicsApi', 'graphicsDeviceName', 'graphicsDeviceVersion', 'graphicsDeviceId',
-    'graphicsDeviceVendorId', 'operatingSystem', 'processorType', 'processorCount',
+    'graphicsDeviceVendorId', 'operatingSystem', 'processorType', 'processorCount', 'jobWorkerCount',
     'renderingThreadingMode', 'backend', 'nativeApiContract', 'buildGuid', 'buildInputSha256',
     'shaderSha256', 'contentSha256', 'linuxCgroup', 'cpuMax', 'cpusetEffective', 'memoryMax', 'nvidiaKernelVersion')
 
@@ -52,6 +52,8 @@ def cell_failures(start, end, expected_cell, expected_gpu=None):
     for field in ('graphicsDeviceId', 'graphicsDeviceVendorId', 'processorCount'):
         if not isinstance(start.get(field), int) or start[field] <= 0:
             failures.append('Whole-task numeric identity unavailable: ' + field)
+    if not isinstance(start.get('jobWorkerCount'), int) or start['jobWorkerCount'] < 0:
+        failures.append('Actual Unity job worker count unavailable')
     for field in ('buildGuid', 'graphicsDeviceVersion', 'processorType', 'operatingSystem', 'renderingThreadingMode'):
         if not start.get(field):
             failures.append('Whole-task identity unavailable: ' + field)

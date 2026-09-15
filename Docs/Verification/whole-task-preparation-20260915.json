@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "utc": "2026-09-15T16:27:03.4397874+08:00",
+  "utc": "2026-09-15T08:34:17.1187556+00:00",
   "kind": "lightweight whole-task diagnostic preparation; no native experiment",
   "sourceBaseHead": "9c7fc7b75fa7ac1bca2e407821414cf5941e9b8c",
   "branch": "codex/shader-whole-task-20260915",
@@ -9,10 +9,10 @@
   "pythonFunctionalTests": {
     "passed": 93,
     "failed": 0,
-    "log": "Docs/Evidence/whole-task-preparation-20260915/python-functional-tests-final.log",
-    "sha256": "338e1750c8059e75323092bc97cf85b02ec0672fb60e352f4cd0d919b0f4ca5e",
+    "log": "Docs/Evidence/whole-task-preparation-20260915/python-worker-identity-tests.log",
+    "sha256": "0f43151fa961803910b5e7f9052c03d633c5948734e17fee2538ac109752a95e",
     "scope": "Synthetic/offline functional tests only",
-    "gitBlobOid": "0554ff248a2b99533a342c2023024bc4f1e3906a"
+    "gitBlobOid": "d9fff6361b0723aff5ae71a25ef777c0515553af"
   },
   "sharedDiagnosticsCompile": {
     "succeeded": true,
@@ -20,9 +20,9 @@
     "legacyDtoWarnings": 7,
     "unityVersion": "6000.5.9f1",
     "apiDefines": "UNITY_EDITOR;UNITY_6000_5_OR_NEWER",
-    "log": "Docs/Evidence/whole-task-preparation-20260915/shared-diagnostics-compile.log",
+    "log": "Docs/Evidence/whole-task-preparation-20260915/shared-diagnostics-worker-identity-compile.log",
     "hostAdapterCompilationIncluded": false,
-    "gitBlobOid": "19692238124723f51ca7403ed5661a4982815220"
+    "gitBlobOid": "f39daab76789d517a9fa25188355575292df77ed"
   },
   "sourceInputs": [
     {
@@ -57,9 +57,9 @@
     },
     {
       "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs",
-      "sha256": "9785e2ff04ac6a964ec4b7ab89a58d91d26304b3708ac19c60258e8820ac057c",
-      "bytes": 5036,
-      "gitBlobOid": "e350ba6aed62efe88a7d898e941cae11b2a710fc"
+      "sha256": "e52b8c6483aefb84c9c5ed3a371a4ae116aa4195c45bb2cb18aca3db8f8f3233",
+      "bytes": 5136,
+      "gitBlobOid": "8c022e24d60cd382a76a2800b507739c562c8ab8"
     },
     {
       "path": "Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs.meta",
@@ -153,9 +153,9 @@
     },
     {
       "path": "Tools/pso_whole_task_evidence.py",
-      "sha256": "1d573f724d164401a7356ac00dbabf3ff4ecf0491a07a4475e0b543b52fc8397",
-      "bytes": 16637,
-      "gitBlobOid": "15f1c85b249bd0297f6befde3e35e13014601be1"
+      "sha256": "d769b253ac0ad2aecce2dd5d7a68ecabb3e5e6a65c942001d35e48fa365e22f7",
+      "bytes": 16812,
+      "gitBlobOid": "d650d21f3720e0b64cf6977eb50e40dd01500cf2"
     },
     {
       "path": "Tools/run_cpu_validation.py",
@@ -171,9 +171,9 @@
     },
     {
       "path": "Tools/tests/test_pso_whole_task_evidence.py",
-      "sha256": "d7c6cd0b871d68f7ef328fb9a891d01514915ca33d0b3414ba845471b61c874a",
-      "bytes": 9496,
-      "gitBlobOid": "3fd2f0fde7c13d786e9fc78b927cca8a0fb20422"
+      "sha256": "19fc1474d960f6ec9aab26c0c070eca101eae60348a3344d26f8edaa5472431c",
+      "bytes": 9613,
+      "gitBlobOid": "8e9f8776e0a6672d25fd6dba2c973c136f11ffae"
     }
   ],
   "unvalidated": [

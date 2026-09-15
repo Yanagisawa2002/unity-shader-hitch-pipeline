@@ -15,7 +15,7 @@ public static class PsoWholeTaskCell
         public string contract = "external-runtime-observation-v1";
         public string cell, unityVersion, runtimePlatform, graphicsApi, graphicsDeviceName;
         public string graphicsDeviceVersion, operatingSystem, processorType, renderingThreadingMode;
-        public int graphicsDeviceId, graphicsDeviceVendorId, processorCount, graphicsMemorySizeMb;
+        public int graphicsDeviceId, graphicsDeviceVendorId, processorCount, graphicsMemorySizeMb, jobWorkerCount;
         public string backend, nativeApiContract, buildGuid, buildInputSha256, shaderSha256, contentSha256;
         public string linuxCgroup, cpuMax, cpusetEffective, memoryMax, nvidiaKernelVersion;
         public string cpuStat, cpuPressure, observationError;
@@ -46,6 +46,7 @@ public static class PsoWholeTaskCell
             graphicsDeviceId = SystemInfo.graphicsDeviceID, graphicsDeviceVendorId = SystemInfo.graphicsDeviceVendorID,
             graphicsMemorySizeMb = SystemInfo.graphicsMemorySize, operatingSystem = SystemInfo.operatingSystem,
             processorType = SystemInfo.processorType, processorCount = SystemInfo.processorCount,
+            jobWorkerCount = Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerCount,
             renderingThreadingMode = SystemInfo.renderingThreadingMode.ToString(), buildGuid = Application.buildGUID,
             buildInputSha256 = identity.buildInputSha256, shaderSha256 = identity.shaderSha256, contentSha256 = identity.contentSha256,
             backend = native ? "unity-native-progressive-control-v1" : "original-route-no-package-warmup-v1",

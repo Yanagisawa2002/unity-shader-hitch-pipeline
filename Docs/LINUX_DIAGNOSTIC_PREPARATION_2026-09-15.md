@@ -9,7 +9,7 @@
 
 | 项目 | 已实现行为 | 验证边界 |
 |---|---|---|
-| 版本化 Linux/后端观察 | [PsoWholeTaskCell](D:/CodexWork/shader-whole-task-20260915/Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs) 要求显式 `linux-vulkan-v1` 或 `windows-d3d12-v1`，匹配实际 6000.5.9f1 Player、API、GPU 和构建/内容身份；启动及退出采集 cgroup、CPU、内存与内核驱动原始元数据。 | 目前仅识别 cgroup v2 命名空间根 `0::/`，其他布局返回 unavailable 并拒绝进入已验证条件。记录 208 个可见逻辑 CPU 与 `2500000 100000` 额度两项，不推导 208 个独占核。 |
+| 版本化 Linux/后端观察 | [PsoWholeTaskCell](D:/CodexWork/shader-whole-task-20260915/Integrations/ExternalScenes/Adapter/PsoWholeTaskCell.cs) 要求显式 `linux-vulkan-v1` 或 `windows-d3d12-v1`，匹配实际 6000.5.9f1 Player、API、GPU 和构建/内容身份；启动及退出采集 cgroup、CPU、实际 Unity job worker 数、内存与内核驱动原始元数据。 | 目前仅识别 cgroup v2 命名空间根 `0::/`，其他布局返回 unavailable 并拒绝进入已验证条件。可见逻辑 CPU、时间额度与实际 job worker 数分别记录，任何一项漂移都会阻止配对验收。 |
 | Linux 成本复用边界 | 保留原核心兼容规则；诊断观察的 `driverBytesAttested=false`、`calibratedLinuxCostReuseSupported=false`。 | 未实现 Linux 驱动字节证明，未开放已校准成本复用。新平台仍需重新 trace/plan；元数据来源不会冒充 Windows 驱动文件证明。 |
 | 直接原生 progressive 对照 | [PsoNativeProgressiveControl](D:/CodexWork/shader-whole-task-20260915/Integrations/ExternalScenes/Adapter/PsoNativeProgressiveControl.cs) 直接调用 `GraphicsStateCollection.WarmUpProgressively(count, JobHandle, false)`；不经过项目 scheduler/backend wrapper。显式固定 count，每个 Update 最多一次、最多一个未完成 job，只在原有 Warming 窗口提交。 | 保留 loading 加四场景的原 collection、文件哈希、平台/API/count 校验、实际逐调用及完成记录；shutdown fence 单列。无调用、少场景、错误 API、并行提交或部分完成不能通过 native-path 验收。仍未在真实 Player 上调用此路径。 |
 | 固定画面检查点 | [PsoRenderCheckpointRecorder](D:/CodexWork/shader-whole-task-20260915/Integrations/ExternalScenes/Adapter/PsoRenderCheckpointRecorder.cs) 在每场景原有预热的 1 秒，以及 Running 路线的 10%/50%/90% 各记录一张 PNG，共 16 张。记录实际 Timeline 时间、相机姿态、请求/读回帧、像素尺寸和哈希。 | 不改变相机或 Timeline；第一个越过目标的真实帧最多晚 0.25 秒，超出就保留证据并失败。要求非 batchmode 的真实图形 Player/end-of-frame 路径。截图与深入 profiler 分开运行。 |
@@ -22,10 +22,10 @@
 [保留日志副本](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/README.md)已纳入交付。
 
 - **93/93 Python 检查通过**，包括 9 项新增证据反例。缺少 `jsonschema` 的旧失败保留；本轮在本任务 venv 安装 `jsonschema==4.26.0` 后重跑。
-  [最终日志](D:/CodexWork/shader-whole-task-20260915/work/whole-task-20260915/resumed-preparation/python-functional-tests-final.log)、[依赖锁](D:/CodexWork/shader-whole-task-20260915/work/whole-task-20260915/resumed-preparation/python-requirements-lock.txt)。
+  [最终日志](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/python-worker-identity-tests.log)、[依赖锁](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/python-requirements-lock.txt)。
 - **共享诊断 C# 编译通过**：实际 Unity 6000.5.9f1 Managed 引用，`UNITY_6000_5_OR_NEWER`，0 错误、7 个已有 legacy DTO 未赋值字段警告；未启动 Editor。
   范围为 profiler/export、运行观察、直接 native control、检查点组件及其包 Runtime/Core 引用。
-  [编译日志](D:/CodexWork/shader-whole-task-20260915/work/whole-task-20260915/resumed-preparation/shared-diagnostics-compile.log)。
+  [编译日志](D:/CodexWork/shader-whole-task-20260915/Docs/Evidence/whole-task-preparation-20260915/shared-diagnostics-worker-identity-compile.log)。
 - [两份 PowerShell 语法检查](D:/CodexWork/shader-whole-task-20260915/work/whole-task-20260915/resumed-preparation/powershell-syntax.json)没有错误；`git diff --check` 通过。
   原 URP Benchmark/Cinemachine 宿主依赖未导入，所以完整宿主编译、画面、native collection 行为、二进制 profiler 覆盖与 GPU/呈现测量均未验证。
 
