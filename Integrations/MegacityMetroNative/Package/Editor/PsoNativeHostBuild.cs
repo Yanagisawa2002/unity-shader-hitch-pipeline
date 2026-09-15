@@ -72,8 +72,25 @@ namespace Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor
                 options = BuildOptions.Development };
             PsoBuildIdentityCapture.DeclareBuildInputs(options);
             BuildReport report = BuildPipeline.BuildPlayer(options);
+            string receipt = command.GetString("-pso-build-receipt", string.Empty);
+            if (!string.IsNullOrWhiteSpace(receipt))
+                System.IO.File.WriteAllText(receipt, JsonUtility.ToJson(new BuildReceipt {
+                    result = report.summary.result.ToString(), guid = report.summary.guid.ToString(),
+                    bytes = report.summary.totalSize, seconds = report.summary.totalTime.TotalSeconds,
+                    errors = report.summary.totalErrors, warnings = report.summary.totalWarnings, scenes = scenes
+                }, true));
             if (report.summary.result != BuildResult.Succeeded)
                 throw new BuildFailedException("Native host build failed: " + report.summary.result);
+        }
+
+        [Serializable]
+        private sealed class BuildReceipt
+        {
+            public string result, guid;
+            public ulong bytes;
+            public double seconds;
+            public int errors, warnings;
+            public string[] scenes;
         }
 
         private static bool TryGetWindowsBuildSupportError(out string reason)

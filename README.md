@@ -1,6 +1,9 @@
 # Shader Hitch Pipeline
 
-Current code and validation boundary: [2026-09-13 fixes and reproduction](Docs/REVIEW_FIXES_20260913.md). Historical measurements below retain their original conditions.
+Current results: [verified improvements in official external workloads](#verified-external-results),
+with full [Boat Attack](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md)
+and [URP four-scene reports](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md).
+The [September 13 fixes](Docs/REVIEW_FIXES_20260913.md) and historical measurements retain their original conditions.
 
 **Schedule graphics-state warmup around content loading, with explicit coverage and lifecycle contracts.**
 
@@ -14,12 +17,37 @@ This Unity 6 package captures native `GraphicsStateCollection` states, validates
 trace/plan/build identity, and coordinates phase warmup. Unity and the graphics
 driver perform shader compilation and pipeline creation.
 
-The working package is **0.3.0, unreleased**. The September 8 integration preserves
-the existing vNext production and streaming implementation and adds a faithful
-external scene adapter, lifecycle fixes, explicit policy alternatives, and CPU-only
-PR checks. **All new policies and integration changes are Unmeasured.** The existing
+The working package is **0.3.0, unreleased**. It includes production/streaming
+lifecycle contracts, official external-scene adapters, explicit policy alternatives
+and CPU-only PR checks. The existing
 `scheduled` policy remains the default; `observed-budget` and `fixed-progressive`
 require explicit selection.
+
+## Verified external results
+
+As of 14 September 2026, the pipeline has completed native evidence from the official workloads'
+own full benchmark routes. The clearest measured improvement is the repair of
+repeated driver-attestation stalls in our receipt-writing path.
+
+| Verified result | Observed evidence | Scope and details |
+|---|---|---|
+| Repeated driver checks reduced from **about 563 ms to 0.27–0.42 ms** | Native diagnostic timings before and after process-local attestation reuse | Initial full byte hashing remains about 574 ms; every reuse checks device/module/file metadata. [Repair and timings](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md#verified-completion-hitch-repair). |
+| Boat Attack's roughly **0.6-second completion stalls did not recur** in the repaired cohort | **16/16** full-route processes passed, with **zero sampled Update intervals above 200 ms** | Both separately frozen 16-process cohorts are retained: **32 processes total**, four per policy per cohort. [All process points and figure](Docs/Evidence/boat-attack-20260914/README.md). |
+| Official URP **Terminal, Garden, Oasis and Cockpit** completed native integration | **16/16** formal processes passed full original timelines, native-work completion, ownership, identity and normal-exit checks | All 29 original scene/timeline/animation files remain byte-identical; declared host adaptations are documented. [Four-scene evidence](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md). |
+| Boat Attack's repeated warning about **216 Persistent allocations** stopped appearing | Subsequent complete native runs, including both formal cohorts, contain no allocation-leak warning | Narrow backport of Unity's official RenderGraph cleanup fix; earlier failures and upstream attribution remain. [Declared repairs](Docs/EXTERNAL_BOAT_ATTACK_2026-09-14.md#declared-repairs). |
+
+The evidence bundles retain every process point, frozen Player/protocol identities,
+raw-evidence hashes, independent audit results and figure reproduction scripts.
+The [Boat Attack](Docs/Evidence/boat-attack-20260914/README.md) PNG and
+[URP](Docs/Evidence/urp-sample-20260914/README.md) PNG/SVG were reproduced
+byte-for-byte from their public points.
+
+These are sampled **CPU Update intervals** on one Windows D3D12/IL2CPP hardware
+cell, with application/OS/driver caches retained. **Overall scheduling speedup and
+useful first-draw coverage improvement remain unproven.** The valid URP
+**381.3446 ms** interval and all negative results remain in the reports; its cause
+is unresolved. [Megacity Main/six-SubScene acceptance](Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md)
+remains incomplete and is not counted among these validated results.
 
 ## What the historical evidence establishes
 
@@ -41,10 +69,27 @@ inconclusive hotset result, an unequal-work capture pair, and the original measu
 source/build identities. Neither those outcomes nor the outlier are claimed to be
 fixed by unmeasured code changes.
 
-## External workload
+## External workloads
+
+[Official Boat Attack](Integrations/BoatAttack/README.md) uses the original full
+flythrough and static benchmark routes, with declared correctness repairs and
+first-load capture. Sixteen post-repair processes completed; the earlier negative
+16-process sequence and all failed attempts remain recorded. This demonstrates
+a concrete runtime-overhead fix, not a general PSO score or a policy promotion.
+
+[Official URP 3D Sample](Docs/EXTERNAL_URP_SAMPLE_2026-09-14.md) pins
+template 17.1.5 and its Terminal, Garden, Oasis and Cockpit scenes. Its own original
+BenchmarkScene supplies the automatic full scene/timeline route. Sixteen matched
+processes passed content/native-work/ownership and identity checks, with all
+first-load samples, the 381 ms outlier and a separate diagnostic retained.
+This external-scene result is independent of Megacity large acceptance.
 
 [Megacity Metro native scene integration](Integrations/MegacityMetroNative/README.md)
 pins Unity's official application at `07652ee74a1f322c2c3e607020f07be720175680`.
+Its [new large-acceptance attempt](Docs/EXTERNAL_MEGACITY_ACCEPTANCE_2026-09-14.md)
+has a complete IL2CPP Player and a repaired Menu-camera observation failure.
+The repair's new link was interrupted by external Unity work; Main, six-SubScene
+content and Megacity policy comparisons remain unaccepted.
 It retains the original Menu/Main scenes, SubScenes, materials, gameplay, camera
 and ECS simulation. The optional package observes asynchronous SubScene requests;
 it creates no render workload. This is an **external application scene**, not a

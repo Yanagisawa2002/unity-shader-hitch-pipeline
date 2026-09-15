@@ -722,7 +722,10 @@ namespace Yanagisawa.ShaderHitchPipeline
             {
                 if (failed) { scheduler.Pump(); SyncExecutions(); return; }
                 if (PsoUnityEnvironment.CurrentQualityName() != schedulingEnvironment.qualityLevelName ||
-                    SystemInfo.graphicsDeviceType.ToString() != schedulingEnvironment.graphicsDeviceType)
+                    SystemInfo.graphicsDeviceType.ToString() != schedulingEnvironment.graphicsDeviceType ||
+                    SystemInfo.graphicsDeviceID != schedulingEnvironment.graphicsDeviceId ||
+                    SystemInfo.graphicsDeviceVendorID != schedulingEnvironment.graphicsDeviceVendorId ||
+                    SystemInfo.graphicsDeviceVersion != schedulingEnvironment.graphicsDeviceVersion)
                 {
                     RefreshSchedulingEnvironment(PsoUnityEnvironment.Capture());
                     return;
@@ -879,6 +882,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         private void WriteReceipt()
         {
+            using var diagnostic = PsoRuntimeDiagnostics.Begin("warmup-receipt");
             FinalizePhaseReceipts();
             if (string.IsNullOrWhiteSpace(receiptPath))
                 return;

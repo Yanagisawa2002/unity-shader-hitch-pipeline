@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "status": "partial",
+  "baseCommit": "6218483755b40f6fd3742754b9e71c53b74d3bd4",
+  "upstream": "Unity-Technologies/megacity-metro",
+  "upstreamCommit": "07652ee74a1f322c2c3e607020f07be720175680",
+  "upstreamTree": "7b0bf700ebc01face91223fd7185a02f44ec376e",
+  "editor": "6000.1.0f1 (9ea152932a88)",
+  "editorSha256": "d2336629da111800a35b592b8c8f595dda02c658a8e3e88c0e7d002e1a0a7f8b",
+  "platform": "Windows x64 Development IL2CPP Player / D3D12 / NetCode Client / High / 1920x1080",
+  "selectedBackend": "native-async-bulk; fixed-progressive not validated",
+  "sourceAdaptation": "Shared original SinglePlayer API after initialized rendered Menu; original async Main, loading and simulation retained; declared lifetime and observation repairs",
+  "rawEvidenceRoot": "work/actual-20260914-external-01",
+  "completedBuild": {
+    "stage": "megacity-training-02",
+    "actualBuildCommandCommit": "b2cd6ddbf2fb9f455509d5b719322de323f393cf",
+    "summary": {
+      "result": "Succeeded",
+      "guid": "839c626320694c07a0f9957ea5a18fc3",
+      "bytes": 3988683731,
+      "seconds": 11501.364942299999,
+      "errors": 0,
+      "warnings": 23,
+      "scenes": [
+        "Assets/Scenes/Menu.unity",
+        "Assets/Scenes/Main.unity"
+      ]
+    },
+    "playerFiles": 1431,
+    "playerBytes": 3989983150,
+    "playerIndexSha256": "e71e2203fee9a223aa9967bad2e0309660fbec136760e71f56cc90e1ae0450d4",
+    "sourceInputIndexSha256": "c0699ba95451613cda9d825ef20391c2b22c1a28bbbaafad93b4174bcc8628cc"
+  },
+  "firstNativeAttempt": {
+    "stage": "megacity-native-training-01",
+    "accepted": false,
+    "exitCode": 79,
+    "menuOnly": true,
+    "captureSha256": "ae677d23768c51a75013b120dc67f7b68203815f8aefe9dea2ed80cda22622bc",
+    "playerLogSha256": "9f74c5ecabbbb9e34bc0866d5cfe67939ac2d77ef4061d6188c2c1709314aa47",
+    "renderedSubmissions": 28594,
+    "renderGroups": [
+      {
+        "cameraScenePath": "DontDestroyOnLoad",
+        "camera": "MainCamera",
+        "originalHybridCamera": true,
+        "cameraType": "Game",
+        "targetTexture": false,
+        "width": 1920,
+        "height": 1080,
+        "count": 28594
+      }
+    ],
+    "traceExcludedFromMainTraining": true,
+    "persistentAllocationWarnings": [],
+    "errorMarkers": []
+  },
+  "observationRepair": {
+    "commit": "977d81fcf081f63376567023d22e92845993d60c",
+    "beforeSha256": "dabe7b299dd88ef7820955d6646f6a90f2da123f26e072f5b1a288b4ef70f41c",
+    "afterSha256": "15028b0076ef2bee797474c2a2421ce61cb45466454aa830a165e57b31f39141",
+    "targetedChecksPassed": 8,
+    "nativeRetestCompleted": false,
+    "change": "Retain camera scene path/name and add activeScene, menuInitialized; require actual original screen camera and active route for BOTH Menu and Main."
+  },
+  "interruptedBuild": {
+    "stage": "megacity-training-03",
+    "actualBuildCommandCommit": "977d81fcf081f63376567023d22e92845993d60c",
+    "result": "Owned tree stopped on actual external Unity workload; no complete Player",
+    "externalEditor": "6000.5.2f1",
+    "externalProjectDirectoryName": "FourSceneMain20260914",
+    "foreignProcessesChanged": false,
+    "measuredFreeGiBBefore": 682.3272018432617,
+    "measuredFreeGiBAfter": 677.7297515869141,
+    "estimatedAdditionalPeakGiB": 80,
+    "minimumFreeGiBReserve": 20,
+    "earlyStopFreeGiB": 25
+  },
+  "releaseObservation": {
+    "utc": "2026-09-14T03:16:33.8485712Z",
+    "ownEditorAbsent": true,
+    "ownLinkState": "absent",
+    "shortPathReleased": true,
+    "mutexAvailableAndReleased": true,
+    "measuredFreeGiB": 675.9986381530762,
+    "externalWorkloadStillPresent": true,
+    "scope": "Historical post-stop snapshot, not future execution clearance"
+  },
+  "unexecuted": [
+    "Repaired full Player completion",
+    "Original Main and six-SubScene sustained content acceptance",
+    "Usable original Main training trace",
+    "Plan merge/install/validation",
+    "Common final Player and independent native policy pilots",
+    "Frozen formal Megacity comparisons"
+  ],
+  "completedMegacityComparisons": [],
+  "performanceOrCoverageGainEstablished": false,
+  "rawFiles": [
+    {
+      "file": "megacity-training-02/build-summary.json",
+      "bytes": 268,
+      "sha256": "36b9ef137ee696e94917f73b6c91557051801f82c51e122032db106fd14ee7dd"
+    },
+    {
+      "file": "megacity-training-02-verification/receipt.json",
+      "bytes": 1799,
+      "sha256": "ad8c6500e45d302dee7a6b00b8dd9bfc58ae5dab623cf2377149f43405c0c358"
+    },
+    {
+      "file": "megacity-native-training-01/process.json",
+      "bytes": 816,
+      "sha256": "d11a4b89af8fbfaef05ffe70fdec9dce5d6786c6607a33295eb1bab4ce203e17"
+    },
+    {
+      "file": "megacity-native-training-01/stage.json",
+      "bytes": 3183,
+      "sha256": "1bbcba783807e859829567b1278da639a037473a95e8a5c152e02bd7c6628d32"
+    },
+    {
+      "file": "megacity-camera-repair-01/receipt.json",
+      "bytes": 1517,
+      "sha256": "b5985435a363498a11b25aa39bd621df288755a173030b4d9844f51678334c2e"
+    },
+    {
+      "file": "megacity-camera-repair-checks-01/tests.log",
+      "bytes": 111,
+      "sha256": "6ba5859ae26e0254e052a12847ca201c0f98761f37b0291971d69ec0c060adcd"
+    },
+    {
+      "file": "megacity-training-03/process.json",
+      "bytes": 11463,
+      "sha256": "07db40d00e2517cd94c05f1897fc5f92ef881b871edff70408c4c6cbdc0a7388"
+    },
+    {
+      "file": "megacity-training-03/stage.json",
+      "bytes": 7975,
+      "sha256": "5f51d838920ca392f9d0ab92472be08cc9c8b8cfea946575d33e68b6b151335a"
+    },
+    {
+      "file": "megacity-training-03/editor.log",
+      "bytes": 525772,
+      "sha256": "b066f9a2c0f123c7dc60a5fbc03b4cd5b7e751f8081743c7982b2664d9dc5067"
+    },
+    {
+      "file": "megacity-training-03/short-path-release.json",
+      "bytes": 85,
+      "sha256": "56eb4bff08c3e0ff22b25aa5c06cfbc5b1908fd69a84b212277b8351ff940cd8"
+    },
+    {
+      "file": "megacity-conflict-diagnosis-01.json",
+      "bytes": 903,
+      "sha256": "86f8b7671e7339ea5a47dbcfd49b6360f148135d353d4eea37953c1670c87e77"
+    },
+    {
+      "file": "megacity-training-04/process.json",
+      "bytes": 11214,
+      "sha256": "3c96b58bbc49777b5cb985c048bb55e1bee6333a6b9e8762320e4519b761776b"
+    },
+    {
+      "file": "megacity-training-04/stage.json",
+      "bytes": 10933,
+      "sha256": "733c490cca49da378611676212d96406428556bfadbc4e5cb38ea05cd0406114"
+    },
+    {
+      "file": "megacity-training-04/editor.log",
+      "bytes": 504957,
+      "sha256": "289c28569a7dab7bbef379a2905ff954e7629ceddb8ed326208af7a974d4c51f"
+    },
+    {
+      "file": "megacity-training-04/short-path-release.json",
+      "bytes": 85,
+      "sha256": "b35c407d852c2078664f78955e048a4ab3ec1dc65d8c685c9a05ff86c8798dfe"
+    },
+    {
+      "file": "megacity-conflict-diagnosis-02.json",
+      "bytes": 1224,
+      "sha256": "d2fe1e78a2783d718ca63f577bf8eb943706e6dfc24425a418d8748eb94648d3"
+    },
+    {
+      "file": "megacity-exclusive-window-check-03/stage.json",
+      "bytes": 10225,
+      "sha256": "dbf6a595f249035fae1e7d14d9b54659bf8e6da85aa76a35d6a6fec8cd8fb3dd"
+    },
+    {
+      "file": "external-cpu-validation-08/validation.log",
+      "bytes": 20397,
+      "sha256": "35ce0885d916550596a7ec16ac2b7cbb9bf277f4d37c5342bcd16056289c986e"
+    },
+    {
+      "file": "external-cpu-validation-08/stage.json",
+      "bytes": 1863,
+      "sha256": "3c55671ba17f7b29061e5fa62a1c9aa00dbcbd7cf137699a5ca2023f3750c8f6"
+    },
+    {
+      "file": "github-publication-02/receipt.json",
+      "bytes": 1080,
+      "sha256": "111875b00487be16d3039e47fcde091d90715636023b601b8372a4a4dd15c9c5"
+    }
+  ],
+  "interruptedBuildAfterPeerCompletion": {
+    "stage": "megacity-training-04",
+    "actualBuildCommandCommit": "0c307208ba0bd0fb6cf22bb53cbc049e05d222cf",
+    "startedUtc": "2026-09-14T03:33:57.3816467Z",
+    "stoppedUtc": "2026-09-14T03:37:16.658352Z",
+    "result": "Owned tree stopped on two new non-resident-classified managed CLI processes",
+    "exactExternalCommands": "Not retained; not inferred after the children and parents exited",
+    "measuredFreeGiBBefore": 668.4279937744141,
+    "measuredFreeGiBAfter": 664.9081382751465,
+    "completedPlayer": false,
+    "entryClearance": "Four resident MSBuild/Roslyn services had identical CPU ticks over the existing three-second preflight; the later clients were new processes",
+    "ownedProcessesAbsentAtUtc": "2026-09-14T03:39:41.0974404Z",
+    "shortPathAndMutexReleased": true
+  },
+  "subsequentPreflight": {
+    "stage": "megacity-exclusive-window-check-03",
+    "startedUtc": "2026-09-14T03:45:04.5507504Z",
+    "status": "rejected",
+    "nativeActionStarted": false,
+    "reason": "New separate Unity 6000.5.2f1 Editor and workers/shader compilers active",
+    "mutexReleased": true,
+    "fifthNativeBuildStarted": false
+  },
+  "functionalValidation": {
+    "localStage": "external-cpu-validation-08",
+    "pythonChecks": 78,
+    "schedulerCases": 42,
+    "sixDotNetProgramsPassed": true,
+    "toolsPowerShellSyntaxPassed": true,
+    "latestVerifiedCloudHead": "0c307208ba0bd0fb6cf22bb53cbc049e05d222cf",
+    "cloudChecks": [
+      "cpu (ubuntu-latest): SUCCESS",
+      "cpu (windows-latest): SUCCESS"
+    ],
+    "scope": "CPU/API/schema/ownership checks, not native Main or performance evidence"
+  }
+}

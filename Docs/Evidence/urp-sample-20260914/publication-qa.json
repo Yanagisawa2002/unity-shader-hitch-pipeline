@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "verifiedUtc": "2026-09-14T02:27:24.653980+00:00",
+  "fullRawAuditProcesses": 16,
+  "publicPointsOnlyRoundTripIdentical": true,
+  "figureVisuallyReviewed": true,
+  "newNativeRuns": 0,
+  "hashes": {
+    "urp-native-processes.png": "e18ff533a12739077faf1eb48744f32e80a366410fcf99821f55b8ee968dc5dc",
+    "urp-native-processes.svg": "bba741552df3dfa0b30830bf174a0f767b92226a9b361b5c111050de23cbc589",
+    "source-points.json": "db4f1ab6e284f59d71de82ddb9b3e221f45ee745d37e722313d2e413bb844411"
+  },
+  "scope": "Reproduction from public points using the bundled generator and existing pinned dependencies. Formal data remain unchanged; no Unity run."
+}

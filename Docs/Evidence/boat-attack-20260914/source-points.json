@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "summary": "boat-formal-01/comparison-summary.json",
+      "summarySha256": "6d501adf2eec379a1f6bf75fd8dc71b21c13c5615ef1fbfeef392d9eec487850",
+      "protocolSha256": "ac9cf5c877e297a1b50b82e08c9e114afb43d68d1bed17eaeee9a7fea22af1f8",
+      "buildGuid": "d03a7a0d35224c32be7aa887a3dc1cc6"
+    },
+    {
+      "summary": "boat-formal-02/comparison-summary.json",
+      "summarySha256": "0ebb084b0386e4ee50f8ba3b217bd1f26f9dd1b45537807b84cea3d0e21dff1d",
+      "protocolSha256": "f48cf3b2c7f3e38153b6d27a0370acb6b7a4ceea05a4fcba3f53b40a3a9a6103",
+      "buildGuid": "253edbfc746f44d0b455794639595cfe"
+    }
+  ],
+  "points": [
+    {
+      "revision": "Before attestation repair",
+      "index": 1,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 35.4479999999997,
+      "wholeRunMaximumMilliseconds": 47.08870000000065,
+      "validationSha256": "197b8d32a868767173eb87befb768225d8f5059082dac5832de125ef14e88960"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 2,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 34.03229999999979,
+      "wholeRunMaximumMilliseconds": 584.435199999998,
+      "validationSha256": "5294cd4428bb348c0c4d49950f849882c9a74b78aed26bb681a3158923481bb8"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 3,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 34.73469999999956,
+      "wholeRunMaximumMilliseconds": 594.0529999999998,
+      "validationSha256": "5278ea2e123d88078c94de5a576302e1a10f4ea644e9e0a5960428a2857dd048"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 4,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 32.92629999999974,
+      "wholeRunMaximumMilliseconds": 629.2878000000002,
+      "validationSha256": "6ec70f259a750ff11deb5c7eeb39fef511bf5c7a234cbe06d102f774ae323e60"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 5,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 32.28450000000027,
+      "wholeRunMaximumMilliseconds": 583.2759000000003,
+      "validationSha256": "59a1bf7aa3c83d2e1f94f4f928050c55d8aaca9da0f90a19cc1aef14d0e67232"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 6,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 36.85850000000013,
+      "wholeRunMaximumMilliseconds": 584.2966,
+      "validationSha256": "ec1928248c1847ea251af453af88be78059b43f772a7a5e17977575bef4cfd49"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 7,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 34.3517999999996,
+      "wholeRunMaximumMilliseconds": 44.59520000000072,
+      "validationSha256": "b4192e11a6c04efeeb691b33ac6f9e8825f812d386fcb81fa48b15b4782d92e5"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 8,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 36.099300000000056,
+      "wholeRunMaximumMilliseconds": 587.1680999999995,
+      "validationSha256": "b3b9948b06a032fddce0b6b2f2e4682921eae4c1d98763837384c8d7db0acb61"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 9,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 34.71560000000018,
+      "wholeRunMaximumMilliseconds": 595.0504000000017,
+      "validationSha256": "e92663a65d2ca255a578b684c195f293269c741f1bf29c178e3246e533ee8d06"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 10,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 34.46950000000015,
+      "wholeRunMaximumMilliseconds": 593.1547000000004,
+      "validationSha256": "8d217258dbeedff0d23ee74ef86120a3f77d37be7023c59687ed7a63aa2dac7c"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 11,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 36.72879999999967,
+      "wholeRunMaximumMilliseconds": 585.5663,
+      "validationSha256": "c53fabe4445d3b566175569b7a68c2a3c649a8a82a194a56a988873306d6f030"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 12,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 35.13970000000022,
+      "wholeRunMaximumMilliseconds": 43.98159999999951,
+      "validationSha256": "38d6f76264efbffd651dcd56e37dad8a17e2c9a55afa87b40381321a2921522f"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 13,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 33.52619999999984,
+      "wholeRunMaximumMilliseconds": 593.7471000000016,
+      "validationSha256": "f64c68bbbfe003cb31bb31ba6068c62cb818fb533125d13236192647afb67ed1"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 14,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 36.98409999999974,
+      "wholeRunMaximumMilliseconds": 45.60899999999979,
+      "validationSha256": "34805c26763c43bcce5df1f3a6ee5bcdddbe077c5e575491d4344772455b9e76"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 15,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 35.67270000000011,
+      "wholeRunMaximumMilliseconds": 584.4867000000029,
+      "validationSha256": "bb60dbbe99ae5676f726fb45d08e0c944ecc66021ef92ea27183ac54af829907"
+    },
+    {
+      "revision": "Before attestation repair",
+      "index": 16,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 36.78500000000007,
+      "wholeRunMaximumMilliseconds": 591.8264999999998,
+      "validationSha256": "244d9be0970eb91513320b65285e3f73ce8ead7367d513c83d5d5f63112fa595"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 1,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 40.516499999999844,
+      "wholeRunMaximumMilliseconds": 58.353299999999834,
+      "validationSha256": "97eb3218be1644f185c68b48fe1e0ed18480535b7d40b717a21ac9aa7b5b0fe4"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 2,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 37.70720000000027,
+      "wholeRunMaximumMilliseconds": 49.88290000000006,
+      "validationSha256": "6683574c3a8a95925e091c4a531d711446bf2194833ea31732e7429bfff6ec18"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 3,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 37.87910000000005,
+      "wholeRunMaximumMilliseconds": 90.25620000000245,
+      "validationSha256": "c1167827eed90810205c6be9a2503df32191ff3e1f5275445cd2375dcb188bb7"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 4,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 39.26639999999981,
+      "wholeRunMaximumMilliseconds": 50.1716000000001,
+      "validationSha256": "cce4a803ce255ac1513f5a1b0ad71365cf84fdc67db92eedc005fec0ac66e1f3"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 5,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 38.459100000000305,
+      "wholeRunMaximumMilliseconds": 46.43510000000006,
+      "validationSha256": "67997be0aed0beb92f35f31b19d0e2ceb38ac51d1bb1434af04f03c3e2c4a829"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 6,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 39.90179999999999,
+      "wholeRunMaximumMilliseconds": 57.728399999999795,
+      "validationSha256": "4b1a828e5d060aea3fa20f591bfd4b6a4bbe83f457015042162c27867956bfba"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 7,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 41.849300000000426,
+      "wholeRunMaximumMilliseconds": 57.13429999999997,
+      "validationSha256": "91217227b9b0b0498b9af956df58551ed7d2a6d6f9bfbf72caeac2b7f3248ad2"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 8,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 39.53009999999946,
+      "wholeRunMaximumMilliseconds": 59.639100000000056,
+      "validationSha256": "f9548bf64bf7f997a003d19701c3e846876807a6b3ef17a2f5320cf8e8e3daa0"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 9,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 35.917299999999486,
+      "wholeRunMaximumMilliseconds": 49.10350000000019,
+      "validationSha256": "9586a883660d66e368109dd5823bb33419fdd9faeb538545c53bd1a8e2733059"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 10,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 37.74440000000023,
+      "wholeRunMaximumMilliseconds": 45.78100000000029,
+      "validationSha256": "b6d4a3eaade079512806b587e4af2a8dcc8fe1db16bcc4db16469b28b205875a"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 11,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 36.53160000000044,
+      "wholeRunMaximumMilliseconds": 50.2252000000003,
+      "validationSha256": "84768bf8d9e3b2e2ab77ef37e985dadf17b895909dd44997812b1b5f0195ac5d"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 12,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 38.86880000000037,
+      "wholeRunMaximumMilliseconds": 46.28910000000008,
+      "validationSha256": "cbf0bde4ebb700423f17f64c7d7553955a54e157c8bfe0b1a427d9abaa5d17cd"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 13,
+      "policy": "observed-budget",
+      "firstFlythroughP99Milliseconds": 38.18910000000031,
+      "wholeRunMaximumMilliseconds": 49.238500000001295,
+      "validationSha256": "298355e21fd1a7c7a588ad83003b47e5873d2ac544c8c5f8e309cc287852226d"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 14,
+      "policy": "disabled",
+      "firstFlythroughP99Milliseconds": 36.32919999999995,
+      "wholeRunMaximumMilliseconds": 46.06280000000007,
+      "validationSha256": "7b6978d263ff97b4339f22ed2b4319e7406402d3bc73a020f1c2864079950485"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 15,
+      "policy": "scheduled",
+      "firstFlythroughP99Milliseconds": 38.98699999999966,
+      "wholeRunMaximumMilliseconds": 56.372899999999944,
+      "validationSha256": "af2fac4380858f9bff3e602d6ddc475e9c80c6fc867aacc1b5f176f1abed18e5"
+    },
+    {
+      "revision": "After attestation repair",
+      "index": 16,
+      "policy": "all-at-once",
+      "firstFlythroughP99Milliseconds": 38.26850000000004,
+      "wholeRunMaximumMilliseconds": 51.73720000000026,
+      "validationSha256": "3994235da97d2ae66a3b542152831e52c89e9bf0d03d991500573a478c7fd46d"
+    }
+  ],
+  "matplotlibVersion": "3.11.2",
+  "scope": "Descriptive process-level observations; no significance, driver-cold or general speedup claim."
+}

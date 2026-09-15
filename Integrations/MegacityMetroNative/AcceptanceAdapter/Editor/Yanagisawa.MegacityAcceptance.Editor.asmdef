@@ -1,0 +1,8 @@
+{
+  "name": "Yanagisawa.MegacityAcceptance.Editor",
+  "references": [
+    "Yanagisawa.ShaderHitchPipeline.Core", "Yanagisawa.ShaderHitchPipeline.Runtime", "Yanagisawa.ShaderHitchPipeline.Editor",
+    "Yanagisawa.ShaderHitchPipeline.NativeScenes.Editor", "Unity.NetCode.Authoring.Hybrid"
+  ],
+  "includePlatforms": ["Editor"]
+}

@@ -1,0 +1,1559 @@
+{
+  "verifiedUtc": "2026-09-13T22:56:42.195750+00:00",
+  "directory": "urp-formal-01",
+  "protocolSha256": "4c949c78b65375755d99a910261401eec9e03787ec0c837110620e5624407507",
+  "buildGuid": "6039c8ddc983453a84f2987c54c35bef",
+  "allPassed": true,
+  "runs": [
+    {
+      "index": 1,
+      "policy": "disabled",
+      "elapsedSeconds": 264.7451249,
+      "cpuIntervals": 43111,
+      "maximumUpdateMilliseconds": 212.17050000000003,
+      "observerToFirstUpdateSeconds": 3.5290928999999998,
+      "lastUpdateToQuitCallbackSeconds": 0.06355830000001106,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 212.17050000000003,
+          "startSeconds": 3.5290928999999998,
+          "endSeconds": 3.7412634,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40141104,
+          "sampledReservedDeltaBytes": 29360128,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5292847
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5293508
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5293774
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5293981999999997
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7432885
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.751419
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7515946
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5247734010770975
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5251232010770974
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "6c2ab0bc4c1a70f6f88fb85f72fdb78805a6b3839d7e991d93cc645b93c7dc6f",
+      "nativeCsvSha256": "8ebad2535f2ece58c962d0e8c55cb49c968a3b2f97988518c03678d8da21154d"
+    },
+    {
+      "index": 2,
+      "policy": "all-at-once",
+      "elapsedSeconds": 264.89642929999997,
+      "cpuIntervals": 41526,
+      "maximumUpdateMilliseconds": 218.39150000000006,
+      "observerToFirstUpdateSeconds": 3.5416518999999997,
+      "lastUpdateToQuitCallbackSeconds": 0.06772459999996272,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 218.39150000000006,
+          "startSeconds": 3.5416518999999997,
+          "endSeconds": 3.7600434,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40182165,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5418372999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5419077
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5419340999999998
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5419557999999998
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.762943
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7713986999999998
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7715902
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.537415304195011
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5377642041950113
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "68acec19e7f762f701fd2cb22e4a51cb068070a10500f4c6bb18c69dc59c45d9",
+      "nativeCsvSha256": "933fc0c3e7c7f45062cc1ec679427f8791583b3d6ad82524d4e7f469fc711679"
+    },
+    {
+      "index": 3,
+      "policy": "observed-budget",
+      "elapsedSeconds": 264.8541411,
+      "cpuIntervals": 41472,
+      "maximumUpdateMilliseconds": 217.97089999999963,
+      "observerToFirstUpdateSeconds": 3.5398901,
+      "lastUpdateToQuitCallbackSeconds": 0.06867970000001833,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 217.97089999999963,
+          "startSeconds": 3.5398901,
+          "endSeconds": 3.7578609999999997,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40167797,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5400723
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.540145
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5401711
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5401941999999997
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7607275
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7691272
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7693022999999997
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.535339203287982
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.535691803287982
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "22250ec8d716059142d4b2b48b59c4425212c5c319e4a258fed9f34fed541e77",
+      "nativeCsvSha256": "7e8f014411d481f7fd6000121549fb87269a0ca3d2ae3c51dc5dc1d40167014e"
+    },
+    {
+      "index": 4,
+      "policy": "scheduled",
+      "elapsedSeconds": 265.1364081,
+      "cpuIntervals": 39367,
+      "maximumUpdateMilliseconds": 214.21839999999958,
+      "observerToFirstUpdateSeconds": 3.842977,
+      "lastUpdateToQuitCallbackSeconds": 0.06069980000000896,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 214.21839999999958,
+          "startSeconds": 3.842977,
+          "endSeconds": 4.0571953999999995,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40187943,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.8431569
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.8432366
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.8432625999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.8432852
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 4.059934999999999
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 4.068328
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 4.0685142
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.838648805272109
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.839002805272109
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        },
+        {
+          "frame": 6,
+          "milliseconds": 202.91779999999983,
+          "startSeconds": 4.1055423,
+          "endSeconds": 4.3084601,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/Scenes/Terminal/TerminalScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/Scenes/Terminal/TerminalScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 602731,
+          "sampledReservedDeltaBytes": 0,
+          "adjacentCaptureEvents": [],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "status",
+              "phase": "urp-terminal",
+              "status": "Complete",
+              "frame": 5,
+              "engineRealtimeSeconds": 4.300906005272109
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "91c4db11d4e5db22a2b142ab1258af2b39c580a18df6481d37af51b29e9471cd",
+      "nativeCsvSha256": "e7c0a2525651b8bbbf1ab44f5b5bbc72ce6d334e9c5778e04d22272b6fbf9200"
+    },
+    {
+      "index": 5,
+      "policy": "all-at-once",
+      "elapsedSeconds": 264.57946549999997,
+      "cpuIntervals": 69418,
+      "maximumUpdateMilliseconds": 217.71150000000006,
+      "observerToFirstUpdateSeconds": 3.5281859,
+      "lastUpdateToQuitCallbackSeconds": 0.05883049999999912,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 217.71150000000006,
+          "startSeconds": 3.5281859,
+          "endSeconds": 3.7458974,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40189817,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5283653
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5284389999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5284663999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5284888999999997
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7487127
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7573312
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7575540999999997
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5240043010204083
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5243557010204083
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "e90c6b22c20b55d8c6ea53e2d1b63a8624eb0c4f84215b643c541235d6e1d8c2",
+      "nativeCsvSha256": "ffa5cc6ce9078ea005001b377d0d0e220b8de3cde6346e4603b926666ae0b7c2"
+    },
+    {
+      "index": 6,
+      "policy": "scheduled",
+      "elapsedSeconds": 264.81997989999996,
+      "cpuIntervals": 39928,
+      "maximumUpdateMilliseconds": 216.0261000000001,
+      "observerToFirstUpdateSeconds": 3.5456,
+      "lastUpdateToQuitCallbackSeconds": 0.06608619999997245,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 216.0261000000001,
+          "startSeconds": 3.5456,
+          "endSeconds": 3.7616261,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40153903,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.545798
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5458707
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5458974999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5459202
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7644425999999998
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7728994
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7730858
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5413451001133787
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5417076001133787
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "792adb29e4153a239270d50e122607f326b0cff0c6af1c818bf7a458ede9aa9c",
+      "nativeCsvSha256": "929b2c91485793aae31e5c945af5af5317508234fcea89dcf24fe293dd7c73c0"
+    },
+    {
+      "index": 7,
+      "policy": "disabled",
+      "elapsedSeconds": 264.827879,
+      "cpuIntervals": 41644,
+      "maximumUpdateMilliseconds": 220.81220000000013,
+      "observerToFirstUpdateSeconds": 3.5315611,
+      "lastUpdateToQuitCallbackSeconds": 0.06470849999999473,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 220.81220000000013,
+          "startSeconds": 3.5315611,
+          "endSeconds": 3.7523733,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40045111,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5317486999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5318172
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5318437
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5318655
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7551807
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7638700999999997
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7640585
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.527604304761905
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5279535047619044
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "1cc186eb23479e27fa79fc696785f65b3d9e5f2fdce627b05fa59a77a7f53516",
+      "nativeCsvSha256": "c10d7ef278030e5514af4ed167910a24e06bec4db093336d8463dd1d30c01d84"
+    },
+    {
+      "index": 8,
+      "policy": "observed-budget",
+      "elapsedSeconds": 265.1473375,
+      "cpuIntervals": 39606,
+      "maximumUpdateMilliseconds": 381.3446000000056,
+      "observerToFirstUpdateSeconds": 3.5405496999999997,
+      "lastUpdateToQuitCallbackSeconds": 0.06462220000003072,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 220.4244000000002,
+          "startSeconds": 3.5405496999999997,
+          "endSeconds": 3.7609741,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40196354,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5407347999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5408049
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.540832
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5408543
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7629854
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7709775999999997
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7711447
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5355315020408167
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5358815020408167
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        },
+        {
+          "frame": 16405,
+          "milliseconds": 381.3446000000056,
+          "startSeconds": 134.2102438,
+          "endSeconds": 134.5915884,
+          "before": {
+            "stage": "OasisScene",
+            "status": "Warming",
+            "scene": "Assets/Scenes/Oasis/OasisScene.unity"
+          },
+          "after": {
+            "stage": "OasisScene",
+            "status": "Warming",
+            "scene": "Assets/Scenes/Oasis/OasisScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": -8119078,
+          "sampledReservedDeltaBytes": 0,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Oasis/OasisScene.unity",
+              "frame": 16403,
+              "seconds": 134.1912087
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Oasis/OasisScene.unity",
+              "frame": 16403,
+              "seconds": 134.191474
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "status",
+              "phase": "urp-oasis",
+              "status": "Complete",
+              "frame": 16404,
+              "engineRealtimeSeconds": 134.5836466020408
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "b06033ca1fcd65126d34f3416f59f7cea6ebb0d40edf3266b0fc60f3b3577e88",
+      "nativeCsvSha256": "714b2890de5c0d83f5caec7b5c40061b44d077d2ed54f1b2a7067f881160f933"
+    },
+    {
+      "index": 9,
+      "policy": "scheduled",
+      "elapsedSeconds": 264.6959235,
+      "cpuIntervals": 49469,
+      "maximumUpdateMilliseconds": 217.3337000000002,
+      "observerToFirstUpdateSeconds": 3.5350946999999997,
+      "lastUpdateToQuitCallbackSeconds": 0.05248779999999442,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 217.3337000000002,
+          "startSeconds": 3.5350946999999997,
+          "endSeconds": 3.7524284,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40059648,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5352694
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5353366999999998
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5353624999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5353841
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7544182999999998
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7628046
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7629848999999997
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5311041008503397
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5314369008503403
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "51d9ab4f9f4ad2b7f7fb00716065a43d7591caee260a7ef437522ab09b4af7d0",
+      "nativeCsvSha256": "2f32441c0a870a77aaee1ccc55ffebab7e8b1f32a3c274d77fb6a9c189fcc326"
+    },
+    {
+      "index": 10,
+      "policy": "observed-budget",
+      "elapsedSeconds": 264.9169176,
+      "cpuIntervals": 44747,
+      "maximumUpdateMilliseconds": 218.6572,
+      "observerToFirstUpdateSeconds": 3.5350669,
+      "lastUpdateToQuitCallbackSeconds": 0.06067939999996952,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 218.6572,
+          "startSeconds": 3.5350669,
+          "endSeconds": 3.7537241,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40066860,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5352558
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5353299
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.535357
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5353784999999998
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7557294999999997
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7641275999999997
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7643074999999997
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5299969024376416
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.530346702437642
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "80caded2a227747312b03f641fc817f019ffdace90003ecacbcf0c8853a2ce68",
+      "nativeCsvSha256": "a143525650306e3dd5d8f40c9d800b14360618137bd2944c34f98abf457c9914"
+    },
+    {
+      "index": 11,
+      "policy": "all-at-once",
+      "elapsedSeconds": 265.0096631,
+      "cpuIntervals": 37560,
+      "maximumUpdateMilliseconds": 221.4843000000002,
+      "observerToFirstUpdateSeconds": 3.5419750999999997,
+      "lastUpdateToQuitCallbackSeconds": 0.007699600000023565,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 221.4843000000002,
+          "startSeconds": 3.5419750999999997,
+          "endSeconds": 3.7634594,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40180949,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5421647999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5422369999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5422640999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5422859
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7666508
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7751992999999997
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7754
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.537658000113379
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5380103001133785
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "ba2536d9fa8595fea25fff65c56b0fa5a8a0a1606043d55588748952b1b64aa4",
+      "nativeCsvSha256": "f377f8f9f596bc079c6f40e029efc1ceb85a741b5a03eeb00b219e5d5fd05621"
+    },
+    {
+      "index": 12,
+      "policy": "disabled",
+      "elapsedSeconds": 264.5735329,
+      "cpuIntervals": 64599,
+      "maximumUpdateMilliseconds": 220.9165999999998,
+      "observerToFirstUpdateSeconds": 3.5326127,
+      "lastUpdateToQuitCallbackSeconds": 0.0024606000000062522,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 220.9165999999998,
+          "startSeconds": 3.5326127,
+          "endSeconds": 3.7535293,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40063348,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.532796
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5328671
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5328934
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5329151
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7563465
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7646213
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7647972999999997
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5283948059523813
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5287427059523813
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "16ef135f5f0cd20820815615c1e41e5ee06c445a65f26f4eb3134c83eb5c2e7f",
+      "nativeCsvSha256": "1fb15f3b09e6897f1fcd535720af6b0786e5e26fba1d30eb7b741a8230b6c395"
+    },
+    {
+      "index": 13,
+      "policy": "observed-budget",
+      "elapsedSeconds": 264.79218399999996,
+      "cpuIntervals": 38935,
+      "maximumUpdateMilliseconds": 219.58309999999992,
+      "observerToFirstUpdateSeconds": 3.5454336,
+      "lastUpdateToQuitCallbackSeconds": 0.006719399999951747,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 219.58309999999992,
+          "startSeconds": 3.5454336,
+          "endSeconds": 3.7650167,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40166568,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5456174999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5456841999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5457102999999996
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5457318
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7681035
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7759258
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7761025
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5413613047619044
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5417097047619044
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "4a66ff0e983c53138e0116f099f6da6fc0b180e81692a75f6d57e0a808739b6f",
+      "nativeCsvSha256": "9f23abc2865c68b0f0a42bd23bb7fbd550194c70f7136067b1de7a7b7ea6f412"
+    },
+    {
+      "index": 14,
+      "policy": "disabled",
+      "elapsedSeconds": 264.8666277,
+      "cpuIntervals": 41996,
+      "maximumUpdateMilliseconds": 217.69250000000005,
+      "observerToFirstUpdateSeconds": 3.5394522999999998,
+      "lastUpdateToQuitCallbackSeconds": 0.05736500000000433,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 217.69250000000005,
+          "startSeconds": 3.5394522999999998,
+          "endSeconds": 3.7571448,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40170594,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5396335999999997
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5397051999999998
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5397312
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5397529999999997
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7601023999999996
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.767886
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7680537
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.535126805725624
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5354697057256237
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "576d460296e7621566f6f602b24ec64bc1a7b72294c6593b17e3967ae8e917e4",
+      "nativeCsvSha256": "f4f8615ee0da86e02cb5711c70493621ba5ce0dc8b3a973b887c42dc96eb3582"
+    },
+    {
+      "index": 15,
+      "policy": "scheduled",
+      "elapsedSeconds": 264.67860509999997,
+      "cpuIntervals": 52455,
+      "maximumUpdateMilliseconds": 212.80790000000005,
+      "observerToFirstUpdateSeconds": 3.5407724,
+      "lastUpdateToQuitCallbackSeconds": 0.005033099999991464,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 212.80790000000005,
+          "startSeconds": 3.5407724,
+          "endSeconds": 3.7535803,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40208562,
+          "sampledReservedDeltaBytes": 29360128,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5409522
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5410299
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5410565
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5410782
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7556141
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7639182
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7640876999999997
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.5367620064625847
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.537107206462585
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "e5c2fd6081994284a60d304d5c8a9f693dd2329bc207299c441df493163b6caa",
+      "nativeCsvSha256": "40ec90bdf7fc863cb1266622c563b8e28f06197cf934b150b6e3362ee9f31d62"
+    },
+    {
+      "index": 16,
+      "policy": "all-at-once",
+      "elapsedSeconds": 264.6699769,
+      "cpuIntervals": 39430,
+      "maximumUpdateMilliseconds": 217.32700000000006,
+      "observerToFirstUpdateSeconds": 3.5205398,
+      "lastUpdateToQuitCallbackSeconds": 0.054810200000019904,
+      "intervalsOver200Milliseconds": [
+        {
+          "frame": 2,
+          "milliseconds": 217.32700000000006,
+          "startSeconds": 3.5205398,
+          "endSeconds": 3.7378668,
+          "before": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "after": {
+            "stage": "TerminalScene",
+            "status": "Warming",
+            "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity"
+          },
+          "sampledAllocatedDeltaBytes": 40190435,
+          "sampledReservedDeltaBytes": 33554432,
+          "adjacentCaptureEvents": [
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5207224999999998
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5207911
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5208182
+            },
+            {
+              "kind": "original-stage-status",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 1,
+              "seconds": 3.5208402
+            },
+            {
+              "kind": "scene-unloaded",
+              "scene": "Assets/SharedAssets/Benchmark/BenchmarkScene.unity",
+              "frame": 3,
+              "seconds": 3.7410492
+            },
+            {
+              "kind": "scene-loaded-not-first-draw",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7500586
+            },
+            {
+              "kind": "original-scene-director",
+              "scene": "Assets/Scenes/Terminal/TerminalScene.unity",
+              "frame": 3,
+              "seconds": 3.7502278999999996
+            }
+          ],
+          "adjacentPhaseEvents": [
+            {
+              "kind": "original-warmup-window-open",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.516472004138322
+            },
+            {
+              "kind": "feedback-observed-armed",
+              "phase": "urp-loading",
+              "status": "",
+              "frame": 1,
+              "engineRealtimeSeconds": 3.516814604138322
+            }
+          ],
+          "interpretation": "Capture events use the observer Stopwatch; phase events are joined by the two adjacent frame IDs and retain Unity realtime. No exact cross-clock conversion or causal profiler sample."
+        }
+      ],
+      "captureSha256": "e0d698054ece24153d4791de9003cefb8cde0e36c4994a966185b01a110cd6c8",
+      "nativeCsvSha256": "7cb8a2e955fa5519c75447d326c36772dc169099e6c3bd43c1c04cacb7fdf3cc"
+    }
+  ],
+  "scope": "Independent recomputation from existing native raw captures, CSVs and indexed receipts. No new Unity execution. No fresh rehash of full Player binaries; the runner postcheck is retained.",
+  "temporalContextRevision": {
+    "correctedUtc": "2026-09-13T23:03:32.271318+00:00",
+    "originalAuditSha256": "c655068571036c4d32543ff54feb523e747161fc3131fadd036e7eb847b8bcbf",
+    "change": "Replace unsupported bootstrap cross-clock conversion in diagnostic phase-event context with actual frame-ID association. Original raw metric verification and every plotted point remain unchanged. Validation receipt hashes rechecked.",
+    "auditToolSha256": "e373f3650dcd4e263d9e6fa28f2fdfec4f63db3e36bd288133440e50795b0375"
+  }
+}

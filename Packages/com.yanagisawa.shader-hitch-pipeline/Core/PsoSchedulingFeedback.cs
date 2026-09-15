@@ -2,13 +2,27 @@ using System;
 
 namespace Yanagisawa.ShaderHitchPipeline
 {
+    /// <summary>A host may retry after loading more dependencies; this is never successful empty work.</summary>
+    public sealed class PsoCollectionNotReadyException : InvalidOperationException
+    {
+        public string Phase { get; }
+        public int ExpectedGraphicsStates { get; }
+        public int ResolvedGraphicsStates { get; }
+        public PsoCollectionNotReadyException(string phase, int expected, int resolved)
+            : base("Phase '" + phase + "' resolved " + resolved + " graphics states, expected " + expected +
+                   ". Load all shader dependencies before activation or tracing.")
+        { Phase = phase; ExpectedGraphicsStates = expected; ResolvedGraphicsStates = resolved; }
+    }
+
     public static class PsoCollectionReadiness
     {
         public static void RequireFullCollection(string phase, int expectedGraphicsStates, int resolvedGraphicsStates)
         {
-            if (expectedGraphicsStates < 0 || resolvedGraphicsStates != expectedGraphicsStates)
-                throw new InvalidOperationException("Phase '" + phase + "' resolved " + resolvedGraphicsStates +
-                    " graphics states, expected " + expectedGraphicsStates + ". Load all shader dependencies before activation or tracing.");
+            if (expectedGraphicsStates < 0 || resolvedGraphicsStates < 0 || resolvedGraphicsStates > expectedGraphicsStates)
+                throw new InvalidOperationException("Phase '" + phase + "' has an invalid collection identity: resolved " +
+                    resolvedGraphicsStates + ", expected " + expectedGraphicsStates + ". Do not retry a stale or invalid manifest.");
+            if (resolvedGraphicsStates < expectedGraphicsStates)
+                throw new PsoCollectionNotReadyException(phase, expectedGraphicsStates, resolvedGraphicsStates);
         }
     }
 

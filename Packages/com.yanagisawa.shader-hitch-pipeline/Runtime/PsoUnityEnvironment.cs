@@ -15,6 +15,7 @@ namespace Yanagisawa.ShaderHitchPipeline
 
         public static PsoEnvironmentSnapshot Capture()
         {
+            using var diagnostic = PsoRuntimeDiagnostics.Begin("environment-capture");
             string quality = "Unknown";
             int qualityIndex = QualitySettings.GetQualityLevel();
             string[] qualityNames = QualitySettings.names;

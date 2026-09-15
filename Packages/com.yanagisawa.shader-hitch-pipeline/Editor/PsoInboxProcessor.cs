@@ -124,6 +124,10 @@ namespace Yanagisawa.ShaderHitchPipeline.Editor
                     var source = new GraphicsStateCollection();
                     if (!source.LoadFromFile(candidate.collectionPath))
                         throw new IOException("Could not load " + candidate.collectionPath);
+                    // A native load may succeed with unresolved shader references.
+                    // Never turn a partial load into an apparently valid smaller plan.
+                    PsoCollectionReadiness.RequireFullCollection(candidate.manifest.phase,
+                        candidate.manifest.graphicsStateCount, source.totalGraphicsStateCount);
 
                     source = ApplyPhaseShaderFilter(
                         configuration,

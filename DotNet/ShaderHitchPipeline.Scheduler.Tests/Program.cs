@@ -20,6 +20,59 @@ PsoWarmupPhasePlan Phase(string name, double deadline = 0, int tier = 1, int pri
     new PsoWarmupPhasePlan { phase = name, deadlineMilliseconds = deadline, hotSetTier = tier,
         targetFrameMilliseconds = 20, priority = priority };
 
+Test("driver attestation reuses byte evidence but never aliases mutable receipts", () =>
+{
+    var cache = new PsoDriverAttestationCache(text => new string('c',64));
+    var probe = new PsoDriverIdentityProbe { Device = "device", RegistryIdentity = "registry", Version = "1",
+        Modules = new[] { new PsoDriverFileStamp { File = "driver.dll", LoadedModule = 17, Bytes = 42,
+            LastWriteUtcTicks = 1, CreationUtcTicks = 1 } } };
+    int hashes = 0, utc = 0;
+    string Hash(string path) { hashes++; return new string('a',64); }
+    var first = new PsoEnvironmentSnapshot();
+    cache.CaptureInto(first, () => probe, Hash, () => "utc-" + ++utc);
+    string identity = first.driverIdentity, attestedAt = first.driverBytesAttestedUtc;
+    first.driverModules[0].sha256 = "corrupt caller receipt"; first.driverIdentity = "corrupt";
+    var second = new PsoEnvironmentSnapshot();
+    cache.CaptureInto(second, () => probe, Hash, () => "utc-" + ++utc);
+    Check(hashes == 1 && second.driverByteAttestationReused && second.driverIdentity == identity &&
+        second.driverModules[0].sha256 == new string('a',64), "Repeated capture rehashed or receipt mutation poisoned cache.");
+    Check(second.driverBytesAttestedUtc == attestedAt && second.driverMetadataCheckedUtc != first.driverMetadataCheckedUtc,
+        "Metadata check was falsely labelled a fresh byte attestation.");
+    foreach (Action change in new Action[] { () => probe.Device = "new-device", () => probe.RegistryIdentity = "new-registry",
+        () => probe.Modules[0].LoadedModule++, () => probe.Modules[0].Bytes++,
+        () => probe.Modules[0].LastWriteUtcTicks++, () => probe.Modules[0].CreationUtcTicks++, () => cache.Invalidate() })
+    {
+        int old = hashes; change(); cache.CaptureInto(second, () => probe, Hash, () => "utc-" + ++utc);
+        Check(hashes == old + 1 && !second.driverByteAttestationReused, "Identity change reused stale byte evidence.");
+    }
+});
+Test("failed or unstable driver probes invalidate evidence and force fresh recovery", () =>
+{
+    var cache = new PsoDriverAttestationCache(text => new string('c',64));
+    var probe = new PsoDriverIdentityProbe { Device = "device", RegistryIdentity = "registry", Version = "1",
+        Modules = new[] { new PsoDriverFileStamp { File = "driver.dll", LoadedModule = 17, Bytes = 42,
+            LastWriteUtcTicks = 1, CreationUtcTicks = 1 } } };
+    int hashes = 0;
+    string Hash(string path) { hashes++; return new string('b',64); }
+    var result = new PsoEnvironmentSnapshot();
+    cache.CaptureInto(result, () => probe, Hash, () => "time");
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => throw new System.IO.IOException("missing metadata"), Hash, () => "time"));
+    Check(result.driverIdentity == null && result.driverModules.Length == 0, "Failed probe exposed stale identity.");
+    cache.CaptureInto(result, () => probe, Hash, () => "time");
+    Check(hashes == 2 && !result.driverByteAttestationReused, "Recovery reused invalidated evidence.");
+    cache.Invalidate(); int probes = 0;
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => {
+        if (++probes == 2) probe.Modules[0].LastWriteUtcTicks++; return probe;
+    }, Hash, () => "time"));
+    Check(result.driverIdentity == null, "Changed-during-hash evidence was accepted.");
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => probe, p => "malformed", () => "time"));
+    cache.CaptureInto(result, () => probe, Hash, () => "time");
+    Check(!result.driverByteAttestationReused && result.driverIdentity != null, "Failed hash did not recover freshly.");
+    probe.Modules = new[] { probe.Modules[0], probe.Modules[0] };
+    Throws<System.IO.IOException>(() => cache.CaptureInto(result, () => probe, Hash, () => "time"));
+    Check(result.driverModules.Length == 0, "Ambiguous inventory retained evidence.");
+});
+
 Test("reject nonfinite inputs without poisoning cost state", () =>
 {
     Throws<ArgumentOutOfRangeException>(() => Policy(double.PositiveInfinity));
@@ -298,9 +351,45 @@ Test("caller mutations cannot silently change selected policy", () =>
 });
 Test("partial dependency resolution cannot attest warmup or trace baseline", () =>
 {
-    Throws<InvalidOperationException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 3));
-    Throws<InvalidOperationException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 0));
+    Throws<PsoCollectionNotReadyException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 3));
+    Throws<PsoCollectionNotReadyException>(() => PsoCollectionReadiness.RequireFullCollection("deferred", 40, 0));
     PsoCollectionReadiness.RequireFullCollection("deferred", 40, 40);
+    PsoCollectionReadiness.RequireFullCollection("empty", 0, 0);
+    foreach (var counts in new[] { (-1, 0), (40, -1), (40, 41), (0, 1) })
+    {
+        try { PsoCollectionReadiness.RequireFullCollection("invalid", counts.Item1, counts.Item2); throw new Exception("Invalid identity accepted."); }
+        catch (PsoCollectionNotReadyException) { throw new Exception("Invalid identity must not request a retry."); }
+        catch (InvalidOperationException) { }
+    }
+});
+Test("build metadata exclusions retain scene, shader and unknown input attestation", () =>
+{
+    string unspecified = PsoBuildGeneratedMetadata.PerformanceSettingsIdentity(null);
+    Check(PsoBuildGeneratedMetadata.PerformanceSettingsFromArguments(new[] { "-performance-measurement-count", "50", "-performance-measurement-count", "51" }) ==
+          PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50"), "Producer uses its first exact option.");
+    Check(PsoBuildGeneratedMetadata.PerformanceSettingsFromArguments(new[] { "-performance-measurement-count=50" }) == unspecified,
+          "Producer does not implement equals-style arguments.");
+    Check(unspecified == PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("-1") &&
+          unspecified == PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("invalid"), "Effective producer defaults differ.");
+    Check(PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50") == PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("050") &&
+          PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50") != PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("51") &&
+          unspecified != PsoBuildGeneratedMetadata.PerformanceSettingsIdentity("50"), "Effective measurement count is not attested canonically.");
+    string cache = "Assets/AddressableAssetsData/Windows/addressables_content_state.bin";
+    Check(PsoBuildGeneratedMetadata.IsGenerated(cache, true, false), "Official content-update cache was not recognized.");
+    Check(!PsoBuildGeneratedMetadata.IsGenerated(cache, false, true), "Uninstalled producer must not grant an exclusion.");
+    string linker = "Assets/AddressableAssetsData/link.xml";
+    Check(!PsoBuildGeneratedMetadata.IsGenerated(linker, true, true) &&
+          PsoBuildGeneratedMetadata.RequiresByteIdentity(linker, true), "Linker input must retain byte attestation.");
+    Check(!PsoBuildGeneratedMetadata.RequiresByteIdentity("Assets/Shaders/Water.shader", true), "Shader dependency identity was weakened.");
+    foreach (string path in new[] { "Assets/Resources/PerformanceTestRunInfo.json", "Assets/Resources/PerformanceTestRunSettings.json" })
+    {
+        Check(PsoBuildGeneratedMetadata.IsGenerated(path, false, true), "Official test metadata not recognized.");
+        Check(!PsoBuildGeneratedMetadata.IsGenerated(path, true, false), "Unknown runtime resource excluded.");
+    }
+    foreach (string path in new[] { "Assets/Scenes/Island.unity", "Assets/Shaders/Water.shader", "Assets/Resources/PsoProfile.json",
+        "Assets/AddressableAssetsData/Windows/addressables_content_state.bin.shader", "Assets/AddressableAssetsData/addressables_content_state.bin",
+        "Assets/AddressableAssetsData/Windows/subdir/addressables_content_state.bin", "Assets/Custom/addressables_content_state.bin" })
+        Check(!PsoBuildGeneratedMetadata.IsGenerated(path, true, true), "Real or unknown content was excluded: " + path);
 });
 Test("all cost-critical environment fields participate in invalidation", () =>
 {
